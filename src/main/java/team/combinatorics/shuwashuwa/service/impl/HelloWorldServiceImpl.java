@@ -7,6 +7,6 @@ import team.combinatorics.shuwashuwa.service.HelloWorldService;
 public class HelloWorldServiceImpl implements HelloWorldService {
     @Override
     public String sayHello() {
-        return "Hello, world!";
+        return "Hello, world!\n";
     }
 }
