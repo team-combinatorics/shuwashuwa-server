@@ -18,4 +18,9 @@ public class HelloWorldController {
         return helloWorldService.sayHello();
     }
 
+    @GetMapping("/test/leesou")
+    public String leesouTest()
+    {
+        return helloWorldService.leesou();
+    }
 }

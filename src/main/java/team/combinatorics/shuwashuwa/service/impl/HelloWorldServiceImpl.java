@@ -9,4 +9,9 @@ public class HelloWorldServiceImpl implements HelloWorldService {
     public String sayHello() {
         return "Hello, world!\n";
     }
+
+    @Override
+    public String leesou() {
+        return "Test for leesou!\n";
+    }
 }
