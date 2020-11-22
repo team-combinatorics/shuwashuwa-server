@@ -1,0 +1,11 @@
+##  ˝æ›‘¥≈‰÷√
+spring:
+  datasource:
+    dbcp2:
+      url: jdbc:mysql://localhost:3306/shuwashuwa?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8848
