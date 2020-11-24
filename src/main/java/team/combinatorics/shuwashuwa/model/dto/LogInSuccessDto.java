@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class LogInSuccessDto {
     @ApiModelProperty("token")
     private String token;
+
     @ApiModelProperty("是否为第一次使用小程序")
     private boolean isFirstLogin;
 }

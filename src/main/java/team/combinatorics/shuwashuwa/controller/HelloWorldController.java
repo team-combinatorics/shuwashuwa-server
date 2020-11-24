@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import team.combinatorics.shuwashuwa.service.HelloWorldService;
 
-@Api(value = "Hello模块说明")
+@Api(value = "Hello模块说明", tags = "HelloWord接口说明")
 @RestController
 @AllArgsConstructor
 public class HelloWorldController {
