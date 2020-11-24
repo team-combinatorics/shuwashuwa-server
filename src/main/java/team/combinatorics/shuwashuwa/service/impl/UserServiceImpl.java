@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteOneUser(String openID) {
-        return userDao.deleteUserByOpenid(openID);
+    public int deleteOneUser(String openid) {
+        return userDao.deleteUserByOpenid(openid);
     }
 
     @Override
@@ -87,6 +87,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto) {
+        System.out.println("即将更新用户信息");
+        System.out.println(updateUserInfoDto.getUser_name());
+        System.out.println(updateUserInfoDto.getNick_name());
+    }
+
+    @Override
+    public UpdateUserInfoDto getUserInfo(int openid)
+    {
+        return null;
+    }
+
+    @Override
     public String test(LogInInfoDto logInInfoDto) throws Exception {
         //拼接url
         //拼接url
@@ -107,10 +120,5 @@ public class UserServiceImpl implements UserService {
             userDao.addUserOpenid(openid);
             return userDao.findUserByOpenid(openid).toString();
         }
-    }
-
-    @Override
-    public void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto) {
-
     }
 }

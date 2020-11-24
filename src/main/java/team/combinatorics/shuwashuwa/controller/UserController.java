@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.model.bean.CommonResult;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
+import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
 import team.combinatorics.shuwashuwa.model.pojo.User;
 import team.combinatorics.shuwashuwa.service.UserService;
 
@@ -36,9 +37,32 @@ public class UserController {
         return new CommonResult<>(200, "注册成功", logInSuccessDto);
     }
 
-    public CommonResult<String> updateUserInfo()
+    /**
+     * 更新用户信息
+     */
+    @ApiOperation(value = "更新用户信息", notes = "根据传入的数据结构对数据库中用户的相应表项进行更新", httpMethod = "PUT")
+    @RequestMapping(value = "/updateUserInfo", method = RequestMethod.PUT)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    public CommonResult<String> updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto)
     {
-        return null;
+        userService.updateUserInfo(openid, updateUserInfoDto);
+        return new CommonResult<>(200, "更新成功", "User's information has been updated!");
+    }
+
+    /**
+     * 获取用户信息
+     */
+    @ApiOperation(value = "获取用户信息", notes = "根据传入的openid从数据库中获取用户信息", httpMethod = "GET")
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.PUT)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    public CommonResult<UpdateUserInfoDto> getUserInfo(int openid)
+    {
+        UpdateUserInfoDto updateUserInfoDto = userService.getUserInfo(openid);
+        return new CommonResult<>(200, "更新成功", updateUserInfoDto);
     }
 
     /**
@@ -46,13 +70,13 @@ public class UserController {
      */
     @ApiOperation(value = "删除单个用户", notes = "删除单个用户，测试用", httpMethod = "DELETE")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "删除成功"),
+            @ApiResponse(code = 200, message = "请求成功"),
             @ApiResponse(code = 204, message = "用户不存在")
     })
     @RequestMapping(value = "/deleteOneUser", method = RequestMethod.DELETE)
-    public CommonResult<String> deleteOneUser(@RequestBody String openID) {
-        System.out.println("删除用户，openid为：" + openID);
-        int cnt = userService.deleteOneUser(openID);
+    public CommonResult<String> deleteOneUser(@RequestBody String openid) {
+        System.out.println("删除用户，openid为：" + openid);
+        int cnt = userService.deleteOneUser(openid);
         if(cnt > 0)
         {
             return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
@@ -65,7 +89,7 @@ public class UserController {
      */
     @ApiOperation(value = "删除所有用户", notes = "删除所有用户，测试用", httpMethod = "DELETE")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "删除成功"),
+            @ApiResponse(code = 200, message = "请求成功"),
     })
     @RequestMapping(value = "/deleteAllUsers", method = RequestMethod.DELETE)
     public CommonResult<String> deleteAllUser() {
