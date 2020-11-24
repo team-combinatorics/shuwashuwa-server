@@ -36,6 +36,11 @@ public class UserController {
         return new CommonResult<>(200, "注册成功", logInSuccessDto);
     }
 
+    public CommonResult<String> updateUserInfo()
+    {
+        return null;
+    }
+
     /**
      * 删除单个用户，测试用
      */
@@ -47,7 +52,7 @@ public class UserController {
     @RequestMapping(value = "/deleteOneUser", method = RequestMethod.DELETE)
     public CommonResult<String> deleteOneUser(@RequestBody String openID) {
         System.out.println("删除用户，openid为：" + openID);
-        int cnt = userService.getUserDao().deleteUserByOpenid(openID);
+        int cnt = userService.deleteOneUser(openID);
         if(cnt > 0)
         {
             return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
@@ -65,7 +70,7 @@ public class UserController {
     @RequestMapping(value = "/deleteAllUsers", method = RequestMethod.DELETE)
     public CommonResult<String> deleteAllUser() {
         System.out.println("即将删除所有用户信息");
-        userService.getUserDao().deleteAllUsers();
+        userService.deleteAllUsers();
         return new CommonResult<>(200, "删除成功", "All users have been deleted.");
     }
 

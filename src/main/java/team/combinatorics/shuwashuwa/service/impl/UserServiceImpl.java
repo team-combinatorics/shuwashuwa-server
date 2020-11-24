@@ -39,8 +39,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDao getUserDao() {
-        return userDao;
+    public int deleteOneUser(String openID) {
+        return userDao.deleteUserByOpenid(openID);
+    }
+
+    @Override
+    public void deleteAllUsers()
+    {
+        userDao.deleteAllUsers();
     }
 
     @Override

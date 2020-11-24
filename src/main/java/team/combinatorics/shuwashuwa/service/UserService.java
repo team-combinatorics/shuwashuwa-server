@@ -15,7 +15,9 @@ public interface UserService {
 
     String test(LogInInfoDto logInInfoDto) throws Exception;
 
-    UserDao getUserDao();
+    int deleteOneUser(String openID);
+
+    void deleteAllUsers();
 
     void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto);
 }
