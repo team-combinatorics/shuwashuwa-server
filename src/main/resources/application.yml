@@ -1,4 +1,4 @@
-##  ˝æ›‘¥≈‰÷√
+
 spring:
   datasource:
     dbcp2:
@@ -9,3 +9,8 @@ spring:
 
 server:
   port: 8848
+
+mybatis:
+  type-aliases-package: team.combinatorics.shuwashuwa.model.pojo
+  mapper-locations: classpath:\:mapper/*.xml
+
