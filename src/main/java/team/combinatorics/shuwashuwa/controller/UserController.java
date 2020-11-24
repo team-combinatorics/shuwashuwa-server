@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.model.bean.CommonResult;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
+import team.combinatorics.shuwashuwa.model.pojo.User;
 import team.combinatorics.shuwashuwa.service.UserService;
 
 @Api(value = "User相关接口说明")
@@ -36,15 +37,26 @@ public class UserController {
     }
 
     /**
-     * 删除用户，测试用
+     * 删除单个用户，测试用
      */
-    @ApiOperation(value = "删除所有用户", notes = "删除所有用户，测试用", httpMethod = "POST")
-    public CommonResult<String> deleteAllUser() {
-        return null;
+    @ApiOperation(value = "删除所有用户", notes = "删除单个用户，测试用", httpMethod = "DELETE")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "删除成功"),
+            @ApiResponse(code = 204, message = "用户不存在")
+    })
+    @RequestMapping(value = "/deleteOneUser", method = RequestMethod.DELETE)
+    public CommonResult<String> deleteOneUser(LogInInfoDto logInInfoDto) {
+        System.out.println("删除用户，openid为：" + logInInfoDto.getCode());
+        int cnt = userService.getUserDao().deleteUserByOpenid(logInInfoDto.getCode());
+        if(cnt > 0)
+        {
+            return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
+        }
+        return new CommonResult<>(204, "用户不存在", "You have deleted a ghost user!");
     }
 
 //    /**
-//     * 删除所有用户
+//     * 删除所有用户，测试用
 //     */
 //    @RequestMapping(value = "/login", method = RequestMethod.GET)
 //    public CommonResult<LogInSuccessDto> addUser(@RequestBody LogInInfoDto logInInfoDto) throws Exception {

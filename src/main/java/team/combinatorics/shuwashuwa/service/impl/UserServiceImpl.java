@@ -39,6 +39,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDao getUserDao() {
+        return userDao;
+    }
+
+    @Override
     public LogInSuccessDto wechatLogin(LogInInfoDto logInInfoDto) throws Exception {
 
         //拼接url
