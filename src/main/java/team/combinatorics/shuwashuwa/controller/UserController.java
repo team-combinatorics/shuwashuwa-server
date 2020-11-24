@@ -28,8 +28,9 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
-    public CommonResult<LogInSuccessDto> addUser(@RequestBody LogInInfoDto logInInfoDto) throws Exception {
+    public CommonResult<LogInSuccessDto> addUser(LogInInfoDto logInInfoDto) throws Exception {
         System.out.println("新增了一个用户");
+        System.out.println(logInInfoDto.getCode());
         LogInSuccessDto logInSuccessDto = userService.wechatLogin(logInInfoDto);
         return new CommonResult<>(200, "注册成功", logInSuccessDto);
     }

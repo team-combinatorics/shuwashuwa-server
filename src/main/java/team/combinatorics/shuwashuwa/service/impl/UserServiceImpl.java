@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserService {
                 + "&js_code=" + logInInfoDto.getCode()
                 + "&grant_type=authorization_code";
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
         // TODO: 应该为这里定义一个微信服务器连接错误的异常
         if (!response.getStatusCode().equals(HttpStatus.OK))
             throw new Exception();

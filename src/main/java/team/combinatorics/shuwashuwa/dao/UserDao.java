@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.dao;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -14,4 +15,10 @@ public interface UserDao {
 
     @Select("SELECT * FROM user_info where openid=#{openid}")
     User findUserByOpenid(String openid);
+
+    @Delete("DELETE * FROM user_info where openid=#{openid}")
+    User deleteUserByOpenid(String openid);
+
+    @Delete("DELETE * FROM user_info")
+    User deleteAllUsers();
 }
