@@ -25,6 +25,7 @@ public class TokenUtil {
      * @return token
      */
     public static String createToken(int userid, String openid) {
+
         Calendar nowTime = Calendar.getInstance();
         nowTime.add(Calendar.SECOND, EXPIRE);
         Date expireDate = nowTime.getTime();
