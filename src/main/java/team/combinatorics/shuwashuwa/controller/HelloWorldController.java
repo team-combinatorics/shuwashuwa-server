@@ -28,4 +28,12 @@ public class HelloWorldController {
                            @RequestParam String name) {
         return "Hello " + name + "!\n";
     }
+
+    @ApiOperation(value = "leesou test", notes = "leesou test for swagger")
+    @GetMapping("/leesouTest")
+    public String leesouTest(@ApiParam("参数：输入的字符串")
+                             @RequestParam(defaultValue = "leesou") String name)
+    {
+        return name + " love HoneyWorks!\n";
+    }
 }
