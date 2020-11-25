@@ -45,9 +45,8 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
-    public CommonResult<String> updateUserInfo(UpdateUserInfoDto updateUserInfoDto)
-    {
-        userService.updateUserInfo(-1, updateUserInfoDto);
+    public CommonResult<String> updateUserInfo(String code, UpdateUserInfoDto updateUserInfoDto) throws Exception {
+        userService.updateUserInfo(code, updateUserInfoDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
     }
 
@@ -55,13 +54,12 @@ public class UserController {
      * 获取用户信息，未完成
      */
     @ApiOperation(value = "获取用户信息", notes = "根据传入的openid从数据库中获取用户信息", httpMethod = "GET")
-    @RequestMapping(value = "/getUserInfo", method = RequestMethod.PUT)
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
-    public CommonResult<UpdateUserInfoDto> getUserInfo(int openid)
-    {
-        UpdateUserInfoDto updateUserInfoDto = userService.getUserInfo(openid);
+    public CommonResult<UpdateUserInfoDto> getUserInfo(String code) throws Exception {
+        UpdateUserInfoDto updateUserInfoDto = userService.getUserInfo(code);
         return new CommonResult<>(200, "更新成功", updateUserInfoDto);
     }
 

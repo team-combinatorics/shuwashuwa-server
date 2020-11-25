@@ -67,15 +67,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto) {
+    public void updateUserInfo(String code, UpdateUserInfoDto updateUserInfoDto) throws Exception {
         System.out.println("即将更新用户信息");
+        JsonNode root = wechatUtil.getWechatInfo(code);
+        System.out.println("待更新的用户openid为：" + root.path("openid").asText());
         System.out.println(updateUserInfoDto.getUser_name());
         System.out.println(updateUserInfoDto.getNick_name());
     }
 
     @Override
-    public UpdateUserInfoDto getUserInfo(int openid)
-    {
+    public UpdateUserInfoDto getUserInfo(String code) throws Exception {
+        JsonNode root = wechatUtil.getWechatInfo(code);
+        System.out.println("想要获取" + root.path("openid").asText() + "的信息");
         return null;
     }
 

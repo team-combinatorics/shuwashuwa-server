@@ -15,9 +15,9 @@ public interface UserService {
 
     void deleteAllUsers();
 
-    void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto);
+    void updateUserInfo(String code, UpdateUserInfoDto updateUserInfoDto) throws Exception;
 
-    UpdateUserInfoDto getUserInfo(int openid);
+    UpdateUserInfoDto getUserInfo(String code) throws Exception;
 
     // boolean suicide();
 
