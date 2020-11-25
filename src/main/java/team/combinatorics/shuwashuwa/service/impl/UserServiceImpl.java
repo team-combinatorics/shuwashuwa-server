@@ -2,9 +2,6 @@ package team.combinatorics.shuwashuwa.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -18,28 +15,29 @@ import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
 import team.combinatorics.shuwashuwa.model.pojo.User;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
+import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 @PropertySource("classpath:wx.properties")
 @Component
 public class UserServiceImpl implements UserService {
 
-    private final RestTemplate restTemplate;
+    //private final RestTemplate restTemplate;
+
+    private final WechatUtil wechatUtil;
 
     private final UserDao userDao;
 
-    @Value("${wx.appid:default}")
-    private String appid;
-
-    @Value("${wx.secret:default}")
-    private String secret;
-
-    public UserServiceImpl(RestTemplate restTemplate, UserDao userDao) {
-        this.restTemplate = restTemplate;
+    public UserServiceImpl(WechatUtil wechatUtil, UserDao userDao) {
+        //this.restTemplate = restTemplate;
+        this.wechatUtil = wechatUtil;
         this.userDao = userDao;
     }
 
     @Override
-    public int deleteOneUser(String openid) {
+    public int deleteOneUser(String code) throws Exception {
+        JsonNode root = wechatUtil.getWechatInfo(code);
+        String openid = root.path("openid").asText();
+        System.out.println("要删除用户的openid为：" + openid);
         return userDao.deleteUserByOpenid(openid);
     }
 
@@ -51,39 +49,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LogInSuccessDto wechatLogin(LogInInfoDto logInInfoDto) throws Exception {
-
-        //拼接url
-        String url = "https://api.weixin.qq.com/sns/jscode2session?"
-                + "appid=" + appid
-                + "&secret=" + secret
-                + "&js_code=" + logInInfoDto.getCode()
-                + "&grant_type=authorization_code";
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
-        // TODO: 应该为这里定义一个微信服务器连接错误的异常
-        if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new Exception();
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
-        // TODO: 应该为这里定义一个调用jscode2session错误的异常
-        if (root.has("errcode") && root.path("errcode").asInt() != 0)
-            throw new Exception();
-        else {
-            String openid = root.path("openid").asText();
-            String sessionKey = root.path("session_key").asText();
-            LogInSuccessDto logInSuccessDto = new LogInSuccessDto();
-            User user = userDao.findUserByOpenid(openid);
-            if(user == null) {
-                logInSuccessDto.setFirstLogin(true);
-                userDao.addUserOpenid(openid);
-                user = userDao.findUserByOpenid(openid);
-            }
-            else
-                logInSuccessDto.setFirstLogin(false);
-            String token = TokenUtil.createToken(user.getUserid(), user.getOpenid());
-            logInSuccessDto.setToken(token);
-            return logInSuccessDto;
+        JsonNode root = wechatUtil.getWechatInfo(logInInfoDto.getCode());
+        String openid = root.path("openid").asText();
+        String sessionKey = root.path("session_key").asText();
+        LogInSuccessDto logInSuccessDto = new LogInSuccessDto();
+        User user = userDao.findUserByOpenid(openid);
+        if(user == null) {
+            logInSuccessDto.setFirstLogin(true);
+            userDao.addUserOpenid(openid);
+            user = userDao.findUserByOpenid(openid);
         }
+        else
+            logInSuccessDto.setFirstLogin(false);
+        String token = TokenUtil.createToken(user.getUserid(), user.getOpenid());
+        logInSuccessDto.setToken(token);
+        return logInSuccessDto;
     }
 
     @Override
@@ -99,18 +79,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+
     @Override
     public String test(LogInInfoDto logInInfoDto) throws Exception {
-        //拼接url
-        //拼接url
-        String url = "https://api.weixin.qq.com/sns/jscode2session?"
-                + "appid=" + appid
-                + "&secret=" + secret
-                + "&js_code=" + logInInfoDto.getCode()
-                + "&grant_type=authorization_code";
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
+        JsonNode root = wechatUtil.getWechatInfo(logInInfoDto.getCode());
         // 如果返回中有错误码且不等于零说明出错
         if (root.has("errcode") && root.path("errcode").asInt() != 0)
             return "Yes " + root.toString();

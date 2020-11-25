@@ -11,7 +11,7 @@ public interface UserService {
 
     LogInSuccessDto wechatLogin(LogInInfoDto logInInfoDto) throws Exception;
 
-    int deleteOneUser(String openID);
+    int deleteOneUser(String openID) throws Exception;
 
     void deleteAllUsers();
 

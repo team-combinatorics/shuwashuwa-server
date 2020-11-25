@@ -38,21 +38,21 @@ public class UserController {
     }
 
     /**
-     * 更新用户信息
+     * 更新用户信息，未完成
      */
     @ApiOperation(value = "更新用户信息", notes = "根据传入的数据结构对数据库中用户的相应表项进行更新", httpMethod = "PUT")
     @RequestMapping(value = "/updateUserInfo", method = RequestMethod.PUT)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
-    public CommonResult<String> updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto)
+    public CommonResult<String> updateUserInfo(UpdateUserInfoDto updateUserInfoDto)
     {
-        userService.updateUserInfo(openid, updateUserInfoDto);
+        userService.updateUserInfo(-1, updateUserInfoDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
     }
 
     /**
-     * 获取用户信息
+     * 获取用户信息，未完成
      */
     @ApiOperation(value = "获取用户信息", notes = "根据传入的openid从数据库中获取用户信息", httpMethod = "GET")
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.PUT)
@@ -74,9 +74,8 @@ public class UserController {
             @ApiResponse(code = 204, message = "用户不存在")
     })
     @RequestMapping(value = "/deleteOneUser", method = RequestMethod.DELETE)
-    public CommonResult<String> deleteOneUser(@RequestBody String openid) {
-        System.out.println("删除用户，openid为：" + openid);
-        int cnt = userService.deleteOneUser(openid);
+    public CommonResult<String> deleteOneUser(@RequestBody String code) throws Exception {
+        int cnt = userService.deleteOneUser(code);
         if(cnt > 0)
         {
             return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
