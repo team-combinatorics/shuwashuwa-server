@@ -13,3 +13,10 @@
 以下为misaki说她要做的
 
 - 做token
+  - TokenUtil.java：改参数表
+  - UserServiceImpl：改对TokenUtil的调用
+  - 包含：userid, 权限
+- 鉴权
+  - 深入理解handler和interceptor（至少搞懂返回值有啥用
+  - annotation/：增加更多种类的权限注释
+  - AuthorizationInterceptor：增加对以上注释的检查

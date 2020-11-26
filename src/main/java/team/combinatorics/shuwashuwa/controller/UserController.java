@@ -27,7 +27,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
-            @ApiResponse(code = 40001, message = "lbl出错了")
+            @ApiResponse(code = 40001, message = "lbl出错了") /*???*/
 
     })
     public CommonResult<LogInSuccessDto> addUser(LogInInfoDto logInInfoDto) throws Exception {
