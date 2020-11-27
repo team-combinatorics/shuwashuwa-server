@@ -5,19 +5,26 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import team.combinatorics.shuwashuwa.annotation.PassToken;
-import team.combinatorics.shuwashuwa.annotation.UserLoginToken;
+import team.combinatorics.shuwashuwa.annotation.AdminOnly;
+import team.combinatorics.shuwashuwa.annotation.ClientOnly;
+import team.combinatorics.shuwashuwa.annotation.NoLogin;
+import team.combinatorics.shuwashuwa.annotation.VolunteerOnly;
 import team.combinatorics.shuwashuwa.service.UserService;
+import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
 @Component
 @AllArgsConstructor
 public class AuthorizationInterceptor implements HandlerInterceptor {
     public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
+
+    private static final int client = 1;
+    private static final int volunteer = 2;
+    private static final int admin = 4;
+    private static final int su = 8;
 
     UserService userService;
 
@@ -31,33 +38,24 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
 
-        // 检查是否有ignore注释
-        if(method.isAnnotationPresent(PassToken.class)){
-            PassToken passToken = method.getAnnotation(PassToken.class);
-            return passToken.required();
+        // 检查是否需要用户登录
+        if (!method.isAnnotationPresent(NoLogin.class) && token==null) {
+            //TODO: 需要为这里定义一个没有token的异常
+            throw new Exception("登录失效，返回标题");
         }
 
-        // 检查是否需要权限
-        if (method.isAnnotationPresent(UserLoginToken.class)){
-            UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
-            //TODO: 应该为这里定义一个token
-            if(token == null)
-                throw new RuntimeException("无token，请重新登录");
-//            // 获取token中的userName
-//            String username = JWT.decode(token).getAudience().get(0);
-//            UserInfoDTO user = userService.findUserByName(username);
-//
-//            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(username)).build();
-//            try{
-//                jwtVerifier.verify(token);
-//            }catch (JWTVerificationException e){
-//                throw new RuntimeException("401");
-//            }
-            return true;
+        // 可能因为签名篡改或过期而抛出异常
+        int tokenAuthority = TokenUtil.verifyToken(token).get("authority").asInt();
+        //TODO:需要为这里定义一个身份错误的异常
+        if(method.isAnnotationPresent(AdminOnly.class) && (tokenAuthority & admin) == 0) {
+            throw new Exception("当前账号不具有指定的权限");
         }
-
-
-
-        return false;
+        if(method.isAnnotationPresent(ClientOnly.class) && (tokenAuthority & client) == 0) {
+            throw new Exception("当前账号不具有指定的权限");
+        }
+        if(method.isAnnotationPresent(VolunteerOnly.class) && (tokenAuthority & volunteer) == 0) {
+            throw new Exception("当前账号不具有指定的权限");
+        }
+        return true;
     }
 }

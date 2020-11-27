@@ -3,6 +3,8 @@ package team.combinatorics.shuwashuwa.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
@@ -16,6 +18,11 @@ import java.util.Map;
 public class TokenUtil {
     public static final String SECRET = "HappyLucky";
     public static final int EXPIRE = 60 * 60 * 4;
+    public static final Map<String, Object> headerMap = new HashMap<>();
+    static {
+        headerMap.put("alg", "HS256");
+        headerMap.put("typ", "JWT");
+    }
 
     /**
      * 生成token
@@ -29,12 +36,8 @@ public class TokenUtil {
         nowTime.add(Calendar.SECOND, EXPIRE);
         Date expireDate = nowTime.getTime();
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("alg", "HS256");
-        map.put("typ", "JWT");
-
         return JWT.create()
-                .withHeader(map)
+                .withHeader(headerMap)
                 .withClaim("userid", userid)
                 .withClaim("authority", authority)
                 .withIssuedAt(new Date())
@@ -51,10 +54,14 @@ public class TokenUtil {
         DecodedJWT jwt;
         try {
             jwt = verifier.verify(token);
-        }catch (Exception e){
+        }catch (TokenExpiredException tle) {
             //TODO: 这里应该定义一个凭证过期的异常
-            throw new RuntimeException("凭证已过期，请重新登录");
+            throw new RuntimeException("登录失效，返回标题");
+        } catch (JWTVerificationException e) {
+            //TODO: 这里应该定义一个签名无效的异常
+            throw new RuntimeException("无效的签名");
         }
+
         return jwt.getClaims();
     }
 
