@@ -9,7 +9,7 @@ import team.combinatorics.shuwashuwa.annotation.ClientAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
-import team.combinatorics.shuwashuwa.exception.GlobalException;
+import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +27,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     private static final int SU = 8;
 
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws GlobalException {
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws KnownException {
         String token = httpServletRequest.getHeader("token");
 
         if(!(handler instanceof HandlerMethod))
@@ -40,7 +40,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if (method.isAnnotationPresent(NoToken.class))
             return true;
         if(token==null) {
-            throw new GlobalException(ErrorInfoEnum.TOKEN_LOST);
+            throw new KnownException(ErrorInfoEnum.TOKEN_LOST);
         }
 
         // 验证签名，同时取出权限码
@@ -51,6 +51,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 method.isAnnotationPresent(ClientAccess.class) && (tokenAuthority & CLIENT) != 0 ||
                 method.isAnnotationPresent(VolunteerAccess.class) && (tokenAuthority & VOLUNTEER) != 0)
             return true;
-        else throw new GlobalException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
+        else throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
-import team.combinatorics.shuwashuwa.exception.GlobalException;
+import team.combinatorics.shuwashuwa.exception.KnownException;
 
 @PropertySource("classpath:wx.properties")
 @Component
@@ -38,12 +38,12 @@ public class WechatUtil {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
         if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new GlobalException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response.getBody());
         if (root.has("errcode") && root.path("errcode").asInt() != 0) {
             System.out.println(root.path("errcode") + " " + root.path("errmsg"));
-            throw new GlobalException(ErrorInfoEnum.CODE2SESSION_FAILURE);
+            throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
         }
         return root;
     }
