@@ -7,11 +7,12 @@ import team.combinatorics.shuwashuwa.model.bean.CommonResult;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(value = ShuwarinException.class)
-    public CommonResult<String> ShuwarinExceptionHandler(ShuwarinException se) {
+    @ExceptionHandler(value = GlobalException.class)
+    public CommonResult<String> globalExceptionHandler(GlobalException se) {
         se.printStackTrace();
         return new CommonResult<>(se.getErrCode(),"Error",se.getMessage());
     }
+
     @ExceptionHandler(value = Exception.class)
     public CommonResult<String> toHandlerException(Exception e) {
         e.printStackTrace();

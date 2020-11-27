@@ -5,10 +5,10 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ShuwarinException extends RuntimeException {
+public class GlobalException extends RuntimeException {
     private Integer errCode;
 
-    public ShuwarinException(ErrorEnum errorEnum) {
+    public GlobalException(ErrorEnum errorEnum) {
         super(errorEnum.getErrMsg());
         this.errCode = errorEnum.getErrCode();
     }

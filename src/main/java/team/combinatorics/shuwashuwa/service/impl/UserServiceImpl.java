@@ -2,9 +2,6 @@ package team.combinatorics.shuwashuwa.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
@@ -13,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.exception.ErrorEnum;
-import team.combinatorics.shuwashuwa.exception.ShuwarinException;
+import team.combinatorics.shuwashuwa.exception.GlobalException;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
@@ -52,12 +49,12 @@ public class UserServiceImpl implements UserService {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
         if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new ShuwarinException(ErrorEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+            throw new GlobalException(ErrorEnum.WECHAT_SERVER_CONNECTION_FAILURE);
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response.getBody());
         if (root.has("errcode") && root.path("errcode").asInt() != 0)
-            throw new ShuwarinException(ErrorEnum.CODE2SESSION_FAILURE);
+            throw new GlobalException(ErrorEnum.CODE2SESSION_FAILURE);
         else {
             String openid = root.path("openid").asText();
             String sessionKey = root.path("session_key").asText();

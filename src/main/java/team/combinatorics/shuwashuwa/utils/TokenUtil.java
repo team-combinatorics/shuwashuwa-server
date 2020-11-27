@@ -8,7 +8,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import team.combinatorics.shuwashuwa.exception.ErrorEnum;
-import team.combinatorics.shuwashuwa.exception.ShuwarinException;
+import team.combinatorics.shuwashuwa.exception.GlobalException;
 
 
 import java.util.Calendar;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class TokenUtil {
     public static final String SECRET = "HappyLucky";
-    public static final int EXPIRE = 60 * 60 * 4;
+    public static final int EXPIRE = 60 * 60 * 24 * 15;
     public static final Map<String, Object> headerMap = new HashMap<>();
     static {
         headerMap.put("alg", "HS256");
@@ -57,9 +57,9 @@ public class TokenUtil {
         try {
             jwt = verifier.verify(token);
         }catch (TokenExpiredException tle) {
-            throw new ShuwarinException(ErrorEnum.TOKEN_EXPIRED);
+            throw new GlobalException(ErrorEnum.TOKEN_EXPIRED);
         } catch (JWTVerificationException e) {
-            throw new ShuwarinException(ErrorEnum.TOKEN_INVALID);
+            throw new GlobalException(ErrorEnum.TOKEN_INVALID);
         }
 
         return jwt.getClaims();
