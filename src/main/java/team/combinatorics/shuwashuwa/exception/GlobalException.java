@@ -8,9 +8,9 @@ import lombok.EqualsAndHashCode;
 public class GlobalException extends RuntimeException {
     private Integer errCode;
 
-    public GlobalException(ErrorEnum errorEnum) {
-        super(errorEnum.getErrMsg());
-        this.errCode = errorEnum.getErrCode();
+    public GlobalException(ErrorInfoEnum errorInfoEnum) {
+        super(errorInfoEnum.getErrMsg());
+        this.errCode = errorInfoEnum.getErrCode();
     }
 }
 

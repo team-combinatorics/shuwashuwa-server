@@ -92,6 +92,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
     })
+    @NoLogin
     @RequestMapping(value = "/deleteAllUsers", method = RequestMethod.DELETE)
     public CommonResult<String> deleteAllUser() {
         System.out.println("即将删除所有用户信息");

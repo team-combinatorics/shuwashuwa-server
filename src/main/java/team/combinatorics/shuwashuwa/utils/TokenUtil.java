@@ -7,7 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import team.combinatorics.shuwashuwa.exception.ErrorEnum;
+import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.GlobalException;
 
 
@@ -57,9 +57,9 @@ public class TokenUtil {
         try {
             jwt = verifier.verify(token);
         }catch (TokenExpiredException tle) {
-            throw new GlobalException(ErrorEnum.TOKEN_EXPIRED);
+            throw new GlobalException(ErrorInfoEnum.TOKEN_EXPIRED);
         } catch (JWTVerificationException e) {
-            throw new GlobalException(ErrorEnum.TOKEN_INVALID);
+            throw new GlobalException(ErrorInfoEnum.TOKEN_INVALID);
         }
 
         return jwt.getClaims();

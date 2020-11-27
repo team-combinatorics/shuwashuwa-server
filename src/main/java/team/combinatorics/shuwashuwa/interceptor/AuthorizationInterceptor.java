@@ -8,7 +8,7 @@ import team.combinatorics.shuwashuwa.annotation.AdminOnly;
 import team.combinatorics.shuwashuwa.annotation.ClientOnly;
 import team.combinatorics.shuwashuwa.annotation.NoLogin;
 import team.combinatorics.shuwashuwa.annotation.VolunteerOnly;
-import team.combinatorics.shuwashuwa.exception.ErrorEnum;
+import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.GlobalException;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -39,20 +39,20 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if (method.isAnnotationPresent(NoLogin.class))
             return true;
         if(token==null) {
-            throw new GlobalException(ErrorEnum.TOKEN_LOST);
+            throw new GlobalException(ErrorInfoEnum.TOKEN_LOST);
         }
 
         // 验证签名，同时取出权限码
         // 可能因为签名篡改或过期而抛出异常
         int tokenAuthority = TokenUtil.verifyToken(token).get("authority").asInt();
         if(method.isAnnotationPresent(AdminOnly.class) && (tokenAuthority & admin) == 0) {
-            throw new GlobalException(ErrorEnum.AUTHORITY_UNMATCHED);
+            throw new GlobalException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
         }
         if(method.isAnnotationPresent(ClientOnly.class) && (tokenAuthority & client) == 0) {
-            throw new GlobalException(ErrorEnum.AUTHORITY_UNMATCHED);
+            throw new GlobalException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
         }
         if(method.isAnnotationPresent(VolunteerOnly.class) && (tokenAuthority & volunteer) == 0) {
-            throw new GlobalException(ErrorEnum.AUTHORITY_UNMATCHED);
+            throw new GlobalException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
         }
         return true;
     }

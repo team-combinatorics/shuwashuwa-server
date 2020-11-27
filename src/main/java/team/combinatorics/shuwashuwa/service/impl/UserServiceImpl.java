@@ -1,19 +1,9 @@
 package team.combinatorics.shuwashuwa.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.dao.UserDao;
-import team.combinatorics.shuwashuwa.exception.ErrorEnum;
-import team.combinatorics.shuwashuwa.exception.GlobalException;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
