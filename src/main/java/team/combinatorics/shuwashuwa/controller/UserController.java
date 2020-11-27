@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import team.combinatorics.shuwashuwa.annotation.NoLogin;
 import team.combinatorics.shuwashuwa.model.bean.CommonResult;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
@@ -30,6 +31,7 @@ public class UserController {
             @ApiResponse(code = 40001, message = "lbl出错了") /*???*/
 
     })
+    @NoLogin
     public CommonResult<LogInSuccessDto> addUser(LogInInfoDto logInInfoDto) throws Exception {
         System.out.println("新增了一个用户");
         System.out.println(logInInfoDto.getCode());
