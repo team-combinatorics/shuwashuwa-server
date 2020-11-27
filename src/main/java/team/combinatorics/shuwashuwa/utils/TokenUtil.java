@@ -64,14 +64,4 @@ public class TokenUtil {
 
         return jwt.getClaims();
     }
-
-    /**
-     * 解析Token
-     * @param token Token to be parsed
-     * @return Claims contained in token
-     */
-    public static Map<String, Claim> parseToken(String token){
-        DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaims();
-    }
 }
