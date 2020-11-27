@@ -14,12 +14,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public CommonResult<String> toHandlerException(Exception e) {
+    public CommonResult<String> defaultHandler(Exception e) {
         e.printStackTrace();
-        if(e instanceof DuplicateKeyException){
-            return new CommonResult<>(40001, "Error", "用户名重复");
-        }
-        return new CommonResult<>(40001, "Error", "?");
+        return new CommonResult<>(40000, "Error", "Unknown error");
     }
 
 

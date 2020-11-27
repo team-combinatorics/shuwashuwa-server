@@ -1,19 +1,16 @@
 package team.combinatorics.shuwashuwa.controller;
 
-import com.mysql.cj.log.Log;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import team.combinatorics.shuwashuwa.annotation.NoLogin;
+import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.model.bean.CommonResult;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
-import team.combinatorics.shuwashuwa.model.pojo.User;
 import team.combinatorics.shuwashuwa.service.UserService;
 
 @Api(value = "User相关接口说明")
@@ -33,7 +30,7 @@ public class UserController {
             @ApiResponse(code = 40001, message = "lbl出错了") /*???*/
 
     })
-    @NoLogin
+    @NoToken
     public CommonResult<LogInSuccessDto> addUser(LogInInfoDto logInInfoDto) throws Exception {
         System.out.println("新增了一个用户");
         System.out.println(logInInfoDto.getCode());
@@ -92,7 +89,7 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
     })
-    @NoLogin
+    @NoToken
     @RequestMapping(value = "/deleteAllUsers", method = RequestMethod.DELETE)
     public CommonResult<String> deleteAllUser() {
         System.out.println("即将删除所有用户信息");
