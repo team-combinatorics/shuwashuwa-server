@@ -27,15 +27,15 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
-            @ApiResponse(code = 40001, message = "lbl出错了") /*???*/
+            @ApiResponse(code = 40001, message = "lbl出错了") /*TODO: update ApiResponses*/
 
     })
     @NoToken
-    public CommonResult<LogInSuccessDto> addUser(LogInInfoDto logInInfoDto) throws Exception {
-        System.out.println("新增了一个用户");
+    public CommonResult<LogInSuccessDto> loginHandler(LogInInfoDto logInInfoDto) throws Exception {
+        System.out.println("用户登录");
         System.out.println(logInInfoDto.getCode());
         LogInSuccessDto logInSuccessDto = userService.wechatLogin(logInInfoDto);
-        return new CommonResult<>(200, "注册成功", logInSuccessDto);
+        return new CommonResult<>(200, "登录成功", logInSuccessDto);
     }
 
     /**
