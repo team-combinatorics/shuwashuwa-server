@@ -19,14 +19,11 @@ import java.lang.reflect.Method;
 @Component
 @AllArgsConstructor
 public class AuthorizationInterceptor implements HandlerInterceptor {
-    public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
 
     private static final int client = 1;
     private static final int volunteer = 2;
     private static final int admin = 4;
     private static final int su = 8;
-
-    UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
@@ -39,7 +36,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         Method method = handlerMethod.getMethod();
 
         // 检查是否需要用户登录
-        if (!method.isAnnotationPresent(NoLogin.class) && token==null) {
+        if (method.isAnnotationPresent(NoLogin.class))
+            return true;
+        if(token==null) {
             //TODO: 需要为这里定义一个没有token的异常
             throw new Exception("登录失效，返回标题");
         }
