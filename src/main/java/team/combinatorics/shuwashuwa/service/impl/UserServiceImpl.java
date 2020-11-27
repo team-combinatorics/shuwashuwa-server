@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         }
         else
             logInSuccessDto.setFirstLogin(false);
-        String token = TokenUtil.createToken(user.getUserid(), user.getOpenid());
+        String token = TokenUtil.createToken(user.getUserid(), user.getAuthority());
         logInSuccessDto.setToken(token);
         return logInSuccessDto;
     }
@@ -102,8 +102,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto) {
-
-    }
+//    @Override
+//    public void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto) {
+//
+//    }
 }
