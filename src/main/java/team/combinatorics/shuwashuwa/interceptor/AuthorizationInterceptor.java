@@ -1,6 +1,5 @@
 package team.combinatorics.shuwashuwa.interceptor;
 
-import com.auth0.jwt.JWT;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -11,7 +10,6 @@ import team.combinatorics.shuwashuwa.annotation.NoLogin;
 import team.combinatorics.shuwashuwa.annotation.VolunteerOnly;
 import team.combinatorics.shuwashuwa.exception.ErrorEnum;
 import team.combinatorics.shuwashuwa.exception.ShuwarinException;
-import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +26,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     private static final int su = 8;
 
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws ShuwarinException {
         String token = httpServletRequest.getHeader("token");
 
         if(!(handler instanceof HandlerMethod))
