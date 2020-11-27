@@ -3,7 +3,6 @@ package team.combinatorics.shuwashuwa.service.impl;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
-import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
@@ -43,7 +42,6 @@ public class UserServiceImpl implements UserService {
         userDao.deleteAllUsers();
     }
 
-    @NoToken
     @Override
     public LogInSuccessDto wechatLogin(LogInInfoDto logInInfoDto) throws Exception {
         JsonNode root = wechatUtil.getWechatInfo(logInInfoDto.getCode());
