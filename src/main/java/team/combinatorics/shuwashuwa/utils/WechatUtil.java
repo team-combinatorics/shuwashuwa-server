@@ -29,7 +29,6 @@ public class WechatUtil {
 
     public JsonNode getWechatInfo(String code) throws Exception {
         //拼接url
-        //System.out.println(code);
         String url = "https://api.weixin.qq.com/sns/jscode2session?"
                 + "appid=" + appid
                 + "&secret=" + secret

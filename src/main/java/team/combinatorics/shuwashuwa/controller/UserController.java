@@ -33,7 +33,7 @@ public class UserController {
     @NoToken
     public CommonResult<LogInSuccessDto> loginHandler(LogInInfoDto logInInfoDto) throws Exception {
         System.out.println("用户登录");
-        System.out.println(logInInfoDto.getCode());
+        System.out.println("Code:"+logInInfoDto.getCode());
         LogInSuccessDto logInSuccessDto = userService.wechatLogin(logInInfoDto);
         return new CommonResult<>(200, "登录成功", logInSuccessDto);
     }
