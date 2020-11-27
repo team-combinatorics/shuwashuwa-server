@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.dao.UserDao;
+import team.combinatorics.shuwashuwa.exception.ErrorEnum;
+import team.combinatorics.shuwashuwa.exception.ShuwarinException;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
@@ -49,14 +51,13 @@ public class UserServiceImpl implements UserService {
                 + "&grant_type=authorization_code";
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
-        // TODO: 应该为这里定义一个微信服务器连接错误的异常
         if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new Exception();
+            throw new ShuwarinException(ErrorEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response.getBody());
-        // TODO: 应该为这里定义一个调用jscode2session错误的异常
         if (root.has("errcode") && root.path("errcode").asInt() != 0)
-            throw new Exception();
+            throw new ShuwarinException(ErrorEnum.CODE2SESSION_FAILURE);
         else {
             String openid = root.path("openid").asText();
             String sessionKey = root.path("session_key").asText();

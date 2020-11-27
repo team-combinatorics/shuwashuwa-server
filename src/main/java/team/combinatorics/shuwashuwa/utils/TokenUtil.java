@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import team.combinatorics.shuwashuwa.exception.ErrorEnum;
+import team.combinatorics.shuwashuwa.exception.ShuwarinException;
 
 
 import java.util.Calendar;
@@ -55,11 +57,9 @@ public class TokenUtil {
         try {
             jwt = verifier.verify(token);
         }catch (TokenExpiredException tle) {
-            //TODO: 这里应该定义一个凭证过期的异常
-            throw new RuntimeException("登录失效，返回标题");
+            throw new ShuwarinException(ErrorEnum.TOKEN_EXPIRED);
         } catch (JWTVerificationException e) {
-            //TODO: 这里应该定义一个签名无效的异常
-            throw new RuntimeException("无效的签名");
+            throw new ShuwarinException(ErrorEnum.TOKEN_INVALID);
         }
 
         return jwt.getClaims();

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import team.combinatorics.shuwashuwa.model.bean.CommonResult;
 
 @RestControllerAdvice
-public class GlobalException {
+public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public CommonResult<String> toHandlerException(Exception e) {
         e.printStackTrace();

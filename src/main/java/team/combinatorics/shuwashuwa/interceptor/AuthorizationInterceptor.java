@@ -9,6 +9,8 @@ import team.combinatorics.shuwashuwa.annotation.AdminOnly;
 import team.combinatorics.shuwashuwa.annotation.ClientOnly;
 import team.combinatorics.shuwashuwa.annotation.NoLogin;
 import team.combinatorics.shuwashuwa.annotation.VolunteerOnly;
+import team.combinatorics.shuwashuwa.exception.ErrorEnum;
+import team.combinatorics.shuwashuwa.exception.ShuwarinException;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -39,21 +41,20 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if (method.isAnnotationPresent(NoLogin.class))
             return true;
         if(token==null) {
-            //TODO: 需要为这里定义一个没有token的异常
-            throw new Exception("登录失效，返回标题");
+            throw new ShuwarinException(ErrorEnum.TOKEN_LOST);
         }
 
+        // 验证签名，同时取出权限码
         // 可能因为签名篡改或过期而抛出异常
         int tokenAuthority = TokenUtil.verifyToken(token).get("authority").asInt();
-        //TODO:需要为这里定义一个身份错误的异常
         if(method.isAnnotationPresent(AdminOnly.class) && (tokenAuthority & admin) == 0) {
-            throw new Exception("当前账号不具有指定的权限");
+            throw new ShuwarinException(ErrorEnum.AUTHORITY_UNMATCHED);
         }
         if(method.isAnnotationPresent(ClientOnly.class) && (tokenAuthority & client) == 0) {
-            throw new Exception("当前账号不具有指定的权限");
+            throw new ShuwarinException(ErrorEnum.AUTHORITY_UNMATCHED);
         }
         if(method.isAnnotationPresent(VolunteerOnly.class) && (tokenAuthority & volunteer) == 0) {
-            throw new Exception("当前账号不具有指定的权限");
+            throw new ShuwarinException(ErrorEnum.AUTHORITY_UNMATCHED);
         }
         return true;
     }
