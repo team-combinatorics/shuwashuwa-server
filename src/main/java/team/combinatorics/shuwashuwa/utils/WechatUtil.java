@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import team.combinatorics.shuwashuwa.exception.ErrorEnum;
+import team.combinatorics.shuwashuwa.exception.GlobalException;
 
 @PropertySource("classpath:wx.properties")
 @Component
@@ -35,14 +37,14 @@ public class WechatUtil {
                 + "&grant_type=authorization_code";
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
-        // TODO: 应该为这里定义一个微信服务器连接错误的异常
         if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new Exception();
+            throw new GlobalException(ErrorEnum.WECHAT_SERVER_CONNECTION_FAILURE);
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root = mapper.readTree(response.getBody());
-        // TODO: 应该为这里定义一个调用jscode2session错误的异常
-        if (root.has("errcode") && root.path("errcode").asInt() != 0)
-            throw new Exception();
+        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
+            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
+            throw new GlobalException(ErrorEnum.CODE2SESSION_FAILURE);
+        }
         return root;
     }
 }
