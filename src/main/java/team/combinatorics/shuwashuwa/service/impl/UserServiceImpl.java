@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
             }
             else
                 logInSuccessDto.setFirstLogin(false);
-            String token = TokenUtil.createToken(user.getUserid(), user.getOpenid());
+            String token = TokenUtil.createToken(user.getUserid(), user.getAuthority());
             logInSuccessDto.setToken(token);
             return logInSuccessDto;
         }

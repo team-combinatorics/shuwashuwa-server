@@ -40,6 +40,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         // 检查是否需要权限
         if (method.isAnnotationPresent(UserLoginToken.class)){
             UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
+            //TODO: 应该为这里定义一个token
             if(token == null)
                 throw new RuntimeException("无token，请重新登录");
 //            // 获取token中的userName
