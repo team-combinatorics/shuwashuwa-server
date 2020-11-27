@@ -3,10 +3,10 @@ package team.combinatorics.shuwashuwa.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
-import team.combinatorics.shuwashuwa.model.pojo.User;
 
 
 import java.util.Calendar;
@@ -16,54 +16,59 @@ import java.util.Map;
 
 
 public class TokenUtil {
-    public static final String SECRET = "Li_Baolin";
-    public static final int EXPIRE = 60 * 30;
+    public static final String SECRET = "HappyLucky";
+    public static final int EXPIRE = 60 * 60 * 4;
+    public static final Map<String, Object> headerMap = new HashMap<>();
+    static {
+        headerMap.put("alg", "HS256");
+        headerMap.put("typ", "JWT");
+    }
 
     /**
      * 生成token
-     * @param
+     * @param userid userid
+     * @param authority authority
      * @return token
      */
-    public static String createToken(int userid, String openid) {
+    public static String createToken(int userid, int authority) {
 
         Calendar nowTime = Calendar.getInstance();
         nowTime.add(Calendar.SECOND, EXPIRE);
         Date expireDate = nowTime.getTime();
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("alg", "HS256");
-        map.put("typ", "JWT");
-
-        String token = JWT.create()
-                .withHeader(map)
-                .withClaim("openid", openid)
+        return JWT.create()
+                .withHeader(headerMap)
                 .withClaim("userid", userid)
+                .withClaim("authority", authority)
                 .withIssuedAt(new Date())
                 .withExpiresAt(expireDate)
                 .sign(Algorithm.HMAC256(SECRET));
-
-        return token;
     }
 
     /**
      * 验证Token
      *
      */
-    public static Map<String, Claim> verifyToken(String token) throws Exception {
+    public static Map<String, Claim> verifyToken(String token) throws RuntimeException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
-        DecodedJWT jwt = null;
+        DecodedJWT jwt;
         try {
             jwt = verifier.verify(token);
-        }catch (Exception e){
-            throw new RuntimeException("凭证已过期，请重新登录");
+        }catch (TokenExpiredException tle) {
+            //TODO: 这里应该定义一个凭证过期的异常
+            throw new RuntimeException("登录失效，返回标题");
+        } catch (JWTVerificationException e) {
+            //TODO: 这里应该定义一个签名无效的异常
+            throw new RuntimeException("无效的签名");
         }
+
         return jwt.getClaims();
     }
 
     /**
      * 解析Token
-     * @param token
-     * @return
+     * @param token Token to be parsed
+     * @return Claims contained in token
      */
     public static Map<String, Claim> parseToken(String token){
         DecodedJWT decodedJWT = JWT.decode(token);
