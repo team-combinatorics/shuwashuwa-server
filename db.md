@@ -26,14 +26,32 @@
 | `conputer_model` | `varchar(30)` | 电脑型号 |
 | `cpu_model` | `varchar(30)` | CPU型号 |
 | `has_discrete_graphics` | `tinyint` | 是否有独显 |
-| `graphics_model` |  | 显卡型号 |
-| `laptop_type` |  | 笔记本类型 |
+| `graphics_model` | `varchar(30)` | 显卡型号 |
+| `laptop_type` | `varchar(30)` | 笔记本类型 |
 | `bought_time` |  | 购买时间 |
-| `is_under_warranty` |  | 是否在保 |
-| `problem_description` |  | 问题描述 |
+| `is_under_warranty` | `tinyint` | 是否在保 |
+| `problem_description` | `varchar(100)` | 问题描述 |
 | `problem_type` |  | 问题类型（硬件/软件） |
-| `description_by_volunteer` |  | 志愿者填写的描述 |
+| `decription_editing_advice` | `varchar(100)` | 描述修改建议 |
+| `repairing_result` | `varchar(100)` | 志愿者填写的维修结果 |
 | `status` |  | 维修单状态 |
-| `feedback` |  | 用户反馈信息 |
-| `activiti_id` |  | 预约活动id |
+| `feedback` | `varchar(100)` | 用户反馈信息 |
+| `activity_id` | `int` | 预约活动id |
 | `time_slot` |  | 预约时间段 |
+
+关联表：
+
+用户-维修单（被修
+
+用户-维修单（志愿者
+
+##申请表volunteer_application
+
+| 字段名 | 字段类型 | 说明|
+| ------ | ---- | -------------- |
+| `formid` | `int` | 自增长，表单id |
+| `comment` | `varchar` | 申请理由 |
+| `stauts` |      | 申请状态 |
+
+
+关联：申请人
