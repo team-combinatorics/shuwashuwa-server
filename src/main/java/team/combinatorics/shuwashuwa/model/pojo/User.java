@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
     private int userid;
-    private int authority;
     private String openid;
     private String user_name;
     private String nick_name;
@@ -24,5 +23,6 @@ public class User {
     private String grade;
     private String student_id;
     private String comment;
+    private int authority;
 
 }
