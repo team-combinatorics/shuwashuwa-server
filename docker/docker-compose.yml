@@ -30,7 +30,8 @@ services:
             - MYSQL_DATABASE
             - MYSQL_USER
             - MYSQL_PASSWORD
+            - MYSQL_ADDRESS
         command: 
-            ["./wait-for-it.sh", "mysql:3306", "--", "java", "-jar","/app/target/${TARGET_JAR}"]
+            ["./wait-for-it.sh", "${MYSQL_ADDRESS}", "--", "java", "-jar","/app/target/${TARGET_JAR}"]
         depends_on: 
             - mysql
