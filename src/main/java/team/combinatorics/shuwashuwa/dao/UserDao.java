@@ -16,9 +16,15 @@ public interface UserDao {
     @Select("SELECT * FROM user_info where openid=#{openid}")
     User findUserByOpenid(String openid);
 
-    @Delete("DELETE FROM user_info where openid=#{openid}")
+    @Select("SELECT * FROM user_info where userid=#{userid}")
+    User findUserByUserid(int userid);
+
+    @Delete("DELETE * FROM user_info where userid=#{userid}")
+    void deleteUserByUserid(int userid);
+
+    @Delete("DELETE * FROM user_info where openid=#{openid}")
     int deleteUserByOpenid(String openid);
 
-    @Delete("DELETE FROM user_info")
+    @Delete("DELETE * FROM user_info")
     void deleteAllUsers();
 }
