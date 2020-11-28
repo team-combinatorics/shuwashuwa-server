@@ -4,6 +4,8 @@ name: Java CI with Maven - Upload JAR
 # 手动触发:通过RESTFUL API/STAR
 # 自动触发:更改main分支的pom.xml
 # Reference: actions-openwrt-helloworld/.github/workflows/build-openwrt.yml
+# set-env is disabled since Nov 16 > walkaround in ENV
+# 先给您们写个罪，因为action默认在main上启用因此把main玩坏了
 
 on:
   repository_dispatch:
@@ -65,7 +67,6 @@ jobs:
       run: |
         mkdir staging
         cp target/*.jar staging
-        echo "::set-env name=TARGET::$PWD/staging"
         echo "::set-output name=status::success"
       
     - name: Upload Jar to artifact
@@ -79,13 +80,13 @@ jobs:
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress ${TARGET} 2>&1 | tee cowtransfer.log
+        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress staging 2>&1 | tee cowtransfer.log
         echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
     
     - name: Upload firmware to WeTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${TARGET} 2>&1 | tee wetransfer.log
+        ./transfer wet -s -p 16 --no-progress staging 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
     
