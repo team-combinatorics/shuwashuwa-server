@@ -1,3 +1,4 @@
+# Consider using this config for procduction
 version: '3'
 
 services: 
@@ -13,14 +14,14 @@ services:
             - MYSQL_PASSWORD
         restart: on-failure
 
-    # adminer: THIS CONF IS NOT SUITABLE IN PRODUCTION
-    adminer:
-        image: adminer
-        ports:
-            - "8080:8080"
-        restart: on-failure
-        depends_on: 
-            - mysql
+    #####  Uncomment this when debugging db  #####
+    # adminer:
+    #     image: adminer
+    #     ports:
+    #         - "8080:8080"
+    #     restart: on-failure
+    #     depends_on: 
+    #         - mysql
 
     shuwashuwa:
         build: 
