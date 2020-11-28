@@ -23,7 +23,7 @@
 |-|-|-|
 | `formid` | `int` | 自增长，表单id |
 | `brand` | `varchar(15)` | 电脑品牌 |
-| `conputer_model` | `varchar(30)` | 电脑型号 |
+| `computer_model` | `varchar(30)` | 电脑型号 |
 | `cpu_model` | `varchar(30)` | CPU型号 |
 | `has_discrete_graphics` | `tinyint` | 是否有独显 |
 | `graphics_model` | `varchar(30)` | 显卡型号 |
