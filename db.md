@@ -28,16 +28,16 @@
 | `has_discrete_graphics` | `tinyint` | 是否有独显 |
 | `graphics_model` | `varchar(30)` | 显卡型号 |
 | `laptop_type` | `varchar(30)` | 笔记本类型 |
-| `bought_time` |  | 购买时间 |
+| `bought_time` | `DATE` | 购买时间 |
 | `is_under_warranty` | `tinyint` | 是否在保 |
 | `problem_description` | `varchar(100)` | 问题描述 |
-| `problem_type` |  | 问题类型（硬件/软件） |
+| `problem_type` | `varchar(10)` | 问题类型（硬件/软件） |
 | `decription_editing_advice` | `varchar(100)` | 描述修改建议 |
 | `repairing_result` | `varchar(100)` | 志愿者填写的维修结果 |
 | `status` |  | 维修单状态 |
 | `feedback` | `varchar(100)` | 用户反馈信息 |
 | `activity_id` | `int` | 预约活动id |
-| `time_slot` |  | 预约时间段 |
+| `time_slot` | `int` | 预约时间段 |
 
 关联表：
 
@@ -45,13 +45,21 @@
 
 用户-维修单（志愿者
 
-##申请表volunteer_application
+## 申请表volunteer_application
 
 | 字段名 | 字段类型 | 说明|
 | ------ | ---- | -------------- |
 | `formid` | `int` | 自增长，表单id |
-| `comment` | `varchar` | 申请理由 |
-| `stauts` |      | 申请状态 |
+| `comment` | `varchar(100)` | 申请理由 |
+| `status` |      | 申请状态 |
 
 
 关联：申请人
+
+## 活动activity_info
+| 字段名 | 字段类型 | 说明|
+| ------ | ---- | -------------- |
+| `activity_id` | `int` | 自增长，活动id |
+| `position` | `varchar(100)` | 预约的教室位置 |
+| `starting_time` | `DATETIME` | 预计开始时间 |
+
