@@ -29,19 +29,19 @@ public class TestController {
                 + "password = " + mysqlPassword + "\n";
     }
 
-    @GetMapping("/client")
+    @GetMapping("/auth/client")
     @ClientAccess
     public String clientHelloworld() {
         return "Welcome, client!";
     }
 
-    @GetMapping("/volunteer")
+    @GetMapping("/auth/volunteer")
     @VolunteerAccess
     public String volunteerHelloworld() {
         return "Welcome, volunteer!";
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/auth/admin")
     @AdminAccess
     public String adminHelloworld() {
         return "Welcome, admin!";
