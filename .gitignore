@@ -1,5 +1,6 @@
 HELP.md
 target/
+db/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
