@@ -1,0 +1,42 @@
+version: '3'
+
+services: 
+    mysql:
+        image: mysql:8.0.22
+        volumes:
+            - ${DBINIT}:/docker-entrypoint-initdb.d
+            - ${DBSTORE}:/var/lib/mysql
+        environment: 
+            - MYSQL_ROOT_PASSWORD
+            - MYSQL_DATABASE
+            - MYSQL_USER
+            - MYSQL_PASSWORD
+        restart: on-failure
+
+    # adminer: THIS CONF IS NOT SUITABLE IN PRODUCTION
+    adminer:
+        image: adminer
+        ports:
+            - "8080:8080"
+        restart: on-failure
+        depends_on: 
+            - mysql
+
+    shuwashuwa:
+        build: 
+            context: ../
+            dockerfile: ./docker-run/shuwashuwa-server.dockerfile
+        ports: 
+            - "8848:8848"
+        volumes:
+            - ${TARGET_PATH}:/app/target.jar
+        environment: 
+            - MYSQL_DATABASE
+            - MYSQL_USER
+            - MYSQL_PASSWORD
+            - MYSQL_ADDRESS
+        command: 
+            ["./wait-for-it.sh", "-t", "30", "${MYSQL_ADDRESS}", "--", "java", "-jar","/app/target.jar"]
+        restart: on-failure
+        depends_on: 
+            - mysql

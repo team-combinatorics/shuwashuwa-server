@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import team.combinatorics.shuwashuwa.annotation.AdminAccess;
+import team.combinatorics.shuwashuwa.annotation.ClientAccess;
+import team.combinatorics.shuwashuwa.annotation.NoToken;
+import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 
 @Api(value = "测试用接口")
 @RestController
@@ -26,4 +30,27 @@ public class TestController {
                 + "password = " + mysqlPassword + "\n";
     }
 
+    @GetMapping("/auth")
+    @NoToken
+    public String ordinaryHelloworld() {
+        return "Hello, world";
+    }
+
+    @GetMapping("/auth/client")
+    @ClientAccess
+    public String clientHelloworld() {
+        return "Welcome, client!";
+    }
+
+    @GetMapping("/auth/volunteer")
+    @VolunteerAccess
+    public String volunteerHelloworld() {
+        return "Welcome, volunteer!";
+    }
+
+    @GetMapping("/auth/admin")
+    @AdminAccess
+    public String adminHelloworld() {
+        return "Welcome, admin!";
+    }
 }

@@ -23,15 +23,20 @@ services:
     shuwashuwa:
         build: 
             context: ../
-            dockerfile: ./docker/shuwashuwa-server.dockerfile
+            dockerfile: ./docker-build/shuwashuwa-server.dockerfile
         ports: 
             - "8848:8848"
+        volumes: 
+            - ${TARGET_DIR}:/target
         environment: 
             - MYSQL_DATABASE
             - MYSQL_USER
             - MYSQL_PASSWORD
             - MYSQL_ADDRESS
+            - TARGET_JAR
         command: 
-            ["./wait-for-it.sh", "${MYSQL_ADDRESS}", "--", "java", "-jar","/app/target/${TARGET_JAR}"]
+            # Save artifacts to host
+            ["./wait-for-it.sh", "${MYSQL_ADDRESS}", "--", "cp", "-r", "/app/target", "/target", 
+                "&&", "java", "-jar","/app/target/${TARGET_JAR}"]
         depends_on: 
             - mysql
