@@ -13,7 +13,7 @@ CREATE TABLE `user_info` (
                            `grade` varchar(25) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '年级',
                            `student_id` varchar(25) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '学号',
                            `comment` text COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
-                           `authority` INT NOT NULL  COMMENT '权限',
+                           `authority` INT NOT NULL COMMENT '权限',
                            UNIQUE KEY (`openid`),
                            KEY `normalIndex` (`userid`,`openid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

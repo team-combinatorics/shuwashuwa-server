@@ -10,7 +10,7 @@ import team.combinatorics.shuwashuwa.model.pojo.User;
 @Mapper
 @Component(value = "userDao")
 public interface UserDao {
-    @Insert("insert into user_info(openid) values (#{openid})")
+    @Insert("insert into user_info(openid, authority) values (#{openid}, 1)")
     void addUserOpenid(String openid);
 
     @Select("SELECT * FROM user_info where openid=#{openid}")
