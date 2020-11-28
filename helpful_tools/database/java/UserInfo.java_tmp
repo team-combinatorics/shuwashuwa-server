@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfo {
     privite int userid;
-    privite int openid;
+    privite String openid;
     privite String user_name;
     privite String nick_name;
     privite String phone_number;

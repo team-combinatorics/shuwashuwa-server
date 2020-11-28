@@ -29,11 +29,13 @@ def xhx2tf(name):
     return rst
 
 
+# 将csv文件转化成java类文件
 def csv2javafile(filename):
+    # 将下划线命名转换为驼峰命名
     tf_name = xhx2tf(filename[0:-4])
+    print("生成java类：" + tf_name + '\n')
+    # 生成的java文件
     java_name = tf_name + '.java_tmp'
-    print(java_name)
-    # print(os.getcwd())
     java_file = open("java/" + java_name, 'w', encoding="utf-8")
     java_file.write(java_head)
     java_file.write("public class " + tf_name + ' {\n')
@@ -69,19 +71,16 @@ def csv2sql(filename):
     for i in range(len(lines)):
         line = lines[i]
         tmp = line.strip().lower().split(',')
-        sql_file.write('    ' + '`{}`'.format(tmp[0]) + ' ')
-        sql_file.write(tmp[1].upper() + ' ')
-        sql_file.write(tmp[3].upper() + ' ')
-        sql_file.write('COMMENT ' + '\'{}\''.format(tmp[2]))
+        sql_file.write('    `{}` {} {} COMMENT \'{}\''.format(
+            tmp[0], tmp[1].upper(), tmp[3].upper(), tmp[2]))
         if i != len(lines) - 1:
             sql_file.write(',\n')
-        # sql_file.write('\n')
         if tmp[4] == '1':
             normal_index.append(tmp[0])
         if tmp[5] == '1':
             unique_keys.append(tmp[0])
         print(tmp)
-   
+
     if len(unique_keys):
         sql_file.write(',\n')
         sql_file.write('    UNIQUE KEY (')
@@ -114,8 +113,3 @@ if __name__ == "__main__":
     for file in os.listdir('csv'):
         csv2javafile(file)
         csv2sql(file)
-
-    # csv2javafile("user_info.csv")
-    # csv2javafile("service_form.csv")
-    # csv2javafile("activity_info.csv")
-    # csv2javafile("volunteer_application.csv")

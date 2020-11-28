@@ -31,7 +31,7 @@ CREATE TABLE `service_form` (
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
     `userid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
-    `openid` INT NOT NULL COMMENT '微信提供的用户id',
+    `openid` VARCHAR(30) NOT NULL COMMENT '微信提供的用户id',
     `user_name` VARCHAR(30) DEFAULT NULL COMMENT '用户姓名',
     `nick_name` VARCHAR(30) DEFAULT NULL COMMENT '用户昵称',
     `phone_number` VARCHAR(30) DEFAULT NULL COMMENT '用户手机号',

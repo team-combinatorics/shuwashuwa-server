@@ -1,6 +1,6 @@
 字段名,字段类型,说明,数据库补充信息,是否为normalIndex,是否为unique key
 userid,int,自增长,AUTO_INCREMENT PRIMARY KEY NOT NULL,1,
-openid,int,微信提供的用户id,NOT NULL,,1
+openid,varchar(30),微信提供的用户id,NOT NULL,,1
 user_name,varchar(30),用户姓名,DEFAULT NULL,1,
 nick_name,varchar(30),用户昵称,DEFAULT NULL,,
 phone_number,varchar(30),用户手机号,DEFAULT NULL,,
