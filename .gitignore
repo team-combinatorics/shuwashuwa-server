@@ -4,6 +4,9 @@ db/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Wechat Secrets ###
+src/main/resources/wx.properties
+
 ### STS ###
 .apt_generated
 .classpath
@@ -31,5 +34,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### MacOS ###
 .DS_Store
-src/main/resources/wx.properties
+
