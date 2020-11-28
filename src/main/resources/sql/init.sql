@@ -39,7 +39,6 @@ CREATE TABLE `service_form` (
                              `activity_id` INT NOT NULL COMMENT '预约活动id',
                              `time_slot` INT NOT NULL COMMENT '预约时间段',
 
-                             UNIQUE KEY (`formid`),
                              KEY `normalIndex` (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
