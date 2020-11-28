@@ -1,0 +1,4 @@
+字段名,字段类型,说明,数据库补充信息,是否为normalIndex,是否为unique key
+formid,int,自增长，表单id,AUTO_INCREMENT PRIMARY KEY NOT NULL,1,""
+comment,varchar(100),申请理由,DEFAULT NULL,"",""
+status,tinyint,申请状态,DEFAULT NULL,1,""

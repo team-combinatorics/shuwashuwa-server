@@ -1,0 +1,15 @@
+package team.combinatorics.shuwashuwa.model.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ActivityInfo {
+    privite int activity_id;
+    privite String position;
+    privite String tarting_time;
+}
