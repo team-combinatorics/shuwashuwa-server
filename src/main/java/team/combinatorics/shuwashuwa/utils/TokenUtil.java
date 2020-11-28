@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
+import team.combinatorics.shuwashuwa.exception.KnownException;
 
 
 import java.util.Calendar;
@@ -17,7 +19,7 @@ import java.util.Map;
 
 public class TokenUtil {
     public static final String SECRET = "HappyLucky";
-    public static final int EXPIRE = 60 * 60 * 4;
+    public static final int EXPIRE = 60 * 60 * 24 * 15;
     public static final Map<String, Object> headerMap = new HashMap<>();
     static {
         headerMap.put("alg", "HS256");
@@ -55,23 +57,11 @@ public class TokenUtil {
         try {
             jwt = verifier.verify(token);
         }catch (TokenExpiredException tle) {
-            //TODO: 这里应该定义一个凭证过期的异常
-            throw new RuntimeException("登录失效，返回标题");
+            throw new KnownException(ErrorInfoEnum.TOKEN_EXPIRED);
         } catch (JWTVerificationException e) {
-            //TODO: 这里应该定义一个签名无效的异常
-            throw new RuntimeException("无效的签名");
+            throw new KnownException(ErrorInfoEnum.TOKEN_INVALID);
         }
 
         return jwt.getClaims();
-    }
-
-    /**
-     * 解析Token
-     * @param token Token to be parsed
-     * @return Claims contained in token
-     */
-    public static Map<String, Claim> parseToken(String token){
-        DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaims();
     }
 }
