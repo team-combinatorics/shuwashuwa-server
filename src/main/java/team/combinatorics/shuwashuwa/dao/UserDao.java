@@ -1,9 +1,6 @@
 package team.combinatorics.shuwashuwa.dao;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.model.pojo.User;
 
