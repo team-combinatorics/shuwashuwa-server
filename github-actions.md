@@ -1,6 +1,6 @@
 # GitHub Actions
 
-![Java CI with Maven - Build and Test](https://github.com/team-combinatorics/shuwashuwa-server/workflows/Java%20CI%20with%20Maven%20-%20Build%20and%20Test/badge.svg)![Java CI with Maven - Upload JAR](https://github.com/team-combinatorics/shuwashuwa-server/workflows/Java%20CI%20with%20Maven%20-%20Upload%20JAR/badge.svg)
+![Java CI with Maven - Build and Test](https://github.com/team-combinatorics/shuwashuwa-server/workflows/Build%20and%20Test/badge.svg)    ![Java CI with Maven - Upload JAR](https://github.com/team-combinatorics/shuwashuwa-server/workflows/Upload%20Jar/badge.svg)
 
 目前仅仅实现了自动在`main`分支上编译Jar包的功能。
 
@@ -10,7 +10,7 @@
 
 ![image-20201129021407237](https://i.loli.net/2020/11/29/WcSEkJK8mFlXeTA.png)
 
-1. 您在shuwashuwa-server仓库上方标签栏点击Actions，找到All Workflows中名称带Upload JAR的
+1. 您在shuwashuwa-server仓库上方标签栏点击Actions，找到All Workflows中名称带Upload Jar的
 
 ![image-20201129021553938](https://i.loli.net/2020/11/29/fZH596KEepdz8GR.png)
 
@@ -28,7 +28,7 @@
 
 其中最简单的方式就是点Star（不过您们最好不要点的太频繁）
 
-### 自动化测试
+#### 自动化测试
 
 每一次`main`分支出现新的`commit`时，Build and Test 便会尝试用Maven编译项目，并运行单元测试。
 
