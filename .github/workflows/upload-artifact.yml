@@ -1,0 +1,92 @@
+name: Upload Jar
+
+# [12f23eddde] Nov 29 2020
+# 手动触发:通过RESTFUL API/STAR
+# 自动触发:更改main分支的pom.xml
+# Reference: actions-openwrt-helloworld/.github/workflows/build-openwrt.yml
+# set-env is disabled since Nov 16 > walkaround in ENV
+# 先给您们写个罪，因为action默认在main上启用因此把main玩坏了
+
+on:
+  repository_dispatch:
+    types: helloworld
+  push:
+    branches:
+      - main
+    paths:
+      - 'pom.xml'
+  watch:
+    types: started
+
+env:
+  UPLOAD_ARTIFACT: true
+  UPLOAD_COWTRANSFER: true
+  UPLOAD_WETRANSFER: false
+  TZ: Asia/Shanghai
+
+jobs:
+  build-test:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+
+    - name: Cache the Maven packages to speed up build
+      uses: actions/cache@v1
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2      
+
+    - name: Build and test project with Maven
+      run: mvn -B package --file pom.xml
+  
+  publish-job:
+    runs-on: ubuntu-18.04
+    needs: [ build-test ]
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+      
+    - name: Build project with Maven
+      id: compile
+      run: | 
+        mvn -B package --file pom.xml -DskipTests
+        echo "::set-output name=status::success"
+      
+    - name: Organize files
+      id: organize
+      if: steps.compile.outputs.status == 'success'
+      run: |
+        mkdir staging
+        cp target/*.jar staging
+        echo "::set-output name=status::success"
+      
+    - name: Upload Jar to artifact
+      uses: actions/upload-artifact@v1
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_ARTIFACT == 'true' && !cancelled()
+      with:
+       name: shuwashuwa_snapshot
+       path: staging
+    
+    - name: Upload Jar to cowtransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer cow --block 2621440 -s -p 99 -t 3 --hash --no-progress staging 2>&1 | tee cowtransfer.log
+        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
+    
+    - name: Upload Jar to WeTransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer wet -s -p 16 --no-progress staging 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+    

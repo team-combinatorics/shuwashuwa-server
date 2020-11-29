@@ -78,5 +78,8 @@
 2. `shuwashuwa Exit code 127`
 
    找不到Jar，请您检查.env对应的Jar文件是否存在
+3. `/usr/bin/env: bash\r not found` 或其他带`\r`的错误
 
-3. 如果您出现其他错误且难以自行解决，欢迎提issue
+   您需要手动把`docker-run`和`docker-build`下的文件修改为LF编码
+
+4. 如果您出现其他错误且难以自行解决，欢迎提issue
