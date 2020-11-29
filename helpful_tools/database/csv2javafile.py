@@ -31,7 +31,7 @@ def xhx2tf(name):
 
 
 # 将csv文件转化成java类文件
-def csv2javafile(filename):
+def csv2javafile(srcdir,filename):
     # 将下划线命名转换为驼峰命名
     tf_name = xhx2tf(filename[0:-4])
     print("生成java类：" + tf_name + '\n')
@@ -40,7 +40,7 @@ def csv2javafile(filename):
     java_file = open("java/" + java_name, 'w', encoding="utf-8")
     java_file.write(java_head)
     java_file.write("public class " + tf_name + ' {\n')
-    csv_file = open("csv/" + filename, 'r', encoding="utf-8")
+    csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     csv_file.readline()
     for line in csv_file.readlines():
         tmp = line.lower().split(',')[0:2]
@@ -59,12 +59,12 @@ def init_sql_file():
     sql_file.close()
 
 
-def csv2sql(filename):
+def csv2sql(srcdir,filename):
     table_name = filename[0:-4]
     sql_file = open("sql/init.sql", 'a', encoding="utf-8")
     sql_file.write('DROP TABLE IF EXISTS `{}`;\n'.format(table_name))
     sql_file.write('CREATE TABLE `{}` (\n'.format(table_name))
-    csv_file = open("csv/" + filename, 'r', encoding="utf-8")
+    csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     csv_file.readline()
     normal_index = []
     unique_keys = []
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
     init_sql_file()
     for file in os.listdir('csv'):
-        csv2javafile(file)
-        csv2sql(file)
-    # for file in os.listdir('merge'):
-    #     csv2sql(file)
+        csv2javafile('csv/', file)
+        csv2sql('csv/', file)
+    for file in os.listdir('merge'):
+        csv2sql('merge/', file)
