@@ -29,10 +29,9 @@ public class TokenUtil {
     /**
      * 生成token
      * @param userid userid
-     * @param authority authority
      * @return token
      */
-    public static String createToken(int userid, int authority) {
+    public static String createToken(int userid) {
 
         Calendar nowTime = Calendar.getInstance();
         nowTime.add(Calendar.SECOND, EXPIRE);
@@ -41,7 +40,6 @@ public class TokenUtil {
         return JWT.create()
                 .withHeader(headerMap)
                 .withClaim("userid", userid)
-                .withClaim("authority", authority)
                 .withIssuedAt(new Date())
                 .withExpiresAt(expireDate)
                 .sign(Algorithm.HMAC256(SECRET));
@@ -63,5 +61,9 @@ public class TokenUtil {
         }
 
         return jwt.getClaims();
+    }
+
+    public static int extractUserid(String token) {
+        return JWT.decode(token).getClaim("userid").asInt();
     }
 }
