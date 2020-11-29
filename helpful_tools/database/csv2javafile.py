@@ -16,7 +16,8 @@ class_dic = {
     'text': 'String',
     'tinyint': 'int',
     'date': 'String',
-    'datetime': 'String'
+    'datetime': 'String',
+    'boolean': 'boolean'
 }
 
 
@@ -112,4 +113,6 @@ if __name__ == "__main__":
     init_sql_file()
     for file in os.listdir('csv'):
         csv2javafile(file)
+        csv2sql(file)
+    for file in os.listdir('merge'):
         csv2sql(file)
