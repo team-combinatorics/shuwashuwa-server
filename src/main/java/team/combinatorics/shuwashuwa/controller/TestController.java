@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
-import team.combinatorics.shuwashuwa.annotation.ClientAccess;
+import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 
@@ -36,8 +36,8 @@ public class TestController {
         return "Hello, world";
     }
 
-    @GetMapping("/auth/client")
-    @ClientAccess
+    @GetMapping("/auth/default")
+    @AllAccess
     public String clientHelloworld() {
         return "Welcome, client!";
     }
