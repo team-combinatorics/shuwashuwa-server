@@ -51,6 +51,10 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         //检查权限
         User currentUser = userDao.findUserByUserid(userid);
+
+        if(currentUser == null)
+            throw new KnownException(ErrorInfoEnum.USER_NOT_EXISTING);
+
         if(method.isAnnotationPresent(AllAccess.class) ||
             method.isAnnotationPresent(AdminAccess.class) && currentUser.is_admin() ||
             method.isAnnotationPresent(VolunteerAccess.class) && currentUser.is_volunteer() ||
