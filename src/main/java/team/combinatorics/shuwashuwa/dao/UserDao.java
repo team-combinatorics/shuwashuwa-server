@@ -19,12 +19,15 @@ public interface UserDao {
     @Select("SELECT * FROM user_info where userid=#{userid}")
     User findUserByUserid(int userid);
 
-    @Delete("DELETE * FROM user_info where userid=#{userid}")
-    void deleteUserByUserid(int userid);
+    @Select("SELECT authority FROM user_info where userid=#{userid}")
+    Integer getAuthorityByUserid(int userid);
 
-    @Delete("DELETE * FROM user_info where openid=#{openid}")
-    int deleteUserByOpenid(String openid);
+    @Delete("DELETE FROM user_info where userid=#{userid}")
+    Integer deleteUserByUserid(int userid);
 
-    @Delete("DELETE * FROM user_info")
+    @Delete("DELETE FROM user_info where openid=#{openid}")
+    Integer deleteUserByOpenid(String openid);
+
+    @Delete("DELETE FROM user_info")
     void deleteAllUsers();
 }
