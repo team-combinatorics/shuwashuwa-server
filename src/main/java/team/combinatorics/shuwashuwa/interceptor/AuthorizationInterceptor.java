@@ -1,15 +1,15 @@
 package team.combinatorics.shuwashuwa.interceptor;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import team.combinatorics.shuwashuwa.annotation.AdminAccess;
-import team.combinatorics.shuwashuwa.annotation.ClientAccess;
-import team.combinatorics.shuwashuwa.annotation.NoToken;
-import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
+import team.combinatorics.shuwashuwa.annotation.*;
+import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
+import team.combinatorics.shuwashuwa.model.pojo.User;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,11 +20,13 @@ import java.lang.reflect.Method;
 @AllArgsConstructor
 public class AuthorizationInterceptor implements HandlerInterceptor {
 
-    //按位或之后得到一个用户的身份
-    private static final int CLIENT = 1;
-    private static final int VOLUNTEER = 2;
-    private static final int ADMIN = 4;
-    private static final int SU = 8;
+    //用于读取权限
+    private UserDao userDao;
+
+    @Autowired
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws KnownException {
@@ -45,11 +47,14 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
         // 验证签名，同时取出权限码
         // 可能因为签名篡改或过期而抛出异常
-        int tokenAuthority = TokenUtil.verifyToken(token).get("authority").asInt();
+        Integer userid = TokenUtil.verifyToken(token).get("userid").asInt();
 
-        if(method.isAnnotationPresent(AdminAccess.class) && (tokenAuthority & ADMIN) != 0 ||
-                method.isAnnotationPresent(ClientAccess.class) && (tokenAuthority & CLIENT) != 0 ||
-                method.isAnnotationPresent(VolunteerAccess.class) && (tokenAuthority & VOLUNTEER) != 0)
+        //检查权限
+        User currentUser = userDao.findUserByUserid(userid);
+        if(method.isAnnotationPresent(AllAccess.class) ||
+            method.isAnnotationPresent(AdminAccess.class) && currentUser.is_admin() ||
+            method.isAnnotationPresent(VolunteerAccess.class) && currentUser.is_volunteer() ||
+            method.isAnnotationPresent(SUAccess.class) && currentUser.is_su())
             return true;
         else throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
     }
