@@ -11,13 +11,13 @@ public interface UserService {
 
     LogInSuccessDto wechatLogin(LogInInfoDto logInInfoDto) throws Exception;
 
-    int deleteOneUser(String openID) throws Exception;
+    int deleteOneUser(int userid) throws Exception;
 
     void deleteAllUsers();
 
-    void updateUserInfo(String code, UpdateUserInfoDto updateUserInfoDto) throws Exception;
+    void updateUserInfo(int userid, UpdateUserInfoDto updateUserInfoDto) throws Exception;
 
-    UpdateUserInfoDto getUserInfo(String code) throws Exception;
+    UpdateUserInfoDto getUserInfo(int userid) throws Exception;
 
     // boolean suicide();
 

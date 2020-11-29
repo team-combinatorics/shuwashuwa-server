@@ -31,11 +31,9 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public int deleteOneUser(String code) throws Exception {
-        JsonNode root = wechatUtil.getWechatInfo(code);
-        String openid = root.path("openid").asText();
-        System.out.println("要删除用户的openid为：" + openid);
-        return userDao.deleteUserByOpenid(openid);
+    public int deleteOneUser(int userid){
+        System.out.println("要删除用户的userid为：" + userid);
+        return userDao.deleteUserByUserid(userid);
     }
 
     @Override
@@ -58,24 +56,22 @@ public class UserServiceImpl implements UserService {
         }
         else
             logInSuccessDto.setFirstLogin(false);
-        String token = TokenUtil.createToken(user.getUserid(), user.getAuthority());
+        String token = TokenUtil.createToken(user.getUserid());
         logInSuccessDto.setToken(token);
         return logInSuccessDto;
     }
 
     @Override
-    public void updateUserInfo(String code, UpdateUserInfoDto updateUserInfoDto) throws Exception {
+    public void updateUserInfo(int userid, UpdateUserInfoDto updateUserInfoDto){
         System.out.println("即将更新用户信息");
-        JsonNode root = wechatUtil.getWechatInfo(code);
-        System.out.println("待更新的用户openid为：" + root.path("openid").asText());
+        System.out.println("待更新的用户userid为：" + userid);
         System.out.println(updateUserInfoDto.getUser_name());
         System.out.println(updateUserInfoDto.getNick_name());
     }
 
     @Override
-    public UpdateUserInfoDto getUserInfo(String code) throws Exception {
-        JsonNode root = wechatUtil.getWechatInfo(code);
-        System.out.println("想要获取" + root.path("openid").asText() + "的信息");
+    public UpdateUserInfoDto getUserInfo(int userid){
+        System.out.println("想要获取" + userid + "的信息");
         return null;
     }
 
