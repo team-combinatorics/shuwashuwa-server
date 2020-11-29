@@ -10,4 +10,6 @@ department,varchar(40),院系或工作部门,DEFAULT NULL,,
 grade,varchar(40),年级,DEFAULT NULL,,
 student_id,varchar(15),学号,DEFAULT NULL,,
 comment,text,备注,DEFAULT NULL,,
-authority,int,权限,NOT NULL DEFAULT 1,,
+is_volunteer,BOOLEAN,是否为志愿者,NOT NULL DEFAULT 0,,
+is_admin,BOOLEAN,是否为管理员,NOT NULL DEFAULT 0,"",""
+is_su,BOOLEAN,是否为超管,NOT NULL DEFAULT 0,"",""
