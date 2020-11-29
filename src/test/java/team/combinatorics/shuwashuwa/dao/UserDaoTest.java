@@ -24,10 +24,5 @@ public class UserDaoTest {
     public void deleteUserByUseridTest() {
         System.out.println(userDao.deleteUserByUserid(1));
     }
-
-    @Test
-    public void getAuthorityByUseridTest() {
-
-        System.out.println(userDao.getAuthorityByUserid(2));
-    }
 }
+
