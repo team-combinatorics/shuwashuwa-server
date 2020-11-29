@@ -17,8 +17,12 @@ import team.combinatorics.shuwashuwa.service.UserService;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    @Autowired
     UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 注册
