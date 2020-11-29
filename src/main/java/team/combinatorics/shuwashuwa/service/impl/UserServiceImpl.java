@@ -1,6 +1,7 @@
 package team.combinatorics.shuwashuwa.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.dao.UserDao;
@@ -14,6 +15,7 @@ import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 @PropertySource("classpath:wx.properties")
 @Component
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     //private final RestTemplate restTemplate;
@@ -22,11 +24,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
-    public UserServiceImpl(WechatUtil wechatUtil, UserDao userDao) {
-        //this.restTemplate = restTemplate;
-        this.wechatUtil = wechatUtil;
-        this.userDao = userDao;
-    }
+//    public UserServiceImpl(WechatUtil wechatUtil, UserDao userDao) {
+//        //this.restTemplate = restTemplate;
+//        this.wechatUtil = wechatUtil;
+//        this.userDao = userDao;
+//    }
 
     @Override
     public int deleteOneUser(String code) throws Exception {
@@ -92,8 +94,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    @Override
-//    public void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto) {
-//
-//    }
 }
