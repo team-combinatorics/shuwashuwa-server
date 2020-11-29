@@ -44,7 +44,7 @@ def csv2javafile(filename):
     csv_file.readline()
     for line in csv_file.readlines():
         tmp = line.lower().split(',')[0:2]
-        java_file.write("    privite ")
+        java_file.write("    private ")
         if tmp[1].startswith("varchar"):
             java_file.write("String " + tmp[0] + ';\n')
             continue
