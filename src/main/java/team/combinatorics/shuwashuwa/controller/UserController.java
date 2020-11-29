@@ -12,6 +12,7 @@ import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
 import team.combinatorics.shuwashuwa.service.UserService;
+import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 @Api(value = "User相关接口说明")
 @RestController
@@ -50,8 +51,8 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
-    public CommonResult<String> updateUserInfo(String code, UpdateUserInfoDto updateUserInfoDto) throws Exception {
-        userService.updateUserInfo(code, updateUserInfoDto);
+    public CommonResult<String> updateUserInfo(@RequestHeader("token") String token, UpdateUserInfoDto updateUserInfoDto) throws Exception {
+        userService.updateUserInfo(TokenUtil.extractUserid(token), updateUserInfoDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
     }
 
@@ -63,8 +64,8 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
-    public CommonResult<UpdateUserInfoDto> getUserInfo(String code) throws Exception {
-        UpdateUserInfoDto updateUserInfoDto = userService.getUserInfo(code);
+    public CommonResult<UpdateUserInfoDto> getUserInfo(Integer userid) throws Exception {
+        UpdateUserInfoDto updateUserInfoDto = userService.getUserInfo(userid);
         return new CommonResult<>(200, "更新成功", updateUserInfoDto);
     }
 
@@ -77,8 +78,8 @@ public class UserController {
             @ApiResponse(code = 204, message = "用户不存在")
     })
     @RequestMapping(value = "/deleteOneUser", method = RequestMethod.DELETE)
-    public CommonResult<String> deleteOneUser(@RequestBody String code) throws Exception {
-        int cnt = userService.deleteOneUser(code);
+    public CommonResult<String> deleteOneUser(@RequestHeader("token") String token) throws Exception {
+        int cnt = userService.deleteOneUser(TokenUtil.extractUserid(token));
         if(cnt > 0)
         {
             return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
