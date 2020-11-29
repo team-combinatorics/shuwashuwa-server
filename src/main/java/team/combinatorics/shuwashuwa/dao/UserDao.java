@@ -16,9 +16,6 @@ public interface UserDao {
     @Select("SELECT * FROM user_info where userid=#{userid}")
     User findUserByUserid(int userid);
 
-    @Select("SELECT authority FROM user_info where userid=#{userid}")
-    Integer getAuthorityByUserid(int userid);
-
     @Delete("DELETE FROM user_info where userid=#{userid}")
     Integer deleteUserByUserid(int userid);
 
