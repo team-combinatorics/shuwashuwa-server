@@ -114,5 +114,5 @@ if __name__ == "__main__":
     for file in os.listdir('csv'):
         csv2javafile(file)
         csv2sql(file)
-    for file in os.listdir('merge'):
-        csv2sql(file)
+    # for file in os.listdir('merge'):
+    #     csv2sql(file)
