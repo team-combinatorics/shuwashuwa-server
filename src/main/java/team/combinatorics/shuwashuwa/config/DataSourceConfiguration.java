@@ -10,13 +10,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnProperty(name = "spring.datasource.dbcp2.url")
-@MapperScan(value = { "team.combinatorics.shuwashuwa.dao" }, sqlSessionFactoryRef = "sqlSessionFactory")
+@MapperScan(value = {"team.combinatorics.shuwashuwa.dao"}, sqlSessionFactoryRef = "sqlSessionFactory")
 public class DataSourceConfiguration {
 
     @Bean(name = "dataSource")
@@ -36,6 +37,9 @@ public class DataSourceConfiguration {
     public SqlSessionFactory dbOneSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
+        sessionFactory.setMapperLocations(
+                new PathMatchingResourcePatternResolver()
+                        .getResources("classpath:/mapper/*.xml"));
         return sessionFactory.getObject();
     }
 
