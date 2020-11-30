@@ -20,6 +20,7 @@ public class UserDaoTest {
     @Test
     // 这个测试方法中随便编openid就行，并不向tx服务器验证
     public void insertUserTest() {
+        userDao.deleteAllUsers();
         userDao.addUserOpenid("fake openid 1");
         userDao.addUserOpenid("fake openid 2");
         userDao.addUserOpenid("fake openid 3");
