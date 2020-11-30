@@ -7,21 +7,24 @@ import team.combinatorics.shuwashuwa.model.pojo.User;
 @Mapper
 @Component(value = "userDao")
 public interface UserDao {
-    @Insert("insert into user_info(openid) values (#{openid})")
+    @Insert("insert into user(openid) values (#{openid})")
     void addUserOpenid(String openid);
 
-    @Select("SELECT * FROM user_info where openid=#{openid}")
+    @Select("SELECT * FROM user where openid=#{openid}")
     User findUserByOpenid(String openid);
 
-    @Select("SELECT * FROM user_info where userid=#{userid}")
+    @Select("SELECT * FROM user where userid=#{userid}")
     User findUserByUserid(int userid);
 
-    @Delete("DELETE FROM user_info where userid=#{userid}")
+    // 一个通用的更新方法，使用xml实现
+    void update(@Param("user") User user);
+
+    @Delete("DELETE FROM user where userid=#{userid}")
     Integer deleteUserByUserid(int userid);
 
-    @Delete("DELETE FROM user_info where openid=#{openid}")
+    @Delete("DELETE FROM user where openid=#{openid}")
     Integer deleteUserByOpenid(String openid);
 
-    @Delete("DELETE FROM user_info")
+    @Delete("DELETE FROM user")
     void deleteAllUsers();
 }
