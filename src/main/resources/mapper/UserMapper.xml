@@ -22,12 +22,6 @@
     <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.User">
         update user
         <trim prefix="SET" suffixOverrides=",">
-            <if test="user.userid != null">
-                userid = #{user.userid},
-            </if>
-            <if test="user.openid != null">
-                openid = #{user.openid},
-            </if>
             <if test="user.userName != null">
                 user_name = #{user.userName},
             </if>
@@ -54,15 +48,6 @@
             </if>
             <if test="user.comment != null">
                 comment = #{user.comment},
-            </if>
-            <if test="user.isVolunteer != null">
-                is_volunteer = #{user.isVolunteer},
-            </if>
-            <if test="user.isAdmin != null">
-                is_admin = #{user.isAdmin},
-            </if>
-            <if test="user.isSu != null">
-                is_su = #{user.isSu},
             </if>
         </trim>
         where userid = #{user.userid}
