@@ -14,12 +14,16 @@
         <result column="grade" jdbcType="VARCHAR" property="grade" />
         <result column="student_id" jdbcType="VARCHAR" property="studentId" />
         <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-        <result column="is_volunteer" jdbcType="BOOLEAN" property="isVolunteer" />
-        <result column="is_admin" jdbcType="BOOLEAN" property="isAdmin" />
-        <result column="is_su" jdbcType="BOOLEAN" property="isSu" />
+        <result column="is_volunteer" jdbcType="BOOLEAN" property="volunteer" />
+        <result column="is_admin" jdbcType="BOOLEAN" property="admin" />
+        <result column="is_su" jdbcType="BOOLEAN" property="su" />
     </resultMap>
 
-    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.pojo.User">
+    <select id="findUserByUserid" resultMap="userResultMap">
+        select * from user where userid=#{id}
+    </select>
+
+    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto">
         update user
         <trim prefix="SET" suffixOverrides=",">
             <if test="user.userName != null">
@@ -50,6 +54,6 @@
                 comment = #{user.comment},
             </if>
         </trim>
-        where userid = #{user.userid}
+        where userid = #{id}
     </update>
 </mapper>
