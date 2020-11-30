@@ -31,14 +31,13 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public int deleteOneUser(int userid){
+    public int deleteOneUser(int userid) {
         System.out.println("要删除用户的userid为：" + userid);
         return userDao.deleteUserByUserid(userid);
     }
 
     @Override
-    public void deleteAllUsers()
-    {
+    public void deleteAllUsers() {
         userDao.deleteAllUsers();
     }
 
@@ -49,12 +48,11 @@ public class UserServiceImpl implements UserService {
         String sessionKey = root.path("session_key").asText();
         LogInSuccessDto logInSuccessDto = new LogInSuccessDto();
         User user = userDao.findUserByOpenid(openid);
-        if(user == null) {
+        if (user == null) {
             logInSuccessDto.setFirstLogin(true);
             userDao.addUserOpenid(openid);
             user = userDao.findUserByOpenid(openid);
-        }
-        else
+        } else
             logInSuccessDto.setFirstLogin(false);
         String token = TokenUtil.createToken(user.getUserid());
         logInSuccessDto.setToken(token);
@@ -62,17 +60,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(int userid, UpdateUserInfoDto updateUserInfoDto){
+    public void updateUserInfo(int userid, UpdateUserInfoDto updateUserInfoDto) {
         System.out.println("即将更新用户信息");
         System.out.println("待更新的用户userid为：" + userid);
-        System.out.println(updateUserInfoDto.getUser_name());
-        System.out.println(updateUserInfoDto.getNick_name());
+        System.out.println(updateUserInfoDto.toString());
+        userDao.updateUserInfo(userid, updateUserInfoDto);
     }
 
     @Override
-    public UpdateUserInfoDto getUserInfo(int userid){
+    public User getUserInfo(int userid) {
         System.out.println("想要获取" + userid + "的信息");
-        return null;
+        User user = userDao.findUserByUserid(userid);
+        user.setOpenid("你无权获取openid");
+        return user;
     }
 
 
