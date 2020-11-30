@@ -22,7 +22,7 @@ public class User {
     private String grade;
     private String studentId;
     private String comment;
-    private boolean isVolunteer;
-    private boolean isAdmin;
-    private boolean isSu;
+    private boolean volunteer;
+    private boolean admin;
+    private boolean su;
 }
