@@ -1,8 +1,12 @@
+DROP DATABASE IF EXISTS `shuwashuwa`;
+CREATE DATABASE `shuwashuwa` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `shuwashuwa`;
+
 DROP TABLE IF EXISTS `activity_info`;
 CREATE TABLE `activity_info` (
     `activity_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，活动id',
     `position` VARCHAR(100) DEFAULT NULL COMMENT '预约的教室位置',
-    `tarting_time` DATETIME DEFAULT NULL COMMENT '预计开始时间',
+    `starting_time` DATETIME DEFAULT NULL COMMENT '预计开始时间',
     UNIQUE KEY (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -16,7 +20,7 @@ CREATE TABLE `service_form` (
     `graphics_model` VARCHAR(30) DEFAULT NULL COMMENT '显卡型号',
     `laptop_type` VARCHAR(30) DEFAULT NULL COMMENT '笔记本类型',
     `bought_time` DATE DEFAULT NULL COMMENT '购买时间',
-    `is_under_warranty` TINYINT DEFAULT NULL COMMENT '是否在保',
+    `is_under_warranty` BOOLEAN DEFAULT NULL COMMENT '是否在保',
     `problem_description` VARCHAR(100) DEFAULT NULL COMMENT '问题描述',
     `problem_type` VARCHAR(10) DEFAULT NULL COMMENT '问题类型（硬件/软件）',
     `decription_editing_advice` VARCHAR(100) DEFAULT NULL COMMENT '描述修改建议',
@@ -28,8 +32,8 @@ CREATE TABLE `service_form` (
     KEY `normalIndex` (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-DROP TABLE IF EXISTS `user_info`;
-CREATE TABLE `user_info` (
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
     `userid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
     `openid` VARCHAR(30) NOT NULL COMMENT '微信提供的用户id',
     `user_name` VARCHAR(30) DEFAULT NULL COMMENT '用户姓名',
@@ -41,9 +45,11 @@ CREATE TABLE `user_info` (
     `grade` VARCHAR(40) DEFAULT NULL COMMENT '年级',
     `student_id` VARCHAR(15) DEFAULT NULL COMMENT '学号',
     `comment` TEXT DEFAULT NULL COMMENT '备注',
-    `authority` INT NOT NULL DEFAULT 1 COMMENT '权限',
+    `is_volunteer` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为志愿者',
+    `is_admin` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为管理员',
+    `is_su` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为超管',
     UNIQUE KEY (`openid`),
-    KEY `normalIndex` (`userid`,`user_name`,`email`)
+    KEY `normalIndex` (`userid`, `user_name`, `email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `volunteer_application`;
@@ -51,6 +57,20 @@ CREATE TABLE `volunteer_application` (
     `formid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，表单id',
     `comment` VARCHAR(100) DEFAULT NULL COMMENT '申请理由',
     `status` TINYINT DEFAULT NULL COMMENT '申请状态',
-    KEY `normalIndex` (`formid`,`status`)
+    KEY `normalIndex` (`formid`, `status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `r_user_service_form`;
+CREATE TABLE `r_user_service_form` (
+    `userid` INT NOT NULL COMMENT 'userid',
+    `formid` INT NOT NULL COMMENT 'formid',
+    KEY `normalIndex` (`userid`, `formid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `r_user_volunteer_application`;
+CREATE TABLE `r_user_volunteer_application` (
+    `formid` INT NOT NULL COMMENT '',
+    `userid` INT NOT NULL COMMENT '',
+    KEY `normalIndex` (`formid`, `userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
