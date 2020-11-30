@@ -19,7 +19,7 @@
         <result column="is_su" jdbcType="BOOLEAN" property="isSu" />
     </resultMap>
 
-    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.User">
+    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.pojo.User">
         update user
         <trim prefix="SET" suffixOverrides=",">
             <if test="user.userName != null">

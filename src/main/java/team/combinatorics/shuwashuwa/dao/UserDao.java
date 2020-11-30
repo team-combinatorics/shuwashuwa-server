@@ -17,7 +17,7 @@ public interface UserDao {
     User findUserByUserid(int userid);
 
     // 一个通用的更新方法，使用xml实现
-    void update(@Param("user") User user);
+    void updateUserInfo(@Param("user") User user);
 
     @Delete("DELETE FROM user where userid=#{userid}")
     Integer deleteUserByUserid(int userid);
