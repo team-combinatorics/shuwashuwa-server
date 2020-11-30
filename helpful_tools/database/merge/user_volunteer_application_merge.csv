@@ -1,3 +1,0 @@
-字段名,字段类型,说明,数据库补充信息,是否为normalIndex,是否为unique key
-formid,INT,,NOT NULL,1,0
-userid,INT,,NOT NULL,1,
