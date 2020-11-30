@@ -32,7 +32,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws KnownException {
         String token = httpServletRequest.getHeader("token");
 
-        if(!(handler instanceof HandlerMethod))
+        if (!(handler instanceof HandlerMethod))
             return true;
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -41,7 +41,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         // 检查是否需要用户登录
         if (method.isAnnotationPresent(NoToken.class))
             return true;
-        if(token==null) {
+        if (token == null) {
             throw new KnownException(ErrorInfoEnum.TOKEN_LOST);
         }
 
@@ -52,13 +52,13 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         //检查权限
         User currentUser = userDao.findUserByUserid(userid);
 
-        if(currentUser == null)
+        if (currentUser == null)
             throw new KnownException(ErrorInfoEnum.USER_NOT_EXISTING);
 
-        if(method.isAnnotationPresent(AllAccess.class) ||
-            method.isAnnotationPresent(AdminAccess.class) && currentUser.is_admin() ||
-            method.isAnnotationPresent(VolunteerAccess.class) && currentUser.is_volunteer() ||
-            method.isAnnotationPresent(SUAccess.class) && currentUser.is_su())
+        if (method.isAnnotationPresent(AllAccess.class) ||
+                method.isAnnotationPresent(AdminAccess.class) && currentUser.isAdmin() ||
+                method.isAnnotationPresent(VolunteerAccess.class) && currentUser.isVolunteer() ||
+                method.isAnnotationPresent(SUAccess.class) && currentUser.isSu())
             return true;
         else throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
     }
