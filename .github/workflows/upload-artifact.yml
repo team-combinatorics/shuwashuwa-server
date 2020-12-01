@@ -13,12 +13,18 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'pom.xml'
+      - 12f23eddde
+    # paths:
+    #   - 'pom.xml'
   watch:
     types: started
 
 env:
+  MYSQL_ADDRESS: 127.0.0.1:3306
+  MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+  MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+  MYSQL_USER: ${{ secrets.MYSQL_USER }}
+  MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
   UPLOAD_ARTIFACT: true
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: false
@@ -26,7 +32,22 @@ env:
 
 jobs:
   build-test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
+    
+    services:
+      # DO NOT mount your repo, it's not ready
+      mysql:
+        image: mysql:8.0.22
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        ports:
+          - 3306:3306
+        options:
+          --name mysql
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -34,13 +55,21 @@ jobs:
       with:
         java-version: 11
 
+    # Can't mount volumes to a running container
+    # Docker executes entrypoint.sh on restart
+    # Credit: https://github.community/t/services-and-volumes/16313/2
+    - name: Restart MySQL container
+      run: |
+        docker cp ${{ github.workspace }}/src/main/resources/sql mysql:/docker-entrypoint-initdb.d
+        docker restart mysql
+
     - name: Cache the Maven packages to speed up build
       uses: actions/cache@v1
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2      
-
+        restore-keys: ${{ runner.os }}-m2  
+    
     - name: Build and test project with Maven
       run: mvn -B package --file pom.xml
   

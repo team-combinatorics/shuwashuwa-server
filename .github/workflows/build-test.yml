@@ -2,10 +2,10 @@
 # This workflow will build a Java project with Maven
 # https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-    # Ubuntu 2004 image packs MySQL 8.0.22
-    # which matches our envirmonment
-    # Using docker-compose directly is not quite suitable for github actions
-    # Since our docker configuration packs its artifacts and gets dependencies from custom repo
+# Ubuntu 20.04 image packs MySQL 8.0.22
+# which matches our envirmonment
+# Using docker-compose directly is not quite suitable for github actions
+# Since our docker configuration packs its artifacts and gets dependencies from custom repo
 
 name: Build and Test
 
@@ -27,11 +27,11 @@ env:
   MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-20.04
     
     services:
-      # Credit: https://github.community/t/services-and-volumes/16313/2
+      # DO NOT mount your repo, it's not ready
       mysql:
         image: mysql:8.0.22
         env:
@@ -51,6 +51,9 @@ jobs:
       with:
         java-version: 11
 
+    # Can't mount volumes to a running container
+    # Docker executes entrypoint.sh on restart
+    # Credit: https://github.community/t/services-and-volumes/16313/2
     - name: Restart MySQL container
       run: |
         docker cp ${{ github.workspace }}/src/main/resources/sql mysql:/docker-entrypoint-initdb.d
