@@ -19,5 +19,6 @@ public class VolunteerApplicationDO {
     private Integer userId;
     private String reasonForApplication;
     private String replyByAdmin;
+    private Integer adminId;
     private Integer status;
 }
