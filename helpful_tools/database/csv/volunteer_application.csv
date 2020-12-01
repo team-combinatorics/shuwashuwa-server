@@ -1,7 +1,8 @@
 字段名,字段类型,字段补充信息,说明,是否为普通索引,是否为唯一索引,是否为主键索引,是否为全文索引
 id,int unsigned,AUTO_INCREMENT NOT NULL,自增长id,,,1,
-create_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP,创建时间,,,,""
+create_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP,创建时间,,,,
 updated_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,更新时间,,,,
 user_id,int unsigned,NOT NULL,申请用户的id,1,,,
-comment,varchar(100),DEFAULT NULL,申请理由,,,,
-status,tinyint,DEFAULT NULL,申请状态,1,,,
+reason_for_application,varchar(100),DEFAULT NULL,申请理由,,,,
+reply_by_admin,varchar(100),DEFAULT NULL,管理员回复,"","","",""
+status,tinyint,DEFAULT 0,申请状态,1,,,

@@ -71,8 +71,9 @@ CREATE TABLE `volunteer_application` (
                                          `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                          `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                          `user_id` INT UNSIGNED NOT NULL COMMENT '申请用户的id',
-                                         `comment` VARCHAR(100) DEFAULT NULL COMMENT '申请理由',
-                                         `status` TINYINT DEFAULT NULL COMMENT '申请状态',
+                                         `reason_for_application` VARCHAR(100) DEFAULT NULL COMMENT '申请理由',
+                                         `reply_by_admin` VARCHAR(100) DEFAULT NULL COMMENT '管理员回复',
+                                         `status` TINYINT DEFAULT 0 COMMENT '申请状态',
                                          INDEX idx_user_id(user_id),
                                          INDEX idx_status(status),
                                          PRIMARY KEY pk_id(`id`)

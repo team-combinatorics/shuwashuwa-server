@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VolunteerApplication {
-    private Integer formid;
-    private String comment;
+public class VolunteerApplicationDO {
+    private Integer id;
+    private Timestamp createTime;
+    private Timestamp updatedTime;
+    private Integer userId;
+    private String reasonForApplication;
+    private String replyByAdmin;
     private Integer status;
 }
