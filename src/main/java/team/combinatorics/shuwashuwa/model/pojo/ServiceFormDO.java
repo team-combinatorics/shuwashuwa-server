@@ -1,28 +1,36 @@
 package team.combinatorics.shuwashuwa.model.pojo;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
+
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ServiceFormDO {
-    private int formid;
+    private Integer id;
+    private Timestamp createTime;
+    private Timestamp updatedTime;
     private String brand;
-    private String computer_model;
-    private String cpu_model;
-    private int has_discrete_graphics;
-    private String graphics_model;
-    private String laptop_type;
-    private String bought_time;
-    private int is_under_warranty;
-    private String problem_description;
-    private String problem_type;
-    private String decription_editing_advice;
-    private String repairing_result;
-    private int status;
+    private String computerModel;
+    private String cpuModel;
+    private boolean hasDiscreteGraphics;
+    private String graphicsModel;
+    private String laptopType;
+    private Date boughtTime;
+    private boolean underWarranty;
+    private String problemDescription;
+    private String problemType;
+    private String decriptionEditingAdvice;
+    private String repairingResult;
+    private Integer status;
     private String feedback;
-    private int activity_id;
-    private int time_slot;
+    private Integer activityId;
+    private Integer timeSlot;
 }

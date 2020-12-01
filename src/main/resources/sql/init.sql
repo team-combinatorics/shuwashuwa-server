@@ -20,7 +20,7 @@ CREATE TABLE `service_form` (
                                 `brand` VARCHAR(15) DEFAULT NULL COMMENT '电脑品牌',
                                 `computer_model` VARCHAR(30) DEFAULT NULL COMMENT '电脑型号',
                                 `cpu_model` VARCHAR(30) DEFAULT NULL COMMENT 'cpu型号',
-                                `has_discrete_graphics` TINYINT DEFAULT NULL COMMENT '是否有独显',
+                                `has_discrete_graphics` BOOLEAN DEFAULT NULL COMMENT '是否有独显',
                                 `graphics_model` VARCHAR(30) DEFAULT NULL COMMENT '显卡型号',
                                 `laptop_type` VARCHAR(30) DEFAULT NULL COMMENT '笔记本类型',
                                 `bought_time` DATE DEFAULT NULL COMMENT '购买时间',
