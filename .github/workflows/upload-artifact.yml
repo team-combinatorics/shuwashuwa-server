@@ -5,7 +5,7 @@ name: Upload Jar
 # 自动触发:更改main分支的pom.xml
 # Reference: actions-openwrt-helloworld/.github/workflows/build-openwrt.yml
 # set-env is disabled since Nov 16 > walkaround in ENV
-# 先给您们写个罪，因为action默认在main上启用因此把main玩坏了
+# 先给您们谢个罪，因为action默认在main上启用因此把main玩坏了
 
 on:
   repository_dispatch:
@@ -13,9 +13,9 @@ on:
   push:
     branches:
       - main
-      - 12f23eddde
-    # paths:
-    #   - 'pom.xml'
+      # - 12f23eddde
+    paths:
+      - 'pom.xml'
   watch:
     types: started
 
@@ -74,7 +74,7 @@ jobs:
       run: mvn -B package --file pom.xml
   
   publish-job:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     needs: [ build-test ]
     steps:
     - uses: actions/checkout@v2
@@ -102,7 +102,7 @@ jobs:
       uses: actions/upload-artifact@v1
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_ARTIFACT == 'true' && !cancelled()
       with:
-       name: shuwashuwa_snapshot
+       name: shuwashuwa-SNAPSHOT
        path: staging
     
     - name: Upload Jar to cowtransfer

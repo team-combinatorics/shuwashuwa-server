@@ -13,11 +13,11 @@ on:
   push:
     branches: 
       - main
-      - 12f23eddde
+      # - 12f23eddde
   pull_request:
     branches: 
       - main
-      - 12f23eddde
+      # - 12f23eddde
 
 env:
   MYSQL_ADDRESS: 127.0.0.1:3306
