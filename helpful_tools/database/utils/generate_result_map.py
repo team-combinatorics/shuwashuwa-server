@@ -22,7 +22,7 @@ def csv2mapper(srcdir, filename):
     mapper_file.write(
         '    <resultMap type=' +
         '\"team.combinatorics.shuwashuwa.model.pojo.{}\" id=\"{}\">\n'.format(
-            class_name, result_map_name))
+            class_name + 'DO', result_map_name))
     # 读取csv信息
     csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     property_names = []
@@ -49,7 +49,7 @@ def csv2mapper(srcdir, filename):
     mapper_file.write(
         '    <update id="update" ' +
         'parameterType="team.combinatorics.shuwashuwa.model.pojo.{}">\n'.
-        format(class_name))
+        format(class_name + 'DO'))
     mapper_file.write('        update ' + filename[0:-4] + '\n')
     # begin trim
     mapper_file.write('        <trim prefix="SET" suffixOverrides=",">\n')
