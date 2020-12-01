@@ -40,3 +40,4 @@ src/main/resources/wx.properties
 helpful_tools/database/mapper
 helpful_tools/database/java
 helpful_tools/database/sql
+helpful_tools/database/utils/__pycache__
