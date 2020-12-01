@@ -34,6 +34,9 @@ def underscore_to_camel(name, is_class=False):
     # print(wordsList)
     result = ''
     for word in wordsList:
+        # 对布尔型的命名不要加is
+        if word == 'is' and not is_class:
+            continue
         result += word[0].upper() + word[1:]
     if not is_class:
         result = result[0].lower() + result[1:]
