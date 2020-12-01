@@ -1,17 +1,48 @@
+### 12f23eddde Dec 1 2020 ###
 # This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+    # Ubuntu 2004 image packs MySQL 8.0.22
+    # which matches our envirmonment
+    # Using docker-compose directly is not quite suitable for github actions
+    # Since our docker configuration packs its artifacts and gets dependencies from custom repo
 
 name: Build and Test
 
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - main
+      - 12f23eddde
   pull_request:
-    branches: [ main ]
+    branches: 
+      - main
+      - 12f23eddde
+
+env:
+  MYSQL_ADDRESS: 127.0.0.1:3306
+  MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+  MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+  MYSQL_USER: ${{ secrets.MYSQL_USER }}
+  MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-2004
+    
+    services:
+      mysql:
+        image: mysql:8.0.22
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        ports:
+          - 3306:3306
+        volumes:
+          - $GITHUB_WORKSPACE/src/main/resources/sql:/docker-entrypoint-initdb.d
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -24,7 +55,7 @@ jobs:
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2      
-
+        restore-keys: ${{ runner.os }}-m2  
+    
     - name: Build and test project with Maven
       run: mvn -B package --file pom.xml
