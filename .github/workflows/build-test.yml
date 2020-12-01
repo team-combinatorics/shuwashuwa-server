@@ -31,6 +31,7 @@ jobs:
     runs-on: ubuntu-20.04
     
     services:
+      # Credit: https://github.community/t/services-and-volumes/16313/2
       mysql:
         image: mysql:8.0.22
         env:
@@ -41,7 +42,9 @@ jobs:
         ports:
           - 3306:3306
         volumes:
-          - /home/runner/work/shuwashuwa-server/shuwashuwa-server/src/main/resources/sql:/docker-entrypoint-initdb.d
+          - ${{ github.workspace }}/src/main/resources/sql:/docker-entrypoint-initdb.d
+        options:
+          --name mysql
 
     steps:
     - uses: actions/checkout@v2
@@ -49,6 +52,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+
+    - name: Restart MySQL container
+      run: |
+        docker restart mysql
 
     - name: Cache the Maven packages to speed up build
       uses: actions/cache@v1
