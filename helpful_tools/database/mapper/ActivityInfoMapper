@@ -3,16 +3,24 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ActivityInfoDao">
     <resultMap type="team.combinatorics.shuwashuwa.model.pojo.ActivityInfo" id="activityInfoResultMap">
-        <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
         <result column="position" jdbcType="VARCHAR" property="position" />
-        <result column="starting_time" jdbcType="DATE" property="startingTime" />
+        <result column="starting_time" jdbcType="TIMESTAMP" property="startingTime" />
     </resultMap>
 
     <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.ActivityInfo">
         update activity_info
         <trim prefix="SET" suffixOverrides=",">
-            <if test="activityInfo.activityId != null">
-                activity_id = #{activityInfo.activityId},
+            <if test="activityInfo.id != null">
+                id = #{activityInfo.id},
+            </if>
+            <if test="activityInfo.createTime != null">
+                create_time = #{activityInfo.createTime},
+            </if>
+            <if test="activityInfo.updatedTime != null">
+                updated_time = #{activityInfo.updatedTime},
             </if>
             <if test="activityInfo.position != null">
                 position = #{activityInfo.position},

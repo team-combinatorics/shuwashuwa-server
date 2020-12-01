@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    private Integer userid;
+public class UserDO {
+    private Integer id;
+    private Timestamp createTime;
+    private Timestamp updatedTime;
     private String openid;
     private String userName;
     private String nickName;
@@ -22,7 +24,7 @@ public class User {
     private String grade;
     private String studentId;
     private String comment;
-    private boolean isVolunteer;
-    private boolean isAdmin;
-    private boolean isSu;
+    private boolean volunteer;
+    private boolean admin;
+    private boolean su;
 }

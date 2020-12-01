@@ -16,9 +16,9 @@
         <result column="grade" jdbcType="VARCHAR" property="grade" />
         <result column="student_id" jdbcType="VARCHAR" property="studentId" />
         <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-        <result column="is_volunteer" jdbcType="BOOLEAN" property="isVolunteer" />
-        <result column="is_admin" jdbcType="BOOLEAN" property="isAdmin" />
-        <result column="is_su" jdbcType="BOOLEAN" property="isSu" />
+        <result column="is_volunteer" jdbcType="BOOLEAN" property="volunteer" />
+        <result column="is_admin" jdbcType="BOOLEAN" property="admin" />
+        <result column="is_su" jdbcType="BOOLEAN" property="su" />
     </resultMap>
 
     <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.User">
@@ -63,14 +63,14 @@
             <if test="user.comment != null">
                 comment = #{user.comment},
             </if>
-            <if test="user.isVolunteer != null">
-                is_volunteer = #{user.isVolunteer},
+            <if test="user.volunteer != null">
+                is_volunteer = #{user.volunteer},
             </if>
-            <if test="user.isAdmin != null">
-                is_admin = #{user.isAdmin},
+            <if test="user.admin != null">
+                is_admin = #{user.admin},
             </if>
-            <if test="user.isSu != null">
-                is_su = #{user.isSu},
+            <if test="user.su != null">
+                is_su = #{user.su},
             </if>
         </trim>
         where id = #{user.id}

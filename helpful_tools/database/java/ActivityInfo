@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActivityInfo {
-    private Integer activityId;
+public class ActivityInfoDO {
+    private Integer id;
+    private Timestamp createTime;
+    private Timestamp updatedTime;
     private String position;
-    private String startingTime;
+    private Timestamp startingTime;
 }

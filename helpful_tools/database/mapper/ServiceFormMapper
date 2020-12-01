@@ -3,7 +3,9 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ServiceFormDao">
     <resultMap type="team.combinatorics.shuwashuwa.model.pojo.ServiceForm" id="serviceFormResultMap">
-        <result column="formid" jdbcType="INTEGER" property="formid" />
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
         <result column="brand" jdbcType="VARCHAR" property="brand" />
         <result column="computer_model" jdbcType="VARCHAR" property="computerModel" />
         <result column="cpu_model" jdbcType="VARCHAR" property="cpuModel" />
@@ -11,7 +13,7 @@
         <result column="graphics_model" jdbcType="VARCHAR" property="graphicsModel" />
         <result column="laptop_type" jdbcType="VARCHAR" property="laptopType" />
         <result column="bought_time" jdbcType="DATE" property="boughtTime" />
-        <result column="is_under_warranty" jdbcType="BOOLEAN" property="isUnderWarranty" />
+        <result column="is_under_warranty" jdbcType="BOOLEAN" property="underWarranty" />
         <result column="problem_description" jdbcType="VARCHAR" property="problemDescription" />
         <result column="problem_type" jdbcType="VARCHAR" property="problemType" />
         <result column="decription_editing_advice" jdbcType="VARCHAR" property="decriptionEditingAdvice" />
@@ -25,8 +27,14 @@
     <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.ServiceForm">
         update service_form
         <trim prefix="SET" suffixOverrides=",">
-            <if test="serviceForm.formid != null">
-                formid = #{serviceForm.formid},
+            <if test="serviceForm.id != null">
+                id = #{serviceForm.id},
+            </if>
+            <if test="serviceForm.createTime != null">
+                create_time = #{serviceForm.createTime},
+            </if>
+            <if test="serviceForm.updatedTime != null">
+                updated_time = #{serviceForm.updatedTime},
             </if>
             <if test="serviceForm.brand != null">
                 brand = #{serviceForm.brand},
@@ -49,8 +57,8 @@
             <if test="serviceForm.boughtTime != null">
                 bought_time = #{serviceForm.boughtTime},
             </if>
-            <if test="serviceForm.isUnderWarranty != null">
-                is_under_warranty = #{serviceForm.isUnderWarranty},
+            <if test="serviceForm.underWarranty != null">
+                is_under_warranty = #{serviceForm.underWarranty},
             </if>
             <if test="serviceForm.problemDescription != null">
                 problem_description = #{serviceForm.problemDescription},
