@@ -12,21 +12,11 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class VolunteerApplicationDO {
     private Integer id;
     private Timestamp createTime;
     private Timestamp updatedTime;
-    private String openid;
-    private String userName;
-    private String nickName;
-    private String phoneNumber;
-    private String email;
-    private String identity;
-    private String department;
-    private String grade;
-    private String studentId;
+    private Integer userId;
     private String comment;
-    private boolean volunteer;
-    private boolean admin;
-    private boolean su;
+    private Integer status;
 }

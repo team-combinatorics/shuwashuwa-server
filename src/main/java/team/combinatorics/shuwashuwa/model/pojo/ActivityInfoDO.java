@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActivityInfo {
+public class ActivityInfoDO {
     private int activity_id;
     private String position;
     private String starting_time;

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceForm {
+public class ServiceFormDO {
     private int formid;
     private String brand;
     private String computer_model;
