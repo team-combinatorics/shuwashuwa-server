@@ -46,32 +46,32 @@ public class UserController {
     }
 
     /**
-     * 更新用户信息，未完成
+     * 更新用户信息
      */
     @ApiOperation(value = "更新用户信息", notes = "根据传入的数据结构对数据库中用户的相应表项进行更新", httpMethod = "PUT")
     @RequestMapping(value = "/info", method = RequestMethod.PUT)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
+            @ApiResponse(code = 40000, message = "请求成功")
     })
     @AllAccess
     public CommonResult<String> updateUserInfo(@RequestHeader("token") String token, @RequestBody UpdateUserInfoDto updateUserInfoDto) throws Exception {
         userService.updateUserInfo(TokenUtil.extractUserid(token), updateUserInfoDto);
-        return new CommonResult<>(200, "更新成功", "User's information has been updated!");
+        return new CommonResult<>(40000, "请求成功", "User's information has been updated!");
     }
 
 
     /**
-     * 获取用户信息，未完成
+     * 获取用户信息
      */
     @ApiOperation(value = "获取当前用户信息", notes = "根据当前token中的userid获取用户信息", httpMethod = "GET")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
+            @ApiResponse(code = 40000, message = "请求成功")
     })
     @AllAccess
     public CommonResult<User> getUserInfo(@RequestHeader("token") String token) throws Exception {
         User user = userService.getUserInfo(TokenUtil.extractUserid(token));
-        return new CommonResult<>(200, "更新成功", user);
+        return new CommonResult<>(40000, "请求成功", user);
     }
 
     /**
