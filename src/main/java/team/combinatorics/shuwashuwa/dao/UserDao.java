@@ -9,7 +9,7 @@ import team.combinatorics.shuwashuwa.model.pojo.UserDO;
 @Component(value = "userDao")
 public interface UserDao {
     @Insert("insert into user(openid) values (#{openid})")
-    void addUserOpenid(String openid);
+    void insertByOpenid(String openid);
 
     @Select("SELECT * FROM user where openid=#{openid}")
     UserDO findUserByOpenid(String openid);
