@@ -41,7 +41,7 @@ jobs:
         ports:
           - 3306:3306
         volumes:
-          - ${{GITHUB_WORKSPACE}}/src/main/resources/sql:/docker-entrypoint-initdb.d
+          - ./src/main/resources/sql:/docker-entrypoint-initdb.d
 
     steps:
     - uses: actions/checkout@v2
