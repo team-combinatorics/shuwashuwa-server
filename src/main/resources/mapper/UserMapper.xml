@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.UserDao">
-    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.User" id="userResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.UserDO" id="userResultMap">
         <result column="id" jdbcType="INTEGER" property="id" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
@@ -25,7 +25,7 @@
         select * from user where id=#{id}
     </select>
 
-    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto">
+    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO">
         update user
         <trim prefix="SET" suffixOverrides=",">
             <if test="user.userName != null">
@@ -52,7 +52,7 @@
             <if test="user.studentId != null">
                 student_id = #{user.studentId},
             </if>
-            <if test="user.comment != null">
+            <if test="userDO.comment != null">
                 comment = #{user.comment},
             </if>
         </trim>
