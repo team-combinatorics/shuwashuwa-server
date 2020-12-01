@@ -17,6 +17,7 @@ public class VolunteerApplicationDO {
     private Timestamp createTime;
     private Timestamp updatedTime;
     private Integer userId;
-    private String comment;
+    private String reasonForApplication;
+    private String replyByAdmin;
     private Integer status;
 }
