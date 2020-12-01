@@ -41,8 +41,6 @@ jobs:
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         ports:
           - 3306:3306
-        volumes:
-          - ${{ github.workspace }}/src/main/resources/sql:/docker-entrypoint-initdb.d
         options:
           --name mysql
 
@@ -55,6 +53,7 @@ jobs:
 
     - name: Restart MySQL container
       run: |
+        docker cp ${{ github.workspace }}/src/main/resources/sql mysql:/docker-entrypoint-initdb.d
         docker restart mysql
 
     - name: Cache the Maven packages to speed up build
