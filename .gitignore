@@ -39,3 +39,4 @@ src/main/resources/wx.properties
 ### 自动生成的代码等 ###
 helpful_tools/database/mapper
 helpful_tools/database/java
+helpful_tools/database/sql
