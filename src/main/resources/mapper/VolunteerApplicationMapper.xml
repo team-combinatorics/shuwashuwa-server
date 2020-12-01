@@ -9,6 +9,7 @@
         <result column="user_id" jdbcType="INTEGER" property="userId" />
         <result column="reason_for_application" jdbcType="VARCHAR" property="reasonForApplication" />
         <result column="reply_by_admin" jdbcType="VARCHAR" property="replyByAdmin" />
+        <result column="admin_id" jdbcType="INTEGER" property="adminId" />
         <result column="status" jdbcType="TINYINT" property="status" />
     </resultMap>
 
