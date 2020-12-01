@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VolunteerApplicationDTO {
     private String reasonForApplication;
-    private String replyByAdmin;
 }
