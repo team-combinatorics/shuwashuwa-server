@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         UserDO userDO = userDao.selectUserByOpenid(openid);
         if (userDO == null) {
             logInSuccessDto.setFirstLogin(true);
-            userDao.insertByOpenid(openid);
+            userDao.insertUserByOpenid(openid);
             userDO = userDao.selectUserByOpenid(openid);
         } else
             logInSuccessDto.setFirstLogin(false);
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
         else {
             String openid = root.path("openid").asText();
             String sessionKey = root.path("session_key").asText();
-            userDao.insertByOpenid(openid);
+            userDao.insertUserByOpenid(openid);
             return userDao.selectUserByOpenid(openid).toString();
         }
     }
