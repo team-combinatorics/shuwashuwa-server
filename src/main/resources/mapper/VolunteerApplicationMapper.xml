@@ -39,6 +39,29 @@
         where id = #{id}
     </select>
 
+    <select id="selectByCondition" resultMap="volunteerApplicationResultMap"
+            parameterType="team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO">
+        select *
+        from volunteer_application
+        where 1=1
+        <if test="condition.beginTime != null">
+            and create_time >= #{condition.beginTime}
+        </if>
+        <if test="condition.endTime != null">
+            and create_time &lt;= #{condition.endTime}
+        </if>
+        <if test="condition.userID != null">
+            and user_id = #{condition.userID}
+        </if>
+        <if test="condition.status != null">
+            and status = #{condition.status}
+        </if>
+        <if test="condition.adminID != null">
+            and admin_id = #{condition.adminID}
+        </if>
+
+    </select>
+
     <!--    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO">-->
     <!--        update volunteer_application-->
     <!--        <trim prefix="SET" suffixOverrides=",">-->
