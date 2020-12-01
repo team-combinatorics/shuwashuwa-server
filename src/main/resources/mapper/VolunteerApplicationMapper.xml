@@ -2,15 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao">
-    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO" id="volunteerApplicationResultMap">
-        <result column="id" jdbcType="INTEGER" property="id" />
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
-        <result column="user_id" jdbcType="INTEGER" property="userId" />
-        <result column="reason_for_application" jdbcType="VARCHAR" property="reasonForApplication" />
-        <result column="reply_by_admin" jdbcType="VARCHAR" property="replyByAdmin" />
-        <result column="admin_id" jdbcType="INTEGER" property="adminId" />
-        <result column="status" jdbcType="TINYINT" property="status" />
+    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO"
+               id="volunteerApplicationResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="reason_for_application" jdbcType="VARCHAR" property="reasonForApplication"/>
+        <result column="reply_by_admin" jdbcType="VARCHAR" property="replyByAdmin"/>
+        <result column="admin_id" jdbcType="INTEGER" property="adminId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
     </resultMap>
 
     <insert id="insert">
@@ -18,27 +19,39 @@
         values (#{id}, #{application.reasonForApplication})
     </insert>
 
+    <update id="updateApplicationByAdmin">
+        update volunteer_application
+        set admin_id       = #{adminID},
+            reply_by_admin = #{adminReply.replyByAdmin},
+            status         = #{adminReply.status}
+        where id = #{formID}
+    </update>
+
     <select id="selectByUserId" resultMap="volunteerApplicationResultMap">
-        select * from volunteer_application where user_id = #{id}
+        select *
+        from volunteer_application
+        where user_id = #{id}
     </select>
 
     <select id="selectByFormId" resultMap="volunteerApplicationResultMap">
-        select * from volunteer_application where id = #{id}
+        select *
+        from volunteer_application
+        where id = #{id}
     </select>
-    
-<!--    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO">-->
-<!--        update volunteer_application-->
-<!--        <trim prefix="SET" suffixOverrides=",">-->
-<!--            <if test="volunteerApplication.userId != null">-->
-<!--                user_id = #{volunteerApplication.userId},-->
-<!--            </if>-->
-<!--            <if test="volunteerApplication.comment != null">-->
-<!--                comment = #{volunteerApplication.comment},-->
-<!--            </if>-->
-<!--            <if test="volunteerApplication.status != null">-->
-<!--                status = #{volunteerApplication.status},-->
-<!--            </if>-->
-<!--        </trim>-->
-<!--        where id = #{volunteerApplication.id}-->
-<!--    </update>-->
+
+    <!--    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO">-->
+    <!--        update volunteer_application-->
+    <!--        <trim prefix="SET" suffixOverrides=",">-->
+    <!--            <if test="volunteerApplication.userId != null">-->
+    <!--                user_id = #{volunteerApplication.userId},-->
+    <!--            </if>-->
+    <!--            <if test="volunteerApplication.comment != null">-->
+    <!--                comment = #{volunteerApplication.comment},-->
+    <!--            </if>-->
+    <!--            <if test="volunteerApplication.status != null">-->
+    <!--                status = #{volunteerApplication.status},-->
+    <!--            </if>-->
+    <!--        </trim>-->
+    <!--        where id = #{volunteerApplication.id}-->
+    <!--    </update>-->
 </mapper>
