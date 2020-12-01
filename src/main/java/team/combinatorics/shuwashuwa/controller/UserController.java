@@ -33,8 +33,7 @@ public class UserController {
     @ApiOperation(value = "登录", notes = "通过微信提供的临时登录凭证进行登录", httpMethod = "GET")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功"),
-            @ApiResponse(code = 40001, message = "lbl出错了") /*TODO: update ApiResponses*/
+            @ApiResponse(code = 40000, message = "请求成功")
 
     })
     @NoToken
@@ -42,7 +41,7 @@ public class UserController {
         System.out.println("用户登录");
         System.out.println("Code:" + logInInfoDto.getCode());
         LogInSuccessDto logInSuccessDto = userService.wechatLogin(logInInfoDto);
-        return new CommonResult<>(200, "登录成功", logInSuccessDto);
+        return new CommonResult<>(40000, "请求成功", logInSuccessDto);
     }
 
     /**
