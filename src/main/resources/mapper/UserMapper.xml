@@ -52,7 +52,7 @@
             <if test="user.studentId != null">
                 student_id = #{user.studentId},
             </if>
-            <if test="userDO.comment != null">
+            <if test="user.comment != null">
                 comment = #{user.comment},
             </if>
         </trim>
