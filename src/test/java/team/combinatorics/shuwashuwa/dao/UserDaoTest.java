@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
-import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
+import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
@@ -30,7 +30,7 @@ public class UserDaoTest {
 
     @Test
     public void addUserOpenidTest() {
-        userDao.updateUserInfo(1, UpdateUserInfoDto.builder()
+        userDao.updateUserInfo(1, UpdateUserInfoDTO.builder()
                 .userName("misaki")
                 .nickName("粉红裸熊")
                 .build());
