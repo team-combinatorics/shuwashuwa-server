@@ -13,6 +13,7 @@ import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
 import team.combinatorics.shuwashuwa.model.pojo.User;
+import team.combinatorics.shuwashuwa.model.pojo.VolunteerApplication;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -72,6 +73,21 @@ public class UserController {
         User user = userService.getUserInfo(TokenUtil.extractUserid(token));
         return new CommonResult<>(40000, "请求成功", user);
     }
+
+    /**
+     * 接收志愿者申请，未完成
+     */
+    @ApiOperation(value = "接收当前用户的申请", notes = "根据传入的token解析userid，再储存申请表", httpMethod = "POST")
+    @RequestMapping(value = "/apply", method = RequestMethod.POST)
+    @ApiResponses({
+            @ApiResponse(code = 40000, message = "请求成功")
+    })
+    @AllAccess
+    public CommonResult<String> receiveApplicationInfo(@RequestHeader("token") String token, @RequestBody VolunteerApplication application)
+    {
+        return null;
+    }
+
 
     /**
      * 删除单个用户，测试用
