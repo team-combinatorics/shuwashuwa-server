@@ -24,7 +24,7 @@ def csv2javafile(srcdir, filename):
     java_name = camel_name
     java_file = open("java/" + java_name, 'w', encoding="utf-8")
     java_file.write(java_head)
-    java_file.write("public class " + camel_name + ' {\n')
+    java_file.write("public class " + camel_name + 'DO' + ' {\n')
     csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     csv_file.readline()
     for line in csv_file.readlines():
@@ -87,11 +87,11 @@ def csv2sql(srcdir, filename):
     # 写入普通索引
     # 普通索引名加idx前缀
     for n_idx in normal_indexes:
-        sql_file.write(',\n    INDEX {}({})'.format('idx_'+n_idx, n_idx))
+        sql_file.write(',\n    INDEX {}({})'.format('idx_' + n_idx, n_idx))
     # 写入唯一索引
     # 唯一索引名以uk为前缀
     for u_idx in unique_indexes:
-        sql_file.write(',\n    UNIQUE {}({})'.format('uk_'+u_idx, u_idx))
+        sql_file.write(',\n    UNIQUE {}({})'.format('uk_' + u_idx, u_idx))
     # 写入主键索引
     sql_file.write(',\n    PRIMARY KEY pk_id(`id`)')
     # 写入尾部信息
