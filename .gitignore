@@ -32,4 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 .DS_Store
+
+### 私密信息 ###
 src/main/resources/wx.properties
+
+### 自动生成的代码等 ###
+helpful_tools/database/mapper
+helpful_tools/database/java
