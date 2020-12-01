@@ -73,8 +73,10 @@ CREATE TABLE `volunteer_application` (
                                          `user_id` INT UNSIGNED NOT NULL COMMENT '申请用户的id',
                                          `reason_for_application` VARCHAR(100) DEFAULT NULL COMMENT '申请理由',
                                          `reply_by_admin` VARCHAR(100) DEFAULT NULL COMMENT '管理员回复',
+                                         `admin_id` INT UNSIGNED DEFAULT NULL COMMENT '回复的管理员的id',
                                          `status` TINYINT DEFAULT 0 COMMENT '申请状态',
                                          INDEX idx_user_id(user_id),
+                                         INDEX idx_admin_id(admin_id),
                                          INDEX idx_status(status),
                                          PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
