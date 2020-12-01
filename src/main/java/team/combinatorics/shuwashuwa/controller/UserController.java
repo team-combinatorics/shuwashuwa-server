@@ -12,6 +12,7 @@ import team.combinatorics.shuwashuwa.model.bean.CommonResult;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDTO;
 import team.combinatorics.shuwashuwa.model.pojo.UserDO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
@@ -75,15 +76,22 @@ public class UserController {
 
     /**
      * 接收志愿者申请，未完成
+     * TODO: 已经定义好了DTO，速速完成
      */
     @ApiOperation(value = "接收当前用户的申请", notes = "根据传入的token解析userid，再储存申请表", httpMethod = "POST")
-    @RequestMapping(value = "/apply", method = RequestMethod.POST)
+    /**
+     * 接口尽量RESTful一些！
+     * 接口尽量RESTful一些！
+     * 接口尽量RESTful一些！
+     * 比如这里用/application + post方法来表示添加数据
+     */
+    @RequestMapping(value = "/application", method = RequestMethod.POST)
     @ApiResponses({
-            @ApiResponse(code = 40000, message = "请求成功")
+            @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<String> receiveApplicationInfo(@RequestHeader("token") String token, @RequestBody VolunteerApplication application)
-    {
+    public CommonResult<String> receiveApplicationInfo(@RequestHeader("token") String token,
+                                                       @RequestBody VolunteerApplicationDTO application) {
         return null;
     }
 
@@ -94,6 +102,7 @@ public class UserController {
     @ApiOperation(value = "删除单个用户", notes = "删除单个用户，测试用", httpMethod = "DELETE")
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
+            //TODO: 注意一下，错误码都是定义好的，统一为4xxxx格式，这个204不太星
             @ApiResponse(code = 204, message = "用户不存在")
     })
     @RequestMapping(value = "/deleteOne", method = RequestMethod.DELETE)
