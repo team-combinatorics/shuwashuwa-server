@@ -2,8 +2,8 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
-import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
-import team.combinatorics.shuwashuwa.model.pojo.User;
+import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
+import team.combinatorics.shuwashuwa.model.pojo.UserDO;
 
 @Mapper
 @Component(value = "userDao")
@@ -12,15 +12,15 @@ public interface UserDao {
     void addUserOpenid(String openid);
 
     @Select("SELECT * FROM user where openid=#{openid}")
-    User findUserByOpenid(String openid);
+    UserDO findUserByOpenid(String openid);
 
-    User findUserByUserid(@Param("id") Integer id);
+    UserDO findUserByUserid(@Param("id") Integer id);
 
 //    // 一个通用的更新方法，使用xml实现
-//    void updateUserInfo(@Param("user") User user);
+//    void updateUserInfo(@Param("user") UserDO user);
 
     // 一个通用的更新方法，使用特定的DTO传输
-    void updateUserInfo(@Param("id") int id, @Param("user") UpdateUserInfoDto user);
+    void updateUserInfo(@Param("id") int id, @Param("user") UpdateUserInfoDTO user);
 
     @Delete("DELETE FROM user where userid=#{userid}")
     Integer deleteUserByUserid(int userid);

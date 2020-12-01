@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.model.bean.CommonResult;
-import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
-import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
-import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
-import team.combinatorics.shuwashuwa.model.pojo.User;
+import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
+import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
+import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
+import team.combinatorics.shuwashuwa.model.pojo.UserDO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -38,10 +38,10 @@ public class UserController {
 
     })
     @NoToken
-    public CommonResult<LogInSuccessDto> loginHandler(LogInInfoDto logInInfoDto) throws Exception {
+    public CommonResult<LogInSuccessDTO> loginHandler(LogInInfoDTO logInInfoDto) throws Exception {
         System.out.println("用户登录");
         System.out.println("Code:" + logInInfoDto.getCode());
-        LogInSuccessDto logInSuccessDto = userService.wechatLogin(logInInfoDto);
+        LogInSuccessDTO logInSuccessDto = userService.wechatLogin(logInInfoDto);
         return new CommonResult<>(200, "登录成功", logInSuccessDto);
     }
 
@@ -54,9 +54,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<String> updateUserInfo(@RequestHeader("token") String token, @RequestBody UpdateUserInfoDto updateUserInfoDto) throws Exception {
+    public CommonResult<String> updateUserInfo(@RequestHeader("token") String token, @RequestBody UpdateUserInfoDTO updateUserInfoDto) throws Exception {
         userService.updateUserInfo(TokenUtil.extractUserid(token), updateUserInfoDto);
-        return new CommonResult<>(200, "更新成功", "User's information has been updated!");
+        return new CommonResult<>(200, "更新成功", "UserDO's information has been updated!");
     }
 
 
@@ -69,9 +69,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<User> getUserInfo(@RequestHeader("token") String token) throws Exception {
-        User user = userService.getUserInfo(TokenUtil.extractUserid(token));
-        return new CommonResult<>(200, "更新成功", user);
+    public CommonResult<UserDO> getUserInfo(@RequestHeader("token") String token) throws Exception {
+        UserDO userDO = userService.getUserInfo(TokenUtil.extractUserid(token));
+        return new CommonResult<>(200, "更新成功", userDO);
     }
 
     /**

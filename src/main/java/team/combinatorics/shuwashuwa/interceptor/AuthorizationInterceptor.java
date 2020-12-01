@@ -9,7 +9,7 @@ import team.combinatorics.shuwashuwa.annotation.*;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.pojo.User;
+import team.combinatorics.shuwashuwa.model.pojo.UserDO;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,15 +50,15 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         Integer userid = TokenUtil.verifyToken(token).get("userid").asInt();
 
         //检查权限
-        User currentUser = userDao.findUserByUserid(userid);
+        UserDO currentUserDO = userDao.findUserByUserid(userid);
 
-        if (currentUser == null)
+        if (currentUserDO == null)
             throw new KnownException(ErrorInfoEnum.USER_NOT_EXISTING);
 
         if (method.isAnnotationPresent(AllAccess.class) ||
-                method.isAnnotationPresent(AdminAccess.class) && currentUser.isAdmin() ||
-                method.isAnnotationPresent(VolunteerAccess.class) && currentUser.isVolunteer() ||
-                method.isAnnotationPresent(SUAccess.class) && currentUser.isSu())
+                method.isAnnotationPresent(AdminAccess.class) && currentUserDO.isAdmin() ||
+                method.isAnnotationPresent(VolunteerAccess.class) && currentUserDO.isVolunteer() ||
+                method.isAnnotationPresent(SUAccess.class) && currentUserDO.isSu())
             return true;
         else throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
     }
