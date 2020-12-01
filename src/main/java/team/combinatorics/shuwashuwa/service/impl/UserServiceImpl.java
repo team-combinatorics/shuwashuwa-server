@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.dao.UserDao;
-import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
-import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
-import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
-import team.combinatorics.shuwashuwa.model.pojo.User;
+import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
+import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
+import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
+import team.combinatorics.shuwashuwa.model.pojo.UserDO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
@@ -42,25 +42,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LogInSuccessDto wechatLogin(LogInInfoDto logInInfoDto) throws Exception {
+    public LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception {
         JsonNode root = wechatUtil.getWechatInfo(logInInfoDto.getCode());
         String openid = root.path("openid").asText();
         String sessionKey = root.path("session_key").asText();
-        LogInSuccessDto logInSuccessDto = new LogInSuccessDto();
-        User user = userDao.findUserByOpenid(openid);
-        if (user == null) {
+        LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
+        UserDO userDO = userDao.selectUserByOpenid(openid);
+        if (userDO == null) {
             logInSuccessDto.setFirstLogin(true);
-            userDao.addUserOpenid(openid);
-            user = userDao.findUserByOpenid(openid);
+            userDao.insertUserByOpenid(openid);
+            userDO = userDao.selectUserByOpenid(openid);
         } else
             logInSuccessDto.setFirstLogin(false);
-        String token = TokenUtil.createToken(user.getUserid());
+        String token = TokenUtil.createToken(userDO.getId());
         logInSuccessDto.setToken(token);
         return logInSuccessDto;
     }
 
     @Override
-    public void updateUserInfo(int userid, UpdateUserInfoDto updateUserInfoDto) {
+    public void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) {
         System.out.println("即将更新用户信息");
         System.out.println("待更新的用户userid为：" + userid);
         System.out.println(updateUserInfoDto.toString());
@@ -68,16 +68,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserInfo(int userid) {
+    public UserDO getUserInfo(int userid) {
         System.out.println("想要获取" + userid + "的信息");
-        User user = userDao.findUserByUserid(userid);
-        user.setOpenid("你无权获取openid");
-        return user;
+        UserDO userDO = userDao.selectUserByUserid(userid);
+        userDO.setOpenid("你无权获取openid");
+        return userDO;
     }
 
 
     @Override
-    public String test(LogInInfoDto logInInfoDto) throws Exception {
+    public String test(LogInInfoDTO logInInfoDto) throws Exception {
         JsonNode root = wechatUtil.getWechatInfo(logInInfoDto.getCode());
         // 如果返回中有错误码且不等于零说明出错
         if (root.has("errcode") && root.path("errcode").asInt() != 0)
@@ -85,8 +85,8 @@ public class UserServiceImpl implements UserService {
         else {
             String openid = root.path("openid").asText();
             String sessionKey = root.path("session_key").asText();
-            userDao.addUserOpenid(openid);
-            return userDao.findUserByOpenid(openid).toString();
+            userDao.insertUserByOpenid(openid);
+            return userDao.selectUserByOpenid(openid).toString();
         }
     }
 

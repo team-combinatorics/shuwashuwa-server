@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao">
+    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO"
+               id="volunteerApplicationResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="reason_for_application" jdbcType="VARCHAR" property="reasonForApplication"/>
+        <result column="reply_by_admin" jdbcType="VARCHAR" property="replyByAdmin"/>
+        <result column="admin_id" jdbcType="INTEGER" property="adminId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+
+    <insert id="insert">
+        insert into volunteer_application(user_id, reason_for_application)
+        values (#{id}, #{application.reasonForApplication})
+    </insert>
+
+    <update id="updateApplicationByAdmin">
+        update volunteer_application
+        set admin_id       = #{adminID},
+            reply_by_admin = #{adminReply.replyByAdmin},
+            status         = #{adminReply.status}
+        where id = #{formID}
+    </update>
+
+    <select id="selectByUserId" resultMap="volunteerApplicationResultMap">
+        select *
+        from volunteer_application
+        where user_id = #{id}
+    </select>
+
+    <select id="selectByFormId" resultMap="volunteerApplicationResultMap">
+        select *
+        from volunteer_application
+        where id = #{id}
+    </select>
+
+    <select id="selectByCondition" resultMap="volunteerApplicationResultMap"
+            parameterType="team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO">
+        select *
+        from volunteer_application
+        where 1=1
+        <if test="condition.beginTime != null">
+            and create_time >= #{condition.beginTime}
+        </if>
+        <if test="condition.endTime != null">
+            and create_time &lt;= #{condition.endTime}
+        </if>
+        <if test="condition.userID != null">
+            and user_id = #{condition.userID}
+        </if>
+        <if test="condition.status != null">
+            and status = #{condition.status}
+        </if>
+        <if test="condition.adminID != null">
+            and admin_id = #{condition.adminID}
+        </if>
+
+    </select>
+
+    <!--    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO">-->
+    <!--        update volunteer_application-->
+    <!--        <trim prefix="SET" suffixOverrides=",">-->
+    <!--            <if test="volunteerApplication.userId != null">-->
+    <!--                user_id = #{volunteerApplication.userId},-->
+    <!--            </if>-->
+    <!--            <if test="volunteerApplication.comment != null">-->
+    <!--                comment = #{volunteerApplication.comment},-->
+    <!--            </if>-->
+    <!--            <if test="volunteerApplication.status != null">-->
+    <!--                status = #{volunteerApplication.status},-->
+    <!--            </if>-->
+    <!--        </trim>-->
+    <!--        where id = #{volunteerApplication.id}-->
+    <!--    </update>-->
+</mapper>

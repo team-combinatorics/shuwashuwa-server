@@ -69,10 +69,10 @@ public class TestController {
     @GetMapping("/addUser")
     @NoToken
     public String addFakeUsers() {
-        userDao.addUserOpenid("fake openid 1");
-        userDao.addUserOpenid("fake openid 2");
-        userDao.addUserOpenid("fake openid 3");
-        userDao.addUserOpenid("fake openid 4");
+        userDao.insertUserByOpenid("fake openid 1");
+        userDao.insertUserByOpenid("fake openid 2");
+        userDao.insertUserByOpenid("fake openid 3");
+        userDao.insertUserByOpenid("fake openid 4");
         return "dokidoki";
     }
 }

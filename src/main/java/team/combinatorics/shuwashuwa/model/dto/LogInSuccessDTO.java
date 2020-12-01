@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(description = "登录成功的响应数据")
-public class LogInSuccessDto {
+public class LogInSuccessDTO {
     @ApiModelProperty("token")
     private String token;
 

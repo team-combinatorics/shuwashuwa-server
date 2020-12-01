@@ -5,21 +5,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceForm {
-    private Integer formid;
+public class ServiceFormDO {
+    private Integer id;
+    private Timestamp createTime;
+    private Timestamp updatedTime;
     private String brand;
     private String computerModel;
     private String cpuModel;
-    private Integer hasDiscreteGraphics;
+    private boolean hasDiscreteGraphics;
     private String graphicsModel;
     private String laptopType;
-    private String boughtTime;
-    private boolean isUnderWarranty;
+    private Date boughtTime;
+    private boolean underWarranty;
     private String problemDescription;
     private String problemType;
     private String decriptionEditingAdvice;

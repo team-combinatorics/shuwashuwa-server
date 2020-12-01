@@ -24,7 +24,7 @@ def csv2javafile(srcdir, filename):
     java_name = camel_name
     java_file = open("java/" + java_name, 'w', encoding="utf-8")
     java_file.write(java_head)
-    java_file.write("public class " + camel_name + ' {\n')
+    java_file.write("public class " + camel_name + 'DO' + ' {\n')
     csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     csv_file.readline()
     for line in csv_file.readlines():
@@ -63,37 +63,38 @@ def csv2sql(srcdir, filename):
     # 打开csv文件
     csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     csv_file.readline()
-    normal_index = []
-    unique_keys = []
+    normal_indexes = []
+    unique_indexes = []
+    primary_indexes = []
+    fulltext_indexes = []
+
     lines = csv_file.readlines()
     for i in range(len(lines)):
         line = lines[i]
         tmp = line.strip().lower().split(',')
         sql_file.write('    `{}` {} {} COMMENT \'{}\''.format(
-            tmp[0], tmp[1].upper(), tmp[3].upper(), tmp[2]))
+            tmp[0], tmp[1].upper(), tmp[2].upper(), tmp[3]))
         if i != len(lines) - 1:
             sql_file.write(',\n')
         if tmp[4] == '1':
-            normal_index.append(tmp[0])
+            normal_indexes.append(tmp[0])
         if tmp[5] == '1':
-            unique_keys.append(tmp[0])
-
-    if len(unique_keys):
-        sql_file.write(',\n')
-        sql_file.write('    UNIQUE KEY (')
-
-        for j in range(len(unique_keys)):
-            sql_file.write('`{}`'.format(unique_keys[j]))
-            if j != len(unique_keys) - 1:
-                sql_file.write(',')
-        sql_file.write(')')
-
-    if len(normal_index):
-        # 在上一行后补一个逗号
-        sql_file.write(',\n')
-        sql_file.write('    KEY `normalIndex` ({})'.format(
-            str(normal_index)[1:-1].replace('\'', '`')))
-
+            unique_indexes.append(tmp[0])
+        if tmp[6] == '1':
+            primary_indexes.append(tmp[0])
+        if tmp[7] == '1':
+            fulltext_indexes.append(tmp[0])
+    # 写入普通索引
+    # 普通索引名加idx前缀
+    for n_idx in normal_indexes:
+        sql_file.write(',\n    INDEX {}({})'.format('idx_' + n_idx, n_idx))
+    # 写入唯一索引
+    # 唯一索引名以uk为前缀
+    for u_idx in unique_indexes:
+        sql_file.write(',\n    UNIQUE {}({})'.format('uk_' + u_idx, u_idx))
+    # 写入主键索引
+    sql_file.write(',\n    PRIMARY KEY pk_id(`id`)')
+    # 写入尾部信息
     sql_file.write(
         '\n' +
         ') ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;\n'

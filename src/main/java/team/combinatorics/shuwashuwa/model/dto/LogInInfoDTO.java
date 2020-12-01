@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("LogInfoDto: 用于登录的数据传输类")
-public class LogInInfoDto {
+public class LogInInfoDTO {
     /** 临时登录凭证 */
     @ApiModelProperty(value = "小程序中调用wx.login()产生的code", required = true)
     private String code;

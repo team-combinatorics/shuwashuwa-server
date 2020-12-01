@@ -1,17 +1,14 @@
 package team.combinatorics.shuwashuwa.model.pojo;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VolunteerApplication {
-    private Integer formid;
-    private String comment;
-    private Integer status;
+public class ActivityInfoDO {
+    private int activity_id;
+    private String position;
+    private String starting_time;
 }
