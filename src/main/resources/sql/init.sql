@@ -4,17 +4,17 @@ USE `shuwashuwa`;
 
 DROP TABLE IF EXISTS `activity_info`;
 CREATE TABLE `activity_info` (
-                                 `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，活动id',
+                                 `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长，活动id',
                                  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                  `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                  `position` VARCHAR(100) DEFAULT NULL COMMENT '预约的教室位置',
                                  `starting_time` DATETIME DEFAULT NULL COMMENT '预计开始时间',
-                                 UNIQUE KEY (`id`)
+                                 PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `service_form`;
 CREATE TABLE `service_form` (
-                                `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长的表单id',
+                                `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长的表单id',
                                 `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                 `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                 `brand` VARCHAR(15) DEFAULT NULL COMMENT '电脑品牌',
@@ -33,12 +33,13 @@ CREATE TABLE `service_form` (
                                 `feedback` VARCHAR(100) DEFAULT NULL COMMENT '用户反馈信息',
                                 `activity_id` INT DEFAULT NULL COMMENT '预约活动id',
                                 `time_slot` INT DEFAULT NULL COMMENT '预约时间段',
-                                KEY `normalIndex` (`activity_id`)
+                                INDEX idx_activity_id(activity_id),
+                                PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-                        `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
+                        `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长',
                         `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                         `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                         `openid` VARCHAR(30) NOT NULL COMMENT '微信提供的用户id',
@@ -54,39 +55,51 @@ CREATE TABLE `user` (
                         `is_volunteer` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为志愿者',
                         `is_admin` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为管理员',
                         `is_su` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为超管',
-                        UNIQUE KEY (`openid`),
-                        KEY `normalIndex` (`id`, `user_name`, `email`)
+                        INDEX idx_user_name(user_name),
+                        INDEX idx_phone_number(phone_number),
+                        INDEX idx_email(email),
+                        INDEX idx_is_volunteer(is_volunteer),
+                        INDEX idx_is_admin(is_admin),
+                        INDEX idx_is_su(is_su),
+                        UNIQUE uk_openid(openid),
+                        PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `volunteer_application`;
 CREATE TABLE `volunteer_application` (
-                                         `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，表单id',
+                                         `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长id',
                                          `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                          `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                         `user_id` INT UNSIGNED NOT NULL COMMENT '申请用户的id',
                                          `comment` VARCHAR(100) DEFAULT NULL COMMENT '申请理由',
                                          `status` TINYINT DEFAULT NULL COMMENT '申请状态',
-                                         KEY `normalIndex` (`id`, `status`)
+                                         INDEX idx_user_id(user_id),
+                                         INDEX idx_status(status),
+                                         PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `r_user_service_form`;
 CREATE TABLE `r_user_service_form` (
-                                       `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
+                                       `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长',
                                        `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                        `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                        `user_id` INT NOT NULL COMMENT 'userid',
                                        `service_form_id` INT NOT NULL COMMENT 'formid',
-                                       UNIQUE KEY (`id`),
-                                       KEY `normalIndex` (`user_id`, `service_form_id`)
+                                       INDEX idx_user_id(user_id),
+                                       INDEX idx_service_form_id(service_form_id),
+                                       UNIQUE uk_id(id),
+                                       PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `r_user_volunteer_application`;
 CREATE TABLE `r_user_volunteer_application` (
-                                                `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
+                                                `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长',
                                                 `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                                 `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                                                `application_form_id` INT NOT NULL COMMENT '',
-                                                `user_id` INT NOT NULL COMMENT '',
-                                                UNIQUE KEY (`id`),
-                                                KEY `normalIndex` (`application_form_id`, `user_id`)
+                                                `application_form_id` INT NOT NULL COMMENT '表单id',
+                                                `user_id` INT NOT NULL COMMENT '用户id',
+                                                INDEX idx_application_form_id(application_form_id),
+                                                INDEX idx_user_id(user_id),
+                                                PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
