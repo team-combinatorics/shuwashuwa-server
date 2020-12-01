@@ -31,7 +31,14 @@ public class UserDaoTest {
         System.out.println(userDao.selectUserByOpenid("fake openid 1"));
         // 根据userid查找测试
         System.out.println(userDao.selectUserByUserid(1));
-
+        System.out.println(userDao.deleteUserByOpenid("fake openid 2"));
+        System.out.println(userDao.deleteUserByUserid(3));
+        userDao.insertUserByOpenid("fake openid 5");
+        userDao.insertUserByOpenid("fake openid 6");
+        userDao.updateUserVolunteerAuthority(4, true);
+        userDao.updateUserAdminAuthority(4, true);
+        System.out.println(userDao.selectUserByUserid(4));
+        System.out.println(userDao.deleteAllUsers());
 
     }
 

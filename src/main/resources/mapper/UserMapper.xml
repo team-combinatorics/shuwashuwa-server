@@ -90,4 +90,16 @@
         where id = #{id}
     </update>
 
+    <update id="updateUserVolunteerAuthority">
+        update user set
+            is_volunteer = #{volunteer}
+        where id=#{id}
+    </update>
+
+    <update id="updateUserAdminAuthority">
+        update user set
+            is_admin = #{admin}
+        where id=#{id}
+    </update>
+
 </mapper>
