@@ -79,16 +79,16 @@ public class UserController {
      */
     @ApiOperation(value = "删除单个用户", notes = "删除单个用户，测试用", httpMethod = "DELETE")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功"),
-            @ApiResponse(code = 204, message = "用户不存在")
+            @ApiResponse(code = 40000, message = "请求成功"),
+            @ApiResponse(code = 40001, message = "不存在的用户ID")
     })
-    @RequestMapping(value = "/deleteOneUser", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteOne", method = RequestMethod.DELETE)
     public CommonResult<String> deleteOneUser(@RequestHeader("token") String token) throws Exception {
         int cnt = userService.deleteOneUser(TokenUtil.extractUserid(token));
         if (cnt > 0) {
-            return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
+            return new CommonResult<>(40000, "请求成功", "If success, you can receive this message.");
         }
-        return new CommonResult<>(204, "用户不存在", "You have deleted a ghost user!");
+        return new CommonResult<>(40001, "不存在的用户ID", "You have deleted a ghost user!");
     }
 
     /**
@@ -96,14 +96,14 @@ public class UserController {
      */
     @ApiOperation(value = "删除所有用户", notes = "删除所有用户，测试用", httpMethod = "DELETE")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功"),
+            @ApiResponse(code = 40000, message = "请求成功"),
     })
     @NoToken
-    @RequestMapping(value = "/deleteAllUsers", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
     public CommonResult<String> deleteAllUser() {
         System.out.println("即将删除所有用户信息");
         userService.deleteAllUsers();
-        return new CommonResult<>(200, "删除成功", "All users have been deleted.");
+        return new CommonResult<>(40000, "删除成功", "All users have been deleted.");
     }
 
 
