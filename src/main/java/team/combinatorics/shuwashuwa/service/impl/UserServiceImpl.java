@@ -1,6 +1,7 @@
 package team.combinatorics.shuwashuwa.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.dao.UserDao;
@@ -14,6 +15,7 @@ import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 @PropertySource("classpath:wx.properties")
 @Component
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
     //private final RestTemplate restTemplate;
@@ -22,23 +24,20 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
-    public UserServiceImpl(WechatUtil wechatUtil, UserDao userDao) {
-        //this.restTemplate = restTemplate;
-        this.wechatUtil = wechatUtil;
-        this.userDao = userDao;
+//    public UserServiceImpl(WechatUtil wechatUtil, UserDao userDao) {
+//        //this.restTemplate = restTemplate;
+//        this.wechatUtil = wechatUtil;
+//        this.userDao = userDao;
+//    }
+
+    @Override
+    public int deleteOneUser(int userid) {
+        System.out.println("要删除用户的userid为：" + userid);
+        return userDao.deleteUserByUserid(userid);
     }
 
     @Override
-    public int deleteOneUser(String code) throws Exception {
-        JsonNode root = wechatUtil.getWechatInfo(code);
-        String openid = root.path("openid").asText();
-        System.out.println("要删除用户的openid为：" + openid);
-        return userDao.deleteUserByOpenid(openid);
-    }
-
-    @Override
-    public void deleteAllUsers()
-    {
+    public void deleteAllUsers() {
         userDao.deleteAllUsers();
     }
 
@@ -49,32 +48,31 @@ public class UserServiceImpl implements UserService {
         String sessionKey = root.path("session_key").asText();
         LogInSuccessDto logInSuccessDto = new LogInSuccessDto();
         User user = userDao.findUserByOpenid(openid);
-        if(user == null) {
+        if (user == null) {
             logInSuccessDto.setFirstLogin(true);
             userDao.addUserOpenid(openid);
             user = userDao.findUserByOpenid(openid);
-        }
-        else
+        } else
             logInSuccessDto.setFirstLogin(false);
-        String token = TokenUtil.createToken(user.getUserid(), user.getAuthority());
+        String token = TokenUtil.createToken(user.getUserid());
         logInSuccessDto.setToken(token);
         return logInSuccessDto;
     }
 
     @Override
-    public void updateUserInfo(String code, UpdateUserInfoDto updateUserInfoDto) throws Exception {
+    public void updateUserInfo(int userid, UpdateUserInfoDto updateUserInfoDto) {
         System.out.println("即将更新用户信息");
-        JsonNode root = wechatUtil.getWechatInfo(code);
-        System.out.println("待更新的用户openid为：" + root.path("openid").asText());
-        System.out.println(updateUserInfoDto.getUser_name());
-        System.out.println(updateUserInfoDto.getNick_name());
+        System.out.println("待更新的用户userid为：" + userid);
+        System.out.println(updateUserInfoDto.toString());
+        userDao.updateUserInfo(userid, updateUserInfoDto);
     }
 
     @Override
-    public UpdateUserInfoDto getUserInfo(String code) throws Exception {
-        JsonNode root = wechatUtil.getWechatInfo(code);
-        System.out.println("想要获取" + root.path("openid").asText() + "的信息");
-        return null;
+    public User getUserInfo(int userid) {
+        System.out.println("想要获取" + userid + "的信息");
+        User user = userDao.findUserByUserid(userid);
+        user.setOpenid("你无权获取openid");
+        return user;
     }
 
 
@@ -92,8 +90,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    @Override
-//    public void updateUserInfo(int openid, UpdateUserInfoDto updateUserInfoDto) {
-//
-//    }
 }

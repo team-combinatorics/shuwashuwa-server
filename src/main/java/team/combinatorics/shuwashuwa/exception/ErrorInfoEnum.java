@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ErrorInfoEnum {
+    USER_NOT_EXISTING(40001,"不存在的用户ID"),
     TOKEN_LOST(40002,"当前操作需要token"),
     AUTHORITY_UNMATCHED(40003,"当前账号不具有执行指定操作的权限"),
     WECHAT_SERVER_CONNECTION_FAILURE(40004,"微信服务器连接错误"),

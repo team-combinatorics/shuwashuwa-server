@@ -1,69 +1,76 @@
+DROP DATABASE IF EXISTS `shuwashuwa`;
+CREATE DATABASE `shuwashuwa` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `shuwashuwa`;
 
-DROP TABLE IF EXISTS `user_info`;
-
-CREATE TABLE `user_info` (
-                           `userid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL  COMMENT 'UUID',
-                           `openid` varchar(40)  NOT NULL COMMENT '用户登录名',
-                           `user_name` varchar(70)  COMMENT '用户密码',
-                           `nick_name` varchar(30)  DEFAULT NULL COMMENT '昵称，建议为真实姓名',
-                           `phone_number` varchar(15)  DEFAULT NULL COMMENT '手机号',
-                           `email` varchar(25)  DEFAULT NULL COMMENT '邮件地址',
-                           `identity` varchar(25)  DEFAULT NULL COMMENT '身份信息',
-                           `department` varchar(25)  DEFAULT NULL COMMENT '部门',
-                           `grade` varchar(25)  DEFAULT NULL COMMENT '年级',
-                           `student_id` varchar(25)  DEFAULT NULL COMMENT '学号',
-                           `comment` text  DEFAULT NULL COMMENT '备注',
-                           `authority` INT NOT NULL COMMENT '权限',
-                           UNIQUE KEY (`openid`),
-                           KEY `normalIndex` (`userid`,`openid`)
+DROP TABLE IF EXISTS `activity_info`;
+CREATE TABLE `activity_info` (
+                                 `activity_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，活动id',
+                                 `position` VARCHAR(100) DEFAULT NULL COMMENT '预约的教室位置',
+                                 `starting_time` DATETIME DEFAULT NULL COMMENT '预计开始时间',
+                                 UNIQUE KEY (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `service_form`;
-
 CREATE TABLE `service_form` (
-                             `formid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL  COMMENT '表单id',
-                             `brand` varchar(100) DEFAULT NULL COMMENT '电脑品牌',
-                             `computer_model` varchar(100) DEFAULT NULL COMMENT '电脑型号',
-                             `cpu_model` varchar(100)  DEFAULT NULL COMMENT 'CPU型号',
-                             `has_discrete_graphics` TINYINT  DEFAULT NULL COMMENT '是否有独显',
-                             `graphics_model` varchar(100)  DEFAULT NULL COMMENT '显卡型号',
-                             `laptop_type` varchar(100)  DEFAULT NULL COMMENT '笔记本类型',
-                             `bought_time` DATE  DEFAULT NULL COMMENT '购买时间',
-                             `is_under_warranty` TINYINT  DEFAULT NULL COMMENT '是否在保',
-                             `problem_description` TEXT  DEFAULT NULL COMMENT '问题描述',
-                             `problem_type` varchar(100)  DEFAULT NULL COMMENT '问题类型',
-                             `decription_editing_advice` varchar(100) NOT NULL COMMENT '描述修改建议',
-                             `repairing_result` varchar(100) NOT NULL COMMENT '志愿者填写的维修结果',
-                             `status` INT NOT NULL COMMENT '维修单状态',
-                             `feedback` varchar(100) NOT NULL COMMENT '用户反馈信息',
-                             `activity_id` INT NOT NULL COMMENT '预约活动id',
-                             `time_slot` INT NOT NULL COMMENT '预约时间段',
-
-                             KEY `normalIndex` (`activity_id`)
+                                `formid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长的表单id',
+                                `brand` VARCHAR(15) DEFAULT NULL COMMENT '电脑品牌',
+                                `computer_model` VARCHAR(30) DEFAULT NULL COMMENT '电脑型号',
+                                `cpu_model` VARCHAR(30) DEFAULT NULL COMMENT 'cpu型号',
+                                `has_discrete_graphics` TINYINT DEFAULT NULL COMMENT '是否有独显',
+                                `graphics_model` VARCHAR(30) DEFAULT NULL COMMENT '显卡型号',
+                                `laptop_type` VARCHAR(30) DEFAULT NULL COMMENT '笔记本类型',
+                                `bought_time` DATE DEFAULT NULL COMMENT '购买时间',
+                                `is_under_warranty` BOOLEAN DEFAULT NULL COMMENT '是否在保',
+                                `problem_description` VARCHAR(100) DEFAULT NULL COMMENT '问题描述',
+                                `problem_type` VARCHAR(10) DEFAULT NULL COMMENT '问题类型（硬件/软件）',
+                                `decription_editing_advice` VARCHAR(100) DEFAULT NULL COMMENT '描述修改建议',
+                                `repairing_result` VARCHAR(100) DEFAULT NULL COMMENT '志愿者填写的维修结果',
+                                `status` TINYINT DEFAULT NULL COMMENT '维修单状态',
+                                `feedback` VARCHAR(100) DEFAULT NULL COMMENT '用户反馈信息',
+                                `activity_id` INT DEFAULT NULL COMMENT '预约活动id',
+                                `time_slot` INT DEFAULT NULL COMMENT '预约时间段',
+                                KEY `normalIndex` (`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `user_service_form_merge` (
-                                `userid` INT NOT NULL,
-                                `formid` INT NOT NULL  COMMENT '表单id',
-                                KEY `normalIndex` (`userid`, `formid`)
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+                        `userid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
+                        `openid` VARCHAR(30) NOT NULL COMMENT '微信提供的用户id',
+                        `user_name` VARCHAR(30) DEFAULT NULL COMMENT '用户姓名',
+                        `nick_name` VARCHAR(30) DEFAULT NULL COMMENT '用户昵称',
+                        `phone_number` VARCHAR(30) DEFAULT NULL COMMENT '用户手机号',
+                        `email` VARCHAR(100) DEFAULT NULL COMMENT '用户邮箱',
+                        `identity` VARCHAR(40) DEFAULT NULL COMMENT '类别：学生、教职工、校外人员',
+                        `department` VARCHAR(40) DEFAULT NULL COMMENT '院系或工作部门',
+                        `grade` VARCHAR(40) DEFAULT NULL COMMENT '年级',
+                        `student_id` VARCHAR(15) DEFAULT NULL COMMENT '学号',
+                        `comment` TEXT DEFAULT NULL COMMENT '备注',
+                        `is_volunteer` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为志愿者',
+                        `is_admin` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为管理员',
+                        `is_su` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为超管',
+                        UNIQUE KEY (`openid`),
+                        KEY `normalIndex` (`userid`, `user_name`, `email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `volunteer_application`;
 CREATE TABLE `volunteer_application` (
-                                           `formid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-                                           `comment` varchar(100) NOT NULL,
-                                           `status` tinyint,
-                                           KEY `normalIndex` (`formid`)
+                                         `formid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，表单id',
+                                         `comment` VARCHAR(100) DEFAULT NULL COMMENT '申请理由',
+                                         `status` TINYINT DEFAULT NULL COMMENT '申请状态',
+                                         KEY `normalIndex` (`formid`, `status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `user_volunteer_application_merge` (
-                                         `formid` INT NOT NULL,
-                                         `userid` INT NOT NULL,
-                                         KEY `normalIndex` (`formid`, `userid`)
+DROP TABLE IF EXISTS `r_user_service_form`;
+CREATE TABLE `r_user_service_form` (
+                                       `userid` INT NOT NULL COMMENT 'userid',
+                                       `formid` INT NOT NULL COMMENT 'formid',
+                                       KEY `normalIndex` (`userid`, `formid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `activity_info` (
-                                                    `activity_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-                                                    `position` varchar(100) NOT NULL,
-                                                    `starting_time` DATETIME,
-                                                    KEY `normalIndex` (`activity_id`)
+DROP TABLE IF EXISTS `r_user_volunteer_application`;
+CREATE TABLE `r_user_volunteer_application` (
+                                                `formid` INT NOT NULL COMMENT '',
+                                                `userid` INT NOT NULL COMMENT '',
+                                                KEY `normalIndex` (`formid`, `userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+

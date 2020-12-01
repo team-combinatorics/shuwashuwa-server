@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public CommonResult<String> defaultExceptionHandler(Exception e) {
         e.printStackTrace();
-        return new CommonResult<>(40000, "Error", "Unknown error");
+        return new CommonResult<>(40000, "Unknown Error", e.getMessage());
     }
 
 

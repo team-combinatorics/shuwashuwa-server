@@ -6,19 +6,26 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.model.bean.CommonResult;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
+import team.combinatorics.shuwashuwa.model.pojo.User;
 import team.combinatorics.shuwashuwa.service.UserService;
+import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 @Api(value = "User相关接口说明")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    @Autowired
     UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 注册
@@ -33,7 +40,7 @@ public class UserController {
     @NoToken
     public CommonResult<LogInSuccessDto> loginHandler(LogInInfoDto logInInfoDto) throws Exception {
         System.out.println("用户登录");
-        System.out.println("Code:"+logInInfoDto.getCode());
+        System.out.println("Code:" + logInInfoDto.getCode());
         LogInSuccessDto logInSuccessDto = userService.wechatLogin(logInInfoDto);
         return new CommonResult<>(200, "登录成功", logInSuccessDto);
     }
@@ -42,26 +49,29 @@ public class UserController {
      * 更新用户信息，未完成
      */
     @ApiOperation(value = "更新用户信息", notes = "根据传入的数据结构对数据库中用户的相应表项进行更新", httpMethod = "PUT")
-    @RequestMapping(value = "/updateUserInfo", method = RequestMethod.PUT)
+    @RequestMapping(value = "/info", method = RequestMethod.PUT)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
-    public CommonResult<String> updateUserInfo(String code, UpdateUserInfoDto updateUserInfoDto) throws Exception {
-        userService.updateUserInfo(code, updateUserInfoDto);
+    @AllAccess
+    public CommonResult<String> updateUserInfo(@RequestHeader("token") String token, @RequestBody UpdateUserInfoDto updateUserInfoDto) throws Exception {
+        userService.updateUserInfo(TokenUtil.extractUserid(token), updateUserInfoDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
     }
+
 
     /**
      * 获取用户信息，未完成
      */
-    @ApiOperation(value = "获取用户信息", notes = "根据传入的openid从数据库中获取用户信息", httpMethod = "GET")
-    @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
+    @ApiOperation(value = "获取当前用户信息", notes = "根据当前token中的userid获取用户信息", httpMethod = "GET")
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
-    public CommonResult<UpdateUserInfoDto> getUserInfo(String code) throws Exception {
-        UpdateUserInfoDto updateUserInfoDto = userService.getUserInfo(code);
-        return new CommonResult<>(200, "更新成功", updateUserInfoDto);
+    @AllAccess
+    public CommonResult<User> getUserInfo(@RequestHeader("token") String token) throws Exception {
+        User user = userService.getUserInfo(TokenUtil.extractUserid(token));
+        return new CommonResult<>(200, "更新成功", user);
     }
 
     /**
@@ -73,10 +83,9 @@ public class UserController {
             @ApiResponse(code = 204, message = "用户不存在")
     })
     @RequestMapping(value = "/deleteOneUser", method = RequestMethod.DELETE)
-    public CommonResult<String> deleteOneUser(@RequestBody String code) throws Exception {
-        int cnt = userService.deleteOneUser(code);
-        if(cnt > 0)
-        {
+    public CommonResult<String> deleteOneUser(@RequestHeader("token") String token) throws Exception {
+        int cnt = userService.deleteOneUser(TokenUtil.extractUserid(token));
+        if (cnt > 0) {
             return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
         }
         return new CommonResult<>(204, "用户不存在", "You have deleted a ghost user!");

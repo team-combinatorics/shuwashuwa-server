@@ -41,7 +41,9 @@ CREATE TABLE `user_info` (
                              `grade` VARCHAR(40) DEFAULT NULL COMMENT '年级',
                              `student_id` VARCHAR(15) DEFAULT NULL COMMENT '学号',
                              `comment` TEXT DEFAULT NULL COMMENT '备注',
-                             `authority` INT NOT NULL COMMENT '权限',
+                             `is_volunteer` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为志愿者',
+                             `is_admin` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为管理员',
+                             `is_su` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为超管',
                              UNIQUE KEY (`openid`),
                              KEY `normalIndex` (`userid`,`user_name`,`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
