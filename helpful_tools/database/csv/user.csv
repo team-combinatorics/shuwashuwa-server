@@ -1,5 +1,7 @@
 字段名,字段类型,说明,数据库补充信息,是否为normalIndex,是否为unique key
-userid,int,自增长,AUTO_INCREMENT PRIMARY KEY NOT NULL,1,
+id,int unsigned,自增长,AUTO_INCREMENT PRIMARY KEY NOT NULL,1,
+create_time,datetime,创建时间,NOT NULL DEFAULT CURRENT_TIMESTAMP,,
+updated_time,datetime,更新时间,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,,
 openid,varchar(30),微信提供的用户id,NOT NULL,,1
 user_name,varchar(30),用户姓名,DEFAULT NULL,1,
 nick_name,varchar(30),用户昵称,DEFAULT NULL,,
@@ -11,5 +13,5 @@ grade,varchar(40),年级,DEFAULT NULL,,
 student_id,varchar(15),学号,DEFAULT NULL,,
 comment,text,备注,DEFAULT NULL,,
 is_volunteer,BOOLEAN,是否为志愿者,NOT NULL DEFAULT 0,,
-is_admin,BOOLEAN,是否为管理员,NOT NULL DEFAULT 0,"",""
-is_su,BOOLEAN,是否为超管,NOT NULL DEFAULT 0,"",""
+is_admin,BOOLEAN,是否为管理员,NOT NULL DEFAULT 0,,
+is_su,BOOLEAN,是否为超管,NOT NULL DEFAULT 0,,

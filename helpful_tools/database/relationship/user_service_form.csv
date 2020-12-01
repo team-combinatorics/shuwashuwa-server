@@ -1,3 +1,6 @@
 字段名,字段类型,说明,数据库补充信息,是否为normalIndex,是否为unique key
-userid,INT,userid,NOT NULL,1,
-formid,INT,formid,NOT NULL,1,
+id,int unsigned,自增长,AUTO_INCREMENT PRIMARY KEY NOT NULL,,1
+create_time,datetime,创建时间,NOT NULL DEFAULT CURRENT_TIMESTAMP,,
+updated_time,datetime,更新时间,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,,
+user_id,INT,userid,NOT NULL,1,
+service_form_id,INT,formid,NOT NULL,1,

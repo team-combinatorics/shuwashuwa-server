@@ -3,7 +3,9 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.UserDao">
     <resultMap type="team.combinatorics.shuwashuwa.model.pojo.User" id="userResultMap">
-        <result column="userid" jdbcType="INTEGER" property="userid" />
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
         <result column="openid" jdbcType="VARCHAR" property="openid" />
         <result column="user_name" jdbcType="VARCHAR" property="userName" />
         <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
@@ -22,8 +24,14 @@
     <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.User">
         update user
         <trim prefix="SET" suffixOverrides=",">
-            <if test="user.userid != null">
-                userid = #{user.userid},
+            <if test="user.id != null">
+                id = #{user.id},
+            </if>
+            <if test="user.createTime != null">
+                create_time = #{user.createTime},
+            </if>
+            <if test="user.updatedTime != null">
+                updated_time = #{user.updatedTime},
             </if>
             <if test="user.openid != null">
                 openid = #{user.openid},

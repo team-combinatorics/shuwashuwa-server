@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
             user = userDao.findUserByOpenid(openid);
         } else
             logInSuccessDto.setFirstLogin(false);
-        String token = TokenUtil.createToken(user.getUserid());
+        String token = TokenUtil.createToken(user.getId());
         logInSuccessDto.setToken(token);
         return logInSuccessDto;
     }

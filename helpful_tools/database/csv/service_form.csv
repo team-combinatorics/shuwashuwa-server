@@ -1,5 +1,7 @@
 字段名,字段类型,说明,数据库补充信息,是否为normalIndex,是否为unique key
-formid,int,自增长的表单id,AUTO_INCREMENT PRIMARY KEY NOT NULL,,
+id,int unsigned,自增长的表单id,AUTO_INCREMENT PRIMARY KEY NOT NULL,,
+create_time,datetime,创建时间,NOT NULL DEFAULT CURRENT_TIMESTAMP,,
+updated_time,datetime,更新时间,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,,
 brand,varchar(15),电脑品牌,DEFAULT NULL,,
 computer_model,varchar(30),电脑型号,DEFAULT NULL,,
 cpu_model,varchar(30),CPU型号,DEFAULT NULL,,

@@ -4,15 +4,19 @@ USE `shuwashuwa`;
 
 DROP TABLE IF EXISTS `activity_info`;
 CREATE TABLE `activity_info` (
-                                 `activity_id` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，活动id',
+                                 `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，活动id',
+                                 `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                  `position` VARCHAR(100) DEFAULT NULL COMMENT '预约的教室位置',
                                  `starting_time` DATETIME DEFAULT NULL COMMENT '预计开始时间',
-                                 UNIQUE KEY (`activity_id`)
+                                 UNIQUE KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `service_form`;
 CREATE TABLE `service_form` (
-                                `formid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长的表单id',
+                                `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长的表单id',
+                                `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                 `brand` VARCHAR(15) DEFAULT NULL COMMENT '电脑品牌',
                                 `computer_model` VARCHAR(30) DEFAULT NULL COMMENT '电脑型号',
                                 `cpu_model` VARCHAR(30) DEFAULT NULL COMMENT 'cpu型号',
@@ -34,7 +38,9 @@ CREATE TABLE `service_form` (
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-                        `userid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
+                        `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
+                        `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                        `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                         `openid` VARCHAR(30) NOT NULL COMMENT '微信提供的用户id',
                         `user_name` VARCHAR(30) DEFAULT NULL COMMENT '用户姓名',
                         `nick_name` VARCHAR(30) DEFAULT NULL COMMENT '用户昵称',
@@ -49,28 +55,38 @@ CREATE TABLE `user` (
                         `is_admin` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为管理员',
                         `is_su` BOOLEAN NOT NULL DEFAULT 0 COMMENT '是否为超管',
                         UNIQUE KEY (`openid`),
-                        KEY `normalIndex` (`userid`, `user_name`, `email`)
+                        KEY `normalIndex` (`id`, `user_name`, `email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `volunteer_application`;
 CREATE TABLE `volunteer_application` (
-                                         `formid` INT AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，表单id',
+                                         `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长，表单id',
+                                         `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                         `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                          `comment` VARCHAR(100) DEFAULT NULL COMMENT '申请理由',
                                          `status` TINYINT DEFAULT NULL COMMENT '申请状态',
-                                         KEY `normalIndex` (`formid`, `status`)
+                                         KEY `normalIndex` (`id`, `status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `r_user_service_form`;
 CREATE TABLE `r_user_service_form` (
-                                       `userid` INT NOT NULL COMMENT 'userid',
-                                       `formid` INT NOT NULL COMMENT 'formid',
-                                       KEY `normalIndex` (`userid`, `formid`)
+                                       `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
+                                       `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                       `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                       `user_id` INT NOT NULL COMMENT 'userid',
+                                       `service_form_id` INT NOT NULL COMMENT 'formid',
+                                       UNIQUE KEY (`id`),
+                                       KEY `normalIndex` (`user_id`, `service_form_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `r_user_volunteer_application`;
 CREATE TABLE `r_user_volunteer_application` (
-                                                `formid` INT NOT NULL COMMENT '',
-                                                `userid` INT NOT NULL COMMENT '',
-                                                KEY `normalIndex` (`formid`, `userid`)
+                                                `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL COMMENT '自增长',
+                                                `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                                `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                                `application_form_id` INT NOT NULL COMMENT '',
+                                                `user_id` INT NOT NULL COMMENT '',
+                                                UNIQUE KEY (`id`),
+                                                KEY `normalIndex` (`application_form_id`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

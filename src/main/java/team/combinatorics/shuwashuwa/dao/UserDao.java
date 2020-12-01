@@ -14,13 +14,13 @@ public interface UserDao {
     @Select("SELECT * FROM user where openid=#{openid}")
     User findUserByOpenid(String openid);
 
-    User findUserByUserid(@Param("id") Integer userid);
+    User findUserByUserid(@Param("id") Integer id);
 
 //    // 一个通用的更新方法，使用xml实现
 //    void updateUserInfo(@Param("user") User user);
 
     // 一个通用的更新方法，使用特定的DTO传输
-    void updateUserInfo(@Param("id") int userid, @Param("user") UpdateUserInfoDto user);
+    void updateUserInfo(@Param("id") int id, @Param("user") UpdateUserInfoDto user);
 
     @Delete("DELETE FROM user where userid=#{userid}")
     Integer deleteUserByUserid(int userid);

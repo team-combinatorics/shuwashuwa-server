@@ -3,9 +3,10 @@ class_dic = {
     'varchar': 'String',
     'text': 'String',
     'tinyint': 'Integer',
-    'date': 'String',
-    'datetime': 'String',
-    'boolean': 'boolean'
+    'datetime': 'Timestamp',
+    'date': 'Date',
+    'boolean': 'boolean',
+    'int unsigned': 'Integer'
 }
 
 
@@ -22,6 +23,8 @@ def get_sql_type(type_name: str) -> str:
                 return 'INTEGER'
             if key == 'text':
                 return 'LONGVARCHAR'
+            if key == 'datetime':
+                return 'TIMESTAMP'
             return key.upper()
 
 
