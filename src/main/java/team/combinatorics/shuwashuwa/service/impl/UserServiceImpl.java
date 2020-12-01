@@ -47,11 +47,11 @@ public class UserServiceImpl implements UserService {
         String openid = root.path("openid").asText();
         String sessionKey = root.path("session_key").asText();
         LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
-        UserDO userDO = userDao.findUserByOpenid(openid);
+        UserDO userDO = userDao.selectUserByOpenid(openid);
         if (userDO == null) {
             logInSuccessDto.setFirstLogin(true);
             userDao.insertByOpenid(openid);
-            userDO = userDao.findUserByOpenid(openid);
+            userDO = userDao.selectUserByOpenid(openid);
         } else
             logInSuccessDto.setFirstLogin(false);
         String token = TokenUtil.createToken(userDO.getId());
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDO getUserInfo(int userid) {
         System.out.println("想要获取" + userid + "的信息");
-        UserDO userDO = userDao.findUserByUserid(userid);
+        UserDO userDO = userDao.selectUserByUserid(userid);
         userDO.setOpenid("你无权获取openid");
         return userDO;
     }
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
             String openid = root.path("openid").asText();
             String sessionKey = root.path("session_key").asText();
             userDao.insertByOpenid(openid);
-            return userDao.findUserByOpenid(openid).toString();
+            return userDao.selectUserByOpenid(openid).toString();
         }
     }
 

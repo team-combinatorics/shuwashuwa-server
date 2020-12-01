@@ -12,9 +12,9 @@ public interface UserDao {
     void insertByOpenid(String openid);
 
     @Select("SELECT * FROM user where openid=#{openid}")
-    UserDO findUserByOpenid(String openid);
+    UserDO selectUserByOpenid(String openid);
 
-    UserDO findUserByUserid(@Param("id") Integer id);
+    UserDO selectUserByUserid(@Param("id") Integer id);
 
 //    // 一个通用的更新方法，使用xml实现
 //    void updateUserInfo(@Param("user") UserDO user);
