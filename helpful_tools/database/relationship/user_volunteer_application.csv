@@ -1,6 +1,6 @@
-字段名,字段类型,说明,数据库补充信息,是否为normalIndex,是否为unique key
-id,int unsigned,自增长,AUTO_INCREMENT PRIMARY KEY NOT NULL,,1
-create_time,datetime,创建时间,NOT NULL DEFAULT CURRENT_TIMESTAMP,,
-updated_time,datetime,更新时间,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,,
-application_form_id,INT,,NOT NULL,1,0
-user_id,INT,,NOT NULL,1,
+字段名,字段类型,数据库补充信息,说明,是否为普通索引,是否为唯一索引,是否为主键索引,是否为全文索引
+id,int unsigned,AUTO_INCREMENT PRIMARY KEY NOT NULL,自增长,,,1,""
+create_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP,创建时间,,,"",""
+updated_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,更新时间,,,"",""
+application_form_id,INT,NOT NULL,表单id,1,,"",""
+user_id,INT,NOT NULL,用户id,1,,"",""

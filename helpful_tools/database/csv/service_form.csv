@@ -1,20 +1,20 @@
-字段名,字段类型,说明,数据库补充信息,是否为普通索引,是否为唯一索引,是否为主键索引,是否为全文索引
-id,int unsigned,自增长的表单id,AUTO_INCREMENT PRIMARY KEY NOT NULL,,,"",""
-create_time,datetime,创建时间,NOT NULL DEFAULT CURRENT_TIMESTAMP,,,"",""
-updated_time,datetime,更新时间,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,,,"",""
-brand,varchar(15),电脑品牌,DEFAULT NULL,,,"",""
-computer_model,varchar(30),电脑型号,DEFAULT NULL,,,"",""
-cpu_model,varchar(30),CPU型号,DEFAULT NULL,,,"",""
-has_discrete_graphics,tinyint,是否有独显,DEFAULT NULL,,,"",""
-graphics_model,varchar(30),显卡型号,DEFAULT NULL,,,"",""
-laptop_type,varchar(30),笔记本类型,DEFAULT NULL,,,"",""
-bought_time,DATE,购买时间,DEFAULT NULL,,,"",""
-is_under_warranty,boolean,是否在保,DEFAULT NULL,,,"",""
-problem_description,varchar(100),问题描述,DEFAULT NULL,,,"",""
-problem_type,varchar(10),问题类型（硬件/软件）,DEFAULT NULL,,,"",""
-decription_editing_advice,varchar(100),描述修改建议,DEFAULT NULL,,,"",""
-repairing_result,varchar(100),志愿者填写的维修结果,DEFAULT NULL,,,"",""
-status,tinyint,维修单状态,DEFAULT NULL,,,"",""
-feedback,varchar(100),用户反馈信息,DEFAULT NULL,,,"",""
-activity_id,int,预约活动id,DEFAULT NULL,1,,"",""
-time_slot,int,预约时间段,DEFAULT NULL,,,"",""
+字段名,字段类型,字段补充信息,说明,是否为普通索引,是否为唯一索引,是否为主键索引,是否为全文索引
+id,int unsigned,AUTO_INCREMENT NOT NULL,自增长的表单id,,,1,
+create_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP,创建时间,,,,
+updated_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,更新时间,,,,
+brand,varchar(15),DEFAULT NULL,电脑品牌,,,,
+computer_model,varchar(30),DEFAULT NULL,电脑型号,,,,
+cpu_model,varchar(30),DEFAULT NULL,CPU型号,,,,
+has_discrete_graphics,tinyint,DEFAULT NULL,是否有独显,,,,
+graphics_model,varchar(30),DEFAULT NULL,显卡型号,,,,
+laptop_type,varchar(30),DEFAULT NULL,笔记本类型,,,,
+bought_time,DATE,DEFAULT NULL,购买时间,,,,
+is_under_warranty,boolean,DEFAULT NULL,是否在保,,,,
+problem_description,varchar(100),DEFAULT NULL,问题描述,,,,
+problem_type,varchar(10),DEFAULT NULL,问题类型（硬件/软件）,,,,
+decription_editing_advice,varchar(100),DEFAULT NULL,描述修改建议,,,,
+repairing_result,varchar(100),DEFAULT NULL,志愿者填写的维修结果,,,,
+status,tinyint,DEFAULT NULL,维修单状态,,,,
+feedback,varchar(100),DEFAULT NULL,用户反馈信息,,,,
+activity_id,int,DEFAULT NULL,预约活动id,1,,,
+time_slot,int,DEFAULT NULL,预约时间段,,,,
