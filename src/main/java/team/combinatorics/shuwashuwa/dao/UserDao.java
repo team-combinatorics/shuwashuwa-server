@@ -1,33 +1,25 @@
 package team.combinatorics.shuwashuwa.dao;
 
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
 import team.combinatorics.shuwashuwa.model.pojo.UserDO;
 
-@Mapper
-@Component(value = "userDao")
+@Component
 public interface UserDao {
-    @Insert("insert into user(openid) values (#{openid})")
-    void insertByOpenid(String openid);
 
-    @Select("SELECT * FROM user where openid=#{openid}")
-    UserDO selectUserByOpenid(String openid);
+    void insertUserByOpenid(@Param("openid") String openid);
+
+    UserDO selectUserByOpenid(@Param("openid") String openid);
 
     UserDO selectUserByUserid(@Param("id") Integer id);
 
-//    // 一个通用的更新方法，使用xml实现
-//    void updateUserInfo(@Param("user") UserDO user);
-
     // 一个通用的更新方法，使用特定的DTO传输
-    void updateUserInfo(@Param("id") int id, @Param("user") UpdateUserInfoDTO user);
+    void updateUserInfo(@Param("id") Integer id, @Param("user") UpdateUserInfoDTO user);
 
-    @Delete("DELETE FROM user where userid=#{userid}")
-    Integer deleteUserByUserid(int userid);
+    Integer deleteUserByUserid(@Param("id") Integer id);
 
-    @Delete("DELETE FROM user where openid=#{openid}")
-    Integer deleteUserByOpenid(String openid);
+    Integer deleteUserByOpenid(@Param("openid") String openid);
 
-    @Delete("DELETE FROM user")
     void deleteAllUsers();
 }

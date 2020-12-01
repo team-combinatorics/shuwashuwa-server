@@ -1,6 +1,5 @@
 package team.combinatorics.shuwashuwa.dao;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +15,27 @@ public class UserDaoTest {
     @Autowired
     UserDao userDao;
 
-    @Before
     @Test
-    // 这个测试方法中随便编openid就行，并不向tx服务器验证
-    public void insertUserTest() {
-        userDao.deleteAllUsers();
-        userDao.insertByOpenid("fake openid 1");
-        userDao.insertByOpenid("fake openid 2");
-        userDao.insertByOpenid("fake openid 3");
-        userDao.insertByOpenid("fake openid 4");
-
-    }
-
-    @Test
-    public void addUserOpenidTest() {
+    public void weakTest() {
+        userDao.insertUserByOpenid("fake openid 1");
+        userDao.insertUserByOpenid("fake openid 2");
+        userDao.insertUserByOpenid("fake openid 3");
+        userDao.insertUserByOpenid("fake openid 4");
+        // 更改一个用户信息测试
         userDao.updateUserInfo(1, UpdateUserInfoDTO.builder()
                 .userName("misaki")
                 .nickName("粉红裸熊")
                 .build());
 
+        // 根据openid查找测试
+        System.out.println(userDao.selectUserByOpenid("fake openid 1"));
+        // 根据userid查找测试
+        System.out.println(userDao.selectUserByUserid(1));
+
+
     }
+
+
 
 }
 
