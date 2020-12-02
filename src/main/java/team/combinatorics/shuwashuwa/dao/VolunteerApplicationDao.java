@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
-import team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public interface VolunteerApplicationDao {
      * @param id 用户id
      * @return 申请表列表
      */
-    List<VolunteerApplicationDO> selectByUserId(@Param("id") int id);
+    List<VolunteerApplicationPO> selectByUserId(@Param("id") int id);
 
     /**
      * 通过申请表id寻找申请表，只有一个结果
@@ -45,7 +45,7 @@ public interface VolunteerApplicationDao {
      * @param id 申请表id
      * @return 申请表对象
      */
-    VolunteerApplicationDO selectByFormId(@Param("id") int id);
+    VolunteerApplicationPO selectByFormId(@Param("id") int id);
 
     /**
      * 条件查询，返回一个或多个结果，条件可以都为null，此时返回所有申请表。条件中不提供formID，因为formID可以唯一确定一个申请表。
@@ -53,7 +53,7 @@ public interface VolunteerApplicationDao {
      * @param selectApplicationCO 用于选取的条件，各种属性见注释，各个属性可以都为空，此时会返回所有列表
      * @return 申请表列表
      */
-    List<VolunteerApplicationDO> selectByCondition(@Param("condition") SelectApplicationCO selectApplicationCO);
+    List<VolunteerApplicationPO> selectByCondition(@Param("condition") SelectApplicationCO selectApplicationCO);
 
 
 }

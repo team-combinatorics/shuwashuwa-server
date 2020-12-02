@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.UserDao">
-    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.UserDO" id="userResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.UserPO" id="userResultMap">
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>

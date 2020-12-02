@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao">
-    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO"
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO"
                id="volunteerApplicationResultMap">
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -62,7 +62,7 @@
 
     </select>
 
-    <!--    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.VolunteerApplicationDO">-->
+    <!--    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO">-->
     <!--        update volunteer_application-->
     <!--        <trim prefix="SET" suffixOverrides=",">-->
     <!--            <if test="volunteerApplication.userId != null">-->

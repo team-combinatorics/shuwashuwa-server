@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
-import team.combinatorics.shuwashuwa.model.bean.CommonResult;
+import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDTO;
-import team.combinatorics.shuwashuwa.model.pojo.UserDO;
+import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -69,9 +69,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<UserDO> getUserInfo(@RequestHeader("token") String token) throws Exception {
-        UserDO userDO = userService.getUserInfo(TokenUtil.extractUserid(token));
-        return new CommonResult<>(200, "更新成功", userDO);
+    public CommonResult<UserPO> getUserInfo(@RequestHeader("token") String token) throws Exception {
+        UserPO userPO = userService.getUserInfo(TokenUtil.extractUserid(token));
+        return new CommonResult<>(200, "更新成功", userPO);
     }
 
     /**
@@ -79,7 +79,7 @@ public class UserController {
      * TODO: 已经定义好了DTO，速速完成
      */
     @ApiOperation(value = "接收当前用户的申请", notes = "根据传入的token解析userid，再储存申请表", httpMethod = "POST")
-    /**
+    /*
      * 接口尽量RESTful一些！
      * 接口尽量RESTful一些！
      * 接口尽量RESTful一些！

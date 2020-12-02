@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
-import team.combinatorics.shuwashuwa.model.pojo.UserDO;
+import team.combinatorics.shuwashuwa.model.po.UserPO;
 
 @Service
 public interface UserService {
@@ -17,7 +17,7 @@ public interface UserService {
 
     void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) throws Exception;
 
-    UserDO getUserInfo(int userid) throws Exception;
+    UserPO getUserInfo(int userid) throws Exception;
 
     // boolean suicide();
 

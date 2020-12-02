@@ -3,7 +3,7 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
-import team.combinatorics.shuwashuwa.model.pojo.UserDO;
+import team.combinatorics.shuwashuwa.model.po.UserPO;
 
 @Component
 public interface UserDao {
@@ -20,14 +20,14 @@ public interface UserDao {
      * @param openid 微信提供的openid
      * @return 一个UserDO类
      */
-    UserDO selectUserByOpenid(@Param("openid") String openid);
+    UserPO selectUserByOpenid(@Param("openid") String openid);
 
     /**
      * 通过userid选择用户
      * @param id userid
      * @return UserDO对象
      */
-    UserDO selectUserByUserid(@Param("id") int id);
+    UserPO selectUserByUserid(@Param("id") int id);
 
     /**
      * 更新用户基本信息，updateUserInfoDTO中不为null的属性会被更新，但是要保证updateUserInfoDTO不能全空，否则会出错

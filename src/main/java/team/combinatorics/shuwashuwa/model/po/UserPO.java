@@ -1,4 +1,4 @@
-package team.combinatorics.shuwashuwa.model.pojo;
+package team.combinatorics.shuwashuwa.model.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDO {
+public class UserPO {
     private Integer id;
     private Timestamp createTime;
     private Timestamp updatedTime;

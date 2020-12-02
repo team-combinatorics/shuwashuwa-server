@@ -1,6 +1,6 @@
 import os
 import utils
-java_head = '''package team.combinatorics.shuwashuwa.model.pojo;
+java_head = '''package team.combinatorics.shuwashuwa.model.po;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +26,7 @@ def csv2javafile(srcdir, filename):
     java_name = camel_name
     java_file = open("java/" + java_name, 'w', encoding="utf-8")
     java_file.write(java_head)
-    java_file.write("public class " + camel_name + 'DO' + ' {\n')
+    java_file.write("public class " + camel_name + 'PO' + ' {\n')
     csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     csv_file.readline()
     for line in csv_file.readlines():

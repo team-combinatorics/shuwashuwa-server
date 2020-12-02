@@ -8,7 +8,7 @@ import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
-import team.combinatorics.shuwashuwa.model.pojo.UserDO;
+import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
@@ -47,14 +47,14 @@ public class UserServiceImpl implements UserService {
         String openid = root.path("openid").asText();
         String sessionKey = root.path("session_key").asText();
         LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
-        UserDO userDO = userDao.selectUserByOpenid(openid);
-        if (userDO == null) {
+        UserPO userPO = userDao.selectUserByOpenid(openid);
+        if (userPO == null) {
             logInSuccessDto.setFirstLogin(true);
             userDao.insertUserByOpenid(openid);
-            userDO = userDao.selectUserByOpenid(openid);
+            userPO = userDao.selectUserByOpenid(openid);
         } else
             logInSuccessDto.setFirstLogin(false);
-        String token = TokenUtil.createToken(userDO.getId());
+        String token = TokenUtil.createToken(userPO.getId());
         logInSuccessDto.setToken(token);
         return logInSuccessDto;
     }
@@ -68,11 +68,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDO getUserInfo(int userid) {
+    public UserPO getUserInfo(int userid) {
         System.out.println("想要获取" + userid + "的信息");
-        UserDO userDO = userDao.selectUserByUserid(userid);
-        userDO.setOpenid("你无权获取openid");
-        return userDO;
+        UserPO userPO = userDao.selectUserByUserid(userid);
+        userPO.setOpenid("你无权获取openid");
+        return userPO;
     }
 
 
