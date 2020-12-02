@@ -26,6 +26,7 @@ public class ServiceFormPO {
     private boolean underWarranty;
     private String problemDescription;
     private String problemType;
+    private Integer replyUserId;
     private String descriptionAdvice;
     private Integer serviceEventId;
     private Integer status;

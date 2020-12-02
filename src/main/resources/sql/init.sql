@@ -41,6 +41,7 @@ CREATE TABLE `service_form` (
                                 `is_under_warranty` BOOLEAN DEFAULT NULL COMMENT '是否在保',
                                 `problem_description` VARCHAR(100) DEFAULT NULL COMMENT '问题描述',
                                 `problem_type` VARCHAR(10) DEFAULT NULL COMMENT '问题类型（硬件/软件）',
+                                `reply_user_id` INT UNSIGNED DEFAULT NULL COMMENT '""',
                                 `description_advice` VARCHAR(100) DEFAULT NULL COMMENT '描述修改建议',
                                 `service_event_id` INT UNSIGNED NOT NULL COMMENT '关联的维修事件的id',
                                 `status` TINYINT DEFAULT 0 COMMENT '维修单状态：待审核，未通过，通过',
