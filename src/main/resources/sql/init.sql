@@ -17,11 +17,14 @@ CREATE TABLE `service_event` (
                                  `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长的表单id',
                                  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                  `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                 `volunteer_id` INT UNSIGNED DEFAULT NULL COMMENT '负责维修的志愿者',
                                  `repairing_result` VARCHAR(100) DEFAULT NULL COMMENT '志愿者填写的维修结果',
                                  `status` TINYINT DEFAULT 0 COMMENT '该维修请求的状态',
                                  `feedback` VARCHAR(100) DEFAULT NULL COMMENT '用户反馈信息',
                                  `activity_id` INT DEFAULT NULL COMMENT '预约活动id',
                                  `time_slot` INT DEFAULT NULL COMMENT '预约时间段',
+                                 INDEX idx_volunteer_id(volunteer_id),
+                                 INDEX idx_status(status),
                                  INDEX idx_activity_id(activity_id),
                                  PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

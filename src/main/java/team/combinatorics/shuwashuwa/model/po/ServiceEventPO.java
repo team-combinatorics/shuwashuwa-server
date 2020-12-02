@@ -15,6 +15,7 @@ public class ServiceEventPO {
     private Integer id;
     private Timestamp createTime;
     private Timestamp updatedTime;
+    private Integer volunteerId;
     private String repairingResult;
     private Integer status;
     private String feedback;
