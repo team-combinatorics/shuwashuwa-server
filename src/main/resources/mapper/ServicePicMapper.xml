@@ -33,4 +33,16 @@
         where service_form_id = #{formID}
     </select>
 
+    <delete id="deleteByPicId">
+        delete
+        from service_pic
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteByServiceFormId">
+        delete
+        from service_pic
+        where service_form_id = #{formID}
+    </delete>
+
 </mapper>

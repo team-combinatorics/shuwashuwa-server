@@ -31,4 +31,18 @@ public interface ServicePicDao {
      * @return 维修单关联的图片列表
      */
     List<ServicePic> selectByServiceFormId(@Param("formID")int serviceFormId);
+
+    /**
+     * 根据图片id删除
+     * @param id 要删除图片的id
+     * @return 删除的数量，本方法中只会为0或1，返回0说明要删除的图片记录不存在，然而这种情况并不合理
+     */
+    int deleteByPicId(@Param("id")int id);
+
+    /**
+     * 根据维修单id删除图片信息
+     * @param serviceFormId 要删除图片的为u维修单id
+     * @return 删除的数量
+     */
+    int deleteByServiceFormId(@Param("formID")int serviceFormId);
 }

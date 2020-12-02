@@ -29,6 +29,9 @@ public class ServicePicTest {
             servicePicDao.insertServicePic(servicePicPO);
         }
         System.out.println(servicePicDao.selectByServiceFormId(5));
+        System.out.println(servicePicDao.deleteByPicId(1));
+        System.out.println(servicePicDao.deleteByPicId(1));
+        System.out.println(servicePicDao.deleteByServiceFormId(5));
 
     }
 }
