@@ -59,4 +59,25 @@
         from service_form
         where id = #{id}
     </select>
+
+    <select id="selectServiceFormByServiceEventID" resultMap="serviceFormResultMap">
+        select id,
+               brand,
+               computer_model,
+               cpu_model,
+               has_discrete_graphics,
+               graphics_model,
+               laptop_type,
+               bought_time,
+               is_under_warranty,
+               problem_description,
+               problem_type,
+               reply_user_id,
+               description_advice,
+               status
+        from service_form
+        where service_event_id = #{eventID}
+    </select>
+
+
 </mapper>

@@ -6,6 +6,8 @@ import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
 
+import java.util.List;
+
 @Component
 public interface ServiceFormDao {
     /**
@@ -29,5 +31,12 @@ public interface ServiceFormDao {
      * @return 一个ServiceForm结构
      */
     ServiceForm selectServiceFormByFormID(@Param("id") int id);
+
+    /**
+     * 根据event id寻找form
+     * @param eventID event id
+     * @return 一个ServiceForm结构
+     */
+    List<ServiceForm> selectServiceFormByServiceEventID(@Param("eventID") int eventID);
 
 }
