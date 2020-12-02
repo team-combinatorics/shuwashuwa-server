@@ -18,7 +18,7 @@ CREATE TABLE `service_event` (
                                  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                  `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                  `repairing_result` VARCHAR(100) DEFAULT NULL COMMENT '志愿者填写的维修结果',
-                                 `status` TINYINT DEFAULT NULL COMMENT '该维修请求的状态',
+                                 `status` TINYINT DEFAULT 0 COMMENT '该维修请求的状态',
                                  `feedback` VARCHAR(100) DEFAULT NULL COMMENT '用户反馈信息',
                                  `activity_id` INT DEFAULT NULL COMMENT '预约活动id',
                                  `time_slot` INT DEFAULT NULL COMMENT '预约时间段',
