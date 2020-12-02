@@ -27,5 +27,6 @@ public class ServiceFormPO {
     private String problemDescription;
     private String problemType;
     private String descriptionAdvice;
+    private Integer serviceEventId;
     private Integer status;
 }

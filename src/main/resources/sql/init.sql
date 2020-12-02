@@ -42,7 +42,9 @@ CREATE TABLE `service_form` (
                                 `problem_description` VARCHAR(100) DEFAULT NULL COMMENT '问题描述',
                                 `problem_type` VARCHAR(10) DEFAULT NULL COMMENT '问题类型（硬件/软件）',
                                 `description_advice` VARCHAR(100) DEFAULT NULL COMMENT '描述修改建议',
-                                `status` TINYINT DEFAULT NULL COMMENT '维修单状态：待审核，未通过，通过',
+                                `service_event_id` INT UNSIGNED NOT NULL COMMENT '关联的维修事件的id',
+                                `status` TINYINT DEFAULT 0 COMMENT '维修单状态：待审核，未通过，通过',
+                                INDEX idx_service_event_id(service_event_id),
                                 INDEX idx_status(status),
                                 PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
