@@ -2,23 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ServiceFormDao">
-    <resultMap type="team.combinatorics.shuwashuwa.model.po.ServiceFormPO" id="serviceFormResultMap">
-        <result column="id" jdbcType="INTEGER" property="id"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
-        <result column="brand" jdbcType="VARCHAR" property="brand"/>
-        <result column="computer_model" jdbcType="VARCHAR" property="computerModel"/>
-        <result column="cpu_model" jdbcType="VARCHAR" property="cpuModel"/>
-        <result column="has_discrete_graphics" jdbcType="BOOLEAN" property="hasDiscreteGraphics"/>
-        <result column="graphics_model" jdbcType="VARCHAR" property="graphicsModel"/>
-        <result column="laptop_type" jdbcType="VARCHAR" property="laptopType"/>
-        <result column="bought_time" jdbcType="DATE" property="boughtTime"/>
-        <result column="is_under_warranty" jdbcType="BOOLEAN" property="underWarranty"/>
-        <result column="problem_description" jdbcType="VARCHAR" property="problemDescription"/>
-        <result column="problem_type" jdbcType="VARCHAR" property="problemType"/>
-        <result column="description_advice" jdbcType="VARCHAR" property="descriptionAdvice"/>
-        <result column="status" jdbcType="TINYINT" property="status"/>
-    </resultMap>
+
 
     <insert id="insertServiceForm" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into service_form(brand, computer_model, cpu_model, has_discrete_graphics, graphics_model, laptop_type,
@@ -27,4 +11,10 @@
                 #{form.graphicsModel}, #{form.laptopType}, #{form.boughtTime}, #{form.underWarranty},
                 #{form.problemDescription}, #{form.problemType}, #{form.serviceEventId})
     </insert>
+
+    <update id="updateAdvice" parameterType="team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO">
+        update service_form set
+            reply_user_id = #{adminID}, description_advice = #{updateInfo.advice}, status = #{updateInfo.status}
+        where id = #{updateInfo.formID}
+    </update>
 </mapper>

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 
 import java.sql.Date;
@@ -34,5 +35,11 @@ public class ServiceFormTest {
                 .build();
         serviceFormDao.insertServiceForm(serviceFormPO);
         System.out.println(serviceFormPO.getId());
+
+        serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
+                .advice("没救了，换电脑吧")
+                .formID(1)
+                .status(1)
+                .build());
     }
 }
