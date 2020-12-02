@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.dao;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
+import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
 
 import java.sql.Date;
 
@@ -17,6 +19,9 @@ public class ServiceFormTest {
 
     @Autowired
     ServiceFormDao serviceFormDao;
+
+    @Autowired
+    ServicePicDao servicePicDao;
 
     @Test
     public void simpleTest() {
@@ -41,5 +46,17 @@ public class ServiceFormTest {
                 .formID(1)
                 .status(1)
                 .build());
+
+        for (int i = 1; i <= 4; i++) {
+            ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(1).build();
+            servicePicDao.insertServicePic(servicePicPO);
+        }
+        try {
+            String json = new ObjectMapper().writeValueAsString(serviceFormDao.selectServiceFormByFormID(1));
+            System.out.println(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

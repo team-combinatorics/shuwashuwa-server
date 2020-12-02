@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
+import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
 
 @Component
 public interface ServiceFormDao {
@@ -21,5 +22,12 @@ public interface ServiceFormDao {
      * @param serviceFormUpdateDTO 更新的内容
      */
     void updateAdvice(@Param("adminID") int adminID, @Param("updateInfo") ServiceFormUpdateDTO serviceFormUpdateDTO);
+
+    /**
+     * 根据form id寻找form
+     * @param id form id
+     * @return 一个ServiceForm结构
+     */
+    ServiceForm selectServiceFormByFormID(@Param("id") int id);
 
 }
