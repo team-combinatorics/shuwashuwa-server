@@ -12,7 +12,7 @@ bought_time,date,DEFAULT NULL,购买时间,,,,
 is_under_warranty,boolean,DEFAULT NULL,是否在保,,,,
 problem_description,varchar(100),DEFAULT NULL,问题描述,,,,
 problem_type,varchar(10),DEFAULT NULL,问题类型（硬件/软件）,,,,
-reply_user_id,int unsigned,DEFAULT NULL,"","","","",""
+reply_user_id,int unsigned,DEFAULT NULL,提供建议的人的id,"","","",""
 description_advice,varchar(100),DEFAULT NULL,描述修改建议,,,,
 service_event_id,int unsigned,NOT NULL,关联的维修事件的id,1,,,
 status,tinyint,DEFAULT 0,维修单状态：待审核，未通过，通过,1,,,
