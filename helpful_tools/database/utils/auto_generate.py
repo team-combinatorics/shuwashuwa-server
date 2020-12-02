@@ -107,6 +107,10 @@ def csv2sql(srcdir, filename):
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.dirname(__file__)))
+    if not os.path.exists('sql'):
+        os.mkdir('sql')
+    if not os.path.exists('java'):
+        os.mkdir('java')
     init_sql_file()
     for file in os.listdir('csv'):
         csv2javafile('csv/', file)

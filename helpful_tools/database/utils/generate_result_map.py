@@ -75,5 +75,7 @@ def csv2mapper(srcdir, filename):
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.dirname(__file__)))
+    if not os.path.exists('mapper'):
+        os.mkdir('mapper')
     for file in os.listdir('csv'):
         csv2mapper('csv/', file)
