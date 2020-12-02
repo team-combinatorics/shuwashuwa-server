@@ -52,9 +52,9 @@ CREATE TABLE `service_pic` (
                                `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长的表单id',
                                `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                               `servce_form_id` INT UNSIGNED DEFAULT NULL COMMENT '关联的维修单id',
+                               `service_form_id` INT UNSIGNED DEFAULT NULL COMMENT '关联的维修单id',
                                `pic_location` VARCHAR(100) DEFAULT NULL COMMENT '图片路径',
-                               INDEX idx_servce_form_id(servce_form_id),
+                               INDEX idx_service_form_id(service_form_id),
                                PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
