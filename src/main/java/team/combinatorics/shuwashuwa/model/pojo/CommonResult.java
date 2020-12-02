@@ -1,4 +1,4 @@
-package team.combinatorics.shuwashuwa.model.bean;
+package team.combinatorics.shuwashuwa.model.pojo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
