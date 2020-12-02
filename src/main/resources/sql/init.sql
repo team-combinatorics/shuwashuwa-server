@@ -12,6 +12,20 @@ CREATE TABLE `activity_info` (
                                  PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `service_event`;
+CREATE TABLE `service_event` (
+                                 `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长的表单id',
+                                 `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                 `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                                 `repairing_result` VARCHAR(100) DEFAULT NULL COMMENT '志愿者填写的维修结果',
+                                 `status` TINYINT DEFAULT NULL COMMENT '该维修请求的状态',
+                                 `feedback` VARCHAR(100) DEFAULT NULL COMMENT '用户反馈信息',
+                                 `activity_id` INT DEFAULT NULL COMMENT '预约活动id',
+                                 `time_slot` INT DEFAULT NULL COMMENT '预约时间段',
+                                 INDEX idx_activity_id(activity_id),
+                                 PRIMARY KEY pk_id(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 DROP TABLE IF EXISTS `service_form`;
 CREATE TABLE `service_form` (
                                 `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长的表单id',
@@ -27,14 +41,21 @@ CREATE TABLE `service_form` (
                                 `is_under_warranty` BOOLEAN DEFAULT NULL COMMENT '是否在保',
                                 `problem_description` VARCHAR(100) DEFAULT NULL COMMENT '问题描述',
                                 `problem_type` VARCHAR(10) DEFAULT NULL COMMENT '问题类型（硬件/软件）',
-                                `decription_editing_advice` VARCHAR(100) DEFAULT NULL COMMENT '描述修改建议',
-                                `repairing_result` VARCHAR(100) DEFAULT NULL COMMENT '志愿者填写的维修结果',
-                                `status` TINYINT DEFAULT NULL COMMENT '维修单状态',
-                                `feedback` VARCHAR(100) DEFAULT NULL COMMENT '用户反馈信息',
-                                `activity_id` INT DEFAULT NULL COMMENT '预约活动id',
-                                `time_slot` INT DEFAULT NULL COMMENT '预约时间段',
-                                INDEX idx_activity_id(activity_id),
+                                `decription_advice` VARCHAR(100) DEFAULT NULL COMMENT '描述修改建议',
+                                `status` TINYINT DEFAULT NULL COMMENT '维修单状态：待审核，未通过，通过',
+                                INDEX idx_status(status),
                                 PRIMARY KEY pk_id(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `service_pic`;
+CREATE TABLE `service_pic` (
+                               `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长的表单id',
+                               `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                               `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                               `servce_form_id` INT UNSIGNED DEFAULT NULL COMMENT '关联的维修单id',
+                               `pic_location` VARCHAR(100) DEFAULT NULL COMMENT '图片路径',
+                               INDEX idx_servce_form_id(servce_form_id),
+                               PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `user`;
