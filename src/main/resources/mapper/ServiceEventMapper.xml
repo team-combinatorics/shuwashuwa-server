@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.combinatorics.shuwashuwa.dao.ServiceEventDao">
+
+    <insert id="insertServiceEvent" useGeneratedKeys="true" keyColumn="id" keyProperty="serviceEvent.id"
+            parameterType="team.combinatorics.shuwashuwa.model.po.ServiceEventPO">
+        insert into service_event(user_id, activity_id, time_slot)
+        values (#{userID},#{serviceEvent.activityId}, #{serviceEvent.timeSlot})
+    </insert>
+
+    <update id="updateByVolunteer"
+            parameterType="team.combinatorics.shuwashuwa.model.dto.ServiceEventUpdateByVolunteerDTO">
+        update service_event
+        set volunteer_id=#{volunteerID},
+            repairing_result=#{updateInfo.repairingResult},
+            status=#{updateInfo.status}
+        where id = #{updateInfo.eventID}
+    </update>
+
+    <update id="updateAppointment">
+        update service_event
+        set activity_id=#{activityID},
+            time_slot=#{timeSlot}
+        where id = #{id}
+    </update>
+
+    <update id="updateFeedback">
+        update service_event
+        set feedback=#{feedback}
+        where id = #{id}
+    </update>
+</mapper>
