@@ -22,7 +22,7 @@ def csv2mapper(srcdir, filename):
     mapper_file.write(
         '    <resultMap type=' +
         '\"team.combinatorics.shuwashuwa.model.po.{}\" id=\"{}\">\n'.format(
-            class_name + 'DO', result_map_name))
+            class_name + 'PO', result_map_name))
     # 读取csv信息
     csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     property_names = []
