@@ -16,6 +16,6 @@ public class ServicePicPO {
     private Integer id;
     private Timestamp createTime;
     private Timestamp updatedTime;
-    private Integer servceFormId;
+    private Integer serviceFormId;
     private String picLocation;
 }

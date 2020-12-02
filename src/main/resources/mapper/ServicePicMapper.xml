@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.combinatorics.shuwashuwa.dao.ServicePicDao">
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.ServicePicPO" id="servicePicResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="service_form_id" jdbcType="INTEGER" property="serviceFormId"/>
+        <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
+    </resultMap>
+
+    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.ServicePic" id="simplePicResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
+    </resultMap>
+
+    <insert id="insertServicePic" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="team.combinatorics.shuwashuwa.model.po.ServicePicPO">
+        insert into service_pic(pic_location, service_form_id)
+        values (#{pic.picLocation}, #{pic.serviceFormId})
+    </insert>
+
+    <select id="selectByPicId" resultMap="simplePicResultMap">
+        select id, pic_location
+        from service_pic
+        where id = #{id}
+    </select>
+
+    <select id="selectByServiceFormId" resultMap="simplePicResultMap">
+        select id, pic_location
+        from service_pic
+        where service_form_id = #{formID}
+    </select>
+
+</mapper>
