@@ -3,10 +3,27 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ServiceEventDao">
 
+    <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO" id="serviceEventResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="volunteer_id" jdbcType="INTEGER" property="volunteerId"/>
+        <result column="repairing_result" jdbcType="VARCHAR" property="repairingResult"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="feedback" jdbcType="VARCHAR" property="feedback"/>
+        <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
+        <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
+        <collection property="serviceForms"
+                    select="team.combinatorics.shuwashuwa.dao.ServiceFormDao.selectServiceFormByServiceEventID"
+                    ofType="team.combinatorics.shuwashuwa.model.pojo.ServiceForm"
+                    javaType="java.util.ArrayList"
+                    column="id">
+        </collection>
+    </resultMap>
+
     <insert id="insertServiceEvent" useGeneratedKeys="true" keyColumn="id" keyProperty="serviceEvent.id"
             parameterType="team.combinatorics.shuwashuwa.model.po.ServiceEventPO">
         insert into service_event(user_id, activity_id, time_slot)
-        values (#{userID},#{serviceEvent.activityId}, #{serviceEvent.timeSlot})
+        values (#{userID}, #{serviceEvent.activityId}, #{serviceEvent.timeSlot})
     </insert>
 
     <update id="updateByVolunteer"
@@ -30,4 +47,51 @@
         set feedback=#{feedback}
         where id = #{id}
     </update>
+
+    <select id="selectByServiceEventID" resultMap="serviceEventResultMap">
+        select id,
+               user_id,
+               volunteer_id,
+               repairing_result,
+               status,
+               feedback,
+               activity_id,
+               time_slot
+        from service_event
+        where id = #{id}
+    </select>
+
+    <select id="selectByCondition" resultMap="serviceEventResultMap">
+        select id,
+               user_id,
+               volunteer_id,
+               repairing_result,
+               status,
+               feedback,
+               activity_id,
+               time_slot
+        from service_event
+        where 1=1
+        <if test="condition.beginTime != null">
+            and create_time >= #{condition.beginTime}
+        </if>
+        <if test="condition.endTime != null">
+            and create_time &lt;= #{condition.endTime}
+        </if>
+        <if test="condition.userID != null">
+            and user_id = #{condition.userID}
+        </if>
+        <if test="condition.volunteerId != null">
+            and volunteer_id = #{condition.volunteerId}
+        </if>
+        <if test="condition.status != null">
+            and status = #{condition.status}
+        </if>
+        <if test="condition.activityId != null">
+            and activity_id = #{condition.activityId}
+        </if>
+        <if test="condition.timeSlot != null">
+            and time_slot = #{condition.timeSlot}
+        </if>
+    </select>
 </mapper>
