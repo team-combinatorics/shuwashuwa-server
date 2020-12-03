@@ -24,7 +24,7 @@ public interface UserService {
 
     List<VolunteerApplicationPO> getUnauditedVolunteerApplicationList();
 
-    void updateVolunteerApplication(int formid, int userid, VolunteerApplicationUpdateDTO updateDTO);
+    void completeApplicationAudition(int formid, int userid, VolunteerApplicationUpdateDTO updateDTO);
 
     // boolean suicide();
 

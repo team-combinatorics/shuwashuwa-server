@@ -6,16 +6,17 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
+import team.combinatorics.shuwashuwa.model.dto.*;
+import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
-import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
-import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
-import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDTO;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
+
+import java.util.List;
 
 @Api(value = "User相关接口说明")
 @RestController
@@ -75,8 +76,7 @@ public class UserController {
     }
 
     /**
-     * 接收志愿者申请，未完成
-     * TODO: 已经定义好了DTO，速速完成
+     * 接收志愿者申请
      */
     @ApiOperation(value = "接收当前用户的申请", notes = "根据传入的token解析userid，再储存申请表", httpMethod = "POST")
     /*
@@ -92,7 +92,36 @@ public class UserController {
     @AllAccess
     public CommonResult<String> receiveApplicationInfo(@RequestHeader("token") String token,
                                                        @RequestBody VolunteerApplicationDTO application) {
-        return null;
+        int userid = TokenUtil.extractUserid(token);
+        System.out.println(userid+"提交了志愿者申请");
+        userService.addVolunteerApplication(userid,application);
+        return new CommonResult<>(200,"申请完成","posted");
+    }
+
+    /**
+     * 获取待审核志愿者申请
+     */
+    @ApiOperation(value = "获取待审核志愿者申请", notes = "限管理员调用，返回List", httpMethod = "GET")
+    @RequestMapping(value = "/application", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @AdminAccess
+    public CommonResult<List<VolunteerApplicationPO>> getUnauditedApplicationList() {
+        return new CommonResult<>(200,"获取成功",userService.getUnauditedVolunteerApplicationList());
+    }
+
+    /**
+     * 处理志愿者申请的审核
+     * TODO: 确认一下formid怎么搞进来
+     */
+    public CommonResult<String> receiveApplicationAudition(@RequestHeader("token") String token,
+                                          @RequestBody VolunteerApplicationUpdateDTO updateDTO) {
+        int userid = TokenUtil.extractUserid(token);
+        System.out.println(userid+"审核了编号为？的申请");
+        return new CommonResult<>(404,"未开发","这项功能还在开发中");
+//        userService.completeApplicationAudition(formid,userid,updateDTO);
+//        return new CommonResult<>(40000,"审核完成","posted");
     }
 
 
