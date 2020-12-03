@@ -3,7 +3,7 @@ package team.combinatorics.shuwashuwa.service.impl;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
@@ -17,7 +17,7 @@ import team.combinatorics.shuwashuwa.utils.WechatUtil;
 import java.util.List;
 
 @PropertySource("classpath:wx.properties")
-@Component
+@Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 

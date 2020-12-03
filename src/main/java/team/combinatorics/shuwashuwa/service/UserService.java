@@ -1,13 +1,11 @@
 package team.combinatorics.shuwashuwa.service;
 
-import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
 import java.util.List;
 
-@Service
 public interface UserService {
 
     LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception;
