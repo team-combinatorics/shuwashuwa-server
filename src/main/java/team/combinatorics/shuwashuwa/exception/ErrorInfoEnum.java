@@ -15,7 +15,8 @@ public enum ErrorInfoEnum {
     CODE2SESSION_FAILURE(40005,"微信code校验api出错"),
     TOKEN_EXPIRED(40006,"token过期"),
     TOKEN_INVALID(40007,"token无效"),
-    STORAGE_FAILURE(40008,"文件存储失败");
+    STORAGE_FAILURE(40008,"文件存储失败"),
+    NOT_YOUR_FILE(40009,"试图删除自己缓存以外的图片文件");
 
     private final Integer errCode;
     private final String errMsg;
