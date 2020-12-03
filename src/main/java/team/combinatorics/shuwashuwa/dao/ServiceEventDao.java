@@ -2,6 +2,7 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+import team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventUpdateByVolunteerDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 
@@ -39,6 +40,8 @@ public interface ServiceEventDao {
      * @param feedback 用户反馈
      */
     void updateFeedback(@Param("id") int id, @Param("feedback") String feedback);
+
+    ServiceEventResponseDTO selectByServiceEventID(@Param("id")int id);
 
     // TODO 这里应该写几个简单的查询语句，例如通过维修单id查找对应的用户，通过维修单id查找当前状态等
 
