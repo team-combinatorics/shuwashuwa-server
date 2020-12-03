@@ -17,7 +17,7 @@ public interface ImageStorageService {
      * @param userid 发起图片删除的用户id
      * @param path 待删除的文件路径
      */
-    void remove(int userid, String path);
+    void removeFromCache(int userid, String path);
 
     /**
      * 确认一个文件与维修单关联，从而去除缓存属性

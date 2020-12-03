@@ -55,7 +55,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     }
 
     @Override
-    public void remove(int userid, String path) {
+    public void removeFromCache(int userid, String path) {
         //删除当然是"确认"图片没有用
         confirm(userid, path);
 
