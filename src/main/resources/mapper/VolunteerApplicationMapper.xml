@@ -24,7 +24,7 @@
         set admin_id       = #{adminID},
             reply_by_admin = #{adminReply.replyByAdmin},
             status         = #{adminReply.status}
-        where id = #{formID}
+        where id = #{adminReply.formID}
     </update>
 
     <select id="selectByUserId" resultMap="volunteerApplicationResultMap">

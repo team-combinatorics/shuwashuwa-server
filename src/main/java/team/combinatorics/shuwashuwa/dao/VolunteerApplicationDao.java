@@ -23,13 +23,12 @@ public interface VolunteerApplicationDao {
     /**
      * 管理员更新维修单状态
      *
-     * @param formID                        维修单id
      * @param adminID                       管理员id
      * @param volunteerApplicationUpdateDTO 管理员的回复结构，必须都不为空
      */
-    void updateApplicationByAdmin(@Param("formID") int formID,
-                                  @Param("adminID") int adminID,
-                                  @Param("adminReply") VolunteerApplicationUpdateDTO volunteerApplicationUpdateDTO);
+    void updateApplicationByAdmin(
+            @Param("adminID") int adminID,
+            @Param("adminReply") VolunteerApplicationUpdateDTO volunteerApplicationUpdateDTO);
 
     /**
      * 通过用户id寻找申请表，可能有多个结果，因此返回一个列表
