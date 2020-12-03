@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
+import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventUpdateByVolunteerDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
@@ -151,6 +152,28 @@ public class ServiceEventDaoTest {
 
         try {
             String json = new ObjectMapper().writeValueAsString(serviceEventDao.selectByServiceEventID(1));
+            System.out.println(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String json = new ObjectMapper().writeValueAsString(serviceEventDao.selectByCondition(
+                    SelectServiceEventCO.builder()
+                            .activityId(2)
+                            .build()
+            ));
+            System.out.println(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String json = new ObjectMapper().writeValueAsString(serviceEventDao.selectByCondition(
+                    SelectServiceEventCO.builder()
+                            .volunteerId(1)
+                            .build()
+            ));
             System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();

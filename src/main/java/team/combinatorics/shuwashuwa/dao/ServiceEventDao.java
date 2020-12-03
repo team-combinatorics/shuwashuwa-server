@@ -2,9 +2,12 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventUpdateByVolunteerDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
+
+import java.util.List;
 
 @Component
 public interface ServiceEventDao {
@@ -41,8 +44,18 @@ public interface ServiceEventDao {
      */
     void updateFeedback(@Param("id") int id, @Param("feedback") String feedback);
 
-    ServiceEventResponseDTO selectByServiceEventID(@Param("id")int id);
+    /**
+     * @param id 维修请求id
+     * @return 一个完整的维修单结构
+     */
+    ServiceEventResponseDTO selectByServiceEventID(@Param("id") int id);
 
+    /**
+     * 条件检索
+     * @param selectServiceEventCO 根据条件来检索维修单，条件说名见类说明
+     * @return 一个维修单列表
+     */
+    List<ServiceEventResponseDTO> selectByCondition(@Param("condition") SelectServiceEventCO selectServiceEventCO);
     // TODO 这里应该写几个简单的查询语句，例如通过维修单id查找对应的用户，通过维修单id查找当前状态等
 
 }
