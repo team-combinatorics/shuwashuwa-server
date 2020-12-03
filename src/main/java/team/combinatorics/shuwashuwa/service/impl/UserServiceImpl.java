@@ -5,30 +5,26 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import team.combinatorics.shuwashuwa.dao.UserDao;
-import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
-import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
-import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
+import team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao;
+import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
+
+import java.util.List;
 
 @PropertySource("classpath:wx.properties")
 @Component
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    //private final RestTemplate restTemplate;
-
     private final WechatUtil wechatUtil;
 
     private final UserDao userDao;
-
-//    public UserServiceImpl(WechatUtil wechatUtil, UserDao userDao) {
-//        //this.restTemplate = restTemplate;
-//        this.wechatUtil = wechatUtil;
-//        this.userDao = userDao;
-//    }
+    private final VolunteerApplicationDao applicationDao;
 
     @Override
     public int deleteOneUser(int userid) {
@@ -75,6 +71,22 @@ public class UserServiceImpl implements UserService {
         return userPO;
     }
 
+    @Override
+    public void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO) {
+        applicationDao.insert(userid,volunteerApplicationDTO);
+    }
+
+    @Override
+    public List<VolunteerApplicationPO> getUnauditedVolunteerApplicationList() {
+        return applicationDao.selectByCondition(SelectApplicationCO.builder().status(0).build());
+    }
+
+    @Override
+    public void updateVolunteerApplication(int formid, int userid, VolunteerApplicationUpdateDTO updateDTO) {
+        applicationDao.updateApplicationByAdmin(formid,userid,updateDTO);
+        if(updateDTO.getStatus() == 1)
+            userDao.updateUserVolunteerAuthority(userid,true);
+    }
 
     @Override
     public String test(LogInInfoDTO logInInfoDto) throws Exception {
