@@ -138,6 +138,7 @@ public class UserController {
             @ApiResponse(code = 40001, message = "用户不存在")
     })
     @RequestMapping(value = "/deleteOne", method = RequestMethod.DELETE)
+    @NoToken
     public CommonResult<String> deleteOneUser(@RequestHeader("token") String token) throws Exception {
         int cnt = userService.deleteOneUser(TokenUtil.extractUserid(token));
         if (cnt > 0) {
