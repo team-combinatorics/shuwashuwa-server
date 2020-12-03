@@ -18,6 +18,7 @@ import java.util.Map;
 
 
 public class TokenUtil {
+    //todo: 把这加进环境变量
     public static final String SECRET = "HappyLucky";
     public static final int EXPIRE = 60 * 60 * 24 * 15;
     public static final Map<String, Object> headerMap = new HashMap<>();
