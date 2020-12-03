@@ -67,6 +67,6 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         if(!unconfirmed.get(userid).remove(Path.of(path)))
             throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
         if(unconfirmed.get(userid).size()==0)
-            unconfirmed.get(userid).remove(userid);
+            unconfirmed.remove(userid);
     }
 }
