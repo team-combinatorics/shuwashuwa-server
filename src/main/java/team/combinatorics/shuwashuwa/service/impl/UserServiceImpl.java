@@ -82,11 +82,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void completeApplicationAudition(int formid, int userid, VolunteerApplicationUpdateDTO updateDTO) {
-        // TODO 请修改这里@leo_h
-//        applicationDao.updateApplicationByAdmin(formid,userid,updateDTO);
-//        if(updateDTO.getStatus() == 1)
-//            userDao.updateUserVolunteerAuthority(applicationDao.selectByFormId(formid).getUserId(),true);
+    public void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO) {
+        applicationDao.updateApplicationByAdmin(userid,updateDTO);
+        if(updateDTO.getStatus() == 1)
+            userDao.updateUserVolunteerAuthority(applicationDao.selectByFormId(updateDTO.getFormID()).getUserId(),true);
     }
 
     @Override
