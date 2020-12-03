@@ -41,13 +41,15 @@ public class VolunteerApplicationDaoTest {
         // 测试select多个申请单
         System.out.println(volunteerApplicationDao.selectByUserId(1));
         // 测试管理员回复
-        volunteerApplicationDao.updateApplicationByAdmin(1, 1
-                , VolunteerApplicationUpdateDTO.builder()
+        volunteerApplicationDao.updateApplicationByAdmin(1,
+                VolunteerApplicationUpdateDTO.builder()
+                        .formID(1)
                         .replyByAdmin("不给过，爬")
                         .status(1)
                         .build());
-        volunteerApplicationDao.updateApplicationByAdmin(2, 1
-                , VolunteerApplicationUpdateDTO.builder()
+        volunteerApplicationDao.updateApplicationByAdmin(2,
+                VolunteerApplicationUpdateDTO.builder()
+                        .formID(1)
                         .replyByAdmin("不给过，爬")
                         .status(1)
                         .build());
