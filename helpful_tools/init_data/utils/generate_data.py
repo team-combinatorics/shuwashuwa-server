@@ -28,7 +28,32 @@ def generate_str(length):
 
 
 def generate_level():
-    return {}
+    vo = []
+    ad = []
+    su = []
+    for _ in range(num_random):
+        s = chr(random.randint(ord('0'), ord('1')))
+        vo.append(s)
+        if s == '0':
+            ad.append('0')
+            su.append('0')
+        else:
+            s = chr(random.randint(ord('0'), ord('1')))
+            ad.append(s)
+            if s == '0':
+                su.append('0')
+            else:
+                s = chr(random.randint(ord('0'), ord('1')))
+                su.append(s)
+        vo.append(',')
+        ad.append(',')
+        su.append(',')
+    level_dict = {
+        'is_volunteer': ''.join(vo),
+        'is_admin': ''.join(ad),
+        'is_su': ''.join(su)
+    }
+    return level_dict
 
 
 def generate_csv(filename):
@@ -40,8 +65,8 @@ def generate_csv(filename):
             types.append(line[1])
     print(headers)
     print(types)
-
     random_level = generate_level()
+    print(random_level)
 
     with open('../csv/user_init.csv', 'w', encoding="utf-8") as f:
         for idx in range(len(headers)):
@@ -53,8 +78,7 @@ def generate_csv(filename):
             elif types[idx] == "BOOLEAN":
                 for cnt in range(num_sudo):
                     f.write('1,')
-                for cnt in range(num_random):
-                    f.write('0,')
+                f.write(random_level[headers[idx]])
             else:
                 f.write(sudo_dict[headers[idx]])
                 for _ in range(num_random):
