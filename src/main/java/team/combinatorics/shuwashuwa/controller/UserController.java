@@ -108,20 +108,24 @@ public class UserController {
     })
     @AdminAccess
     public CommonResult<List<VolunteerApplicationPO>> getUnauditedApplicationList() {
-        return new CommonResult<>(200,"获取成功",userService.getUnauditedVolunteerApplicationList());
+        return new CommonResult<>(200,"请求成功",userService.getUnauditedVolunteerApplicationList());
     }
 
     /**
      * 处理志愿者申请的审核
-     * TODO: 确认一下formid怎么搞进来
      */
+    @ApiOperation(value = "审核志愿者申请", notes = "限管理员调用", httpMethod = "PATCH")
+    @RequestMapping(value = "/application", method = RequestMethod.PATCH)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @AdminAccess
     public CommonResult<String> receiveApplicationAudition(@RequestHeader("token") String token,
                                           @RequestBody VolunteerApplicationUpdateDTO updateDTO) {
         int userid = TokenUtil.extractUserid(token);
-        System.out.println(userid+"审核了编号为？的申请");
-        return new CommonResult<>(404,"未开发","这项功能还在开发中");
-//        userService.completeApplicationAudition(formid,userid,updateDTO);
-//        return new CommonResult<>(40000,"审核完成","posted");
+        System.out.println(userid+"审核了编号为"+updateDTO.getFormID()+"的申请");
+        userService.completeApplicationAudition(userid,updateDTO);
+        return new CommonResult<>(200,"请求成功","success");
     }
 
 
@@ -131,8 +135,7 @@ public class UserController {
     @ApiOperation(value = "删除单个用户", notes = "删除单个用户，测试用", httpMethod = "DELETE")
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
-            //TODO: 注意一下，错误码都是定义好的，统一为4xxxx格式，这个204不太星
-            @ApiResponse(code = 204, message = "用户不存在")
+            @ApiResponse(code = 40001, message = "用户不存在")
     })
     @RequestMapping(value = "/deleteOne", method = RequestMethod.DELETE)
     public CommonResult<String> deleteOneUser(@RequestHeader("token") String token) throws Exception {
