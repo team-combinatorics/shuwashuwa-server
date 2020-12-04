@@ -10,18 +10,13 @@ import team.combinatorics.shuwashuwa.utils.PropertiesConstants;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class ImageStorageServiceImpl implements ImageStorageService {
 
-    // TODO: 请验证这样是否可行
-    // 另外，为什么static final不用全大写的命名？！
-    // 建议改名：STORAGE_DIR
-    private static final Path storageDir = PropertiesConstants.PIC_STORAGE_DIR;
-    // private static final Path storageDir = Paths.get("D:\\");
+    private static final Path STORAGE_DIR = PropertiesConstants.PIC_STORAGE_DIR;
 
     private static final Map<Integer, List<Path>> unconfirmed = new HashMap<>();
 
@@ -34,7 +29,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         String receivedFileName = file.getOriginalFilename();
         String fileType = receivedFileName.substring(receivedFileName.lastIndexOf("."));
         String fileName = UUID.randomUUID().toString()+fileType;
-        Path path = storageDir.resolve(fileName);
+        Path path = STORAGE_DIR.resolve(fileName);
 
         //尝试存储
         try {
