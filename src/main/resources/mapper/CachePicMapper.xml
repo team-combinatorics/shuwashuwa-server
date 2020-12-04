@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.combinatorics.shuwashuwa.dao.CachePicDao">
+
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.CachePicPO" id="cachePicResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
+    </resultMap>
+
+    <insert id="insertCachePic" useGeneratedKeys="true" keyProperty="cachePic.id" keyColumn="id"
+            parameterType="team.combinatorics.shuwashuwa.model.po.CachePicPO">
+        insert into cache_pic (user_id, pic_location)
+        VALUES (#{cachePic.userId}, #{cachePic.picLocation})
+    </insert>
+
+    <select id="selectByID" resultMap="cachePicResultMap">
+        select *
+        from cache_pic
+        where id = #{id}
+    </select>
+
+    <select id="selectByUserID" resultMap="cachePicResultMap">
+        select *
+        from cache_pic
+        where user_id = #{userID}
+    </select>
+
+    <select id="selectUserIDByCacheID" resultType="Integer">
+        select user_id
+        from cache_pic
+        where id = #{cacheID}
+    </select>
+
+    <delete id="deleteByID">
+        delete
+        from cache_pic
+        where id = #{cacheID}
+    </delete>
+
+    <delete id="deleteByCondition" parameterType="team.combinatorics.shuwashuwa.dao.co.DeleteCachePicCO">
+        delete from cache_pic
+        <where>
+            <if test="condition.userID == null and condition.endTime == null and condition.beginTime == null">
+                1 = 0
+            </if>
+            <if test="condition.beginTime != null">
+                and create_time >= #{condition.beginTime}
+            </if>
+            <if test="condition.endTime != null">
+                and create_time &lt;= #{condition.endTime}
+            </if>
+            <if test="condition.userID != null">
+                and user_id = #{condition.userId}
+            </if>
+        </where>
+    </delete>
+</mapper>

@@ -12,6 +12,18 @@ CREATE TABLE `activity_info` (
                                  PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `cache_pic`;
+CREATE TABLE `cache_pic` (
+                             `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长的表单id',
+                             `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                             `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                             `user_id` INT UNSIGNED NOT NULL COMMENT '上传用户的id',
+                             `pic_location` VARCHAR(100) NOT NULL COMMENT '图片路径，注意手动改一下索引长度',
+                             INDEX idx_user_id(user_id),
+                             UNIQUE uk_pic_location(pic_location),
+                             PRIMARY KEY pk_id(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 DROP TABLE IF EXISTS `service_event`;
 CREATE TABLE `service_event` (
                                  `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长的表单id',
