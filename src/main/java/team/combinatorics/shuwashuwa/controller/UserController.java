@@ -40,7 +40,7 @@ public class UserController {
     })
     @NoToken
     public CommonResult<LogInSuccessDTO> loginHandler(LogInInfoDTO logInInfoDto) throws Exception {
-        System.out.println("用户登录");
+        System.out.println("用户登录 @Controller");
         System.out.println("Code:" + logInInfoDto.getCode());
         LogInSuccessDTO logInSuccessDto = userService.wechatLogin(logInInfoDto);
         System.out.println("ID: " + TokenUtil.extractUserid(logInSuccessDto.getToken()));
