@@ -4,9 +4,6 @@ db/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### Wechat Secrets ###
-src/main/resources/wx.properties
-
 ### STS ###
 .apt_generated
 .classpath

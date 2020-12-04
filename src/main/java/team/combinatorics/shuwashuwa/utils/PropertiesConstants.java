@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 
 @Component(value = "constants")
-@PropertySource(value = {"classpath:wx.properties", "classpath:shuwashuwa.properties"})
+@PropertySource(value = {"classpath:shuwashuwa.properties"})
 public class PropertiesConstants {
     /**
      * 微信小程序的appid
