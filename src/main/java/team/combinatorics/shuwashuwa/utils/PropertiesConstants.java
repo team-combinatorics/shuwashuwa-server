@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 
 @Component(value = "constants")
-@PropertySource(value = {"classpath:wx.properties", "classpath:shuwashuwa.properties"})
+@PropertySource(value = {"classpath:shuwashuwa.properties"})
 public class PropertiesConstants {
     /**
      * 微信小程序的appid
@@ -34,7 +34,6 @@ public class PropertiesConstants {
 
     @Value("${wx.appid:default}")
     public void setWxMiniProgramAppid(String appid) {
-        System.out.println(appid);
         PropertiesConstants.WX_MINI_PROGRAM_APPID = appid;
     }
 

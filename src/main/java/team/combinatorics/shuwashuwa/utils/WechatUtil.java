@@ -21,7 +21,6 @@ public class WechatUtil {
 
     private static final String APPID = PropertiesConstants.WX_MINI_PROGRAM_APPID;
 
-    @Value("${wx.secret:default}")
     private static final String SECRET = PropertiesConstants.WX_MINI_PROGRAM_SECRET;
 
     public WechatUtil(RestTemplate restTemplate) {

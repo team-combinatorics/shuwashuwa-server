@@ -16,7 +16,6 @@ import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 import java.util.List;
 
-@PropertySource("classpath:wx.properties")
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
