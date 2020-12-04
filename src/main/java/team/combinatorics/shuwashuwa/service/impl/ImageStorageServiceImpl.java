@@ -22,13 +22,14 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
     private static final Map<Integer, List<Path>> unconfirmed = new HashMap<>();
 
-    private static final int SINGLE_USER_QUEUE_LIMIT = 9;
+    private static final int SINGLE_USER_CACHE_LIMIT = 9;
 
-    @SuppressWarnings("")
     @Override
+    @SuppressWarnings("")
     public String store(int userid, MultipartFile file) throws KnownException {
         //生成随机唯一的文件名，但保留后缀
         String receivedFileName = file.getOriginalFilename();
+        assert receivedFileName != null;
         String fileType = receivedFileName.substring(receivedFileName.lastIndexOf("."));
         String fileName = UUID.randomUUID().toString()+fileType;
         Path path = STORAGE_DIR.resolve(fileName);
@@ -42,7 +43,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
         //检查缓存图片队列
         if (unconfirmed.containsKey(userid)) {
-            if (unconfirmed.get(userid).size() == SINGLE_USER_QUEUE_LIMIT) {
+            if (unconfirmed.get(userid).size() == SINGLE_USER_CACHE_LIMIT) {
                 unconfirmed.get(userid).remove(0).toFile().delete();
             }
         }
@@ -57,6 +58,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     }
 
     @Override
+    @SuppressWarnings("")
     public void removeFromCache(int userid, String path) {
         //删除当然是"确认"图片没有用
         confirm(userid, path);
