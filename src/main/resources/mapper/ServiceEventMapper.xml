@@ -63,35 +63,36 @@
 
     <select id="selectByCondition" resultMap="serviceEventResultMap">
         select id,
-               user_id,
-               volunteer_id,
-               repairing_result,
-               status,
-               feedback,
-               activity_id,
-               time_slot
+        user_id,
+        volunteer_id,
+        repairing_result,
+        status,
+        feedback,
+        activity_id,
+        time_slot
         from service_event
-        where 1=1
-        <if test="condition.beginTime != null">
-            and create_time >= #{condition.beginTime}
-        </if>
-        <if test="condition.endTime != null">
-            and create_time &lt;= #{condition.endTime}
-        </if>
-        <if test="condition.userID != null">
-            and user_id = #{condition.userID}
-        </if>
-        <if test="condition.volunteerId != null">
-            and volunteer_id = #{condition.volunteerId}
-        </if>
-        <if test="condition.status != null">
-            and status = #{condition.status}
-        </if>
-        <if test="condition.activityId != null">
-            and activity_id = #{condition.activityId}
-        </if>
-        <if test="condition.timeSlot != null">
-            and time_slot = #{condition.timeSlot}
-        </if>
+        <where>
+            <if test="condition.beginTime != null">
+                create_time >= #{condition.beginTime}
+            </if>
+            <if test="condition.endTime != null">
+                and create_time &lt;= #{condition.endTime}
+            </if>
+            <if test="condition.userID != null">
+                and user_id = #{condition.userId}
+            </if>
+            <if test="condition.volunteerId != null">
+                and volunteer_id = #{condition.volunteerId}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.activityId != null">
+                and activity_id = #{condition.activityId}
+            </if>
+            <if test="condition.timeSlot != null">
+                and time_slot = #{condition.timeSlot}
+            </if>
+        </where>
     </select>
 </mapper>
