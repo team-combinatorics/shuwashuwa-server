@@ -43,6 +43,8 @@ public class UserController {
         System.out.println("用户登录");
         System.out.println("Code:" + logInInfoDto.getCode());
         LogInSuccessDTO logInSuccessDto = userService.wechatLogin(logInInfoDto);
+        System.out.println("ID: " + TokenUtil.extractUserid(logInSuccessDto.getToken()));
+        System.out.println("Token: " + logInSuccessDto.getToken());
         return new CommonResult<>(200, "登录成功", logInSuccessDto);
     }
 
@@ -52,11 +54,15 @@ public class UserController {
     @ApiOperation(value = "更新用户信息", notes = "根据传入的数据结构对数据库中用户的相应表项进行更新", httpMethod = "PUT")
     @RequestMapping(value = "/info", method = RequestMethod.PUT)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
+            @ApiResponse(code = 200, message = "更新成功")
     })
     @AllAccess
-    public CommonResult<String> updateUserInfo(@RequestHeader("token") String token, @RequestBody UpdateUserInfoDTO updateUserInfoDto) throws Exception {
-        userService.updateUserInfo(TokenUtil.extractUserid(token), updateUserInfoDto);
+    public CommonResult<String> updateUserInfo(@RequestHeader("token") String token,
+                                               @RequestBody UpdateUserInfoDTO updateUserInfoDto) throws Exception {
+        int userid = TokenUtil.extractUserid(token);
+        System.out.println("更新" + userid + "的用户信息");
+        System.out.println(updateUserInfoDto.toString());
+        userService.updateUserInfo(userid, updateUserInfoDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
     }
 
@@ -71,8 +77,10 @@ public class UserController {
     })
     @AllAccess
     public CommonResult<UserPO> getUserInfo(@RequestHeader("token") String token) throws Exception {
-        UserPO userPO = userService.getUserInfo(TokenUtil.extractUserid(token));
-        return new CommonResult<>(200, "更新成功", userPO);
+        int userid = TokenUtil.extractUserid(token);
+        UserPO userPO = userService.getUserInfo(userid);
+        System.out.println(userid + "请求个人信息");
+        return new CommonResult<>(200, "请求成功", userPO);
     }
 
     /**
@@ -121,7 +129,7 @@ public class UserController {
     })
     @AdminAccess
     public CommonResult<String> receiveApplicationAudition(@RequestHeader("token") String token,
-                                          @RequestBody VolunteerApplicationUpdateDTO updateDTO) {
+                                                           @RequestBody VolunteerApplicationUpdateDTO updateDTO) {
         int userid = TokenUtil.extractUserid(token);
         System.out.println(userid+"审核了编号为"+updateDTO.getFormID()+"的申请");
         userService.completeApplicationAudition(userid,updateDTO);
@@ -161,6 +169,5 @@ public class UserController {
         userService.deleteAllUsers();
         return new CommonResult<>(200, "删除成功", "All users have been deleted.");
     }
-
 
 }

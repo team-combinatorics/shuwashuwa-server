@@ -57,15 +57,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) {
-        System.out.println("即将更新用户信息");
-        System.out.println("待更新的用户userid为：" + userid);
-        System.out.println(updateUserInfoDto.toString());
         userDao.updateUserInfo(userid, updateUserInfoDto);
     }
 
     @Override
     public UserPO getUserInfo(int userid) {
-        System.out.println("想要获取" + userid + "的信息");
         UserPO userPO = userDao.selectUserByUserid(userid);
         userPO.setOpenid("你无权获取openid");
         return userPO;
