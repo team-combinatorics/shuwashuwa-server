@@ -34,7 +34,6 @@ public class PropertiesConstants {
 
     @Value("${wx.appid:default}")
     public void setWxMiniProgramAppid(String appid) {
-        System.out.println(appid);
         PropertiesConstants.WX_MINI_PROGRAM_APPID = appid;
     }
 
