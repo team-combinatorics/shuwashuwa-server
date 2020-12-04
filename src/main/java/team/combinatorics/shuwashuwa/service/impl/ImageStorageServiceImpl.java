@@ -1,6 +1,7 @@
 package team.combinatorics.shuwashuwa.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
@@ -13,6 +14,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 @RequiredArgsConstructor
+@DependsOn("constants")
 @Service
 public class ImageStorageServiceImpl implements ImageStorageService {
 
