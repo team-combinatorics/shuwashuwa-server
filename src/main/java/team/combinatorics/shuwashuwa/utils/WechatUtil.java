@@ -2,32 +2,24 @@ package team.combinatorics.shuwashuwa.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 
 
 @DependsOn("constants")
-@Service
-public class WechatUtil {
-
-    private final RestTemplate restTemplate;
+final public class WechatUtil {
 
     private static final String APPID = PropertiesConstants.WX_MINI_PROGRAM_APPID;
-
     private static final String SECRET = PropertiesConstants.WX_MINI_PROGRAM_SECRET;
+    private static final RestTemplate restTemplate = new RestTemplate();
 
-    public WechatUtil(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    public JsonNode getWechatInfo(String code) throws Exception {
+    public static JsonNode getWechatInfo(String code) throws Exception {
         //拼接url
         String url = "https://api.weixin.qq.com/sns/jscode2session?"
                 + "appid=" + APPID
@@ -46,4 +38,5 @@ public class WechatUtil {
         }
         return root;
     }
+
 }
