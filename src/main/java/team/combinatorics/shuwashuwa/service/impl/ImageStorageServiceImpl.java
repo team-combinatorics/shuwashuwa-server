@@ -22,7 +22,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
     private static final Map<Integer, List<Path>> unconfirmed = new HashMap<>();
 
-    private static final int SINGLE_USER_CACHE_LIMIT = 9;
+    private static final int SINGLE_USER_CACHE_LIMIT = 6;
 
     @Override
     @SuppressWarnings("")
