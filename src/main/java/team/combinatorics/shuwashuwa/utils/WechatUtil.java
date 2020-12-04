@@ -3,25 +3,26 @@ package team.combinatorics.shuwashuwa.utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 
-@PropertySource("classpath:wx.properties")
-@Component
+
+@DependsOn("constants")
+@Service
 public class WechatUtil {
 
     private final RestTemplate restTemplate;
 
-    @Value("${wx.appid:default}")
-    private String appid;
+    private static final String APPID = PropertiesConstants.WX_MINI_PROGRAM_APPID;
 
     @Value("${wx.secret:default}")
-    private String secret;
+    private static final String SECRET = PropertiesConstants.WX_MINI_PROGRAM_SECRET;
 
     public WechatUtil(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -30,8 +31,8 @@ public class WechatUtil {
     public JsonNode getWechatInfo(String code) throws Exception {
         //拼接url
         String url = "https://api.weixin.qq.com/sns/jscode2session?"
-                + "appid=" + appid
-                + "&secret=" + secret
+                + "appid=" + APPID
+                + "&secret=" + SECRET
                 + "&js_code=" + code
                 + "&grant_type=authorization_code";
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);

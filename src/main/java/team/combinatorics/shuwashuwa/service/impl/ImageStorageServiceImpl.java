@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
+import team.combinatorics.shuwashuwa.utils.PropertiesConstants;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,13 +17,17 @@ import java.util.*;
 @Service
 public class ImageStorageServiceImpl implements ImageStorageService {
 
-    // TODO: 从环境中读取文件目录（需要目录存在
-    private static final Path storageDir = Paths.get("D:\\");
+    // TODO: 请验证这样是否可行
+    // 另外，为什么static final不用全大写的命名？！
+    // 建议改名：STORAGE_DIR
+    private static final Path storageDir = PropertiesConstants.PIC_STORAGE_DIR;
+    // private static final Path storageDir = Paths.get("D:\\");
 
     private static final Map<Integer, List<Path>> unconfirmed = new HashMap<>();
 
     private static final int SINGLE_USER_QUEUE_LIMIT = 9;
 
+    @SuppressWarnings("")
     @Override
     public String store(int userid, MultipartFile file) throws KnownException {
         //生成随机唯一的文件名，但保留后缀
