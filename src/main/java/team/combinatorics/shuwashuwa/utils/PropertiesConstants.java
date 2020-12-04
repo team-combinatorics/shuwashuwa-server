@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
-@Component
+@Component(value = "constants")
 @PropertySource(value = {"classpath:wx.properties", "classpath:shuwashuwa.properties"})
 public class PropertiesConstants {
     /**
@@ -34,21 +34,22 @@ public class PropertiesConstants {
 
     @Value("${wx.appid:default}")
     public void setWxMiniProgramAppid(String appid) {
-        WX_MINI_PROGRAM_APPID = appid;
+        System.out.println(appid);
+        PropertiesConstants.WX_MINI_PROGRAM_APPID = appid;
     }
 
     @Value("${wx.secret:default}")
     public void setWxMiniProgramSecret(String secret) {
-        WX_MINI_PROGRAM_SECRET = secret;
+        PropertiesConstants.WX_MINI_PROGRAM_SECRET = secret;
     }
 
     @Value("${token.secret:default}")
     public void setTokenSecret(String secret) {
-        TOKEN_SECRET = secret;
+        PropertiesConstants.TOKEN_SECRET = secret;
     }
 
     @Value("${dir.pictures:default}")
     public void setPicStorageDir(String dir) {
-        PIC_STORAGE_DIR = Paths.get(dir);
+        PropertiesConstants.PIC_STORAGE_DIR = Paths.get(dir);
     }
 }
