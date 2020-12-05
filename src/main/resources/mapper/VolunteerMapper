@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.combinatorics.shuwashuwa.dao.VolunteerDao">
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.VolunteerPO" id="volunteerResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="department" jdbcType="VARCHAR" property="department"/>
+        <result column="student_id" jdbcType="VARCHAR" property="studentId"/>
+        <result column="order_count" jdbcType="INTEGER" property="orderCount"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerPO"
+            useGeneratedKeys="true" keyColumn="id" keyProperty="volunteer.id">
+        insert into volunteer(userid, user_name, phone_number, email, identity, department, student_id)
+        values (#{volunteer.userId}, #{volunteer.userName}, #{volunteer.phoneNumber}, #{volunteer.email},
+                #{volunteer.identity},
+                #{volunteer.department}, #{volunteer.student_id})
+    </insert>
+
+    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerPO">
+        update volunteer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="volunteer.userName != null">
+                user_name = #{volunteer.userName},
+            </if>
+            <if test="volunteer.phoneNumber != null">
+                phone_number = #{volunteer.phoneNumber},
+            </if>
+            <if test="volunteer.email != null">
+                email = #{volunteer.email},
+            </if>
+            <if test="volunteer.identity != null">
+                identity = #{volunteer.identity},
+            </if>
+            <if test="volunteer.department != null">
+                department = #{volunteer.department},
+            </if>
+            <if test="volunteer.studentId != null">
+                student_id = #{volunteer.studentId},
+            </if>
+        </trim>
+        where id = #{volunteer.id}
+    </update>
+
+    <update id="updateOrderCount">
+        update volunteer
+        set order_count=#{count}
+        where id = #{id}
+    </update>
+
+    <select id="listVolunteers" resultMap="volunteerResultMap">
+        select *
+        from volunteer
+    </select>
+
+    <select id="getByID" resultMap="volunteerResultMap">
+        select *
+        from volunteer
+        where id = #{id}
+    </select>
+
+    <select id="getVolunteerIDByUserID" resultType="int">
+        select id
+        from volunteer
+        where userid = #{userID}
+    </select>
+
+    <select id="getOrderCount" resultType="int">
+        select order_count
+        from volunteer
+        where id = #{id}
+    </select>
+
+    <delete id="deleteByID">
+        delete
+        from volunteer
+        where id = #{id}
+    </delete>
+</mapper>
