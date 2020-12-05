@@ -11,13 +11,13 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteCachePicCO {
+public class CachePicCO {
     /**
-     * 删除时间段（左边界）
+     * 筛选时间段（左边界）
      */
     private Timestamp beginTime;
     /**
-     * 删除时间段（右边界）
+     * 筛选时间段（右边界）
      */
     private Timestamp endTime;
     /**

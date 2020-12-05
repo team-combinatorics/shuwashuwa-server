@@ -41,7 +41,7 @@
         where id = #{cacheID}
     </delete>
 
-    <delete id="deleteByCondition" parameterType="team.combinatorics.shuwashuwa.dao.co.DeleteCachePicCO">
+    <delete id="deleteByCondition" parameterType="team.combinatorics.shuwashuwa.dao.co.CachePicCO">
         delete from cache_pic
         <where>
             <if test="condition.userID == null and condition.endTime == null and condition.beginTime == null">

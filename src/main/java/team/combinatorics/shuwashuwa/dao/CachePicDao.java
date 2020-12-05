@@ -2,7 +2,7 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import team.combinatorics.shuwashuwa.dao.co.DeleteCachePicCO;
+import team.combinatorics.shuwashuwa.dao.co.CachePicCO;
 import team.combinatorics.shuwashuwa.model.po.CachePicPO;
 
 import java.util.List;
@@ -34,11 +34,12 @@ public interface CachePicDao {
     CachePicPO selectByID(@Param("id") int id);
 
     /**
-     * 根据userid获取图片
-     * @param userID 用户id
+     * todo: 改了
+     * 根据条件获取图片
+     * @param selectCachePicCondition 条件
      * @return 图片列表
      */
-    List<CachePicPO> selectByUserID(@Param("userID") int userID);
+    List<CachePicPO> selectByCondition(@Param("condition") CachePicCO selectCachePicCondition);
 
     /**
      * 字面意思
@@ -54,6 +55,6 @@ public interface CachePicDao {
      * @param deleteCachePicCondition 条件
      * @return 删除的数量
      */
-    int deleteByCondition(@Param("condition") DeleteCachePicCO deleteCachePicCondition);
+    int deleteByCondition(@Param("condition") CachePicCO deleteCachePicCondition);
 
 }

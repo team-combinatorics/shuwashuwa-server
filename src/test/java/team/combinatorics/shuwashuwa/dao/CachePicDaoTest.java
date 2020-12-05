@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
-import team.combinatorics.shuwashuwa.dao.co.DeleteCachePicCO;
+import team.combinatorics.shuwashuwa.dao.co.CachePicCO;
 import team.combinatorics.shuwashuwa.model.po.CachePicPO;
 
 import static org.junit.Assert.assertEquals;
@@ -51,9 +51,9 @@ public class CachePicDaoTest {
 
         assertEquals(1, cachePicDao.deleteByID(1));
         assertEquals(4, cachePicDao.selectByUserID(1).size());
-        assertEquals(5, cachePicDao.deleteByCondition(DeleteCachePicCO.builder().userId(2).build()));
+        assertEquals(5, cachePicDao.deleteByCondition(CachePicCO.builder().userId(2).build()));
         assertEquals(0, cachePicDao.deleteByID(1));
-        assertEquals(4, cachePicDao.deleteByCondition(DeleteCachePicCO.builder().userId(1).build()));
+        assertEquals(4, cachePicDao.deleteByCondition(CachePicCO.builder().userId(1).build()));
 
 
     }
