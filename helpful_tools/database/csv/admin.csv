@@ -1,0 +1,11 @@
+字段名,字段类型,字段补充信息,说明,是否为普通索引,是否为唯一索引,是否为主键索引,是否为全文索引
+id,int unsigned,AUTO_INCREMENT NOT NULL,自增长,,,1,
+create_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP,创建时间,,,,
+updated_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,更新时间,,,,
+userid,varchar(30),NOT NULL,user_id,,1,,
+user_name,varchar(30),DEFAULT NULL,真实姓名,1,,,
+phone_number,varchar(30),DEFAULT NULL,用户手机号,1,,,
+email,varchar(100),DEFAULT NULL,用户邮箱,,,,
+identity,varchar(40),DEFAULT NULL,类别：学生、教职工、校外人员,,,,
+department,varchar(40),DEFAULT NULL,院系或工作部门,,,,
+student_id,varchar(15),DEFAULT NULL,学号,,,,
