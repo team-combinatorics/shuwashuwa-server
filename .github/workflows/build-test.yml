@@ -28,6 +28,7 @@ env:
   WX_APPID: ${{ secrets.APPID }}
   WX_SECRET: ${{ secrets.APPSECRET }}
   PIC_PATH: ./pic
+  TOKEN_SECRET: HappyLuckSmileYeah~
   TZ: Asia/Shanghai
 
 jobs:
