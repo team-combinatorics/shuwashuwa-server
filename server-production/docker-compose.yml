@@ -26,7 +26,7 @@ services:
     shuwashuwa:
         build: 
             context: ../
-            dockerfile: ./docker-run/shuwashuwa-server.dockerfile
+            dockerfile: ./server-production/shuwashuwa-server.dockerfile
         ports: 
             - "8848:8848"
         volumes:
@@ -36,8 +36,10 @@ services:
             - MYSQL_USER
             - MYSQL_PASSWORD
             - MYSQL_ADDRESS
-        command: 
-            ["./wait-for-it.sh", "-t", "30", "${MYSQL_ADDRESS}", "--", "java", "-jar","/app/target.jar"]
+            - TOKEN_SECRET
+            - PIC_PATH=/pic
+            - WX_APPID
+            - WX_SECRET
         restart: on-failure
         depends_on: 
             - mysql
