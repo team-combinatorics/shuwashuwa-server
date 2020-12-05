@@ -3,7 +3,8 @@ id,int unsigned,AUTO_INCREMENT NOT NULL,自增长id,,,1,
 create_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP,创建时间,,,,
 updated_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,更新时间,,,,
 user_id,int unsigned,NOT NULL,申请用户的id,1,,,
-reason_for_application,varchar(100),DEFAULT NULL,申请理由,,,,
-reply_by_admin,varchar(100),DEFAULT NULL,管理员回复,,"","",""
-admin_id,int unsigned,DEFAULT NULL,回复的管理员的id,1,"","",""
+reason_for_application,varchar(100),NOT NULL,申请理由,,,,
+reply_by_admin,varchar(100),DEFAULT NULL,管理员回复,,,,
+admin_id,int unsigned,DEFAULT NULL,回复的管理员的id,1,,,
 status,tinyint,DEFAULT 0,申请状态,1,,,
+card_pic_location,varchar(30),NOT NULL,申请者的身份证明的图片location,,"","",""
