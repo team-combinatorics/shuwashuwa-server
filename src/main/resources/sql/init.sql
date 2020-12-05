@@ -5,13 +5,13 @@ USE `shuwashuwa`;
 DROP TABLE IF EXISTS `activity_info`;
 CREATE TABLE `activity_info`
 (
-    `id`            INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长，活动id',
-    `create_time`   DATETIME                    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time`  DATETIME                    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `starting_time` DATETIME                    NOT NULL COMMENT '预计开始时间',
-    `end_time`      DATETIME                    NOT NULL COMMENT '预计开始时间',
-    `location`      VARCHAR(100)                NOT NULL COMMENT '预约的教室位置',
-    `status`        TINYINT                     NOT NULL DEFAULT 0 COMMENT '活动状态',
+    `id`           INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长，活动id',
+    `create_time`  DATETIME                    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_time` DATETIME                    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `start_time`   DATETIME                    NOT NULL COMMENT '预计开始时间',
+    `end_time`     DATETIME                    NOT NULL COMMENT '预计开始时间',
+    `location`     VARCHAR(100)                NOT NULL COMMENT '预约的教室位置',
+    `status`       TINYINT                     NOT NULL DEFAULT 0 COMMENT '活动状态',
     INDEX idx_status (status),
     PRIMARY KEY pk_id (`id`)
 ) ENGINE = InnoDB
