@@ -18,6 +18,7 @@ public class ActivityInfoPO {
     private Timestamp updatedTime;
     private Timestamp startTime;
     private Timestamp endTime;
+    private String activityName;
     private String location;
     private Integer status;
 }
