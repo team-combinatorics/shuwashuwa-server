@@ -19,9 +19,34 @@ on:
       - main
       - 12f23eddde
 
+env:
+  MYSQL_ADDRESS: 127.0.0.1:3306
+  MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+  MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+  MYSQL_USER: ${{ secrets.MYSQL_USER }}
+  MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+  WX_APPID: ${{ secrets.APPID }}
+  WX_SECRET: ${{ secrets.APPSECRET }}
+  PIC_PATH: ./pic
+  TZ: Asia/Shanghai
+
 jobs:
   build-test:
     runs-on: ubuntu-20.04
+    
+    services:
+      # DO NOT mount your repo, it's not ready
+      mysql:
+        image: mysql:8.0.22
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        ports:
+          - 3306:3306
+        options:
+          --name mysql
 
     steps:
     - uses: actions/checkout@v2
@@ -30,10 +55,13 @@ jobs:
       with:
         java-version: 11
 
-    # Docker based solution is slow...
-    - name: Setting up MySQL in runner
+    # Can't mount volumes to a running container
+    # Docker executes entrypoint.sh on restart
+    # Credit: https://github.community/t/services-and-volumes/16313/2
+    - name: Restart MySQL container
       run: |
-        sudo systemctl start mysql
+        docker cp ${{ github.workspace }}/src/main/resources/sql mysql:/docker-entrypoint-initdb.d
+        docker restart mysql
 
     - name: Cache the Maven packages to speed up build
       uses: actions/cache@v1
@@ -43,9 +71,6 @@ jobs:
         restore-keys: ${{ runner.os }}-m2  
     
     - name: Build and test project with Maven
-      env:
-        MYSQL_ADDRESS: 127.0.0.1:3306
-        MYSQL_DATABASE: shuwashuwa
-        MYSQL_USER: root
-        MYSQL_PASSWORD: root
-      run: mvn -B package --file pom.xml
+      run: |
+        mkdir $PIC_PATH
+        mvn -B package --file pom.xml
