@@ -41,11 +41,11 @@ public class UserServiceImpl implements UserService {
         System.out.println("用户登录 @Service");
         System.out.println("openid: " + openid);
         LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
-        UserPO userPO = userDao.selectUserByOpenid(openid);
+        UserPO userPO = userDao.getUserByOpenid(openid);
         if (userPO == null) {
             logInSuccessDto.setFirstLogin(true);
             userDao.insertUserByOpenid(openid);
-            userPO = userDao.selectUserByOpenid(openid);
+            userPO = userDao.getUserByOpenid(openid);
         } else
             logInSuccessDto.setFirstLogin(false);
         String token = TokenUtil.createToken(userPO.getId());
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserPO getUserInfo(int userid) {
-        UserPO userPO = userDao.selectUserByUserid(userid);
+        UserPO userPO = userDao.getUserByUserid(userid);
         userPO.setOpenid("你无权获取openid");
         return userPO;
     }
@@ -79,14 +79,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<VolunteerApplicationPO> getUnauditedVolunteerApplicationList() {
-        return applicationDao.selectByCondition(SelectApplicationCO.builder().status(0).build());
+        return applicationDao.listApplicationsByCondition(SelectApplicationCO.builder().status(0).build());
     }
 
     @Override
     public void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO) {
         applicationDao.updateApplicationByAdmin(userid, updateDTO);
         if (updateDTO.getStatus() == 1)
-            userDao.updateUserVolunteerAuthority(applicationDao.selectByFormId(updateDTO.getFormID()).getUserId(), true);
+            userDao.updateUserVolunteerAuthority(applicationDao.getApplicationByFormId(updateDTO.getFormID()).getUserId(), true);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
             String openid = root.path("openid").asText();
             String sessionKey = root.path("session_key").asText();
             userDao.insertUserByOpenid(openid);
-            return userDao.selectUserByOpenid(openid).toString();
+            return userDao.getUserByOpenid(openid).toString();
         }
     }
 

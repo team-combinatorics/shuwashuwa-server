@@ -38,7 +38,7 @@ public class ServiceFormTest {
                 .problemType("硬件问题")
                 .serviceEventId(1)
                 .build();
-        serviceFormDao.insertServiceForm(serviceFormPO);
+        serviceFormDao.insert(serviceFormPO);
         System.out.println(serviceFormPO.getId());
 
         serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
@@ -49,10 +49,10 @@ public class ServiceFormTest {
 
         for (int i = 1; i <= 4; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(1).build();
-            servicePicDao.insertServicePic(servicePicPO);
+            servicePicDao.insert(servicePicPO);
         }
         try {
-            String json = new ObjectMapper().writeValueAsString(serviceFormDao.selectServiceFormByFormID(1));
+            String json = new ObjectMapper().writeValueAsString(serviceFormDao.getServiceFormByFormID(1));
             System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,7 +71,7 @@ public class ServiceFormTest {
                 .problemType("硬件问题")
                 .serviceEventId(1)
                 .build();
-        serviceFormDao.insertServiceForm(serviceFormPO);
+        serviceFormDao.insert(serviceFormPO);
         System.out.println(serviceFormPO.getId());
 
         serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
@@ -81,10 +81,10 @@ public class ServiceFormTest {
                 .build());
         for (int i = 1; i <= 2; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(2).build();
-            servicePicDao.insertServicePic(servicePicPO);
+            servicePicDao.insert(servicePicPO);
         }
         try {
-            String json = new ObjectMapper().writeValueAsString(serviceFormDao.selectServiceFormByServiceEventID(1));
+            String json = new ObjectMapper().writeValueAsString(serviceFormDao.listServiceFormsByServiceEventID(1));
             System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();

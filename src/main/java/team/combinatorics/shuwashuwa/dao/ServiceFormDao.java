@@ -16,7 +16,7 @@ public interface ServiceFormDao {
      *
      * @param serviceFormPO 构造的申请表信息
      */
-    void insertServiceForm(@Param("form") ServiceFormPO serviceFormPO);
+    void insert(@Param("form") ServiceFormPO serviceFormPO);
 
     /**
      * 管理员更新维修单信息
@@ -31,13 +31,13 @@ public interface ServiceFormDao {
      * @param id form id
      * @return 一个ServiceForm结构
      */
-    ServiceForm selectServiceFormByFormID(@Param("id") int id);
+    ServiceForm getServiceFormByFormID(@Param("id") int id);
 
     /**
      * 根据event id寻找form
      * @param eventID event id
      * @return 一个ServiceForm结构
      */
-    List<ServiceForm> selectServiceFormByServiceEventID(@Param("eventID") int eventID);
+    List<ServiceForm> listServiceFormsByServiceEventID(@Param("eventID") int eventID);
 
 }

@@ -13,17 +13,17 @@
         <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
         <collection property="serviceForms"
-                    select="team.combinatorics.shuwashuwa.dao.ServiceFormDao.selectServiceFormByServiceEventID"
+                    select="team.combinatorics.shuwashuwa.dao.ServiceFormDao.listServiceFormsByServiceEventID"
                     ofType="team.combinatorics.shuwashuwa.model.pojo.ServiceForm"
                     javaType="java.util.ArrayList"
                     column="id">
         </collection>
     </resultMap>
 
-    <insert id="insertServiceEvent" useGeneratedKeys="true" keyColumn="id" keyProperty="serviceEvent.id"
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="serviceEvent.id"
             parameterType="team.combinatorics.shuwashuwa.model.po.ServiceEventPO">
         insert into service_event(user_id, activity_id, time_slot)
-        values (#{userID}, #{serviceEvent.activityId}, #{serviceEvent.timeSlot})
+        values (#{serviceEvent.userId}, #{serviceEvent.activityId}, #{serviceEvent.timeSlot})
     </insert>
 
     <update id="updateByVolunteer"
@@ -48,7 +48,7 @@
         where id = #{id}
     </update>
 
-    <select id="selectByServiceEventID" resultMap="serviceEventResultMap">
+    <select id="getServiceEventByID" resultMap="serviceEventResultMap">
         select id,
                user_id,
                volunteer_id,
@@ -61,7 +61,7 @@
         where id = #{id}
     </select>
 
-    <select id="selectByCondition" resultMap="serviceEventResultMap">
+    <select id="listServiceEventsByCondition" resultMap="serviceEventResultMap">
         select id,
         user_id,
         volunteer_id,

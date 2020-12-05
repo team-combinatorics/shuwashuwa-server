@@ -21,14 +21,14 @@ public interface UserDao {
      * @param openid 微信提供的openid
      * @return 一个UserDO类
      */
-    UserPO selectUserByOpenid(@Param("openid") String openid);
+    UserPO getUserByOpenid(@Param("openid") String openid);
 
     /**
      * 通过userid选择用户
      * @param id userid
      * @return UserDO对象
      */
-    UserPO selectUserByUserid(@Param("id") int id);
+    UserPO getUserByUserid(@Param("id") int id);
 
     /**
      * 更新用户基本信息，updateUserInfoDTO中不为null的属性会被更新，但是要保证updateUserInfoDTO不能全空，否则会出错

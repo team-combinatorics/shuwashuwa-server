@@ -20,15 +20,15 @@ public class ServicePicTest {
         for (int i = 1; i <= 4; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(i).build();
             System.out.println(servicePicPO.getId());
-            servicePicDao.insertServicePic(servicePicPO);
+            servicePicDao.insert(servicePicPO);
             System.out.println(servicePicPO.getId());
         }
-        System.out.println(servicePicDao.selectByPicId(2));
+        System.out.println(servicePicDao.getServicePicById(2));
         for (int i = 1; i <= 4; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(5).build();
-            servicePicDao.insertServicePic(servicePicPO);
+            servicePicDao.insert(servicePicPO);
         }
-        System.out.println(servicePicDao.selectByServiceFormId(5));
+        System.out.println(servicePicDao.listServicePicsByFormId(5));
         System.out.println(servicePicDao.deleteByPicId(1));
         System.out.println(servicePicDao.deleteByPicId(1));
         System.out.println(servicePicDao.deleteByServiceFormId(5));

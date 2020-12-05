@@ -33,8 +33,9 @@ public class ServiceEventDaoTest {
     public void simpleTest() {
         ServiceEventPO serviceEventPO = ServiceEventPO.builder()
                 .activityId(1)
+                .userId(1)
                 .timeSlot(1).build();
-        serviceEventDao.insertServiceEvent(1, serviceEventPO);
+        serviceEventDao.insert(serviceEventPO);
         System.out.println(serviceEventPO.getId());
         serviceEventDao.updateByVolunteer(1,
                 ServiceEventUpdateByVolunteerDTO.builder()
@@ -52,8 +53,9 @@ public class ServiceEventDaoTest {
         // 建立一个维修事件
         ServiceEventPO serviceEventPO = ServiceEventPO.builder()
                 .activityId(1)
+                .userId(1)
                 .timeSlot(1).build();
-        serviceEventDao.insertServiceEvent(1, serviceEventPO);
+        serviceEventDao.insert(serviceEventPO);
         System.out.println(serviceEventPO.getId());
         serviceEventDao.updateByVolunteer(1,
                 ServiceEventUpdateByVolunteerDTO.builder()
@@ -77,7 +79,7 @@ public class ServiceEventDaoTest {
                 .problemType("硬件问题")
                 .serviceEventId(1)
                 .build();
-        serviceFormDao.insertServiceForm(serviceFormPO);
+        serviceFormDao.insert(serviceFormPO);
         System.out.println(serviceFormPO.getId());
 
         // 给维修单1回复
@@ -90,7 +92,7 @@ public class ServiceEventDaoTest {
         // 给维修单1分配图片
         for (int i = 1; i <= 4; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(1).build();
-            servicePicDao.insertServicePic(servicePicPO);
+            servicePicDao.insert(servicePicPO);
         }
         // 建立一个维修单2
         serviceFormPO = ServiceFormPO.builder()
@@ -106,7 +108,7 @@ public class ServiceEventDaoTest {
                 .problemType("管理员有问题")
                 .serviceEventId(1)
                 .build();
-        serviceFormDao.insertServiceForm(serviceFormPO);
+        serviceFormDao.insert(serviceFormPO);
         System.out.println(serviceFormPO.getId());
 
         // 给维修单2回复
@@ -118,7 +120,7 @@ public class ServiceEventDaoTest {
         // 给维修单2分配图片
         for (int i = 1; i <= 2; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(2).build();
-            servicePicDao.insertServicePic(servicePicPO);
+            servicePicDao.insert(servicePicPO);
         }
 
         // 建立一个维修单3
@@ -135,7 +137,7 @@ public class ServiceEventDaoTest {
                 .problemType("misaki有问题")
                 .serviceEventId(1)
                 .build();
-        serviceFormDao.insertServiceForm(serviceFormPO);
+        serviceFormDao.insert(serviceFormPO);
         System.out.println(serviceFormPO.getId());
 
         // 给维修单2回复
@@ -147,18 +149,18 @@ public class ServiceEventDaoTest {
         // 给维修单3分配图片
         for (int i = 1; i <= 3; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(3).build();
-            servicePicDao.insertServicePic(servicePicPO);
+            servicePicDao.insert(servicePicPO);
         }
 
         try {
-            String json = new ObjectMapper().writeValueAsString(serviceEventDao.selectByServiceEventID(1));
+            String json = new ObjectMapper().writeValueAsString(serviceEventDao.getServiceEventByID(1));
             System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            String json = new ObjectMapper().writeValueAsString(serviceEventDao.selectByCondition(
+            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listServiceEventsByCondition(
                     SelectServiceEventCO.builder()
                             .activityId(2)
                             .build()
@@ -169,7 +171,7 @@ public class ServiceEventDaoTest {
         }
 
         try {
-            String json = new ObjectMapper().writeValueAsString(serviceEventDao.selectByCondition(
+            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listServiceEventsByCondition(
                     SelectServiceEventCO.builder()
                             .volunteerId(1)
                             .build()

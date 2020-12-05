@@ -17,7 +17,7 @@ public interface ServiceEventDao {
      *
      * @param serviceEventPO 一个ServiceEventPO对象
      */
-    void insertServiceEvent(@Param("userID") int userid, @Param("serviceEvent") ServiceEventPO serviceEventPO);
+    void insert(@Param("serviceEvent") ServiceEventPO serviceEventPO);
 
     /**
      * 志愿者更新维修结果和状态，这两个必须都不为空
@@ -49,14 +49,14 @@ public interface ServiceEventDao {
      * @param id 维修请求id
      * @return 一个完整的维修单结构
      */
-    ServiceEventResponseDTO selectByServiceEventID(@Param("id") int id);
+    ServiceEventResponseDTO getServiceEventByID(@Param("id") int id);
 
     /**
      * 条件检索
      * @param selectServiceEventCO 根据条件来检索维修单，条件说名见类说明
      * @return 一个维修单列表
      */
-    List<ServiceEventResponseDTO> selectByCondition(@Param("condition") SelectServiceEventCO selectServiceEventCO);
+    List<ServiceEventResponseDTO> listServiceEventsByCondition(@Param("condition") SelectServiceEventCO selectServiceEventCO);
     // TODO 这里应该写几个简单的查询语句，例如通过维修单id查找对应的用户，通过维修单id查找当前状态等
 
 }

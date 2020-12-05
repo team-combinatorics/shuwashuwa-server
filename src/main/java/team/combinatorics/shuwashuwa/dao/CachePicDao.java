@@ -15,7 +15,7 @@ public interface CachePicDao {
      *
      * @param cachePicPO 一个cachePicPO结构
      */
-    void insertCachePic(@Param("cachePic") CachePicPO cachePicPO);
+    void insert(@Param("cachePic") CachePicPO cachePicPO);
 
     /**
      * 根据cache图片id获取用户id
@@ -23,7 +23,7 @@ public interface CachePicDao {
      * @param cacheID 图片id
      * @return 用户id，当该图片不存在时会返回null
      */
-    Integer selectUserIDByCacheID(@Param("cacheID") int cacheID);
+    Integer getUserIDByCacheID(@Param("cacheID") int cacheID);
 
     /**
      * 根据id获取图片
@@ -31,7 +31,7 @@ public interface CachePicDao {
      * @param id 图片id
      * @return 图片
      */
-    CachePicPO selectByID(@Param("id") int id);
+    CachePicPO getCachePicByID(@Param("id") int id);
 
     /**
      * 根据location获取图片
@@ -39,20 +39,20 @@ public interface CachePicDao {
      * @param location 图片location
      * @return 图片
      */
-    CachePicPO selectByLocation(@Param("location") String location);
+    CachePicPO getCachePicByLocation(@Param("location") String location);
 
     /**
      * 返回当前cache pic中的记录数量
      * @return 记录数
      */
-    int selectCachePicNum();
+    int countCachePic();
 
     /**
      * 根据条件获取图片，条件包括：开始时间，结束时间，用户id
      * @param selectCachePicCondition 条件
      * @return 图片列表
      */
-    List<CachePicPO> selectByCondition(@Param("condition") CachePicCO selectCachePicCondition);
+    List<CachePicPO> listCachePicsByCondition(@Param("condition") CachePicCO selectCachePicCondition);
 
     /**
      * 字面意思

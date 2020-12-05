@@ -17,21 +17,21 @@ public interface ServicePicDao {
      * @param servicePicPO 设置了location和service form id的对象
      *
      */
-    void insertServicePic(@Param("pic")ServicePicPO servicePicPO);
+    void insert(@Param("pic")ServicePicPO servicePicPO);
 
     /**
      * 通过图片id获取一张图片的位置
      * @param id 图片id
      * @return 一个ServicePic结构，该结构中不包括图片关联的service form id
      */
-    ServicePic selectByPicId(@Param("id") int id);
+    ServicePic getServicePicById(@Param("id") int id);
 
     /**
      *
      * @param serviceFormId 维修单的id
      * @return 维修单关联的图片列表
      */
-    List<ServicePic> selectByServiceFormId(@Param("formID")int serviceFormId);
+    List<ServicePic> listServicePicsByFormId(@Param("formID")int serviceFormId);
 
     /**
      * 根据图片id删除

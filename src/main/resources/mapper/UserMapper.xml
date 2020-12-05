@@ -43,13 +43,13 @@
     </delete>
 
 
-    <select id="selectUserByUserid" resultMap="userResultMap">
+    <select id="getUserByUserid" resultMap="userResultMap">
         select *
         from user
         where id = #{id}
     </select>
 
-    <select id="selectUserByOpenid" resultMap="userResultMap">
+    <select id="getUserByOpenid" resultMap="userResultMap">
         select *
         from user
         where openid = #{openid}

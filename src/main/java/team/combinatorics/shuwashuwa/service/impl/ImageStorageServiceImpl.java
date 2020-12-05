@@ -56,7 +56,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         }
 
         //检查缓存图片队列
-        List<CachePicPO> userCacheList = cachePicDao.selectByCondition(CachePicCO.builder().userId(userid).build());
+        List<CachePicPO> userCacheList = cachePicDao.listCachePicsByCondition(CachePicCO.builder().userId(userid).build());
         while(userCacheList.size() >= SINGLE_USER_CACHE_LIMIT) {
             CachePicPO victim = userCacheList.remove(0);
             cachePicDao.deleteByID(victim.getId());
@@ -68,7 +68,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
                 .userId(userid)
                 .picLocation(fileName)
                 .build();
-        cachePicDao.insertCachePic(cachePicPO);
+        cachePicDao.insert(cachePicPO);
 
         return fileName;
     }
@@ -76,7 +76,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     @Override
     public void removeFromCache(int userid, String path) {
         //检查权限
-        CachePicPO cachePicPO = cachePicDao.selectByLocation(path);
+        CachePicPO cachePicPO = cachePicDao.getCachePicByLocation(path);
         if(cachePicPO == null)
             throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
         if(cachePicPO.getUserId() != userid)
@@ -92,7 +92,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     @Override
     public void bindWithService(int userid, String path, int formId) {
         //若在缓存表中，移除表项
-        CachePicPO cachePicPO = cachePicDao.selectByLocation(path);
+        CachePicPO cachePicPO = cachePicDao.getCachePicByLocation(path);
         if(cachePicPO != null) {
             if (cachePicPO.getUserId() != userid)
                 throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
@@ -103,13 +103,13 @@ public class ImageStorageServiceImpl implements ImageStorageService {
                 .serviceFormId(formId)
                 .picLocation(path)
                 .build();
-        servicePicDao.insertServicePic(servicePicPO);
+        servicePicDao.insert(servicePicPO);
     }
 
     @Override
     public void clearCache(int userid) {
         //获取列表
-        List<CachePicPO> userCacheList = cachePicDao.selectByCondition(CachePicCO.builder().userId(userid).build());
+        List<CachePicPO> userCacheList = cachePicDao.listCachePicsByCondition(CachePicCO.builder().userId(userid).build());
 
         //逐个删除
         for (CachePicPO picPO:userCacheList) {
@@ -125,7 +125,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     public void clearCacheByTime(int days) {
         //获取列表
         Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now().minusDays(days));
-        List<CachePicPO> userCacheList = cachePicDao.selectByCondition(CachePicCO.builder().endTime(timestamp).build());
+        List<CachePicPO> userCacheList = cachePicDao.listCachePicsByCondition(CachePicCO.builder().endTime(timestamp).build());
 
         //逐个删除
         for (CachePicPO picPO:userCacheList) {
@@ -139,7 +139,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
     @Override
     public int countCacheImages() {
-        return cachePicDao.selectCachePicNum();
+        return cachePicDao.countCachePic();
     }
 
 }

@@ -15,19 +15,19 @@
         <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
     </resultMap>
 
-    <insert id="insertServicePic" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
             parameterType="team.combinatorics.shuwashuwa.model.po.ServicePicPO">
         insert into service_pic(pic_location, service_form_id)
         values (#{pic.picLocation}, #{pic.serviceFormId})
     </insert>
 
-    <select id="selectByPicId" resultMap="simplePicResultMap">
+    <select id="getServicePicById" resultMap="simplePicResultMap">
         select id, pic_location
         from service_pic
         where id = #{id}
     </select>
 
-    <select id="selectByServiceFormId" resultMap="simplePicResultMap">
+    <select id="listServicePicsByFormId" resultMap="simplePicResultMap">
         select id, pic_location
         from service_pic
         where service_form_id = #{formID}

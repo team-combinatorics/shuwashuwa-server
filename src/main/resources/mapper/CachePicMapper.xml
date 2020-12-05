@@ -11,29 +11,29 @@
         <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
     </resultMap>
 
-    <insert id="insertCachePic" useGeneratedKeys="true" keyProperty="cachePic.id" keyColumn="id"
+    <insert id="insert" useGeneratedKeys="true" keyProperty="cachePic.id" keyColumn="id"
             parameterType="team.combinatorics.shuwashuwa.model.po.CachePicPO">
         insert into cache_pic (user_id, pic_location)
         VALUES (#{cachePic.userId}, #{cachePic.picLocation})
     </insert>
 
-    <select id="selectByID" resultMap="cachePicResultMap">
+    <select id="getCachePicByID" resultMap="cachePicResultMap">
         select *
         from cache_pic
         where id = #{id}
     </select>
 
-    <select id="selectByLocation" resultMap="cachePicResultMap">
+    <select id="getCachePicByLocation" resultMap="cachePicResultMap">
         select *
         from cache_pic
         where pic_location = #{location}
     </select>
 
-    <select id="selectCachePicNum" resultType="int">
+    <select id="countCachePic" resultType="int">
         select count(*) from cache_pic
     </select>
 
-    <select id="selectByCondition" resultMap="cachePicResultMap">
+    <select id="listCachePicsByCondition" resultMap="cachePicResultMap">
         select *
         from cache_pic
         <where>
@@ -49,7 +49,7 @@
         </where>
     </select>
 
-    <select id="selectUserIDByCacheID" resultType="Integer">
+    <select id="getUserIDByCacheID" resultType="Integer">
         select user_id
         from cache_pic
         where id = #{cacheID}

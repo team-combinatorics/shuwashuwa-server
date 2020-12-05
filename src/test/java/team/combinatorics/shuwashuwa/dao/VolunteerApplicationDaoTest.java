@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
@@ -43,10 +42,10 @@ public class VolunteerApplicationDaoTest {
                 .cardPicLocation("Location1")
                 .reasonForApplication("就算是死我也要当志愿者")
                 .build());
-        System.out.println(volunteerApplicationDao.selectByFormId(1));
-        System.out.println(volunteerApplicationDao.selectByUserId(233));
+        System.out.println(volunteerApplicationDao.getApplicationByFormId(1));
+        System.out.println(volunteerApplicationDao.listApplicationsByUserId(233));
         // 测试select多个申请单
-        System.out.println(volunteerApplicationDao.selectByUserId(1));
+        System.out.println(volunteerApplicationDao.listApplicationsByUserId(1));
         // 测试管理员回复
         volunteerApplicationDao.updateApplicationByAdmin(1,
                 VolunteerApplicationUpdateDTO.builder()
@@ -60,21 +59,21 @@ public class VolunteerApplicationDaoTest {
                         .replyByAdmin("不给过，爬")
                         .status(1)
                         .build());
-        System.out.println(volunteerApplicationDao.selectByFormId(1));
+        System.out.println(volunteerApplicationDao.getApplicationByFormId(1));
         // 测试条件查询
-        System.out.println(volunteerApplicationDao.selectByCondition(
+        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
                 SelectApplicationCO.builder()
                         .userID(1)
                         .build()
         ));
-        System.out.println(volunteerApplicationDao.selectByCondition(
+        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
                 SelectApplicationCO.builder()
                         .userID(1)
                         .adminID(1)
                         .build()
         ));
         System.out.println(new Timestamp(new Date().getTime()));
-        System.out.println(volunteerApplicationDao.selectByCondition(
+        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
                 SelectApplicationCO.builder()
                         .endTime(new Timestamp(new Date().getTime()))
                         .build()

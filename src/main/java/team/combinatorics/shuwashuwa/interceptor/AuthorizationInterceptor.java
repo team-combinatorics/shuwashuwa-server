@@ -50,7 +50,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         Integer userid = TokenUtil.verifyToken(token).get("userid").asInt();
 
         //检查权限
-        UserPO currentUserPO = userDao.selectUserByUserid(userid);
+        UserPO currentUserPO = userDao.getUserByUserid(userid);
 
         if (currentUserPO == null)
             throw new KnownException(ErrorInfoEnum.USER_NOT_EXISTING);
