@@ -22,22 +22,22 @@ public class VolunteerApplicationDaoTest {
     @Test
     // 这个测试方法中随便编openid就行，并不向tx服务器验证
     public void insertTest() {
-        volunteerApplicationDao.insertApplication(VolunteerApplicationPO.builder()
+        volunteerApplicationDao.insert(VolunteerApplicationPO.builder()
                 .userId(1)
                 .cardPicLocation("Location1")
                 .reasonForApplication("我就要当志愿者")
                 .build());
-        volunteerApplicationDao.insertApplication(VolunteerApplicationPO.builder()
+        volunteerApplicationDao.insert(VolunteerApplicationPO.builder()
                 .userId(1)
                 .cardPicLocation("Location1")
                 .reasonForApplication("我还要当志愿者")
                 .build());
-        volunteerApplicationDao.insertApplication( VolunteerApplicationPO.builder()
+        volunteerApplicationDao.insert( VolunteerApplicationPO.builder()
                 .userId(1)
                 .cardPicLocation("Location1")
                 .reasonForApplication("我非要当志愿者")
                 .build());
-        volunteerApplicationDao.insertApplication( VolunteerApplicationPO.builder()
+        volunteerApplicationDao.insert( VolunteerApplicationPO.builder()
                 .userId(233)
                 .cardPicLocation("Location1")
                 .reasonForApplication("就算是死我也要当志愿者")

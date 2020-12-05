@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.dao;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ public class UserDaoTest {
         userDao.insertUserByOpenid("fake openid 1");
         userDao.insertUserByOpenid("fake openid 2");
         userDao.insertUserByOpenid("fake openid 3");
-        userDao.insertUserByOpenid("fake openid 4");
+        int ans = userDao.insertUserByOpenid("fake openid 4");
+        Assert.assertEquals(1, ans);
         // 更改一个用户信息测试
         userDao.updateUserInfo(1, UpdateUserInfoDTO.builder()
                 .userName("misaki")

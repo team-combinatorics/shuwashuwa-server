@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.dao;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,13 @@ public class ActivityTimeSlotDaoTest {
 
     @Test
     public void simpleTest() {
-        activityTimeSlotDao.insert(
-                ActivityTimeSlotPO.builder()
-                        .activityId(1)
-                        .timeSlot(1)
-                        .startTime(new Timestamp(new Date().getTime()))
-                        .endTime(new Timestamp(new Date().getTime()))
-                        .build()
-        );
-
+        ActivityTimeSlotPO activityTimeSlotPO = ActivityTimeSlotPO.builder()
+                .activityId(1)
+                .timeSlot(1)
+                .startTime(new Timestamp(new Date().getTime()))
+                .endTime(new Timestamp(new Date().getTime()))
+                .build();
+        activityTimeSlotDao.insert(activityTimeSlotPO);
+        Assert.assertEquals(1, activityTimeSlotPO.getId().intValue());
     }
 }
