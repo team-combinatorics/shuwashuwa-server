@@ -21,4 +21,5 @@ public class VolunteerApplicationPO {
     private String replyByAdmin;
     private Integer adminId;
     private Integer status;
+    private String cardPicLocation;
 }

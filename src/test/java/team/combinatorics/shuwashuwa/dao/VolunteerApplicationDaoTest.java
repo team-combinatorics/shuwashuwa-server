@@ -9,6 +9,7 @@ import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -22,20 +23,26 @@ public class VolunteerApplicationDaoTest {
     @Test
     // 这个测试方法中随便编openid就行，并不向tx服务器验证
     public void insertTest() {
-        volunteerApplicationDao.insert(1, VolunteerApplicationDTO.builder()
+        volunteerApplicationDao.insertApplication(VolunteerApplicationPO.builder()
+                .userId(1)
+                .cardPicLocation("Location1")
                 .reasonForApplication("我就要当志愿者")
                 .build());
-        volunteerApplicationDao.insert(1, VolunteerApplicationDTO.builder()
+        volunteerApplicationDao.insertApplication(VolunteerApplicationPO.builder()
+                .userId(1)
+                .cardPicLocation("Location1")
                 .reasonForApplication("我还要当志愿者")
                 .build());
-        volunteerApplicationDao.insert(1, VolunteerApplicationDTO.builder()
+        volunteerApplicationDao.insertApplication( VolunteerApplicationPO.builder()
+                .userId(1)
+                .cardPicLocation("Location1")
                 .reasonForApplication("我非要当志愿者")
                 .build());
-        volunteerApplicationDao.insert(1, VolunteerApplicationDTO.builder()
+        volunteerApplicationDao.insertApplication( VolunteerApplicationPO.builder()
+                .userId(233)
+                .cardPicLocation("Location1")
                 .reasonForApplication("就算是死我也要当志愿者")
                 .build());
-        volunteerApplicationDao.insert(233, VolunteerApplicationDTO.builder()
-                .reasonForApplication("我就要当志愿者").build());
         System.out.println(volunteerApplicationDao.selectByFormId(1));
         System.out.println(volunteerApplicationDao.selectByUserId(233));
         // 测试select多个申请单

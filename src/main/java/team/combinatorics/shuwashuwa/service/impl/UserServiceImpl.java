@@ -2,7 +2,6 @@ package team.combinatorics.shuwashuwa.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao;
@@ -68,7 +67,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO) {
-        applicationDao.insert(userid,volunteerApplicationDTO);
+        VolunteerApplicationPO.VolunteerApplicationPOBuilder volunteerApplicationPOBuilder
+                = VolunteerApplicationPO.builder();
+        volunteerApplicationPOBuilder.userId(userid);
+        // TODO 这里做合法性判断，例如是否为null
+        volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationDTO.getCardPicLocation());
+        volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationDTO.getReasonForApplication());
+        VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationPOBuilder.build();
+        applicationDao.insertApplication(volunteerApplicationPO);
     }
 
     @Override
@@ -78,9 +84,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO) {
-        applicationDao.updateApplicationByAdmin(userid,updateDTO);
-        if(updateDTO.getStatus() == 1)
-            userDao.updateUserVolunteerAuthority(applicationDao.selectByFormId(updateDTO.getFormID()).getUserId(),true);
+        applicationDao.updateApplicationByAdmin(userid, updateDTO);
+        if (updateDTO.getStatus() == 1)
+            userDao.updateUserVolunteerAuthority(applicationDao.selectByFormId(updateDTO.getFormID()).getUserId(), true);
     }
 
     @Override

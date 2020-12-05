@@ -14,11 +14,9 @@ public interface VolunteerApplicationDao {
     /**
      * 用户申请
      *
-     * @param id                      发起申请的用户id
-     * @param volunteerApplicationDTO 用于申请的数据传输对象，暂时只包括申请理由这一项
+     * @param volunteerApplicationPO 构造好的要插入的对象
      */
-    void insert(@Param("id") int id,
-                @Param("application") VolunteerApplicationDTO volunteerApplicationDTO);
+    void insertApplication(@Param("application") VolunteerApplicationPO volunteerApplicationPO);
 
     /**
      * 管理员更新维修单状态

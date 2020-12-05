@@ -15,4 +15,6 @@ import lombok.NoArgsConstructor;
 public class VolunteerApplicationDTO {
     @ApiModelProperty("申请理由")
     private String reasonForApplication;
+    @ApiModelProperty("学生证照片的位置")
+    private String cardPicLocation;
 }

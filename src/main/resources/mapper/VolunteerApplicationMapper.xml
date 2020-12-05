@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao">
-    <resultMap type="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO"
-               id="volunteerApplicationResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO" id="volunteerApplicationResultMap">
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
@@ -12,11 +11,14 @@
         <result column="reply_by_admin" jdbcType="VARCHAR" property="replyByAdmin"/>
         <result column="admin_id" jdbcType="INTEGER" property="adminId"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="card_pic_location" jdbcType="VARCHAR" property="cardPicLocation"/>
     </resultMap>
 
-    <insert id="insert">
-        insert into volunteer_application(user_id, reason_for_application)
-        values (#{id}, #{application.reasonForApplication})
+    <insert id="insertApplication" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO"
+            useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        insert into volunteer_application(user_id, reason_for_application, card_pic_location)
+        values (#{application.userId}, #{application.reasonForApplication}, #{application.cardPicLocation})
     </insert>
 
     <update id="updateApplicationByAdmin">
