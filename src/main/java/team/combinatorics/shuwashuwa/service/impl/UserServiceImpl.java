@@ -3,32 +3,25 @@ package team.combinatorics.shuwashuwa.service.impl;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.UserDao;
-import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
-import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
-import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
-import team.combinatorics.shuwashuwa.model.pojo.User;
+import team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao;
+import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
+import team.combinatorics.shuwashuwa.model.dto.*;
+import team.combinatorics.shuwashuwa.model.po.UserPO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
-@PropertySource("classpath:wx.properties")
-@Component
+import java.util.List;
+
+@Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    //private final RestTemplate restTemplate;
-
-    private final WechatUtil wechatUtil;
-
     private final UserDao userDao;
-
-//    public UserServiceImpl(WechatUtil wechatUtil, UserDao userDao) {
-//        //this.restTemplate = restTemplate;
-//        this.wechatUtil = wechatUtil;
-//        this.userDao = userDao;
-//    }
+    private final VolunteerApplicationDao applicationDao;
 
     @Override
     public int deleteOneUser(int userid) {
@@ -42,51 +35,65 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LogInSuccessDto wechatLogin(LogInInfoDto logInInfoDto) throws Exception {
-        JsonNode root = wechatUtil.getWechatInfo(logInInfoDto.getCode());
+    public LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception {
+        JsonNode root = WechatUtil.getWechatInfo(logInInfoDto.getCode());
         String openid = root.path("openid").asText();
         String sessionKey = root.path("session_key").asText();
-        LogInSuccessDto logInSuccessDto = new LogInSuccessDto();
-        User user = userDao.findUserByOpenid(openid);
-        if (user == null) {
+        System.out.println("用户登录 @Service");
+        System.out.println("openid: " + openid);
+        LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
+        UserPO userPO = userDao.selectUserByOpenid(openid);
+        if (userPO == null) {
             logInSuccessDto.setFirstLogin(true);
-            userDao.addUserOpenid(openid);
-            user = userDao.findUserByOpenid(openid);
+            userDao.insertUserByOpenid(openid);
+            userPO = userDao.selectUserByOpenid(openid);
         } else
             logInSuccessDto.setFirstLogin(false);
-        String token = TokenUtil.createToken(user.getUserid());
+        String token = TokenUtil.createToken(userPO.getId());
         logInSuccessDto.setToken(token);
         return logInSuccessDto;
     }
 
     @Override
-    public void updateUserInfo(int userid, UpdateUserInfoDto updateUserInfoDto) {
-        System.out.println("即将更新用户信息");
-        System.out.println("待更新的用户userid为：" + userid);
-        System.out.println(updateUserInfoDto.toString());
+    public void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) {
         userDao.updateUserInfo(userid, updateUserInfoDto);
     }
 
     @Override
-    public User getUserInfo(int userid) {
-        System.out.println("想要获取" + userid + "的信息");
-        User user = userDao.findUserByUserid(userid);
-        user.setOpenid("你无权获取openid");
-        return user;
+    public UserPO getUserInfo(int userid) {
+        UserPO userPO = userDao.selectUserByUserid(userid);
+        userPO.setOpenid("你无权获取openid");
+        return userPO;
     }
 
+    @Override
+    public void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO) {
+        applicationDao.insert(userid,volunteerApplicationDTO);
+    }
 
     @Override
-    public String test(LogInInfoDto logInInfoDto) throws Exception {
-        JsonNode root = wechatUtil.getWechatInfo(logInInfoDto.getCode());
+    public List<VolunteerApplicationPO> getUnauditedVolunteerApplicationList() {
+        return applicationDao.selectByCondition(SelectApplicationCO.builder().status(0).build());
+    }
+
+    @Override
+    public void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO) {
+        applicationDao.updateApplicationByAdmin(userid,updateDTO);
+        if(updateDTO.getStatus() == 1)
+            userDao.updateUserVolunteerAuthority(applicationDao.selectByFormId(updateDTO.getFormID()).getUserId(),true);
+    }
+
+    @Override
+    public String test(LogInInfoDTO logInInfoDto) throws Exception {
+        JsonNode root = WechatUtil.getWechatInfo(logInInfoDto.getCode());
         // 如果返回中有错误码且不等于零说明出错
         if (root.has("errcode") && root.path("errcode").asInt() != 0)
             return "Yes " + root.toString();
         else {
             String openid = root.path("openid").asText();
             String sessionKey = root.path("session_key").asText();
-            userDao.addUserOpenid(openid);
-            return userDao.findUserByOpenid(openid).toString();
+            userDao.insertUserByOpenid(openid);
+            return userDao.selectUserByOpenid(openid).toString();
         }
     }
 

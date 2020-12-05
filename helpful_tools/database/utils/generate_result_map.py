@@ -21,8 +21,8 @@ def csv2mapper(srcdir, filename):
     # resultMap标签
     mapper_file.write(
         '    <resultMap type=' +
-        '\"team.combinatorics.shuwashuwa.model.pojo.{}\" id=\"{}\">\n'.format(
-            class_name, result_map_name))
+        '\"team.combinatorics.shuwashuwa.model.po.{}\" id=\"{}\">\n'.format(
+            class_name + 'PO', result_map_name))
     # 读取csv信息
     csv_file = open(srcdir + filename, 'r', encoding="utf-8")
     property_names = []
@@ -48,8 +48,8 @@ def csv2mapper(srcdir, filename):
     # 生成通用的update语句
     mapper_file.write(
         '    <update id="update" ' +
-        'parameterType="team.combinatorics.shuwashuwa.model.pojo.{}">\n'.
-        format(class_name))
+        'parameterType="team.combinatorics.shuwashuwa.model.po.{}">\n'.
+        format(class_name + 'PO'))
     mapper_file.write('        update ' + filename[0:-4] + '\n')
     # begin trim
     mapper_file.write('        <trim prefix="SET" suffixOverrides=",">\n')
@@ -75,5 +75,7 @@ def csv2mapper(srcdir, filename):
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.dirname(__file__)))
+    if not os.path.exists('mapper'):
+        os.mkdir('mapper')
     for file in os.listdir('csv'):
         csv2mapper('csv/', file)

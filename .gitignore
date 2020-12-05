@@ -4,9 +4,6 @@ db/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### Wechat Secrets ###
-src/main/resources/wx.properties
-
 ### STS ###
 .apt_generated
 .classpath
@@ -38,3 +35,8 @@ build/
 ### MacOS ###
 .DS_Store
 
+### 自动生成的代码等 ###
+helpful_tools/database/mapper
+helpful_tools/database/java
+helpful_tools/database/sql
+helpful_tools/database/utils/__pycache__

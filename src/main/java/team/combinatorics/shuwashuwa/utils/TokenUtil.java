@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.context.annotation.DependsOn;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 
@@ -16,9 +17,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@DependsOn("constants")
 public class TokenUtil {
-    public static final String SECRET = "HappyLucky";
+    public static final String SECRET = PropertiesConstants.TOKEN_SECRET;
     public static final int EXPIRE = 60 * 60 * 24 * 15;
     public static final Map<String, Object> headerMap = new HashMap<>();
     static {

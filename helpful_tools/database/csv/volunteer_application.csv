@@ -1,4 +1,9 @@
-字段名,字段类型,说明,数据库补充信息,是否为normalIndex,是否为unique key
-formid,int,自增长，表单id,AUTO_INCREMENT PRIMARY KEY NOT NULL,1,""
-comment,varchar(100),申请理由,DEFAULT NULL,"",""
-status,tinyint,申请状态,DEFAULT NULL,1,""
+字段名,字段类型,字段补充信息,说明,是否为普通索引,是否为唯一索引,是否为主键索引,是否为全文索引
+id,int unsigned,AUTO_INCREMENT NOT NULL,自增长id,,,1,
+create_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP,创建时间,,,,
+updated_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,更新时间,,,,
+user_id,int unsigned,NOT NULL,申请用户的id,1,,,
+reason_for_application,varchar(100),DEFAULT NULL,申请理由,,,,
+reply_by_admin,varchar(100),DEFAULT NULL,管理员回复,,"","",""
+admin_id,int unsigned,DEFAULT NULL,回复的管理员的id,1,"","",""
+status,tinyint,DEFAULT 0,申请状态,1,,,

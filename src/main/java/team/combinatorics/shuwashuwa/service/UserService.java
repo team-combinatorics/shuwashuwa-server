@@ -1,25 +1,30 @@
 package team.combinatorics.shuwashuwa.service;
 
-import org.springframework.stereotype.Service;
-import team.combinatorics.shuwashuwa.model.dto.LogInInfoDto;
-import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDto;
-import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto;
-import team.combinatorics.shuwashuwa.model.pojo.User;
+import team.combinatorics.shuwashuwa.model.dto.*;
+import team.combinatorics.shuwashuwa.model.po.UserPO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
-@Service
+import java.util.List;
+
 public interface UserService {
 
-    LogInSuccessDto wechatLogin(LogInInfoDto logInInfoDto) throws Exception;
+    LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception;
 
     int deleteOneUser(int userid) throws Exception;
 
     void deleteAllUsers();
 
-    void updateUserInfo(int userid, UpdateUserInfoDto updateUserInfoDto) throws Exception;
+    void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) throws Exception;
 
-    User getUserInfo(int userid) throws Exception;
+    UserPO getUserInfo(int userid) throws Exception;
+
+    void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO);
+
+    List<VolunteerApplicationPO> getUnauditedVolunteerApplicationList();
+
+    void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO);
 
     // boolean suicide();
 
-    String test(LogInInfoDto logInInfoDto) throws Exception;
+    String test(LogInInfoDTO logInInfoDto) throws Exception;
 }

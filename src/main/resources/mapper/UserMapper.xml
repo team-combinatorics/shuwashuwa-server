@@ -2,28 +2,61 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.UserDao">
-    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.User" id="userResultMap">
-        <result column="userid" jdbcType="INTEGER" property="userid" />
-        <result column="openid" jdbcType="VARCHAR" property="openid" />
-        <result column="user_name" jdbcType="VARCHAR" property="userName" />
-        <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
-        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
-        <result column="email" jdbcType="VARCHAR" property="email" />
-        <result column="identity" jdbcType="VARCHAR" property="identity" />
-        <result column="department" jdbcType="VARCHAR" property="department" />
-        <result column="grade" jdbcType="VARCHAR" property="grade" />
-        <result column="student_id" jdbcType="VARCHAR" property="studentId" />
-        <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
-        <result column="is_volunteer" jdbcType="BOOLEAN" property="volunteer" />
-        <result column="is_admin" jdbcType="BOOLEAN" property="admin" />
-        <result column="is_su" jdbcType="BOOLEAN" property="su" />
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.UserPO" id="userResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="openid" jdbcType="VARCHAR" property="openid"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="department" jdbcType="VARCHAR" property="department"/>
+        <result column="grade" jdbcType="VARCHAR" property="grade"/>
+        <result column="student_id" jdbcType="VARCHAR" property="studentId"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+        <result column="is_volunteer" jdbcType="BOOLEAN" property="volunteer"/>
+        <result column="is_admin" jdbcType="BOOLEAN" property="admin"/>
+        <result column="is_su" jdbcType="BOOLEAN" property="su"/>
     </resultMap>
 
-    <select id="findUserByUserid" resultMap="userResultMap">
-        select * from user where userid=#{id}
+    <insert id="insertUserByOpenid">
+        insert into user(openid)
+        values (#{openid})
+    </insert>
+
+    <delete id="deleteUserByUserid">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteUserByOpenid">
+        delete
+        from user
+        where openid = #{openid}
+    </delete>
+
+    <delete id="deleteAllUsers">
+        delete
+        from user
+    </delete>
+
+
+    <select id="selectUserByUserid" resultMap="userResultMap">
+        select *
+        from user
+        where id = #{id}
     </select>
 
-    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDto">
+    <select id="selectUserByOpenid" resultMap="userResultMap">
+        select *
+        from user
+        where openid = #{openid}
+    </select>
+
+    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO">
         update user
         <trim prefix="SET" suffixOverrides=",">
             <if test="user.userName != null">
@@ -54,6 +87,19 @@
                 comment = #{user.comment},
             </if>
         </trim>
-        where userid = #{id}
+        where id = #{id}
     </update>
+
+    <update id="updateUserVolunteerAuthority">
+        update user set
+            is_volunteer = #{volunteer}
+        where id=#{id}
+    </update>
+
+    <update id="updateUserAdminAuthority">
+        update user set
+            is_admin = #{admin}
+        where id=#{id}
+    </update>
+
 </mapper>
