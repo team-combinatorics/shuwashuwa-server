@@ -2,5 +2,7 @@
 id,int unsigned,AUTO_INCREMENT NOT NULL,自增长，活动id,,,1,
 create_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP,创建时间,,,,
 updated_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,更新时间,,,,
-position,varchar(100),DEFAULT NULL,预约的教室位置,,,,
-starting_time,datetime,DEFAULT NULL,预计开始时间,,,,
+starting_time,datetime,NOT NULL,预计开始时间,,,,
+end_time,datetime,NOT NULL,预计开始时间,,,,
+location,varchar(100),NOT NULL,预约的教室位置,,,,
+status,tinyint,NOT NULL DEFAULT 0,活动状态,1,"","",""
