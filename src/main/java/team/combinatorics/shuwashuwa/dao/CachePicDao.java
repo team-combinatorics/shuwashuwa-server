@@ -14,8 +14,9 @@ public interface CachePicDao {
      * 原则上，cachePicPO里面的location和userid是必填项
      *
      * @param cachePicPO 一个cachePicPO结构
+     * @return 插入成功的数量，如果为0表示不成功
      */
-    void insert(@Param("cachePic") CachePicPO cachePicPO);
+    int insert(@Param("cachePic") CachePicPO cachePicPO);
 
     /**
      * 根据cache图片id获取用户id

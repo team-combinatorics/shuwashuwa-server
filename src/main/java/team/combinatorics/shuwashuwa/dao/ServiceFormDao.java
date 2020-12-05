@@ -15,8 +15,9 @@ public interface ServiceFormDao {
      * 插入
      *
      * @param serviceFormPO 构造的申请表信息
+     * @return 插入成功的数量，如果为0表示不成功
      */
-    void insert(@Param("form") ServiceFormPO serviceFormPO);
+    int insert(@Param("form") ServiceFormPO serviceFormPO);
 
     /**
      * 管理员更新维修单信息
@@ -28,6 +29,7 @@ public interface ServiceFormDao {
 
     /**
      * 根据form id寻找form
+     *
      * @param id form id
      * @return 一个ServiceForm结构
      */
@@ -35,6 +37,7 @@ public interface ServiceFormDao {
 
     /**
      * 根据event id寻找form
+     *
      * @param eventID event id
      * @return 一个ServiceForm结构
      */

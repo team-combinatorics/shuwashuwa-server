@@ -16,8 +16,9 @@ public interface VolunteerApplicationDao {
      * 用户申请
      *
      * @param volunteerApplicationPO 构造好的要插入的对象
+     * @return 插入成功的数量，如果为0表示不成功
      */
-    void insertApplication(@Param("application") VolunteerApplicationPO volunteerApplicationPO);
+    int insert(@Param("application") VolunteerApplicationPO volunteerApplicationPO);
 
     /**
      * 管理员更新维修单状态

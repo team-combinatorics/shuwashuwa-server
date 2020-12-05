@@ -9,6 +9,7 @@ public interface ActivityTimeSlotDao {
     /**
      * 插入一个时间段
      * @param activityTimeSlotPO 要插入的时间段
+     * @return 插入成功的数量，如果为0表示不成功
      */
-    void insert(@Param("timeSlot") ActivityTimeSlotPO activityTimeSlotPO);
+    int insert(@Param("timeSlot") ActivityTimeSlotPO activityTimeSlotPO);
 }

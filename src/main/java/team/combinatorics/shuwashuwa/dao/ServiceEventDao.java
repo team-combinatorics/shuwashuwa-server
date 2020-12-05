@@ -16,8 +16,9 @@ public interface ServiceEventDao {
      * 插入一个新的serviceEvent
      *
      * @param serviceEventPO 一个ServiceEventPO对象
+     * @return 插入成功的数量，如果为0表示不成功
      */
-    void insert(@Param("serviceEvent") ServiceEventPO serviceEventPO);
+    int insert(@Param("serviceEvent") ServiceEventPO serviceEventPO);
 
     /**
      * 志愿者更新维修结果和状态，这两个必须都不为空
@@ -53,6 +54,7 @@ public interface ServiceEventDao {
 
     /**
      * 条件检索
+     *
      * @param selectServiceEventCO 根据条件来检索维修单，条件说名见类说明
      * @return 一个维修单列表
      */

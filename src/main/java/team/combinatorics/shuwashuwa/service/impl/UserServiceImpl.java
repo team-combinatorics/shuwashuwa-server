@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationDTO.getCardPicLocation());
         volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationDTO.getReasonForApplication());
         VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationPOBuilder.build();
-        applicationDao.insertApplication(volunteerApplicationPO);
+        applicationDao.insert(volunteerApplicationPO);
     }
 
     @Override
