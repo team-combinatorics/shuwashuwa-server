@@ -2,11 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ActivityTimeSlotDao">
-    <resultMap type="team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO" id="activityTimeSlotResultMap">
-        <result column="id" jdbcType="INTEGER" property="id"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
-        <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
+
+    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.ActivityTimeSlot" id="simpleActivityTimeSlotResultMap">
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
@@ -17,4 +14,38 @@
         insert into activity_time_slot(activity_id, time_slot, start_time, end_time)
         values (#{timeSlot.activityId}, #{timeSlot.timeSlot}, #{timeSlot.startTime}, #{timeSlot.endTime})
     </insert>
+
+    <select id="listTimeSlotsByActivityID" resultMap="simpleActivityTimeSlotResultMap">
+        select time_slot, start_time, end_time
+        from activity_time_slot
+        where activity_id = #{activityID}
+    </select>
+
+    <select id="getTimeSlot" resultMap="simpleActivityTimeSlotResultMap">
+        select time_slot, start_time, end_time
+        from activity_time_slot
+        where activity_id = #{activityID}
+          and time_slot = #{timeSlotID}
+    </select>
+
+    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.pojo.ActivityTimeSlot">
+        update activity_time_slot
+        set start_time=#{timeSlot.startTime},
+            end_time=#{timeSlot.endTime}
+        where activity_id = #{activityID}
+          and time_slot = #{timeSlot.timeSlot}
+    </update>
+
+    <delete id="deleteOne">
+        delete
+        from activity_time_slot
+        where activity_id = #{activityID}
+          and time_slot = #{timeSlot}
+    </delete>
+
+    <delete id="deleteByActivityID">
+        delete
+        from activity_time_slot
+        where activity_id = #{activityID}
+    </delete>
 </mapper>
