@@ -51,6 +51,14 @@ def init_sql_file():
     sql_file.close()
 
 
+def complite_sql_file():
+    sql_file = open("sql/init.sql", 'a', encoding="utf-8")
+    sql_file.write('\nINSERT INTO user(openid, user_name, identity, is_su)\n' +
+                   'VALUES (\'1da5505af2a5ba46a749eaa6b1a92003\'' +
+                   ', \'shuwashuwa\', \'超级管理员\', 1)')
+    sql_file.close()
+
+
 def csv2sql(srcdir, filename):
     # 表名规范化
     table_name = filename[0:-4]
@@ -117,6 +125,8 @@ if __name__ == "__main__":
     for file in os.listdir('csv'):
         csv2javafile('csv/', file)
         csv2sql('csv/', file)
+
     for file in os.listdir('relationship'):
         csv2sql('relationship/', file)
     # print(underscore_to_camel("sdfsdf"))
+    complite_sql_file()
