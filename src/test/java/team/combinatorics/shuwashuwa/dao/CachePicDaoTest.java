@@ -60,8 +60,10 @@ public class CachePicDaoTest {
         assertEquals(4, cachePicDao.selectByCondition(CachePicCO.builder()
                 .userId(1)
                 .build()).size());
+        assertEquals(9, cachePicDao.selectCachePicNum());
         assertEquals(5, cachePicDao.deleteByCondition(CachePicCO.builder().userId(2).build()));
         assertEquals(0, cachePicDao.deleteByID(1));
+        assertEquals(4, cachePicDao.selectCachePicNum());
         assertEquals(4, cachePicDao.deleteByCondition(CachePicCO.builder().userId(1).build()));
 
 

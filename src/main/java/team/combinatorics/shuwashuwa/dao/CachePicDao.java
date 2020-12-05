@@ -42,6 +42,12 @@ public interface CachePicDao {
     CachePicPO selectByLocation(@Param("location") String location);
 
     /**
+     * 返回当前cache pic中的记录数量
+     * @return 记录数
+     */
+    int selectCachePicNum();
+
+    /**
      * 根据条件获取图片，条件包括：开始时间，结束时间，用户id
      * @param selectCachePicCondition 条件
      * @return 图片列表

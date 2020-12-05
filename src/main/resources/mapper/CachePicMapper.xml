@@ -29,6 +29,10 @@
         where pic_location = #{location}
     </select>
 
+    <select id="selectCachePicNum" resultType="int">
+        select count(*) from cache_pic
+    </select>
+
     <select id="selectByCondition" resultMap="cachePicResultMap">
         select *
         from cache_pic
