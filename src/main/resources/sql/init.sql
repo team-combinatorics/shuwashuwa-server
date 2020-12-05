@@ -7,9 +7,30 @@ CREATE TABLE `activity_info` (
                                  `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长，活动id',
                                  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                  `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                                 `position` VARCHAR(100) DEFAULT NULL COMMENT '预约的教室位置',
-                                 `starting_time` DATETIME DEFAULT NULL COMMENT '预计开始时间',
+                                 `starting_time` DATETIME NOT NULL COMMENT '预计开始时间',
+                                 `end_time` DATETIME NOT NULL COMMENT '预计开始时间',
+                                 `location` VARCHAR(100) NOT NULL COMMENT '预约的教室位置',
+                                 `status` TINYINT NOT NULL DEFAULT 0 COMMENT '活动状态',
+                                 INDEX idx_status(status),
                                  PRIMARY KEY pk_id(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE `admin` (
+                         `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长',
+                         `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                         `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                         `userid` VARCHAR(30) NOT NULL COMMENT 'user_id',
+                         `user_name` VARCHAR(30) DEFAULT NULL COMMENT '真实姓名',
+                         `phone_number` VARCHAR(30) DEFAULT NULL COMMENT '用户手机号',
+                         `email` VARCHAR(100) DEFAULT NULL COMMENT '用户邮箱',
+                         `identity` VARCHAR(40) DEFAULT NULL COMMENT '类别：学生、教职工、校外人员',
+                         `department` VARCHAR(40) DEFAULT NULL COMMENT '院系或工作部门',
+                         `student_id` VARCHAR(15) DEFAULT NULL COMMENT '学号',
+                         INDEX idx_user_name(user_name),
+                         INDEX idx_phone_number(phone_number),
+                         UNIQUE uk_userid(userid),
+                         PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `cache_pic`;
@@ -32,7 +53,7 @@ CREATE TABLE `service_event` (
                                  `user_id` INT UNSIGNED NOT NULL COMMENT '发起维修请求的用户id',
                                  `volunteer_id` INT UNSIGNED DEFAULT NULL COMMENT '负责维修的志愿者',
                                  `repairing_result` VARCHAR(100) DEFAULT NULL COMMENT '志愿者填写的维修结果',
-                                 `status` TINYINT DEFAULT 0 COMMENT '该维修请求的状态',
+                                 `status` TINYINT NOT NULL DEFAULT 0 COMMENT '该维修请求的状态',
                                  `feedback` VARCHAR(100) DEFAULT NULL COMMENT '用户反馈信息',
                                  `activity_id` INT DEFAULT NULL COMMENT '预约活动id',
                                  `time_slot` INT DEFAULT NULL COMMENT '预约时间段',
@@ -84,8 +105,7 @@ CREATE TABLE `user` (
                         `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                         `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                         `openid` VARCHAR(30) NOT NULL COMMENT '微信提供的用户id',
-                        `user_name` VARCHAR(30) DEFAULT NULL COMMENT '用户姓名',
-                        `nick_name` VARCHAR(30) DEFAULT NULL COMMENT '用户昵称',
+                        `user_name` VARCHAR(30) DEFAULT NULL COMMENT '该如何称呼您？',
                         `phone_number` VARCHAR(30) DEFAULT NULL COMMENT '用户手机号',
                         `email` VARCHAR(100) DEFAULT NULL COMMENT '用户邮箱',
                         `identity` VARCHAR(40) DEFAULT NULL COMMENT '类别：学生、教职工、校外人员',
@@ -106,16 +126,36 @@ CREATE TABLE `user` (
                         PRIMARY KEY pk_id(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `volunteer`;
+CREATE TABLE `volunteer` (
+                             `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长',
+                             `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                             `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+                             `userid` VARCHAR(30) NOT NULL COMMENT 'user_id',
+                             `user_name` VARCHAR(30) DEFAULT NULL COMMENT '真实姓名',
+                             `phone_number` VARCHAR(30) DEFAULT NULL COMMENT '用户手机号',
+                             `email` VARCHAR(100) DEFAULT NULL COMMENT '用户邮箱',
+                             `identity` VARCHAR(40) DEFAULT NULL COMMENT '类别：学生、教职工、校外人员',
+                             `department` VARCHAR(40) DEFAULT NULL COMMENT '院系或工作部门',
+                             `student_id` VARCHAR(15) DEFAULT NULL COMMENT '学号',
+                             `order_count` INT UNSIGNED DEFAULT 0 COMMENT '完成的单数',
+                             INDEX idx_user_name(user_name),
+                             INDEX idx_phone_number(phone_number),
+                             UNIQUE uk_userid(userid),
+                             PRIMARY KEY pk_id(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 DROP TABLE IF EXISTS `volunteer_application`;
 CREATE TABLE `volunteer_application` (
                                          `id` INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长id',
                                          `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                          `updated_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                          `user_id` INT UNSIGNED NOT NULL COMMENT '申请用户的id',
-                                         `reason_for_application` VARCHAR(100) DEFAULT NULL COMMENT '申请理由',
+                                         `reason_for_application` VARCHAR(100) NOT NULL COMMENT '申请理由',
                                          `reply_by_admin` VARCHAR(100) DEFAULT NULL COMMENT '管理员回复',
                                          `admin_id` INT UNSIGNED DEFAULT NULL COMMENT '回复的管理员的id',
                                          `status` TINYINT DEFAULT 0 COMMENT '申请状态',
+                                         `card_pic_location` VARCHAR(30) NOT NULL COMMENT '申请者的身份证明的图片location',
                                          INDEX idx_user_id(user_id),
                                          INDEX idx_admin_id(admin_id),
                                          INDEX idx_status(status),
