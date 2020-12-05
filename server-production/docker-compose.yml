@@ -2,6 +2,17 @@
 version: '3'
 
 services: 
+    # caddy
+    caddy:
+        image: caddy:latest
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ${WWWROOT}:/var/www/html
+            - ${CONFIG_PATH}/etc/caddy/Caddyfile
+            - ${SSL}:/root/.local/share/caddy/acme/acme-v02.api.letsencrypt.org/
+
     mysql:
         image: mysql:8.0.22
         volumes:
@@ -13,6 +24,11 @@ services:
             - MYSQL_USER
             - MYSQL_PASSWORD
         restart: on-failure
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1m"
+                max-file: "10"
 
     #####  Uncomment this when debugging db  #####
     # adminer:
@@ -31,6 +47,7 @@ services:
             - "8848:8848"
         volumes:
             - ${TARGET_PATH}:/app/target.jar
+            - ${PIC_PATH}:/pic
         environment: 
             - MYSQL_DATABASE
             - MYSQL_USER
@@ -43,3 +60,9 @@ services:
         restart: on-failure
         depends_on: 
             - mysql
+            - caddy
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "10"
