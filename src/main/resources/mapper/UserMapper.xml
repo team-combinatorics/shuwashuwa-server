@@ -87,15 +87,33 @@
     </update>
 
     <update id="updateUserVolunteerAuthority">
-        update user set
-            is_volunteer = #{volunteer}
-        where id=#{id}
+        update user
+        set is_volunteer = #{volunteer}
+        where id = #{id}
     </update>
 
     <update id="updateUserAdminAuthority">
-        update user set
-            is_admin = #{admin}
-        where id=#{id}
+        update user
+        set is_admin = #{admin}
+        where id = #{id}
+    </update>
+
+    <select id="getSuEncryptedPSW" resultType="String">
+        select openid
+        from user
+        where id = 1
+    </select>
+
+    <select id="getSuUsername" resultType="String">
+        select user_name
+        from user
+        where id = 1
+    </select>
+
+    <update id="updateSuPSW">
+        update user
+        set openid=#{psw}
+        where id = 1
     </update>
 
 </mapper>

@@ -80,4 +80,30 @@ public interface UserDao {
      * @return 删除用户的数量，在该系统设计中，只会为0或者1
      */
     int deleteAllUsers();
+
+    /**
+     * 获取超级管理员的加密后的密码，用于登陆时做比对
+     *
+     * @return 加密后的密码
+     */
+    String getSuEncryptedPSW();
+
+    /**
+     * 获取超级管理员的登录用户名，用于登陆时做比对
+     *
+     * @return 加密后的密码
+     */
+    String getSuUsername();
+
+    /**
+     * 更新超管密码
+     *
+     * @return 更新成功的记录数，应当为1
+     */
+    int updateSuPSW(@Param("psw") String psw);
+
+    /*
+     * 所以需要更改用户名吗？
+     */
+
 }
