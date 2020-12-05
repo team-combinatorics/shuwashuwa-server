@@ -47,10 +47,14 @@ public class CachePicDaoTest {
         assertEquals(1, cachePicDao.selectByID(5).getUserId().intValue());
         assertEquals(2, cachePicDao.selectByID(6).getUserId().intValue());
 
-        assertEquals(5, cachePicDao.selectByUserID(2).size());
+        assertEquals(5, cachePicDao.selectByCondition(CachePicCO.builder()
+                .userId(2)
+                .build()).size());
 
         assertEquals(1, cachePicDao.deleteByID(1));
-        assertEquals(4, cachePicDao.selectByUserID(1).size());
+        assertEquals(4, cachePicDao.selectByCondition(CachePicCO.builder()
+                .userId(1)
+                .build()).size());
         assertEquals(5, cachePicDao.deleteByCondition(CachePicCO.builder().userId(2).build()));
         assertEquals(0, cachePicDao.deleteByID(1));
         assertEquals(4, cachePicDao.deleteByCondition(CachePicCO.builder().userId(1).build()));

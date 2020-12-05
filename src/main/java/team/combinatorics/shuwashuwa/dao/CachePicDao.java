@@ -34,7 +34,6 @@ public interface CachePicDao {
     CachePicPO selectByID(@Param("id") int id);
 
     /**
-     * todo: 改了
      * 根据条件获取图片
      * @param selectCachePicCondition 条件
      * @return 图片列表

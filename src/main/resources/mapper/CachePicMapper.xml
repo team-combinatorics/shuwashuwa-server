@@ -23,10 +23,20 @@
         where id = #{id}
     </select>
 
-    <select id="selectByUserID" resultMap="cachePicResultMap">
+    <select id="selectByCondition" resultMap="cachePicResultMap">
         select *
         from cache_pic
-        where user_id = #{userID}
+        <where>
+            <if test="condition.beginTime != null">
+                and create_time >= #{condition.beginTime}
+            </if>
+            <if test="condition.endTime != null">
+                and create_time &lt;= #{condition.endTime}
+            </if>
+            <if test="condition.userID != null">
+                and user_id = #{condition.userId}
+            </if>
+        </where>
     </select>
 
     <select id="selectUserIDByCacheID" resultType="Integer">
