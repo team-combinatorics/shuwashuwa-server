@@ -14,7 +14,7 @@
         <result column="card_pic_location" jdbcType="VARCHAR" property="cardPicLocation"/>
     </resultMap>
 
-    <insert id="insertApplication" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO"
+    <insert id="insert" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO"
             useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
         insert into volunteer_application(user_id, reason_for_application, card_pic_location)
