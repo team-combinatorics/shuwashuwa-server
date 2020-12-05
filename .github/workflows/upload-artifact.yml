@@ -1,6 +1,6 @@
 name: Upload Jar
 
-# [12f23eddde] Nov 29 2020
+# [12f23eddde] Dec 5 2020
 # 手动触发:通过RESTFUL API/STAR
 # 自动触发:更改main分支的pom.xml
 # Reference: actions-openwrt-helloworld/.github/workflows/build-openwrt.yml
@@ -25,6 +25,10 @@ env:
   MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
   MYSQL_USER: ${{ secrets.MYSQL_USER }}
   MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+  WX_APPID: ${{ secrets.APPID }}
+  WX_SECRET: ${{ secrets.APPSECRET }}
+  PIC_PATH: ./pic
+  TOKEN_SECRET: HappyLuckSmileYeah~
   UPLOAD_ARTIFACT: true
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: false
