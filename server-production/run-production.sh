@@ -49,7 +49,7 @@ fi
 # check your config
 export $(grep -v '^#' .env | xargs -d '\n')
 if [[ $? = 0 ]]; then
-    echo "[Shuwashuwa] Setting up Production Server ..."
+    echo "[Shuwashuwa] Setting up Development Server ..."
 else
     echo "[Shuwashuwa] Error in .env or file does not exists"
     exit -1
@@ -79,4 +79,4 @@ if [[ -z $WX_APPID || -z $WX_SECRET ]]; then
 fi
 
 # run docker
-docker-compose up --build > docker-log.txt
+docker-compose up --build
