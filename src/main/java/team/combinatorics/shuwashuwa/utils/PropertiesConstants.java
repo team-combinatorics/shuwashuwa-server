@@ -29,7 +29,7 @@ public class PropertiesConstants {
     /**
      * 图片保存的地址
      */
-    public static Path PIC_STORAGE_DIR;
+    public static String PIC_STORAGE_DIR;
 
 
     @Value("${wx.appid:default}")
@@ -49,6 +49,6 @@ public class PropertiesConstants {
 
     @Value("${dir.pictures:default}")
     public void setPicStorageDir(String dir) {
-        PropertiesConstants.PIC_STORAGE_DIR = Paths.get(dir);
+        PropertiesConstants.PIC_STORAGE_DIR = dir;
     }
 }
