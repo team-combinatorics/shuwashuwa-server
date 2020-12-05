@@ -6,6 +6,7 @@ import team.combinatorics.shuwashuwa.model.po.AdminPO;
 
 import java.util.List;
 
+// TODO 未测试
 @Repository
 public interface AdminDao {
     /**
@@ -41,6 +42,7 @@ public interface AdminDao {
 
     /**
      * 根据用户id获取管理员id
+     *
      * @param userID 用户id
      * @return 管理员id
      */

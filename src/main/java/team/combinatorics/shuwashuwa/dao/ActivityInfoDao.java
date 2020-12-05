@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * 活动信息的类
  */
+//TODO 未测试
 @Repository
 public interface ActivityInfoDao {
     /**
