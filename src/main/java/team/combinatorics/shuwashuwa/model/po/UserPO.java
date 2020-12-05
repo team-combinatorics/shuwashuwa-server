@@ -18,7 +18,6 @@ public class UserPO {
     private Timestamp updatedTime;
     private String openid;
     private String userName;
-    private String nickName;
     private String phoneNumber;
     private String email;
     private String identity;

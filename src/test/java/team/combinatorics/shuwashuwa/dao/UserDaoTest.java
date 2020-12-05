@@ -24,7 +24,6 @@ public class UserDaoTest {
         // 更改一个用户信息测试
         userDao.updateUserInfo(1, UpdateUserInfoDTO.builder()
                 .userName("misaki")
-                .nickName("粉红裸熊")
                 .build());
 
         // 根据openid查找测试

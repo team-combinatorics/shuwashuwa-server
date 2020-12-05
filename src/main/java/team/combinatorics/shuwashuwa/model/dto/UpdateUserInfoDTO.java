@@ -19,8 +19,6 @@ import lombok.NoArgsConstructor;
 public class UpdateUserInfoDTO {
     @ApiModelProperty("用户姓名")
     private String userName;
-    @ApiModelProperty("用户昵称")
-    private String nickName;
     @ApiModelProperty("用户手机号")
     private String phoneNumber;
     @ApiModelProperty("用户邮箱")

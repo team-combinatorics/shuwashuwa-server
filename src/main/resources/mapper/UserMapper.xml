@@ -8,7 +8,6 @@
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="openid" jdbcType="VARCHAR" property="openid"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
-        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
         <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="identity" jdbcType="VARCHAR" property="identity"/>
@@ -61,9 +60,6 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="user.userName != null">
                 user_name = #{user.userName},
-            </if>
-            <if test="user.nickName != null">
-                nick_name = #{user.nickName},
             </if>
             <if test="user.phoneNumber != null">
                 phone_number = #{user.phoneNumber},
