@@ -2,6 +2,7 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventUpdateByVolunteerDTO;
@@ -9,7 +10,7 @@ import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 
 import java.util.List;
 
-@Component
+@Repository
 public interface ServiceEventDao {
     /**
      * 插入一个新的serviceEvent

@@ -2,10 +2,11 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 
-@Component
+@Repository
 public interface UserDao {
 
     /**
