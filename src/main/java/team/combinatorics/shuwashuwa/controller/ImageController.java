@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
-import team.combinatorics.shuwashuwa.dao.co.CachePicCO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
-import team.combinatorics.shuwashuwa.model.pojo.ServicePic;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -23,7 +21,7 @@ public class ImageController {
 
     private final ImageStorageService storageService;
 
-    @ApiOperation(value = "上传图片", notes = "上传图片到服务器并存储，暂时不与维修单关联，返回图片地址和缓存id，" +
+    @ApiOperation(value = "上传图片", notes = "上传图片到服务器并存储，暂时不与维修单关联，返回图片地址，" +
             "每个用户限制缓存6张不与维修单关联的图片，图片大小不超过1MB", httpMethod = "POST")
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiResponses({
@@ -31,12 +29,12 @@ public class ImageController {
             @ApiResponse(code = 40008, message = "文件存储失败")
     })
     @AllAccess
-    public CommonResult<ServicePic> handleImageUpload(@RequestParam("file") MultipartFile file,
+    public CommonResult<String> handleImageUpload(@RequestParam("file") MultipartFile file,
                                                       @RequestHeader("token") String token) {
         int userid = TokenUtil.extractUserid(token);
-        ServicePic cacheEntry = storageService.store(userid,file);
+        String location = storageService.store(userid,file);
 
-        return new CommonResult<>(200,"上传成功", cacheEntry);
+        return new CommonResult<>(200,"上传成功", location);
     }
 
     @ApiOperation(value = "删除缓存图片", notes = "处理用户手动删除缓存图片", httpMethod = "DELETE")
@@ -46,12 +44,25 @@ public class ImageController {
             @ApiResponse(code = 40009, message = "指定的图片路径不在用户上传记录中")
     })
     @AllAccess
-    public CommonResult<String> handleImageCacheDelete(@RequestParam("cacheId") int cacheId,
+    public CommonResult<String> handleImageCacheDelete(@RequestParam("path") String path,
                                                   @RequestHeader("token") String token) {
         int userid = TokenUtil.extractUserid(token);
-        storageService.removeFromCache(userid,cacheId);
+        storageService.removeFromCache(userid, path);
 
         return new CommonResult<>(200,"删除成功","deleted");
+    }
+
+    /**
+     * 以下为供super user调用的运维接口
+     */
+    @ApiOperation(value = "获取缓存图片数量", notes = "超管专属", httpMethod = "GET")
+    @RequestMapping(value = "/count/cache", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功")
+    })
+    @SUAccess
+    public CommonResult<Integer> getImageCacheNumber() {
+        return new CommonResult<>(200,"请求成功",storageService.countCacheImages());
     }
 
     @ApiOperation(value = "删除指定日期前的所有缓存图片", notes = "超管专属", httpMethod = "DELETE")
@@ -65,14 +76,4 @@ public class ImageController {
         return new CommonResult<>(200,"删除成功","deleted");
     }
 
-    @ApiOperation(value = "删除指定日期前的所有所有图片", notes = "超管专属", httpMethod = "DELETE")
-    @RequestMapping(value = "/store", method = RequestMethod.DELETE)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "删除成功")
-    })
-    @SUAccess
-    public CommonResult<String> handleImageClear(@RequestParam("days") int days) {
-        storageService.clearAllImagesByTime(days);
-        return new CommonResult<>(200,"删除成功","deleted");
-    }
 }
