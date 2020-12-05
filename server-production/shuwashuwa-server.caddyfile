@@ -1,8 +1,9 @@
-{$DOMAIN}
-@backend {
-	path swagger-ui.html* /api/*
-}
+{$DOMAIN} 
 route {
+  @backend {
+     path swagger-ui.html* /api/*
+  }
   reverse_proxy @backend http://shuwashuwa:8848
   file_server { root /var/www/html }
 }
+

@@ -10,8 +10,10 @@ services:
             - "443:443"
         volumes:
             - ${WWWROOT}:/var/www/html
-            - ${CONFIG_PATH}/etc/caddy/Caddyfile
+            - ${CONFIG_PATH}:/etc/caddy/Caddyfile
             - ${SSL}:/root/.local/share/caddy/acme/acme-v02.api.letsencrypt.org/
+        environment:
+            - DOMAIN
 
     mysql:
         image: mysql:8.0.22
@@ -43,8 +45,9 @@ services:
         build: 
             context: ../
             dockerfile: ./server-production/shuwashuwa-server.dockerfile
-        ports: 
-            - "8848:8848"
+        # Disabled for security 
+        # ports:
+        #     - "8848:8848"
         volumes:
             - ${TARGET_PATH}:/app/target.jar
             - ${PIC_PATH}:/pic
