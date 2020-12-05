@@ -37,6 +37,11 @@ public class CachePicDaoTest {
             cachePicDao.insertCachePic(cachePicPO);
             assertEquals(i + 5, cachePicPO.getId().intValue());
         }
+
+        for (int i = 1; i <= 5; i++) {
+            assertEquals(1, cachePicDao.selectByLocation("Location" + i).getUserId().intValue());
+            assertEquals(2, cachePicDao.selectByLocation("Location" + i + 5).getUserId().intValue());
+        }
         // 测试selectUSerIDByCacheID
         assertEquals(1, cachePicDao.selectUserIDByCacheID(2).intValue());
         assertEquals(1, cachePicDao.selectUserIDByCacheID(5).intValue());

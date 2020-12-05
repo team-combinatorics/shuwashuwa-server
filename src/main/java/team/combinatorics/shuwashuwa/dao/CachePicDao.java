@@ -34,7 +34,15 @@ public interface CachePicDao {
     CachePicPO selectByID(@Param("id") int id);
 
     /**
-     * 根据条件获取图片
+     * 根据location获取图片
+     *
+     * @param location 图片location
+     * @return 图片
+     */
+    CachePicPO selectByLocation(@Param("location") String location);
+
+    /**
+     * 根据条件获取图片，条件包括：开始时间，结束时间，用户id
      * @param selectCachePicCondition 条件
      * @return 图片列表
      */

@@ -23,6 +23,12 @@
         where id = #{id}
     </select>
 
+    <select id="selectByLocation" resultMap="cachePicResultMap">
+        select *
+        from cache_pic
+        where pic_location = #{location}
+    </select>
+
     <select id="selectByCondition" resultMap="cachePicResultMap">
         select *
         from cache_pic
