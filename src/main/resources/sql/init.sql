@@ -18,6 +18,22 @@ CREATE TABLE `activity_info`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
+DROP TABLE IF EXISTS `activity_time_slot`;
+CREATE TABLE `activity_time_slot`
+(
+    `id`           INT UNSIGNED AUTO_INCREMENT NOT NULL COMMENT '自增长，活动id',
+    `create_time`  DATETIME                    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_time` DATETIME                    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `activity_id`  INT UNSIGNED                NOT NULL COMMENT '活动id',
+    `time_slot`    INT UNSIGNED                NOT NULL COMMENT '活动时间段',
+    `start_time`   DATETIME                    NOT NULL COMMENT '时间段开始',
+    `end_time`     DATETIME                    NOT NULL COMMENT '时间段结束',
+    INDEX idx_activity_id (activity_id),
+    PRIMARY KEY pk_id (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_general_ci;
+
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin`
 (
