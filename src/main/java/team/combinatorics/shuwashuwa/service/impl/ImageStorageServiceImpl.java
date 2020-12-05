@@ -1,6 +1,6 @@
 package team.combinatorics.shuwashuwa.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,47 +11,47 @@ import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.po.CachePicPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
-import team.combinatorics.shuwashuwa.model.pojo.ServicePic;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.utils.PropertiesConstants;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@RequiredArgsConstructor
 @DependsOn("constants")
+@AllArgsConstructor
 @Service
 public class ImageStorageServiceImpl implements ImageStorageService {
 
-    private static final Path STORAGE_DIR = PropertiesConstants.PIC_STORAGE_DIR;
+    private static final String STORAGE_DIR = PropertiesConstants.PIC_STORAGE_DIR;
 
     private static final int SINGLE_USER_CACHE_LIMIT = 6;
 
-    private CachePicDao cachePicDao;
-    private ServicePicDao servicePicDao;
+    private final CachePicDao cachePicDao;
+    private final ServicePicDao servicePicDao;
 
     @SuppressWarnings("")
-    private static void removeFileFromDisk(String path) {
-        new File(path).delete();
+    @Override
+    public void delete(String path) {
+        new File(STORAGE_DIR + path).delete();
     }
 
     @Override
-    public synchronized ServicePic store(int userid, MultipartFile file) throws KnownException {
+    public synchronized String store(int userid, MultipartFile file) throws KnownException {
         //生成随机唯一的文件名，但保留后缀
         String receivedFileName = file.getOriginalFilename();
         assert receivedFileName != null;
         String fileType = receivedFileName.substring(receivedFileName.lastIndexOf("."));
         String fileName = UUID.randomUUID().toString()+fileType;
-        Path path = STORAGE_DIR.resolve(fileName);
+        String path = STORAGE_DIR + fileName;
 
         //尝试存储
         try {
-            file.transferTo(path);
+            file.transferTo(new File(path));
         } catch (IOException ioe) {
+            System.out.println(path);
             throw new KnownException(ErrorInfoEnum.STORAGE_FAILURE);
         }
 
@@ -60,58 +60,50 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         while(userCacheList.size() >= SINGLE_USER_CACHE_LIMIT) {
             CachePicPO victim = userCacheList.remove(0);
             cachePicDao.deleteByID(victim.getId());
-            removeFileFromDisk(victim.getPicLocation());
+            delete(victim.getPicLocation());
         }
 
         //插入缓存图片队列
         CachePicPO cachePicPO = CachePicPO.builder()
                 .userId(userid)
-                .picLocation(path.toString())
+                .picLocation(fileName)
                 .build();
         cachePicDao.insertCachePic(cachePicPO);
 
-        //构造返回对象
-        return new ServicePic(cachePicPO.getUserId(),cachePicPO.getPicLocation());
+        return fileName;
     }
 
     @Override
-    public void removeFromCache(int userid, int cacheId) {
+    public void removeFromCache(int userid, String path) {
         //检查权限
-        Integer useridRequired = cachePicDao.selectUserIDByCacheID(cacheId);
-        if(useridRequired == null || userid != useridRequired)
+        CachePicPO cachePicPO = cachePicDao.selectByLocation(path);
+        if(cachePicPO == null)
+            throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
+        if(cachePicPO.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
 
         //删除图片
-        CachePicPO picPO = cachePicDao.selectByID(cacheId);
-        removeFileFromDisk(picPO.getPicLocation());
+        delete(path);
 
         //从缓存表中移除
-        cachePicDao.deleteByID(cacheId);
+        cachePicDao.deleteByID(cachePicPO.getId());
     }
 
     @Override
-    public ServicePic confirm(int userid, int cacheId, int formId) {
-        //检查是否已缓存
-        Integer useridRequired = cachePicDao.selectUserIDByCacheID(cacheId);
-        if(useridRequired == null)
-            return null;
-        //TODO: 确认一下图片复用时前端传回的数据结构
-        else if(userid != useridRequired)
-            throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
-
+    public void bindWithService(int userid, String path, int formId) {
+        //若在缓存表中，移除表项
+        CachePicPO cachePicPO = cachePicDao.selectByLocation(path);
+        if(cachePicPO != null) {
+            if (cachePicPO.getUserId() != userid)
+                throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
+            cachePicDao.deleteByID(cachePicPO.getId());
+        }
         //插入记录表
-        CachePicPO cachePicPO = cachePicDao.selectByID(cacheId);
         ServicePicPO servicePicPO = ServicePicPO.builder()
                 .serviceFormId(formId)
-                .picLocation(cachePicPO.getPicLocation())
+                .picLocation(path)
                 .build();
         servicePicDao.insertServicePic(servicePicPO);
-
-        //从缓存表中移除
-        cachePicDao.deleteByID(cacheId);
-
-        //返回结构
-        return ServicePic.builder().id(servicePicPO.getId()).picLocation(servicePicPO.getPicLocation()).build();
     }
 
     @Override
@@ -121,11 +113,12 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
         //逐个删除
         for (CachePicPO picPO:userCacheList) {
-            removeFileFromDisk(picPO.getPicLocation());
+            delete(picPO.getPicLocation());
         }
 
         //整理缓存表
-        cachePicDao.deleteByCondition(CachePicCO.builder().userId(userid).build());
+        int deleteCnt = cachePicDao.deleteByCondition(CachePicCO.builder().userId(userid).build());
+        System.out.println("删除了"+deleteCnt+"张图片");
     }
 
     @Override
@@ -136,18 +129,17 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
         //逐个删除
         for (CachePicPO picPO:userCacheList) {
-            removeFileFromDisk(picPO.getPicLocation());
+            delete(picPO.getPicLocation());
         }
 
         //整理缓存表
-        cachePicDao.deleteByCondition(CachePicCO.builder().endTime(timestamp).build());
+        int deleteCnt = cachePicDao.deleteByCondition(CachePicCO.builder().endTime(timestamp).build());
+        System.out.println("删除了"+deleteCnt+"张图片");
     }
 
     @Override
-    public void clearAllImagesByTime(int days) {
-        //首先清缓存
-        clearCacheByTime(days);
-
-        //TODO: 其次清有用的
+    public int countCacheImages() {
+        return cachePicDao.selectCachePicNum();
     }
+
 }
