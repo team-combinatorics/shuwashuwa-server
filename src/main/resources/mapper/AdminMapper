@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.combinatorics.shuwashuwa.dao.AdminDao">
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.AdminPO" id="adminResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="department" jdbcType="VARCHAR" property="department"/>
+        <result column="student_id" jdbcType="VARCHAR" property="studentId"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="team.combinatorics.shuwashuwa.model.po.AdminPO"
+            useGeneratedKeys="true" keyColumn="id" keyProperty="admin.id">
+        insert into admin(userid, user_name, phone_number, email, identity, department, student_id)
+        values (#{admin.userId}, #{admin.userName}, #{admin.phoneNumber}, #{admin.email}, #{admin.identity},
+                #{admin.department}, #{admin.student_id})
+    </insert>
+
+    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.AdminPO">
+        update admin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="admin.userName != null">
+                user_name = #{admin.userName},
+            </if>
+            <if test="admin.phoneNumber != null">
+                phone_number = #{admin.phoneNumber},
+            </if>
+            <if test="admin.email != null">
+                email = #{admin.email},
+            </if>
+            <if test="admin.identity != null">
+                identity = #{admin.identity},
+            </if>
+            <if test="admin.department != null">
+                department = #{admin.department},
+            </if>
+            <if test="admin.studentId != null">
+                student_id = #{admin.studentId},
+            </if>
+        </trim>
+        where id = #{admin.id}
+    </update>
+
+    <select id="listAdmins" resultMap="adminResultMap">
+        select *
+        from admin
+    </select>
+
+    <select id="getByID" resultMap="adminResultMap">
+        select *
+        from admin
+        where id = #{id}
+    </select>
+
+    <select id="getAdminIDByUserID" resultType="int">
+        select id
+        from admin
+        where userid = #{userID}
+    </select>
+
+    <delete id="deleteByID">
+        delete
+        from admin
+        where id = #{id}
+    </delete>
+</mapper>
