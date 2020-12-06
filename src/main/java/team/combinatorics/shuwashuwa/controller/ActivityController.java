@@ -20,8 +20,6 @@ import team.combinatorics.shuwashuwa.service.ActivityService;
 
 import java.util.List;
 
-//TODO:测试
-
 @Api("活动管理接口说明")
 @RestController
 @RequestMapping("api/activity")
