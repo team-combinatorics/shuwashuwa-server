@@ -16,7 +16,8 @@ public enum ErrorInfoEnum {
     TOKEN_EXPIRED(40006,"token过期"),
     TOKEN_INVALID(40007,"token无效"),
     STORAGE_FAILURE(40008,"文件存储失败"),
-    IMAGE_NOT_CACHED(40009,"指定的图片路径不在用户上传记录中");
+    IMAGE_NOT_CACHED(40009,"指定的图片路径不在用户上传记录中"),
+    PARAMETER_LACKING(40010,"请求结构中缺少必需的参数");
 
     private final Integer errCode;
     private final String errMsg;
