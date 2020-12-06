@@ -1,5 +1,7 @@
 package team.combinatorics.shuwashuwa.service;
 
+import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
+
 public interface SuperAdministratorService {
 
     /**
@@ -18,4 +20,11 @@ public interface SuperAdministratorService {
      *         false 修改失败--应为原密码输入错误导致的
      */
     boolean changePassword(String oldPassword, String newPassword);
+
+    /**
+     * 超级管理员添加新管理员
+     * @param adminDTO 待添加的管理员信息
+     * @return 成功添加应该返回1
+     */
+    int addAdministrator(AdminDTO adminDTO);
 }

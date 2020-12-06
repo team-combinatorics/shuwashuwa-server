@@ -2,7 +2,10 @@ package team.combinatorics.shuwashuwa.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import team.combinatorics.shuwashuwa.dao.AdminDao;
 import team.combinatorics.shuwashuwa.dao.UserDao;
+import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
+import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.MD5Util;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
@@ -12,6 +15,7 @@ import team.combinatorics.shuwashuwa.utils.TokenUtil;
 public class SuperAdministratorServiceImpl implements SuperAdministratorService {
 
     private final UserDao userDao;
+    private final AdminDao adminDao;
 
     @Override
     public String checkInfo(String userName, String password)
@@ -40,5 +44,26 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
             return true;
         }
         return false;
+    }
+
+    @Override
+    public int addAdministrator(AdminDTO adminDTO)
+    {
+        AdminPO adminPO = AdminPO.builder()
+                .userid(adminDTO.getUserid())
+                .userName(adminDTO.getUserName())
+                .phoneNumber(adminDTO.getPhoneNumber())
+                .email(adminDTO.getEmail())
+                .identity(adminDTO.getIdentity())
+                .department(adminDTO.getDepartment())
+                .studentId(adminDTO.getStudentId())
+                .build();
+        System.out.println(adminPO.getUserid());
+        int cnt = adminDao.insert(adminPO);
+        if(cnt == 1)
+        {
+            userDao.updateUserAdminAuthority(Integer.parseInt(adminDTO.getUserid()), true);
+        }
+        return cnt;
     }
 }

@@ -108,11 +108,19 @@ public class SuperAdministratorController {
     @SUAccess
     public CommonResult<String> addNewAdministrator(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO)
     {
+        System.out.println(adminDTO.getUserid());
         if(RequestCheckUtil.fieldExistNull(adminDTO))
         {
             return new CommonResult<>(40010, "添加失败，信息不完整", "You need to fill all information");
         }
-        return null;
+        System.out.println(adminDTO.getUserid()+"将被添加为管理员");
+        int cnt = superAdministratorService.addAdministrator(adminDTO);
+        if(cnt == 1)
+        {
+            return new CommonResult<>(200, "添加成功", "success");
+        }
+        /*TODO: 或需要为数据库返回异常值添加一个error code?*/
+        return new CommonResult<>(40000, "数据库操作失败", "database failure");
     }
 
 }
