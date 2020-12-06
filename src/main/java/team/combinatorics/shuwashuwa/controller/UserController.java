@@ -131,17 +131,12 @@ public class UserController {
     }
 
     /**
-     *
-     */
-
-
-    /**
      * 删除单个用户，测试用
      */
     @ApiOperation(value = "删除单个用户", notes = "删除单个用户，测试用", httpMethod = "DELETE")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功"),
-            @ApiResponse(code = 40001, message = "用户不存在")
+            @ApiResponse(code = 200, message = "删除成功"),
+            @ApiResponse(code = 40001, message = "不存在的用户ID")
     })
     @RequestMapping(value = "/deleteOne", method = RequestMethod.DELETE)
     @NoToken
@@ -158,7 +153,7 @@ public class UserController {
      */
     @ApiOperation(value = "删除所有用户", notes = "删除所有用户，测试用", httpMethod = "DELETE")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功"),
+            @ApiResponse(code = 200, message = "删除成功"),
     })
     @NoToken
     @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
