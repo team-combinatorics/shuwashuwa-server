@@ -51,29 +51,4 @@ public class ImageController {
 
         return new CommonResult<>(200,"删除成功","deleted");
     }
-
-    /**
-     * 以下为供super user调用的运维接口
-     */
-    @ApiOperation(value = "获取缓存图片数量", notes = "超管专属", httpMethod = "GET")
-    @RequestMapping(value = "/count/cache", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "获取成功")
-    })
-    @SUAccess
-    public CommonResult<Integer> getImageCacheNumber() {
-        return new CommonResult<>(200,"请求成功",storageService.countCacheImages());
-    }
-
-    @ApiOperation(value = "删除指定日期前的所有缓存图片", notes = "超管专属", httpMethod = "DELETE")
-    @RequestMapping(value = "/cache", method = RequestMethod.DELETE)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "删除成功")
-    })
-    @SUAccess
-    public CommonResult<String> handleImageCacheClear(@RequestParam("days") int days) {
-        storageService.clearCacheByTime(days);
-        return new CommonResult<>(200,"删除成功","deleted");
-    }
-
 }

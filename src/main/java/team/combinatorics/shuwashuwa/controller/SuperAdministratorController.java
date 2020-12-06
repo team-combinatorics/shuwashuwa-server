@@ -7,14 +7,12 @@ import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
+import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 
 import javax.validation.constraints.NotNull;
@@ -26,6 +24,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class SuperAdministratorController {
     private final SuperAdministratorService superAdministratorService;
+    private final ImageStorageService storageService;
 
     /**
      * 超级管理员登录系统
@@ -76,5 +75,29 @@ public class SuperAdministratorController {
         {
             return new CommonResult<>(40011, "原始密码错误", "Wrong old password!");
         }
+    }
+
+    /**
+     * 以下为供super user调用的运维接口
+     */
+    @ApiOperation(value = "获取缓存图片数量", notes = "超管专属", httpMethod = "GET")
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功")
+    })
+    @SUAccess
+    public CommonResult<Integer> getImageCacheNumber() {
+        return new CommonResult<>(200,"请求成功",storageService.countCacheImages());
+    }
+
+    @ApiOperation(value = "删除指定日期前的所有缓存图片", notes = "超管专属", httpMethod = "DELETE")
+    @RequestMapping(value = "/cache", method = RequestMethod.DELETE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "删除成功")
+    })
+    @SUAccess
+    public CommonResult<String> handleImageCacheClear(@RequestParam("days") int days) {
+        storageService.clearCacheByTime(days);
+        return new CommonResult<>(200,"删除成功","deleted");
     }
 }
