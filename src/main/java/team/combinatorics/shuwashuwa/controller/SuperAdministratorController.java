@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
+import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
+import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
 
 import javax.validation.constraints.NotNull;
 
@@ -41,7 +43,10 @@ public class SuperAdministratorController {
     {
         String token = superAdministratorService.checkInfo(userName, password);
         if(token != null)
+        {
+            System.out.println("超级管理员请求登录");
             return new CommonResult<>(200, "登录成功", token);
+        }
         return new CommonResult<>(40011, "用户名或密码错误", "");
     }
 
@@ -90,4 +95,24 @@ public class SuperAdministratorController {
         storageService.clearCacheByTime(days);
         return new CommonResult<>(200,"删除成功","deleted");
     }
+
+    /**
+     * 超管添加管理员
+     */
+    @ApiOperation(value = "根据输入的信息添加新的管理员", notes = "超管专属", httpMethod = "POST")
+    @RequestMapping(value = "/admin", method = RequestMethod.POST)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "添加成功"),
+            @ApiResponse(code = 40010, message = "添加失败，信息不完整")
+    })
+    @SUAccess
+    public CommonResult<String> addNewAdministrator(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO)
+    {
+        if(RequestCheckUtil.fieldExistNull(adminDTO))
+        {
+            return new CommonResult<>(40010, "添加失败，信息不完整", "You need to fill all information");
+        }
+        return null;
+    }
+
 }
