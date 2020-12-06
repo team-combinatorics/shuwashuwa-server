@@ -1,8 +1,6 @@
 package team.combinatorics.shuwashuwa.exception;
 
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @AllArgsConstructor

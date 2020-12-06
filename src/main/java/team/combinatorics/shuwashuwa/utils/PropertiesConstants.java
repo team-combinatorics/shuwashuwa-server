@@ -4,10 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-
 @Component(value = "constants")
 @PropertySource(value = {"classpath:shuwashuwa.properties"})
 public class PropertiesConstants {

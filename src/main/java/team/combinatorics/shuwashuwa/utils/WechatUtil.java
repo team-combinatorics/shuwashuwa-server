@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
