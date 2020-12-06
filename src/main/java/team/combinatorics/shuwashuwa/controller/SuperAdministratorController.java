@@ -124,4 +124,64 @@ public class SuperAdministratorController {
         return new CommonResult<>(40000, "数据库操作失败", "database failure");
     }
 
+    /**
+     * 超管修改管理员信息
+     */
+    @ApiOperation(value = "根据输入修改管理员信息", notes = "超管专属", httpMethod = "PATCH")
+    @RequestMapping(value = "/admin", method = RequestMethod.PATCH)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "更新成功"),
+            @ApiResponse(code = 40010, message = "更新失败，信息不能全为空")
+    })
+    @SUAccess
+    public CommonResult<String> changeAdministratorInfo()
+    {
+        return null;
+    }
+
+    /**
+     * 超管删除管理员
+     */
+    @ApiOperation(value = "根据输入的信息删除对应的管理员", notes = "超管专属", httpMethod = "DELTETE")
+    @RequestMapping(value = "/admin", method = RequestMethod.DELETE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "添加成功"),
+            @ApiResponse(code = 40010, message = "添加失败，信息不完整")
+    })
+    @SUAccess
+    public CommonResult<String> deleteAdministrator()
+    {
+        return null;
+    }
+
+    /**
+     * 超管获取单个管理员的信息
+     */
+    @ApiOperation(value = "超级管理员获取单个管理员的详细信息", notes = "超管专属", httpMethod = "GET")
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "添加成功"),
+            @ApiResponse(code = 40010, message = "添加失败，信息不完整")
+    })
+    @SUAccess
+    public CommonResult<String> getAdministratorInfo()
+    {
+        return null;
+    }
+
+    /**
+     * 超管获取管理员列表
+     */
+    @ApiOperation(value = "超级管理员获取所有管理员的列表", notes = "超管专属", httpMethod = "GET")
+    @RequestMapping(value = "/admin/list", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "添加成功"),
+            @ApiResponse(code = 40010, message = "添加失败，信息不完整")
+    })
+    @SUAccess
+    public CommonResult<String> getAdministratorList()
+    {
+        return null;
+    }
+
 }
