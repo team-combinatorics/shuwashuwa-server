@@ -51,7 +51,8 @@
         where id = #{id}
     </update>
 
-    <select id="listByCondition" parameterType="team.combinatorics.shuwashuwa.dao.co.SelectActivityCO">
+    <select id="listByCondition" parameterType="team.combinatorics.shuwashuwa.dao.co.SelectActivityCO"
+            resultMap="activityInfoResultMap">
         select * from activity_info
         <where>
             <if test="condition.beginTime != null">

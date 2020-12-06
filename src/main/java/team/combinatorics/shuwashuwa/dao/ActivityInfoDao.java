@@ -27,12 +27,12 @@ public interface ActivityInfoDao {
      * @param activityInfoPO 构造的要更新的信息
      * @return 更新影响的记录数量，应当为1
      */
-    int update(@Param("activity") ActivityInfoPO activityInfoPO);
+    int update(@Param("activityInfo") ActivityInfoPO activityInfoPO);
 
     /**
-     * 根据维修单id更新状态
+     * 根据活动id更新状态
      *
-     * @param id     维修单id
+     * @param id     活动id
      * @param status 状态
      * @return 更新影响的记录数量，应当为1
      */
