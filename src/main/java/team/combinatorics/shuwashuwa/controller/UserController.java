@@ -87,12 +87,6 @@ public class UserController {
      * 接收志愿者申请
      */
     @ApiOperation(value = "接收当前用户的申请", notes = "根据传入的token解析userid，再储存申请表", httpMethod = "POST")
-    /*
-     * 接口尽量RESTful一些！
-     * 接口尽量RESTful一些！
-     * 接口尽量RESTful一些！
-     * 比如这里用/application + post方法来表示添加数据
-     */
     @RequestMapping(value = "/application", method = RequestMethod.POST)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
@@ -116,7 +110,7 @@ public class UserController {
     })
     @AdminAccess
     public CommonResult<List<VolunteerApplicationPO>> getUnauditedApplicationList() {
-        return new CommonResult<>(200,"请求成功",userService.getUnauditedVolunteerApplicationList());
+        return new CommonResult<>(200,"请求成功",userService.listUnauditedVolunteerApplication());
     }
 
     /**
@@ -135,6 +129,10 @@ public class UserController {
         userService.completeApplicationAudition(userid,updateDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
+
+    /**
+     *
+     */
 
 
     /**

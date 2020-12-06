@@ -20,7 +20,7 @@ public interface UserService {
 
     void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO);
 
-    List<VolunteerApplicationPO> getUnauditedVolunteerApplicationList();
+    List<VolunteerApplicationPO> listUnauditedVolunteerApplication();
 
     void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO);
 

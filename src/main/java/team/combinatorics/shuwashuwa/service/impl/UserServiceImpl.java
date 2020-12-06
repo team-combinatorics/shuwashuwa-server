@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<VolunteerApplicationPO> getUnauditedVolunteerApplicationList() {
+    public List<VolunteerApplicationPO> listUnauditedVolunteerApplication() {
         return applicationDao.listApplicationsByCondition(SelectApplicationCO.builder().status(0).build());
     }
 
