@@ -1,19 +1,24 @@
 package team.combinatorics.shuwashuwa.service;
 
-import team.combinatorics.shuwashuwa.model.dto.ActivityInfoDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityReturnDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ActivityInfoPO;
 
 import java.util.List;
 
 public interface ActivityService {
-    void insertActivity(ActivityInfoDTO activityInfoDTO);
+    void insertActivity(ActivityLaunchDTO activityLaunchDTO);
 
-    void updateActivity(ActivityInfoDTO activityInfoDTO);
+    void updateActivity(ActivityUpdateDTO activityUpdateDTO);
 
     void removeActivity(int id);
 
-    List<ActivityInfoPO> listAllActivity();
+    List<ActivityReturnDTO> listAllActivity();
 
-    List<ActivityInfoPO> listActiveActivity();
+    List<ActivityReturnDTO> listComingActivity();
+
+    List<ActivityTimeSlotDTO> listTimeSlots(Integer activityId);
 
 }
