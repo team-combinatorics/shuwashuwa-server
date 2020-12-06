@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,5 +49,26 @@ public class SuperAdministratorController {
             return new CommonResult<>(40011, "用户名或密码错误", "");
         }
 
+    }
+
+    @ApiOperation(value = "修改超级管理员密码", notes = "比对输入的原始密码后，将新密码转换为MD5格式后储存至数据库", httpMethod = "PUT")
+    @RequestMapping(value = "/change", method = RequestMethod.PUT)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "修改成功"),
+            @ApiResponse(code = 40011, message = "原始密码错误")
+    })
+    @SUAccess
+    public CommonResult<String> changePassword(@RequestHeader @NotNull(message = "原始密码不能为空") String oldPassword,
+                                               @RequestHeader @NotNull(message = "新密码不能为空") String newPassword)
+    {
+        boolean success = superAdministratorService.changePassword(oldPassword, newPassword);
+        if(success)
+        {
+            return new CommonResult<>(200, "修改成功", "Change password successfully!");
+        }
+        else
+        {
+            return new CommonResult<>(40011, "原始密码错误", "Wrong old password!");
+        }
     }
 }

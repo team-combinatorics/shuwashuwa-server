@@ -13,6 +13,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
 
     private final UserDao userDao;
 
+    @Override
     public String checkInfo(String userName, String password)
     {
         String md5Password = MD5Util.getMD5(password);
@@ -27,6 +28,25 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         else
         {
             return null;
+        }
+    }
+
+    @Override
+    public boolean changePassword(String oldPassword, String newPassword)
+    {
+        String md5OldPassword = MD5Util.getMD5(oldPassword);
+        String trueOldPassword = userDao.getSuEncryptedPSW();
+        if(!md5OldPassword.equals(trueOldPassword))
+        {
+            return false;
+        }
+        else
+        {
+            String newMD5Password = MD5Util.getMD5(newPassword);
+            System.out.println("old MD5 password is "+trueOldPassword);
+            System.out.println("new MD5 password is "+newMD5Password);
+            userDao.updateSuPSW(newMD5Password);
+            return true;
         }
     }
 }

@@ -10,4 +10,13 @@ public interface SuperAdministratorService {
      *         false，用户名或密码输入错误，登录失败
      */
     String checkInfo(String userName, String password);
+
+    /**
+     * 超级管理员修改密码
+     * @param oldPassword 原始密码
+     * @param newPassword 新密码
+     * @return true 修改成功
+     *         false 修改失败--应为原密码输入错误导致的
+     */
+    boolean changePassword(String oldPassword, String newPassword);
 }
