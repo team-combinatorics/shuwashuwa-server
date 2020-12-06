@@ -10,6 +10,8 @@ import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.MD5Util;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class SuperAdministratorServiceImpl implements SuperAdministratorService {
@@ -65,5 +67,11 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
             userDao.updateUserAdminAuthority(Integer.parseInt(adminDTO.getUserid()), true);
         }
         return cnt;
+    }
+
+    @Override
+    public List<AdminPO> getAdministratorList()
+    {
+        return adminDao.listAdmins();
     }
 }

@@ -1,6 +1,9 @@
 package team.combinatorics.shuwashuwa.service;
 
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
+import team.combinatorics.shuwashuwa.model.po.AdminPO;
+
+import java.util.List;
 
 public interface SuperAdministratorService {
 
@@ -27,4 +30,10 @@ public interface SuperAdministratorService {
      * @return 成功添加应该返回1
      */
     int addAdministrator(AdminDTO adminDTO);
+
+    /**
+     * 超级管理员获取管理员列表
+     * @return 管理员列表
+     */
+    List<AdminPO> getAdministratorList();
 }

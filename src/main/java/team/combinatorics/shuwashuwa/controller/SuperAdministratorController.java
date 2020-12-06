@@ -12,12 +12,14 @@ import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
+import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Api(value = "超级管理员相关接口说明")
 @RestController
@@ -142,7 +144,7 @@ public class SuperAdministratorController {
     /**
      * 超管删除管理员
      */
-    @ApiOperation(value = "根据输入的信息删除对应的管理员", notes = "超管专属", httpMethod = "DELTETE")
+    @ApiOperation(value = "根据输入的信息删除对应的管理员", notes = "超管专属", httpMethod = "DELETE")
     @RequestMapping(value = "/admin", method = RequestMethod.DELETE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "添加成功"),
@@ -175,13 +177,12 @@ public class SuperAdministratorController {
     @ApiOperation(value = "超级管理员获取所有管理员的列表", notes = "超管专属", httpMethod = "GET")
     @RequestMapping(value = "/admin/list", method = RequestMethod.GET)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "添加成功"),
-            @ApiResponse(code = 40010, message = "添加失败，信息不完整")
+            @ApiResponse(code = 200, message = "获取成功"),
     })
     @SUAccess
-    public CommonResult<String> getAdministratorList()
+    public CommonResult<List<AdminPO>> getAdministratorList()
     {
-        return null;
+        return new CommonResult<>(200, "获取成功", superAdministratorService.getAdministratorList());
     }
 
 }
