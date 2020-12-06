@@ -40,8 +40,8 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
             System.out.println("超级管理员请求修改密码");
             System.out.println("old MD5 password is "+trueOldPassword);
             System.out.println("new MD5 password is "+newMD5Password);
-            userDao.updateSuPSW(newMD5Password);
-            return true;
+            int cnt = userDao.updateSuPSW(newMD5Password);
+            return cnt == 1;
         }
         return false;
     }

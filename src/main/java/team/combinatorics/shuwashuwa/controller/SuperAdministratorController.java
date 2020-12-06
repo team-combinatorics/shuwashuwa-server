@@ -66,6 +66,7 @@ public class SuperAdministratorController {
         boolean success = superAdministratorService.changePassword(oldPassword, newPassword);
         if(success)
             return new CommonResult<>(200, "修改成功", "Change password successfully!");
+        /*TODO: 添加对数据库返回值异常的error code*/
         return new CommonResult<>(40011, "原始密码错误", "Wrong old password!");
     }
 
