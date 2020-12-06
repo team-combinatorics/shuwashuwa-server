@@ -20,8 +20,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     private final AdminDao adminDao;
 
     @Override
-    public String checkInfo(String userName, String password)
-    {
+    public String checkInfo(String userName, String password) {
         String md5Password = MD5Util.getMD5(password);
         String realName = userDao.getSuUsername();
         String realPassword = userDao.getSuEncryptedPSW();
@@ -32,12 +31,10 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     }
 
     @Override
-    public boolean changePassword(String oldPassword, String newPassword)
-    {
+    public boolean changePassword(String oldPassword, String newPassword) {
         String md5OldPassword = MD5Util.getMD5(oldPassword);
         String trueOldPassword = userDao.getSuEncryptedPSW();
-        if(md5OldPassword.equals(trueOldPassword))
-        {
+        if(md5OldPassword.equals(trueOldPassword)) {
             String newMD5Password = MD5Util.getMD5(newPassword);
             System.out.println("超级管理员请求修改密码");
             System.out.println("old MD5 password is "+trueOldPassword);
@@ -49,8 +46,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     }
 
     @Override
-    public int addAdministrator(AdminDTO adminDTO)
-    {
+    public int addAdministrator(AdminDTO adminDTO) {
         AdminPO adminPO = AdminPO.builder()
                 .userid(adminDTO.getUserid())
                 .userName(adminDTO.getUserName())
@@ -62,16 +58,14 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
                 .build();
         System.out.println(adminPO.getUserid());
         int cnt = adminDao.insert(adminPO);
-        if(cnt == 1)
-        {
+        if(cnt == 1) {
             userDao.updateUserAdminAuthority(Integer.parseInt(adminDTO.getUserid()), true);
         }
         return cnt;
     }
 
     @Override
-    public List<AdminPO> getAdministratorList()
-    {
+    public List<AdminPO> getAdministratorList() {
         return adminDao.listAdmins();
     }
 }

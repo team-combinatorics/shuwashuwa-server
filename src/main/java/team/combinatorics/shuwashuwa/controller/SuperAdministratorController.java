@@ -41,11 +41,11 @@ public class SuperAdministratorController {
     })
     @NoToken
     public CommonResult<String> loginHandler(@NotNull(message = "用户名不能为空") String userName,
-                                             @NotNull(message = "密码不能为空") String password)
-    {
+                                             @NotNull(message = "密码不能为空") String password) {
+
         String token = superAdministratorService.checkInfo(userName, password);
-        if(token != null)
-        {
+        if(token != null) {
+
             System.out.println("超级管理员请求登录");
             return new CommonResult<>(200, "登录成功", token);
         }
@@ -63,8 +63,7 @@ public class SuperAdministratorController {
     })
     @SUAccess
     public CommonResult<String> changePassword(@RequestHeader @NotNull(message = "原始密码不能为空") String oldPassword,
-                                               @RequestHeader @NotNull(message = "新密码不能为空") String newPassword)
-    {
+                                               @RequestHeader @NotNull(message = "新密码不能为空") String newPassword) {
         boolean success = superAdministratorService.changePassword(oldPassword, newPassword);
         if(success)
             return new CommonResult<>(200, "修改成功", "Change password successfully!");
@@ -109,21 +108,33 @@ public class SuperAdministratorController {
             @ApiResponse(code = 40010, message = "添加失败，信息不完整")
     })
     @SUAccess
-    public CommonResult<String> addNewAdministrator(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO)
-    {
+    public CommonResult<String> addNewAdministrator(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO) {
+
         System.out.println(adminDTO.getUserid());
-        if(RequestCheckUtil.fieldExistNull(adminDTO))
-        {
+        if(RequestCheckUtil.fieldExistNull(adminDTO)) {
             return new CommonResult<>(40010, "添加失败，信息不完整", "You need to fill all information");
         }
         System.out.println(adminDTO.getUserid()+"将被添加为管理员");
         int cnt = superAdministratorService.addAdministrator(adminDTO);
-        if(cnt == 1)
-        {
+        if(cnt == 1) {
             return new CommonResult<>(200, "添加成功", "success");
         }
         /*TODO: 或需要为数据库返回异常值添加一个error code?*/
         return new CommonResult<>(40000, "数据库操作失败", "database failure");
+    }
+
+    /**
+     * 超管获取管理员列表
+     */
+    @ApiOperation(value = "超级管理员获取所有管理员的列表", notes = "超管专属", httpMethod = "GET")
+    @RequestMapping(value = "/admin/list", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+    })
+    @SUAccess
+    public CommonResult<List<AdminPO>> getAdministratorList() {
+
+        return new CommonResult<>(200, "获取成功", superAdministratorService.getAdministratorList());
     }
 
     /**
@@ -171,18 +182,5 @@ public class SuperAdministratorController {
         return null;
     }
 
-    /**
-     * 超管获取管理员列表
-     */
-    @ApiOperation(value = "超级管理员获取所有管理员的列表", notes = "超管专属", httpMethod = "GET")
-    @RequestMapping(value = "/admin/list", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "获取成功"),
-    })
-    @SUAccess
-    public CommonResult<List<AdminPO>> getAdministratorList()
-    {
-        return new CommonResult<>(200, "获取成功", superAdministratorService.getAdministratorList());
-    }
 
 }
