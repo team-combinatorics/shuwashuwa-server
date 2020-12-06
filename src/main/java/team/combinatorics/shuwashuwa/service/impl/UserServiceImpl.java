@@ -11,7 +11,9 @@ import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
+import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.UserService;
+import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
@@ -20,6 +22,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+    ImageStorageService imageStorageService;
 
     private final UserDao userDao;
     private final VolunteerApplicationDao applicationDao;
@@ -56,14 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) {
-        if(updateUserInfoDto.getComment()==null &&
-                updateUserInfoDto.getDepartment()==null &&
-                updateUserInfoDto.getEmail()==null &&
-                updateUserInfoDto.getGrade()==null &&
-                updateUserInfoDto.getIdentity()==null &&
-                updateUserInfoDto.getPhoneNumber()==null &&
-                updateUserInfoDto.getStudentId()==null &&
-                updateUserInfoDto.getUserName()==null)
+        if(RequestCheckUtil.fieldAllNull(updateUserInfoDto))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         userDao.updateUserInfo(userid, updateUserInfoDto);
     }
@@ -80,13 +76,14 @@ public class UserServiceImpl implements UserService {
         VolunteerApplicationPO.VolunteerApplicationPOBuilder volunteerApplicationPOBuilder
                 = VolunteerApplicationPO.builder();
         volunteerApplicationPOBuilder.userId(userid);
-        if(volunteerApplicationDTO.getCardPicLocation()==null ||
-                volunteerApplicationDTO.getReasonForApplication()==null)
+        if(RequestCheckUtil.fieldExistNull(volunteerApplicationDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationDTO.getCardPicLocation());
         volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationDTO.getReasonForApplication());
         VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationPOBuilder.build();
         applicationDao.insert(volunteerApplicationPO);
+
+        imageStorageService.setUseful(volunteerApplicationDTO.getCardPicLocation());
     }
 
     @Override
@@ -99,6 +96,8 @@ public class UserServiceImpl implements UserService {
         if(updateDTO.getFormID()==null || updateDTO.getStatus()==null || updateDTO.getReplyByAdmin()==null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         applicationDao.updateApplicationByAdmin(userid, updateDTO);
+        VolunteerApplicationPO po = applicationDao.getApplicationByFormId(updateDTO.getFormID());
+        imageStorageService.delete(po.getCardPicLocation());
         if (updateDTO.getStatus() == 1)
             userDao.updateUserVolunteerAuthority(applicationDao.getApplicationByFormId(updateDTO.getFormID()).getUserId(), true);
     }
