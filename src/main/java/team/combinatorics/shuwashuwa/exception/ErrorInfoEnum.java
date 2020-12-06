@@ -15,7 +15,8 @@ public enum ErrorInfoEnum {
     TOKEN_INVALID(40007,"token无效"),
     STORAGE_FAILURE(40008,"文件存储失败"),
     IMAGE_NOT_CACHED(40009,"指定的图片路径不在用户上传记录中"),
-    PARAMETER_LACKING(40010,"请求结构中缺少必需的参数");
+    PARAMETER_LACKING(40010,"请求结构中缺少必需的参数"),
+    WRONG_SUPER_ADMINISTRATOR_INFO(40011, "超级管理员用户名/密码错误");
 
     private final Integer errCode;
     private final String errMsg;
