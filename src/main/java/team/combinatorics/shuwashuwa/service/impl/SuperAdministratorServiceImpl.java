@@ -76,4 +76,22 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         userDao.updateUserAdminAuthority(userID, false);
         return adminDao.deleteByID(adminID);
     }
+
+    @Override
+    public AdminDTO getAdministratorInfo(int userID)
+    {
+        int adminID = adminDao.getAdminIDByUserID(userID);
+        AdminPO adminPO = adminDao.getByID(adminID);
+        if(adminPO == null)
+            return null;
+        return AdminDTO.builder()
+                .userid(adminPO.getUserid())
+                .userName((adminPO.getUserName()))
+                .phoneNumber(adminPO.getPhoneNumber())
+                .email(adminPO.getEmail())
+                .identity(adminPO.getIdentity())
+                .department(adminPO.getDepartment())
+                .studentId(adminPO.getStudentId())
+                .build();
+    }
 }

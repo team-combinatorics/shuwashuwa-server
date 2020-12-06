@@ -138,21 +138,6 @@ public class SuperAdministratorController {
     }
 
     /**
-     * 超管修改管理员信息
-     */
-    @ApiOperation(value = "根据输入修改管理员信息", notes = "超管专属", httpMethod = "PATCH")
-    @RequestMapping(value = "/admin", method = RequestMethod.PATCH)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "更新成功"),
-            @ApiResponse(code = 40010, message = "更新失败，信息不能全为空")
-    })
-    @SUAccess
-    public CommonResult<String> changeAdministratorInfo()
-    {
-        return null;
-    }
-
-    /**
      * 超管删除管理员
      */
     @ApiOperation(value = "根据输入的信息删除对应的管理员", notes = "超管专属", httpMethod = "DELETE")
@@ -175,11 +160,24 @@ public class SuperAdministratorController {
     @ApiOperation(value = "超级管理员获取单个管理员的详细信息", notes = "超管专属", httpMethod = "GET")
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "添加成功"),
-            @ApiResponse(code = 40010, message = "添加失败，信息不完整")
+            @ApiResponse(code = 200, message = "获取成功"),
     })
     @SUAccess
-    public CommonResult<String> getAdministratorInfo()
+    public CommonResult<AdminDTO> getAdministratorInfo(@NotNull(message = "用户id不能为空") int userID) {
+        return new CommonResult<>(200, "获取成功", superAdministratorService.getAdministratorInfo(userID));
+    }
+
+    /**
+     * 超管修改管理员信息
+     */
+    @ApiOperation(value = "根据输入修改管理员信息", notes = "超管专属", httpMethod = "PATCH")
+    @RequestMapping(value = "/admin", method = RequestMethod.PATCH)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "更新成功"),
+            @ApiResponse(code = 40010, message = "更新失败，信息不能全为空")
+    })
+    @SUAccess
+    public CommonResult<String> changeAdministratorInfo()
     {
         return null;
     }
