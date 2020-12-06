@@ -74,13 +74,20 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     }
 
     @Override
-    public void removeFromCache(int userid, String path) {
+    public void setUseful(String path) {
+        CachePicPO cachePicPO = cachePicDao.getCachePicByLocation(path);
+        if(cachePicPO != null)
+            cachePicDao.deleteByID(cachePicPO.getId());
+    }
+
+    @Override
+    public void setUseless(int userid, String path) {
         //检查权限
         CachePicPO cachePicPO = cachePicDao.getCachePicByLocation(path);
         if(cachePicPO == null)
-            throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
+            return;
         if(cachePicPO.getUserId() != userid)
-            throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
+            throw new KnownException(ErrorInfoEnum.IMAGE_NOT_YOURS);
 
         //删除图片
         delete(path);
@@ -90,14 +97,10 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     }
 
     @Override
-    public void bindWithService(int userid, String path, int formId) {
+    public void bindWithService(String path, int formId) {
         //若在缓存表中，移除表项
-        CachePicPO cachePicPO = cachePicDao.getCachePicByLocation(path);
-        if(cachePicPO != null) {
-            if (cachePicPO.getUserId() != userid)
-                throw new KnownException(ErrorInfoEnum.IMAGE_NOT_CACHED);
-            cachePicDao.deleteByID(cachePicPO.getId());
-        }
+        setUseful(path);
+
         //插入记录表
         ServicePicPO servicePicPO = ServicePicPO.builder()
                 .serviceFormId(formId)

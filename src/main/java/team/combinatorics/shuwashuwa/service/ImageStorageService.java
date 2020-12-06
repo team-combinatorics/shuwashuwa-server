@@ -13,18 +13,25 @@ public interface ImageStorageService {
     String store(int userid, MultipartFile file);
 
     /**
-     * 删除一个缓存中的图片
-     * @param userid 上传该图片的用户id
+     * 将一张图片与维修单关联，若该图片在缓存表中，则会移出缓存队列
      * @param path 图片路径
+     * @param formId 关联到的维修单id
      */
-    void removeFromCache(int userid, String path);
+    void bindWithService(String path, int formId);
 
     /**
-     * 确认一个图片与维修单关联，从而去除缓存属性
-     * @param userid 上传该图片的用户id
+     * 将一张图片从缓存队列中移出，避免被清理
+     * 务必保证图片可记录于其他表中再调用
      * @param path 图片路径
      */
-    void bindWithService(int userid, String path, int formId);
+    void setUseful(String path);
+
+    /**
+     * 不再需要一张图片，若图片在缓存队列中，则删除
+     * @param userid 请求删除的用户id，用于防止恶意删除
+     * @param path 图片路径
+     */
+    void setUseless(int userid, String path);
 
     /**
      * 暴力地删除一张图片，不会进行任何检查
