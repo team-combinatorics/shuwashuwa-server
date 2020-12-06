@@ -39,18 +39,10 @@ public class SuperAdministratorController {
     public CommonResult<String> loginHandler(@NotNull(message = "用户名不能为空") String userName,
                                              @NotNull(message = "密码不能为空") String password)
     {
-
         String token = superAdministratorService.checkInfo(userName, password);
-
         if(token != null)
-        {
             return new CommonResult<>(200, "登录成功", token);
-        }
-        else
-        {
-            return new CommonResult<>(40011, "用户名或密码错误", "");
-        }
-
+        return new CommonResult<>(40011, "用户名或密码错误", "");
     }
 
     /**
@@ -68,17 +60,12 @@ public class SuperAdministratorController {
     {
         boolean success = superAdministratorService.changePassword(oldPassword, newPassword);
         if(success)
-        {
             return new CommonResult<>(200, "修改成功", "Change password successfully!");
-        }
-        else
-        {
-            return new CommonResult<>(40011, "原始密码错误", "Wrong old password!");
-        }
+        return new CommonResult<>(40011, "原始密码错误", "Wrong old password!");
     }
 
     /**
-     * 以下为供super user调用的运维接口
+     * 超管获取缓存图片数量
      */
     @ApiOperation(value = "获取缓存图片数量", notes = "超管专属", httpMethod = "GET")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
@@ -90,6 +77,9 @@ public class SuperAdministratorController {
         return new CommonResult<>(200,"请求成功",storageService.countCacheImages());
     }
 
+    /**
+     * 超管删除所有缓存图片
+     */
     @ApiOperation(value = "删除指定日期前的所有缓存图片", notes = "超管专属", httpMethod = "DELETE")
     @RequestMapping(value = "/cache", method = RequestMethod.DELETE)
     @ApiResponses({
