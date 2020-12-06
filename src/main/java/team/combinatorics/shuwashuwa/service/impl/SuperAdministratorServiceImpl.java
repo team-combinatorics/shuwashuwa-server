@@ -68,4 +68,12 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     public List<AdminPO> getAdministratorList() {
         return adminDao.listAdmins();
     }
+
+    @Override
+    public int deleteAdministrator(int userID)
+    {
+        int adminID = adminDao.getAdminIDByUserID(userID);
+        userDao.updateUserAdminAuthority(userID, false);
+        return adminDao.deleteByID(adminID);
+    }
 }

@@ -36,4 +36,11 @@ public interface SuperAdministratorService {
      * @return 管理员列表
      */
     List<AdminPO> getAdministratorList();
+
+    /**
+     * 超级管理员删除管理员
+     * @param userid 待删除管理员的用户id
+     * @return 正常删除应该返回1，出现异常应该返回其他值
+     */
+    int deleteAdministrator(int userID);
 }

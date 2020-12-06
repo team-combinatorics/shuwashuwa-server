@@ -158,13 +158,15 @@ public class SuperAdministratorController {
     @ApiOperation(value = "根据输入的信息删除对应的管理员", notes = "超管专属", httpMethod = "DELETE")
     @RequestMapping(value = "/admin", method = RequestMethod.DELETE)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "添加成功"),
-            @ApiResponse(code = 40010, message = "添加失败，信息不完整")
+            @ApiResponse(code = 200, message = "删除成功"),
     })
     @SUAccess
-    public CommonResult<String> deleteAdministrator()
-    {
-        return null;
+    public CommonResult<String> deleteAdministrator(@RequestParam @NotNull(message = "用户id不能为空") int userID){
+        int cnt = superAdministratorService.deleteAdministrator(userID);
+        if(cnt == 1)
+            return new CommonResult<>(200, "删除成功", "success");
+        /*TODO: 为数据库异常定义error code*/
+        return new CommonResult<>(40000, "数据库异常，删除失败", "You need to check database");
     }
 
     /**
