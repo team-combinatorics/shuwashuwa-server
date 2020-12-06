@@ -1,5 +1,7 @@
 package team.combinatorics.shuwashuwa.dao;
 
+import io.swagger.models.auth.In;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +44,11 @@ public class VolunteerApplicationDaoTest {
                 .cardPicLocation("Location1")
                 .reasonForApplication("就算是死我也要当志愿者")
                 .build());
-        System.out.println(volunteerApplicationDao.getApplicationByFormId(1));
+
+        // 测试获取申请单
+        Assert.assertEquals(Integer.valueOf(1), volunteerApplicationDao.getApplicationByFormId(1).getId());
+
+
         System.out.println(volunteerApplicationDao.listApplicationsByUserId(233));
         // 测试select多个申请单
         System.out.println(volunteerApplicationDao.listApplicationsByUserId(1));
