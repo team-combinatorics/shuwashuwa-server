@@ -27,6 +27,9 @@ import javax.validation.constraints.NotNull;
 public class SuperAdministratorController {
     private final SuperAdministratorService superAdministratorService;
 
+    /**
+     * 超级管理员登录系统
+     */
     @ApiOperation(value = "超级管理员登录", notes = "通过输入内置的超级管理员用户名和密码进行登录", httpMethod = "GET")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiResponses({
@@ -51,6 +54,9 @@ public class SuperAdministratorController {
 
     }
 
+    /**
+     * 超级管理员修改密码
+     */
     @ApiOperation(value = "修改超级管理员密码", notes = "比对输入的原始密码后，将新密码转换为MD5格式后储存至数据库", httpMethod = "PUT")
     @RequestMapping(value = "/change", method = RequestMethod.PUT)
     @ApiResponses({
