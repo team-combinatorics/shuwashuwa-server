@@ -7,20 +7,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("创建或更新活动时上传的数据")
-public class ActivityInfoDTO {
-    @ApiModelProperty("活动Id，创建时不需要填")
-    private Integer activityId;
-    @ApiModelProperty("开始时间，以yyyy-MM-dd HH:mm:ss表示")
+@ApiModel("创建活动时上传的数据")
+public class ActivityLaunchDTO {
+    @ApiModelProperty("开始时间，以yyyy-MM-dd HH:mm:ss[.fffffffff]表示")
     private String startTime;
-    @ApiModelProperty("结束时间，以yyyy-MM-dd HH:mm:ss表示")
+    @ApiModelProperty("结束时间，以yyyy-MM-dd HH:mm:ss[.fffffffff]表示")
     private String endTime;
     @ApiModelProperty("活动地点")
     private String location;
+    @ApiModelProperty("活动分段信息")
+    private List<ActivityTimeSlotDTO> timeSlots;
     @ApiModelProperty("活动名称(optional)")
     private String activityName;
 }
