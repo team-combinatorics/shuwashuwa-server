@@ -40,13 +40,14 @@ public class ImageController {
     @ApiOperation(value = "取消使用图片", notes = "检查图片是否在缓存队列中，若是则将其删除", httpMethod = "DELETE")
     @RequestMapping(value = "", method = RequestMethod.DELETE)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "删除成功")
+            @ApiResponse(code = 200, message = "删除成功"),
+            @ApiResponse(code = 40009, message = "试图访问其他用户上传的图片")
     })
     @AllAccess
     public CommonResult<String> handleCancelUse(@RequestParam("path") String path,
                                                   @RequestHeader("token") String token) {
         int userid = TokenUtil.extractUserid(token);
-        storageService.deleteFromCache(userid, path);
+        storageService.setUseless(userid, path);
 
         return new CommonResult<>(200,"删除成功","deleted");
     }
