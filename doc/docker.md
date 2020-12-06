@@ -18,21 +18,21 @@
 
    若您不想修改配置文件，将它放到`target`目录下（没有这个文件夹就新建）
 
-2. `cd ./docker-run`
+2. `cd ./server-production`
 
 3. （可选）修改`.env`文件中的配置`TARGET_PATH`为您收到文件的文件路径
 
    （默认情况是`../target/shuwashuwa-0.0.1-SNAPSHOT.jar`）
 
-4. `docker-compose up`
+4. `sudo ./run-production.sh <appid> <appsecret>`
 
 5. 打开浏览器，访问http://localhost:8848/swagger-ui.html，显示正常则表明容器已经启动
 
 #### 我想自己编译Jar
 
-1. `cd ./docker-build`
+1. `cd ./server-dev`
 2. （可选）修改`.env`文件中的配置（主要是目标目录`$TARGET_DIR`和Jar文件名`$TARGET_JAR`）
-3. `docker-compose up --build`
+3. `sudo ./run-dev.sh <appid> <appsecret>`
 4. 打开浏览器，访问http://localhost:8848/swagger-ui.html，显示正常则表明容器已经启动
 
 #### 关闭服务
@@ -67,6 +67,8 @@
 
    `TARGET_PATH` 需要运行的Jar的路径
 
+   `PIC_PATH` 存储图片的路径
+   
    如果您不知道自己在做什么，请谨慎修改其他配置。
 
 #### 故障排除
@@ -78,8 +80,11 @@
 2. `shuwashuwa Exit code 127`
 
    找不到Jar，请您检查.env对应的Jar文件是否存在
+   
 3. `/usr/bin/env: bash\r not found` 或其他带`\r`的错误
 
    您需要手动把`docker-run`和`docker-build`下的文件修改为LF编码
+
+   可以通过`./run-dev.sh convert` 实现
 
 4. 如果您出现其他错误且难以自行解决，欢迎提issue

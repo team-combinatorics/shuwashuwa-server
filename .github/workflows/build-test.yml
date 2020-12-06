@@ -1,4 +1,4 @@
-### 12f23eddde Dec 1 2020 ###
+### 12f23eddde Dec 5 2020 ###
 # This workflow will build a Java project with Maven
 # https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
@@ -13,11 +13,11 @@ on:
   push:
     branches: 
       - main
-      # - 12f23eddde
+      - 12f23eddde
   pull_request:
     branches: 
       - main
-      # - 12f23eddde
+      - 12f23eddde
 
 env:
   MYSQL_ADDRESS: 127.0.0.1:3306
@@ -25,6 +25,11 @@ env:
   MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
   MYSQL_USER: ${{ secrets.MYSQL_USER }}
   MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+  WX_APPID: ${{ secrets.APPID }}
+  WX_SECRET: ${{ secrets.APPSECRET }}
+  PIC_PATH: ./pic
+  TOKEN_SECRET: HappyLuckSmileYeah~
+  TZ: Asia/Shanghai
 
 jobs:
   build-test:
@@ -67,4 +72,6 @@ jobs:
         restore-keys: ${{ runner.os }}-m2  
     
     - name: Build and test project with Maven
-      run: mvn -B package --file pom.xml
+      run: |
+        mkdir $PIC_PATH
+        mvn -B package --file pom.xml

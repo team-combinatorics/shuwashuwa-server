@@ -1,6 +1,9 @@
 HELP.md
 target/
-db/
+
+*/db/
+*/pic/
+
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -40,3 +43,4 @@ helpful_tools/database/mapper
 helpful_tools/database/java
 helpful_tools/database/sql
 helpful_tools/database/utils/__pycache__
+*.sdi

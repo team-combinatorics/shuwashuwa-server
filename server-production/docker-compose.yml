@@ -2,6 +2,19 @@
 version: '3'
 
 services: 
+    # caddy
+    caddy:
+        image: caddy:latest
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ${WWWROOT}:/var/www/html
+            - ${CONFIG_PATH}:/etc/caddy/Caddyfile
+            - ${SSL}:/root/.local/share/caddy/acme/acme-v02.api.letsencrypt.org/
+        environment:
+            - DOMAIN
+
     mysql:
         image: mysql:8.0.22
         volumes:
@@ -13,6 +26,11 @@ services:
             - MYSQL_USER
             - MYSQL_PASSWORD
         restart: on-failure
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1m"
+                max-file: "10"
 
     #####  Uncomment this when debugging db  #####
     # adminer:
@@ -26,18 +44,28 @@ services:
     shuwashuwa:
         build: 
             context: ../
-            dockerfile: ./docker-run/shuwashuwa-server.dockerfile
-        ports: 
-            - "8848:8848"
+            dockerfile: ./server-production/shuwashuwa-server.dockerfile
+        # Disabled for security 
+        # ports:
+        #     - "8848:8848"
         volumes:
             - ${TARGET_PATH}:/app/target.jar
+            - ${PIC_PATH}:/pic
         environment: 
             - MYSQL_DATABASE
             - MYSQL_USER
             - MYSQL_PASSWORD
             - MYSQL_ADDRESS
-        command: 
-            ["./wait-for-it.sh", "-t", "30", "${MYSQL_ADDRESS}", "--", "java", "-jar","/app/target.jar"]
+            - TOKEN_SECRET
+            - PIC_PATH=/pic
+            - WX_APPID
+            - WX_SECRET
         restart: on-failure
         depends_on: 
             - mysql
+            - caddy
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "10"
