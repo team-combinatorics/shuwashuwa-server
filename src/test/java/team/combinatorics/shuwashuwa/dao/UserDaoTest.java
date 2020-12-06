@@ -19,6 +19,7 @@ public class UserDaoTest {
     @Test
     public void weakTest() {
         // 插入单个用户的测试
+        int num=6+1;
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 2"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 3"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 4"));
@@ -54,12 +55,12 @@ public class UserDaoTest {
         // 更改用户权限的测试--志愿者
         userDao.updateUserVolunteerAuthority(6, true);
         Assert.assertTrue(userDao.getUserByUserid(6).isVolunteer());
-        Assert.assertTrue(userDao.getUserByOpenid("fake opnid 6").isVolunteer());
+        Assert.assertTrue(userDao.getUserByOpenid("fake openid 6").isVolunteer());
 
         // 更改用户权限的测试--管理员
         userDao.updateUserAdminAuthority(6, true);
         Assert.assertTrue(userDao.getUserByUserid(6).isAdmin());
-        Assert.assertTrue(userDao.getUserByOpenid("fake opnid 6").isAdmin());
+        Assert.assertTrue(userDao.getUserByOpenid("fake openid 6").isAdmin());
 
         // 删除单个用户的测试--使用userid
         Assert.assertEquals(1, userDao.deleteUserByUserid(4)); //删除一个已存在的用户
@@ -76,7 +77,7 @@ public class UserDaoTest {
         Assert.assertEquals("shuwashuwadoridorimin!", userDao.getSuEncryptedPSW());
 
         // 删除所有用户的测试
-        Assert.assertEquals(1, userDao.deleteAllUsers());
+        Assert.assertEquals(num-2, userDao.deleteAllUsers());
 
     }
 
