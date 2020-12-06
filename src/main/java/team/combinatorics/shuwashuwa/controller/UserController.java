@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
@@ -20,14 +20,10 @@ import java.util.List;
 
 @Api(value = "User相关接口说明")
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
     UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     /**
      * 注册
@@ -127,6 +123,7 @@ public class UserController {
         int userid = TokenUtil.extractUserid(token);
         System.out.println(userid+"审核了编号为"+updateDTO.getFormID()+"的申请");
         userService.completeApplicationAudition(userid,updateDTO);
+
         return new CommonResult<>(200,"请求成功","success");
     }
 
