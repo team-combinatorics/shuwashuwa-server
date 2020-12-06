@@ -24,7 +24,4 @@ public interface UserService {
 
     void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO);
 
-    // boolean suicide();
-
-    String test(LogInInfoDTO logInInfoDto) throws Exception;
 }

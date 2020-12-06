@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
     public LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception {
         JsonNode root = WechatUtil.getWechatInfo(logInInfoDto.getCode());
         String openid = root.path("openid").asText();
-        String sessionKey = root.path("session_key").asText();
         System.out.println("用户登录 @Service");
         System.out.println("openid: " + openid);
         LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
@@ -87,20 +86,6 @@ public class UserServiceImpl implements UserService {
         applicationDao.updateApplicationByAdmin(userid, updateDTO);
         if (updateDTO.getStatus() == 1)
             userDao.updateUserVolunteerAuthority(applicationDao.getApplicationByFormId(updateDTO.getFormID()).getUserId(), true);
-    }
-
-    @Override
-    public String test(LogInInfoDTO logInInfoDto) throws Exception {
-        JsonNode root = WechatUtil.getWechatInfo(logInInfoDto.getCode());
-        // 如果返回中有错误码且不等于零说明出错
-        if (root.has("errcode") && root.path("errcode").asInt() != 0)
-            return "Yes " + root.toString();
-        else {
-            String openid = root.path("openid").asText();
-            String sessionKey = root.path("session_key").asText();
-            userDao.insertUserByOpenid(openid);
-            return userDao.getUserByOpenid(openid).toString();
-        }
     }
 
 }
