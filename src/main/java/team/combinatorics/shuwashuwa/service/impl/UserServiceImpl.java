@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
+import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
+import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
@@ -54,6 +56,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) {
+        if(updateUserInfoDto.getComment()==null &&
+                updateUserInfoDto.getDepartment()==null &&
+                updateUserInfoDto.getEmail()==null &&
+                updateUserInfoDto.getGrade()==null &&
+                updateUserInfoDto.getIdentity()==null &&
+                updateUserInfoDto.getPhoneNumber()==null &&
+                updateUserInfoDto.getStudentId()==null &&
+                updateUserInfoDto.getUserName()==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         userDao.updateUserInfo(userid, updateUserInfoDto);
     }
 
@@ -69,7 +80,9 @@ public class UserServiceImpl implements UserService {
         VolunteerApplicationPO.VolunteerApplicationPOBuilder volunteerApplicationPOBuilder
                 = VolunteerApplicationPO.builder();
         volunteerApplicationPOBuilder.userId(userid);
-        // TODO 这里做合法性判断，例如是否为null
+        if(volunteerApplicationDTO.getCardPicLocation()==null ||
+                volunteerApplicationDTO.getReasonForApplication()==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationDTO.getCardPicLocation());
         volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationDTO.getReasonForApplication());
         VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationPOBuilder.build();
@@ -83,6 +96,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO) {
+        if(updateDTO.getFormID()==null || updateDTO.getStatus()==null || updateDTO.getReplyByAdmin()==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         applicationDao.updateApplicationByAdmin(userid, updateDTO);
         if (updateDTO.getStatus() == 1)
             userDao.updateUserVolunteerAuthority(applicationDao.getApplicationByFormId(updateDTO.getFormID()).getUserId(), true);
