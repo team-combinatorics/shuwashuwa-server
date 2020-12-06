@@ -2,6 +2,8 @@ package team.combinatorics.shuwashuwa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import team.combinatorics.shuwashuwa.model.po.AdminPO;
+import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
 import team.combinatorics.shuwashuwa.utils.MD5Util;
 
 @SpringBootTest
