@@ -73,7 +73,7 @@ public class SuperAdministratorController {
      * 超管获取缓存图片数量
      */
     @ApiOperation(value = "获取缓存图片数量", notes = "超管专属", httpMethod = "GET")
-    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    @RequestMapping(value = "/cache", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "获取成功")
     })
