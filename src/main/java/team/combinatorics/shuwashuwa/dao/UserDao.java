@@ -77,7 +77,7 @@ public interface UserDao {
     /**
      * 删除所有用户
      *
-     * @return 删除用户的数量，在该系统设计中，只会为0或者1
+     * @return 删除用户的数量，在该系统设计中，会返回删除的用户个数
      */
     int deleteAllUsers();
 
