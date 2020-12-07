@@ -1,13 +1,10 @@
 package team.combinatorics.shuwashuwa.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Setter;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,7 +12,6 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.utils.PropertiesConstants;
 
 import java.io.File;
 import java.io.FileInputStream;

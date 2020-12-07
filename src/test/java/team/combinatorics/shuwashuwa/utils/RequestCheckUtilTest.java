@@ -1,7 +1,7 @@
 package team.combinatorics.shuwashuwa.utils;
 
 import lombok.AllArgsConstructor;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.Assert;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ import team.combinatorics.shuwashuwa.MainApplication;
 public class RequestCheckUtilTest {
 
     @Test
-    void testChecking() {
+    public void testChecking() {
         @AllArgsConstructor
         class TestingClass {
             final Integer a;
@@ -34,7 +34,7 @@ public class RequestCheckUtilTest {
     }
 
     @Test
-    void testAdminDTOChecking() {
+    public void testAdminDTOChecking() {
         // 什么也不填，肯定不行，爪巴
         AdminDTO allNull = AdminDTO.builder()
                 .build();
