@@ -53,7 +53,7 @@ public class SuperAdministratorServiceTest {
         Assert.assertEquals(adminDTO, fetchAdminDTO);
 
         // 测试超管获取管理员列表的服务
-        List<AdminPO> allAdmins = superAdministratorService.getAdministratorList();
+        List<AdminDTO> allAdmins = superAdministratorService.getAdministratorList();
         Assert.assertEquals(1, allAdmins.size());
         fetchAdminDTO = AdminDTO.builder()
                 .userid(allAdmins.get(0).getUserid())

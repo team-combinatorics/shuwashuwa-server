@@ -135,7 +135,7 @@ public class SuperAdministratorController {
             @ApiResponse(code = 200, message = "获取成功"),
     })
     @SUAccess
-    public CommonResult<List<AdminPO>> getAdministratorList() {
+    public CommonResult<List<AdminDTO>> getAdministratorList() {
 
         return new CommonResult<>(200, "获取成功", superAdministratorService.getAdministratorList());
     }

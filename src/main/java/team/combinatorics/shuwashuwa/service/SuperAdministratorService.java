@@ -35,7 +35,7 @@ public interface SuperAdministratorService {
      * 超级管理员获取管理员列表
      * @return 管理员列表
      */
-    List<AdminPO> getAdministratorList();
+    List<AdminDTO> getAdministratorList();
 
     /**
      * 超级管理员删除管理员
