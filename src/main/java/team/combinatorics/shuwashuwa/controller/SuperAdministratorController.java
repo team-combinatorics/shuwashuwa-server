@@ -236,18 +236,4 @@ public class SuperAdministratorController {
         return new CommonResult<>(200, "请求成功", "success");
     }
 
-    /**
-     * 超管查看一个活动的时间段列表
-     */
-    @ApiOperation(value = "查看一个活动的时间段列表", notes = "返回格式化时间段的类", httpMethod = "GET")
-    @RequestMapping(value = "/activity", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
-    @SUAccess
-    public CommonResult<List<ActivityTimeSlotDTO>> handleTimeSlotRequest(@RequestBody Integer activityId) {
-        System.out.println("请求活动"+activityId+"时间段");
-        return new CommonResult<>(200, "请求成功", activityService.listTimeSlots(activityId));
-    }
-
 }
