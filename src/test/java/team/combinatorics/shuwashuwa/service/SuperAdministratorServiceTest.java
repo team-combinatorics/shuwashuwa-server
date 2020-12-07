@@ -13,7 +13,6 @@ import team.combinatorics.shuwashuwa.model.po.UserPO;
 
 import java.util.List;
 
-/*TODO: 完成对超管服务层功能的测试*/
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
 public class SuperAdministratorServiceTest {
