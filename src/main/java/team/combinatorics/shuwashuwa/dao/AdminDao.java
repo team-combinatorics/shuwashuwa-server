@@ -19,6 +19,7 @@ public interface AdminDao {
 
     /**
      * 修改管理员信息，不允许修改userid，不能全为空
+     * 需要在传入的对象中填充id（管理员id）一项
      *
      * @param adminPO 管理员信息
      * @return 修改成功的记录数量
@@ -34,7 +35,7 @@ public interface AdminDao {
     List<AdminPO> listAdmins();
 
     /**
-     * 根据id获取管理员信息
+     * 根据管理员id获取管理员信息
      *
      * @return 管理员信息
      */
