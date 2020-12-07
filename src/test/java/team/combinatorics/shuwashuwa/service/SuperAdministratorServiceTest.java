@@ -10,7 +10,7 @@ import team.combinatorics.shuwashuwa.MainApplication;
 /*TODO: 完成对超管服务层功能的测试*/
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
-public class SuperAdmisistratorServiceTest {
+public class SuperAdministratorServiceTest {
 
     @Autowired
     SuperAdministratorService superAdministratorService;
