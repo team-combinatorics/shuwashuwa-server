@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
+import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
+import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
@@ -29,6 +33,7 @@ import java.util.List;
 public class SuperAdministratorController {
     private final SuperAdministratorService superAdministratorService;
     private final ImageStorageService storageService;
+    private final ActivityService activityService;
 
     /**
      * 超级管理员登录系统
@@ -188,5 +193,63 @@ public class SuperAdministratorController {
         return new CommonResult<>(40000, "更新失败，数据库异常", "You should check your database!");
     }
 
+    /**
+     * 超管发起一次活动
+     */
+    @ApiOperation(value = "发起活动", notes = "su专属", httpMethod = "POST")
+    @RequestMapping(value = "/activity", method = RequestMethod.POST)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @SUAccess
+    public CommonResult<String> handleActivityLaunch(@RequestBody ActivityLaunchDTO activityLaunchDTO) {
+        System.out.println("发起活动");
+        activityService.insertActivity(activityLaunchDTO);
+        return new CommonResult<>(200, "请求成功", "success");
+    }
+
+    /**
+     * 超管更新活动信息
+     */
+    @ApiOperation(value = "更新活动信息", notes = "su专属", httpMethod = "PATCH")
+    @RequestMapping(value = "/activity", method = RequestMethod.PATCH)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @SUAccess
+    public CommonResult<String> handleActivityUpdate(@RequestBody ActivityUpdateDTO activityUpdateDTO) {
+        System.out.println("更新活动"+ activityUpdateDTO.getActivityId());
+        activityService.updateActivity(activityUpdateDTO);
+        return new CommonResult<>(200, "请求成功", "success");
+    }
+
+    /**
+     * 超管取消一次活动
+     */
+    @ApiOperation(value = "移除活动", notes = "su专属", httpMethod = "DELETE")
+    @RequestMapping(value = "/activity", method = RequestMethod.DELETE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @SUAccess
+    public CommonResult<String> handleActivityDelete(@RequestBody Integer activityId) {
+        System.out.println("移除活动"+activityId);
+        activityService.removeActivity(activityId);
+        return new CommonResult<>(200, "请求成功", "success");
+    }
+
+    /**
+     * 超管查看一个活动的时间段列表
+     */
+    @ApiOperation(value = "查看一个活动的时间段列表", notes = "返回格式化时间段的类", httpMethod = "GET")
+    @RequestMapping(value = "/activity", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @SUAccess
+    public CommonResult<List<ActivityTimeSlotDTO>> handleTimeSlotRequest(@RequestBody Integer activityId) {
+        System.out.println("请求活动"+activityId+"时间段");
+        return new CommonResult<>(200, "请求成功", activityService.listTimeSlots(activityId));
+    }
 
 }

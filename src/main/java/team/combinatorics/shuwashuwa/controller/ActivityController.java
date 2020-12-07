@@ -27,42 +27,6 @@ import java.util.List;
 public class ActivityController {
     ActivityService activityService;
 
-    @ApiOperation(value = "发起活动", notes = "su专属", httpMethod = "POST")
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
-    @SUAccess
-    public CommonResult<String> handleActivityLaunch(@RequestBody ActivityLaunchDTO activityLaunchDTO) {
-        System.out.println("发起活动");
-        activityService.insertActivity(activityLaunchDTO);
-        return new CommonResult<>(200, "请求成功", "success");
-    }
-
-    @ApiOperation(value = "更新活动信息", notes = "su专属", httpMethod = "PATCH")
-    @RequestMapping(value = "", method = RequestMethod.PATCH)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
-    @SUAccess
-    public CommonResult<String> handleActivityUpdate(@RequestBody ActivityUpdateDTO activityUpdateDTO) {
-        System.out.println("更新活动"+ activityUpdateDTO.getActivityId());
-        activityService.updateActivity(activityUpdateDTO);
-        return new CommonResult<>(200, "请求成功", "success");
-    }
-
-    @ApiOperation(value = "移除活动", notes = "su专属", httpMethod = "DELETE")
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
-    @SUAccess
-    public CommonResult<String> handleActivityDelete(@RequestBody Integer activityId) {
-        System.out.println("移除活动"+activityId);
-        activityService.removeActivity(activityId);
-        return new CommonResult<>(200, "请求成功", "success");
-    }
-
     @ApiOperation(value = "查看所有活动", notes = "返回所有发起过而未被取消的活动", httpMethod = "GET")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiResponses({
@@ -85,14 +49,4 @@ public class ActivityController {
         return new CommonResult<>(200, "请求成功", activityService.listComingActivity());
     }
 
-    @ApiOperation(value = "查看一个活动的时间段列表", notes = "返回格式化时间段的类", httpMethod = "GET")
-    @RequestMapping(value = "/slots", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
-    @SUAccess
-    public CommonResult<List<ActivityTimeSlotDTO>> handleTimeSlotRequest(@RequestBody Integer activityId) {
-        System.out.println("请求活动"+activityId+"时间段");
-        return new CommonResult<>(200, "请求成功", activityService.listTimeSlots(activityId));
-    }
 }
