@@ -1,7 +1,6 @@
 package team.combinatorics.shuwashuwa.service;
 
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
-import team.combinatorics.shuwashuwa.model.po.AdminPO;
 
 import java.util.List;
 
