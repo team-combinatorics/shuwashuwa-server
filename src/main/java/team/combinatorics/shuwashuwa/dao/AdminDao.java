@@ -6,7 +6,6 @@ import team.combinatorics.shuwashuwa.model.po.AdminPO;
 
 import java.util.List;
 
-// TODO 未测试
 @Repository
 public interface AdminDao {
     /**
