@@ -10,6 +10,8 @@ import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 
+import java.util.List;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
 public class AdminDaoTest {
@@ -55,6 +57,17 @@ public class AdminDaoTest {
         Assert.assertEquals(adminPO.getDepartment(), fetch.getDepartment());
         Assert.assertEquals(adminPO.getStudentId(), fetch.getStudentId());
 
+        // 测试获取管理员列表
+        List<AdminPO> list = adminDao.listAdmins();
+        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(adminPO.getUserid(), list.get(0).getUserid());
+        Assert.assertEquals(adminPO.getUserName(), list.get(0).getUserName());
+        Assert.assertEquals(adminPO.getPhoneNumber(), list.get(0).getPhoneNumber());
+        Assert.assertEquals(adminPO.getEmail(), list.get(0).getEmail());
+        Assert.assertEquals(adminPO.getIdentity(), list.get(0).getIdentity());
+        Assert.assertEquals(adminPO.getDepartment(), list.get(0).getDepartment());
+        Assert.assertEquals(adminPO.getStudentId(), list.get(0).getStudentId());
+
         // 测试更新管理员信息
         AdminPO update = AdminPO.builder()
                 .id(adminID)
@@ -67,9 +80,10 @@ public class AdminDaoTest {
         Assert.assertEquals(update.getUserName(), fetchUpdate.getUserName());
         Assert.assertEquals(update.getEmail(), fetchUpdate.getEmail());
 
-        // 测试获取管理员列表
-
         // 测试删除管理员
+        Assert.assertEquals(1, adminDao.deleteByID(adminID));
+        list = adminDao.listAdmins();
+        Assert.assertEquals(0, list.size());
 
     }
 }
