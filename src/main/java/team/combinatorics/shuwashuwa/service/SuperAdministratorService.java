@@ -50,4 +50,11 @@ public interface SuperAdministratorService {
      * @return 管理员的信息体
      */
     AdminDTO getAdministratorInfo(int userID);
+
+    /**
+     * 超级管理员根据用户id和传过来的管理员待修改信息更新数据库
+     * @param userID 待更新信息的管理员的用户id
+     * @return 如果更新成功应该返回修改成功的记录数量（大于0，因为不允许传入的数据全为空）
+     */
+    int updateAdministratorInfo(int userID, AdminDTO adminDTO);
 }

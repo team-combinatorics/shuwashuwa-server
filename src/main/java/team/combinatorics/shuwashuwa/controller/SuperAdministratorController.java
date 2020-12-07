@@ -177,9 +177,17 @@ public class SuperAdministratorController {
             @ApiResponse(code = 40010, message = "更新失败，信息不能全为空")
     })
     @SUAccess
-    public CommonResult<String> changeAdministratorInfo()
+    public CommonResult<String> updateAdministratorInfo(@RequestHeader("userID") @NotNull(message = "用户id不能为空") int userID,
+                                                        @RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO)
     {
-        return null;
+        if(RequestCheckUtil.fieldAllNull(adminDTO))
+            return new CommonResult<>(40010, "更新失败，信息不能全为空", "You should fill administrator info!");
+        System.out.println("即将更新用户id为"+userID+"的管理员的信息");
+        int cnt = superAdministratorService.updateAdministratorInfo(userID, adminDTO);
+        if(cnt>0)
+            return new CommonResult<>(200, "更新成功", "success");
+        /*TODO: 需要为数据库异常定义一个error code*/
+        return new CommonResult<>(40000, "更新失败，数据库异常", "You should check your database!");
     }
 
 
