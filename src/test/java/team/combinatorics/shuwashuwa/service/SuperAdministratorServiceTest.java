@@ -12,6 +12,8 @@ import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 
+import java.util.List;
+
 /*TODO: 完成对超管服务层功能的测试*/
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
@@ -29,9 +31,6 @@ public class SuperAdministratorServiceTest {
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 2"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 3"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 4"));
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 5"));
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 6"));
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 7"));
 
         int userID = 3;
         // 测试超管添加管理员的服务
@@ -54,16 +53,86 @@ public class SuperAdministratorServiceTest {
         Assert.assertEquals(adminDTO, fetchAdminDTO);
 
         // 测试超管获取管理员列表的服务
+        List<AdminPO> allAdmins = superAdministratorService.getAdministratorList();
+        Assert.assertEquals(1, allAdmins.size());
+        fetchAdminDTO = AdminDTO.builder()
+                .userid(allAdmins.get(0).getUserid())
+                .userName(allAdmins.get(0).getUserName())
+                .phoneNumber(allAdmins.get(0).getPhoneNumber())
+                .email(allAdmins.get(0).getEmail())
+                .identity(allAdmins.get(0).getIdentity())
+                .department(allAdmins.get(0).getDepartment())
+                .studentId(allAdmins.get(0).getStudentId())
+                .build();
+        Assert.assertEquals(adminDTO, fetchAdminDTO);
 
         // 测试超管修改管理员信息的服务
+        AdminDTO updateInfo = AdminDTO.builder()
+                .userid(Integer.toString(userID))
+                .userName("kinami")
+                .identity("misaki")
+                .build();
+        Assert.assertEquals(1, superAdministratorService.updateAdministratorInfo(updateInfo));
 
-        // 测试修改信息后对列表的更新
+        // 测试修改信息后对列表中信息的更新
+        allAdmins = superAdministratorService.getAdministratorList();
+        Assert.assertEquals(1, allAdmins.size());
+        adminDTO.setUserName(updateInfo.getUserName());
+        adminDTO.setIdentity(updateInfo.getIdentity());
+        fetchAdminDTO = AdminDTO.builder()
+                .userid(allAdmins.get(0).getUserid())
+                .userName(allAdmins.get(0).getUserName())
+                .phoneNumber(allAdmins.get(0).getPhoneNumber())
+                .email(allAdmins.get(0).getEmail())
+                .identity(allAdmins.get(0).getIdentity())
+                .department(allAdmins.get(0).getDepartment())
+                .studentId(allAdmins.get(0).getStudentId())
+                .build();
+        Assert.assertEquals(adminDTO, fetchAdminDTO);
 
         // 测试新增管理员后对列表的更新
+        int userID1 = 4;
+        AdminDTO adminDTO1 = AdminDTO.builder()
+                .userid(Integer.toString(userID1))
+                .userName("leesou")
+                .phoneNumber("1145141919810")
+                .email("114514.1919810.inm")
+                .identity("chairman")
+                .department("eecs")
+                .studentId("114514")
+                .build();
+        Assert.assertEquals(1, superAdministratorService.addAdministrator(adminDTO1));
+        UserPO userPO1 = userDao.getUserByUserid(userID1);
+        Assert.assertTrue(userPO1.isAdmin());
+        allAdmins = superAdministratorService.getAdministratorList();
+        Assert.assertEquals(2, allAdmins.size());
+        fetchAdminDTO = AdminDTO.builder()
+                .userid(allAdmins.get(1).getUserid())
+                .userName(allAdmins.get(1).getUserName())
+                .phoneNumber(allAdmins.get(1).getPhoneNumber())
+                .email(allAdmins.get(1).getEmail())
+                .identity(allAdmins.get(1).getIdentity())
+                .department(allAdmins.get(1).getDepartment())
+                .studentId(allAdmins.get(1).getStudentId())
+                .build();
+        Assert.assertEquals(adminDTO1, fetchAdminDTO);
 
         // 测试删除管理员的服务
+        Assert.assertEquals(1, superAdministratorService.deleteAdministrator(userID));
 
         // 测试删除管理员后对列表的更新
+        allAdmins = superAdministratorService.getAdministratorList();
+        Assert.assertEquals(1, allAdmins.size());
+        fetchAdminDTO = AdminDTO.builder()
+                .userid(allAdmins.get(0).getUserid())
+                .userName(allAdmins.get(0).getUserName())
+                .phoneNumber(allAdmins.get(0).getPhoneNumber())
+                .email(allAdmins.get(0).getEmail())
+                .identity(allAdmins.get(0).getIdentity())
+                .department(allAdmins.get(0).getDepartment())
+                .studentId(allAdmins.get(0).getStudentId())
+                .build();
+        Assert.assertEquals(adminDTO1, fetchAdminDTO);
 
     }
 }
