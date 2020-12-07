@@ -178,8 +178,7 @@ public class SuperAdministratorController {
     })
     @SUAccess
     public CommonResult<String> updateAdministratorInfo(@RequestHeader("userID") @NotNull(message = "用户id不能为空") int userID,
-                                                        @RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO)
-    {
+                                                        @RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO) {
         if(RequestCheckUtil.fieldAllNull(adminDTO))
             return new CommonResult<>(40010, "更新失败，信息不能全为空", "You should fill administrator info!");
         System.out.println("即将更新用户id为"+userID+"的管理员的信息");

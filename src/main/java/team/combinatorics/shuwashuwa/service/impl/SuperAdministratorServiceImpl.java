@@ -70,16 +70,14 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     }
 
     @Override
-    public int deleteAdministrator(int userID)
-    {
+    public int deleteAdministrator(int userID) {
         int adminID = adminDao.getAdminIDByUserID(userID);
         userDao.updateUserAdminAuthority(userID, false);
         return adminDao.deleteByID(adminID);
     }
 
     @Override
-    public AdminDTO getAdministratorInfo(int userID)
-    {
+    public AdminDTO getAdministratorInfo(int userID) {
         int adminID = adminDao.getAdminIDByUserID(userID);
         AdminPO adminPO = adminDao.getByID(adminID);
         if(adminPO == null)
@@ -96,8 +94,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     }
 
     @Override
-    public int updateAdministratorInfo(int userID, AdminDTO adminDTO)
-    {
+    public int updateAdministratorInfo(int userID, AdminDTO adminDTO) {
         int adminID = adminDao.getAdminIDByUserID(userID);
         AdminPO adminPO = AdminPO.builder()
                 .id(adminID)

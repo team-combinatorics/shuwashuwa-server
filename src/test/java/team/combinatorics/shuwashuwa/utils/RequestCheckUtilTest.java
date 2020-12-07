@@ -30,8 +30,7 @@ public class RequestCheckUtilTest {
     }
 
     @Test
-    void testAdminDTOChecking()
-    {
+    void testAdminDTOChecking() {
         AdminDTO allNull = AdminDTO.builder()
                 .build();
         Assert.assertTrue(RequestCheckUtil.fieldAllNull(allNull));
