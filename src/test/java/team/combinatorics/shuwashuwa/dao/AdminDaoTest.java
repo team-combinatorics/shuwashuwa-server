@@ -18,17 +18,8 @@ public class AdminDaoTest {
     @Autowired
     AdminDao adminDao;
 
-    @Autowired
-    UserDao userDao;
-
     @Test
     public void simpleTest() {
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 2"));
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 3"));
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 4"));
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 5"));
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 6"));
-        Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 7"));
 
         AdminPO adminPO = AdminPO.builder()
                 .userid("3")
