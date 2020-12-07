@@ -4,7 +4,6 @@ import team.combinatorics.shuwashuwa.model.dto.ActivityReturnDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
-import team.combinatorics.shuwashuwa.model.po.ActivityInfoPO;
 
 import java.util.List;
 

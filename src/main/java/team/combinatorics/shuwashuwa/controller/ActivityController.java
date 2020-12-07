@@ -5,16 +5,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
-import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.model.dto.ActivityReturnDTO;
-import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
-import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
-import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.ActivityService;
 
