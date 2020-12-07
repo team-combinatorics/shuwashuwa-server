@@ -5,15 +5,17 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
-import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
+import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
+import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
@@ -29,6 +31,7 @@ import java.util.List;
 public class SuperAdministratorController {
     private final SuperAdministratorService superAdministratorService;
     private final ImageStorageService storageService;
+    private final ActivityService activityService;
 
     /**
      * 超级管理员登录系统
@@ -177,10 +180,74 @@ public class SuperAdministratorController {
             @ApiResponse(code = 40010, message = "更新失败，信息不能全为空")
     })
     @SUAccess
-    public CommonResult<String> changeAdministratorInfo()
-    {
-        return null;
+    public CommonResult<String> updateAdministratorInfo(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO) {
+        if(RequestCheckUtil.fieldAllNull(adminDTO))
+            return new CommonResult<>(40010, "更新失败，信息不能全为空", "You should fill administrator info!");
+        System.out.println("即将更新用户id为"+adminDTO.getUserid()+"的管理员的信息");
+        int cnt = superAdministratorService.updateAdministratorInfo(adminDTO);
+        if(cnt>0)
+            return new CommonResult<>(200, "更新成功", "success");
+        /*TODO: 需要为数据库异常定义一个error code*/
+        return new CommonResult<>(40000, "更新失败，数据库异常", "You should check your database!");
     }
 
+    /**
+     * 超管发起一次活动
+     */
+    @ApiOperation(value = "发起活动", notes = "su专属", httpMethod = "POST")
+    @RequestMapping(value = "/activity", method = RequestMethod.POST)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @SUAccess
+    public CommonResult<String> handleActivityLaunch(@RequestBody ActivityLaunchDTO activityLaunchDTO) {
+        System.out.println("发起活动");
+        activityService.insertActivity(activityLaunchDTO);
+        return new CommonResult<>(200, "请求成功", "success");
+    }
+
+    /**
+     * 超管更新活动信息
+     */
+    @ApiOperation(value = "更新活动信息", notes = "su专属", httpMethod = "PATCH")
+    @RequestMapping(value = "/activity", method = RequestMethod.PATCH)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @SUAccess
+    public CommonResult<String> handleActivityUpdate(@RequestBody ActivityUpdateDTO activityUpdateDTO) {
+        System.out.println("更新活动"+ activityUpdateDTO.getActivityId());
+        activityService.updateActivity(activityUpdateDTO);
+        return new CommonResult<>(200, "请求成功", "success");
+    }
+
+    /**
+     * 超管取消一次活动
+     */
+    @ApiOperation(value = "移除活动", notes = "su专属", httpMethod = "DELETE")
+    @RequestMapping(value = "/activity", method = RequestMethod.DELETE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @SUAccess
+    public CommonResult<String> handleActivityDelete(@RequestBody Integer activityId) {
+        System.out.println("移除活动"+activityId);
+        activityService.removeActivity(activityId);
+        return new CommonResult<>(200, "请求成功", "success");
+    }
+
+    /**
+     * 超管查看一个活动的时间段列表
+     */
+    @ApiOperation(value = "查看一个活动的时间段列表", notes = "返回格式化时间段的类", httpMethod = "GET")
+    @RequestMapping(value = "/activity", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @SUAccess
+    public CommonResult<List<ActivityTimeSlotDTO>> handleTimeSlotRequest(@RequestBody Integer activityId) {
+        System.out.println("请求活动"+activityId+"时间段");
+        return new CommonResult<>(200, "请求成功", activityService.listTimeSlots(activityId));
+    }
 
 }

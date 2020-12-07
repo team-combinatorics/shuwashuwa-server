@@ -8,6 +8,18 @@ public class RequestCheckUtil {
         for (Field field:obj.getClass().getDeclaredFields()){
             if(field.getName().equals("this$0"))
                 continue;
+            if(obj.getClass().toString().equals("class team.combinatorics.shuwashuwa.model.dto.AdminDTO")
+                    && field.getName().equals("userid")) {
+                try {
+                    field.setAccessible(true);
+                    if(field.get(obj) == null)
+                        return true;
+                    continue;
+                }catch (IllegalAccessException e) {
+                    System.out.println(field.getName()+" is not accessible");
+                }
+            }
+
             try {
                 field.setAccessible(true);
                 if(field.get(obj) != null)
