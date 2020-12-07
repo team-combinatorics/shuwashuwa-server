@@ -94,8 +94,8 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     }
 
     @Override
-    public int updateAdministratorInfo(int userID, AdminDTO adminDTO) {
-        int adminID = adminDao.getAdminIDByUserID(userID);
+    public int updateAdministratorInfo(AdminDTO adminDTO) {
+        int adminID = adminDao.getAdminIDByUserID(Integer.parseInt(adminDTO.getUserid()));
         AdminPO adminPO = AdminPO.builder()
                 .id(adminID)
                 .userName(adminDTO.getUserName())
