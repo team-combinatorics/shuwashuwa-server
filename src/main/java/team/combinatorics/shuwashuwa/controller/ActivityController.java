@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
-import team.combinatorics.shuwashuwa.model.dto.ActivityReturnDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.ActivityService;
@@ -30,7 +30,7 @@ public class ActivityController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<List<ActivityReturnDTO>> handleListRequest() {
+    public CommonResult<List<ActivityResponseDTO>> handleListRequest() {
         System.out.println("请求活动列表");
         return new CommonResult<>(200, "请求成功", activityService.listAllActivity());
     }
@@ -41,7 +41,7 @@ public class ActivityController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<List<ActivityReturnDTO>> handleComingListRequest() {
+    public CommonResult<List<ActivityResponseDTO>> handleComingListRequest() {
         System.out.println("请求未开始活动列表");
         return new CommonResult<>(200, "请求成功", activityService.listComingActivity());
     }

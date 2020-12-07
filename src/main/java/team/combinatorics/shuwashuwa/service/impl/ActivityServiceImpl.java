@@ -7,7 +7,7 @@ import team.combinatorics.shuwashuwa.dao.ActivityTimeSlotDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.dto.ActivityReturnDTO;
+import team.combinatorics.shuwashuwa.model.dto.ActivityResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
@@ -16,6 +16,7 @@ import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
 import team.combinatorics.shuwashuwa.model.pojo.ActivityTimeSlot;
 import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
+import team.combinatorics.shuwashuwa.utils.TimeFormatUtil;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -103,13 +104,13 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<ActivityReturnDTO> listAllActivity() {
+    public List<ActivityResponseDTO> listAllActivity() {
         final List<ActivityInfoPO> raw = activityInfoDao.listByCondition(SelectActivityCO.builder().build());
         return formattedActivityList(raw);
     }
 
     @Override
-    public List<ActivityReturnDTO> listComingActivity() {
+    public List<ActivityResponseDTO> listComingActivity() {
         final List<ActivityInfoPO> raw = activityInfoDao.listByCondition(SelectActivityCO.builder()
                 .beginTime(Timestamp.valueOf(LocalDateTime.now())).build());
         return formattedActivityList(raw);
@@ -121,24 +122,24 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityTimeSlotDTO> converted = new Vector<>();
         for(ActivityTimeSlot timeSlot: raw) {
             converted.add(new ActivityTimeSlotDTO(timeSlot.getTimeSlot(),
-                    timeSlot.getStartTime().toString(),
-                    timeSlot.getEndTime().toString()));
+                    TimeFormatUtil.stamp2str(timeSlot.getStartTime()),
+                    TimeFormatUtil.stamp2str(timeSlot.getEndTime())));
         }
         return converted;
     }
 
-    private List<ActivityReturnDTO> formattedActivityList(List<ActivityInfoPO> raw) {
-        List<ActivityReturnDTO> converted = new Vector<>();
+    private List<ActivityResponseDTO> formattedActivityList(List<ActivityInfoPO> raw) {
+        List<ActivityResponseDTO> converted = new Vector<>();
         for (ActivityInfoPO activity: raw) {
-            converted.add(ActivityReturnDTO.builder()
+            converted.add(ActivityResponseDTO.builder()
+                    .createTime(TimeFormatUtil.stamp2str(activity.getCreateTime()))
+                    .updatedTime(TimeFormatUtil.stamp2str(activity.getUpdatedTime()))
+                    .startTime(TimeFormatUtil.stamp2str(activity.getStartTime()))
+                    .endTime(TimeFormatUtil.stamp2str(activity.getEndTime()))
                     .activityName(activity.getActivityName())
-                    .createTime(activity.getCreateTime().toString())
-                    .endTime(activity.getEndTime().toString())
                     .id(activity.getId())
                     .location(activity.getLocation())
                     .status(activity.getStatus())
-                    .startTime(activity.getStartTime().toString())
-                    .updatedTime(activity.getUpdatedTime().toString())
                     .build());
         }
         return converted;

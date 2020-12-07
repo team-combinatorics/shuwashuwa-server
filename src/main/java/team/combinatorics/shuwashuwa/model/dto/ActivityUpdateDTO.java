@@ -17,9 +17,9 @@ import java.util.List;
 public class ActivityUpdateDTO {
     @ApiModelProperty("要更新的活动id")
     private Integer activityId;
-    @ApiModelProperty("开始时间，以yyyy-MM-dd HH:mm:ss[.fffffffff]表示")
+    @ApiModelProperty("开始时间，以yyyy-MM-dd HH:mm:ss表示")
     private String startTime;
-    @ApiModelProperty("结束时间，以yyyy-MM-dd HH:mm:ss[.fffffffff]表示")
+    @ApiModelProperty("结束时间，以yyyy-MM-dd HH:mm:ss表示")
     private String endTime;
     @ApiModelProperty("活动地点")
     private String location;
