@@ -31,19 +31,30 @@ public class RequestCheckUtilTest {
 
     @Test
     void testAdminDTOChecking() {
+        // 什么也不填，肯定不行，爪巴
         AdminDTO allNull = AdminDTO.builder()
                 .build();
         Assert.assertTrue(RequestCheckUtil.fieldAllNull(allNull));
 
+        // 只填更新信息，我更新谁呢，爪巴
         AdminDTO partNull = AdminDTO.builder()
                 .email("114514@1919.810")
                 .studentId("1919810")
                 .build();
-        Assert.assertFalse(RequestCheckUtil.fieldAllNull(partNull));
+        Assert.assertTrue(RequestCheckUtil.fieldAllNull(partNull));
 
+        // 只填用户id，更新了个寂寞，爪巴
         AdminDTO exceptUseridNull = AdminDTO.builder()
                 .userid("114")
                 .build();
         Assert.assertTrue(RequestCheckUtil.fieldAllNull(exceptUseridNull));
+
+        // 填了用户id，也填了更新的信息，daisuki！
+        AdminDTO correctFormat = AdminDTO.builder()
+                .userid("114")
+                .email("115514@1919.810")
+                .studentId("1919810")
+                .build();
+        Assert.assertFalse(RequestCheckUtil.fieldAllNull(correctFormat));
     }
 }
