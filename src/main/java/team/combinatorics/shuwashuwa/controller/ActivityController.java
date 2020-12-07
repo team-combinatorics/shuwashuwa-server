@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
-import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.model.dto.ActivityReturnDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
