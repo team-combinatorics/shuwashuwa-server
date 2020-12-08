@@ -1,26 +1,25 @@
 package team.combinatorics.shuwashuwa.service;
 
 import team.combinatorics.shuwashuwa.model.dto.*;
-import team.combinatorics.shuwashuwa.model.po.UserPO;
-import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
 import java.util.List;
 
 public interface UserService {
-
     LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception;
 
     int deleteOneUser(int userid) throws Exception;
 
     void deleteAllUsers();
 
-    void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) throws Exception;
+    void updateUserInfo(int userid, UserInfoDTO userInfoDto) throws Exception;
 
-    UserPO getUserInfo(int userid) throws Exception;
+    UserInfoDTO getUserInfo(int userid) throws Exception;
 
-    void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO);
+    void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO);
 
-    List<VolunteerApplicationPO> listUnauditedVolunteerApplication();
+    List<VolunteerApplicationResponseForAdminDTO> listUnauditedVolunteerApplication();
+
+    List<VolunteerApplicationResultDTO> listVolunteerApplicationOf(int userid);
 
     void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO);
 

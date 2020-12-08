@@ -18,8 +18,8 @@
     <insert id="insert" parameterType="team.combinatorics.shuwashuwa.model.po.AdminPO"
             useGeneratedKeys="true" keyColumn="id" keyProperty="admin.id">
         insert into admin(userid, user_name, phone_number, email, identity, department, student_id)
-        values (#{admin.userId}, #{admin.userName}, #{admin.phoneNumber}, #{admin.email}, #{admin.identity},
-                #{admin.department}, #{admin.student_id})
+        values (#{admin.userid}, #{admin.userName}, #{admin.phoneNumber}, #{admin.email}, #{admin.identity},
+                #{admin.department}, #{admin.studentId})
     </insert>
 
     <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.AdminPO">

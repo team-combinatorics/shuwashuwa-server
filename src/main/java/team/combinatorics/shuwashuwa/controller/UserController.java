@@ -10,9 +10,7 @@ import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.model.dto.*;
-import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
-import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -54,11 +52,11 @@ public class UserController {
     })
     @AllAccess
     public CommonResult<String> updateUserInfo(@RequestHeader("token") String token,
-                                               @RequestBody UpdateUserInfoDTO updateUserInfoDto) throws Exception {
+                                               @RequestBody UserInfoDTO userInfoDto) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         System.out.println("更新" + userid + "的用户信息");
-        System.out.println(updateUserInfoDto.toString());
-        userService.updateUserInfo(userid, updateUserInfoDto);
+        System.out.println(userInfoDto.toString());
+        userService.updateUserInfo(userid, userInfoDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
     }
 
@@ -72,9 +70,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<UserPO> getUserInfo(@RequestHeader("token") String token) throws Exception {
+    public CommonResult<UserInfoDTO> getUserInfo(@RequestHeader("token") String token) throws Exception {
         int userid = TokenUtil.extractUserid(token);
-        UserPO userPO = userService.getUserInfo(userid);
+        UserInfoDTO userPO = userService.getUserInfo(userid);
         System.out.println(userid + "请求个人信息");
         return new CommonResult<>(200, "请求成功", userPO);
     }
@@ -89,7 +87,7 @@ public class UserController {
     })
     @AllAccess
     public CommonResult<String> receiveApplicationInfo(@RequestHeader("token") String token,
-                                                       @RequestBody VolunteerApplicationDTO application) {
+                                                       @RequestBody VolunteerApplicationAdditionDTO application) {
         int userid = TokenUtil.extractUserid(token);
         System.out.println(userid+"提交了志愿者申请");
         userService.addVolunteerApplication(userid,application);
@@ -105,8 +103,23 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AdminAccess
-    public CommonResult<List<VolunteerApplicationPO>> getUnauditedApplicationList() {
+    public CommonResult<List<VolunteerApplicationResponseForAdminDTO>> getUnauditedApplicationList() {
         return new CommonResult<>(200,"请求成功",userService.listUnauditedVolunteerApplication());
+    }
+
+    /**
+     * 获取用户自己的志愿者申请记录
+     */
+    @ApiOperation(value = "获取志愿者申请记录", notes = "筛选当前用户的申请", httpMethod = "GET")
+    @RequestMapping(value = "/application/mine", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @AdminAccess
+    public CommonResult<List<VolunteerApplicationResultDTO>> getMyApplicationList(
+            @RequestHeader("token") String token) {
+        return new CommonResult<>(200,"请求成功",
+                userService.listVolunteerApplicationOf(TokenUtil.extractUserid(token)));
     }
 
     /**

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(description = "用户提交申请单的传输结构")
-public class VolunteerApplicationDTO {
+public class VolunteerApplicationAdditionDTO {
     @ApiModelProperty("申请理由")
     private String reasonForApplication;
     @ApiModelProperty("学生证照片的位置")

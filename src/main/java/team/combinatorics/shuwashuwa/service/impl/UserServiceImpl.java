@@ -13,11 +13,12 @@ import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.UserService;
-import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -58,37 +59,47 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) {
-        if(RequestCheckUtil.fieldAllNull(updateUserInfoDto))
+    public void updateUserInfo(int userid, UserInfoDTO userInfoDto) {
+        if(DTOUtil.fieldAllNull(userInfoDto))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        userDao.updateUserInfo(userid, updateUserInfoDto);
+        userDao.updateUserInfo(userid, userInfoDto);
     }
 
     @Override
-    public UserPO getUserInfo(int userid) {
+    public UserInfoDTO getUserInfo(int userid) {
         UserPO userPO = userDao.getUserByUserid(userid);
-        userPO.setOpenid("你无权获取openid");
-        return userPO;
+        return (UserInfoDTO) DTOUtil.convert(userPO,UserInfoDTO.class);
     }
 
     @Override
-    public void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO) {
-        VolunteerApplicationPO.VolunteerApplicationPOBuilder volunteerApplicationPOBuilder
-                = VolunteerApplicationPO.builder();
-        volunteerApplicationPOBuilder.userId(userid);
-        if(RequestCheckUtil.fieldExistNull(volunteerApplicationDTO))
+    public void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO additionDTO) {
+        if(DTOUtil.fieldExistNull(additionDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationDTO.getCardPicLocation());
-        volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationDTO.getReasonForApplication());
-        VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationPOBuilder.build();
+        VolunteerApplicationPO volunteerApplicationPO =
+                (VolunteerApplicationPO) DTOUtil.convert(additionDTO,VolunteerApplicationPO.class);
+        volunteerApplicationPO.setId(userid);
         applicationDao.insert(volunteerApplicationPO);
 
-        imageStorageService.setUseful(volunteerApplicationDTO.getCardPicLocation());
+        imageStorageService.setUseful(additionDTO.getCardPicLocation());
     }
 
     @Override
-    public List<VolunteerApplicationPO> listUnauditedVolunteerApplication() {
-        return applicationDao.listApplicationsByCondition(SelectApplicationCO.builder().status(0).build());
+    public List<VolunteerApplicationResponseForAdminDTO> listUnauditedVolunteerApplication() {
+        final List<VolunteerApplicationPO> raw = applicationDao.listApplicationsByCondition(
+                SelectApplicationCO.builder().status(0).build());
+        return raw.stream().map(
+                        (x) -> (VolunteerApplicationResponseForAdminDTO)
+                                DTOUtil.convert(x,VolunteerApplicationResponseForAdminDTO.class)
+                ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VolunteerApplicationResultDTO> listVolunteerApplicationOf(int userid) {
+        final List<VolunteerApplicationPO> raw = applicationDao.listApplicationsByUserId(userid);
+        return raw.stream().map(
+                (x) -> (VolunteerApplicationResultDTO)
+                        DTOUtil.convert(x,VolunteerApplicationResultDTO.class)
+        ).collect(Collectors.toList());
     }
 
     @Override
