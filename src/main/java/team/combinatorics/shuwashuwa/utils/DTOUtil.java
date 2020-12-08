@@ -66,40 +66,37 @@ public class DTOUtil {
         return Timestamp.valueOf(format);
     }
 
-    public static Object convert(Object source, Class<?> targetClass) throws Exception {
-        Object target = targetClass.getDeclaredConstructor().newInstance();
-        Object[] sourceFields = Arrays.stream(source.getClass().getDeclaredFields())
-                .map(Field::getName).toArray();
-        Set<Object> targetFields = Arrays.stream(targetClass.getDeclaredFields())
-                .map(Field::getName).collect(Collectors.toSet());
-        for(Object fieldName:sourceFields) {
-            if(fieldName.equals("this$0"))
-                continue;
-            if(targetFields.contains(fieldName)) {
-                String fieldNameCap = fieldName.toString().substring(0,1).toUpperCase(Locale.ROOT) +
-                                    fieldName.toString().substring(1);
-                Method getter = source.getClass().getMethod("get"+fieldNameCap);
-                Method setter = targetClass.getMethod("set"+fieldNameCap,targetClass.
-                        getDeclaredField(fieldName.toString()).getType());
-                Object value = getter.invoke(source);
-                if(getter.getReturnType() == Timestamp.class)
-                    value = stamp2str((Timestamp) value);
-                if(setter.getParameterTypes()[0] == Timestamp.class)
-                    value = Timestamp.valueOf((String) value);
-                setter.invoke(target,value);
+    public static Object convert(Object source, Class<?> targetClass){
+        try {
+            Object target = targetClass.getDeclaredConstructor().newInstance();
+            Object[] sourceFields = Arrays.stream(source.getClass().getDeclaredFields())
+                    .map(Field::getName).toArray();
+            Set<Object> targetFields = Arrays.stream(targetClass.getDeclaredFields())
+                    .map(Field::getName).collect(Collectors.toSet());
+            for (Object fieldName : sourceFields) {
+                if (fieldName.equals("this$0"))
+                    continue;
+                if (targetFields.contains(fieldName)) {
+                    String fieldNameCap = fieldName.toString().substring(0, 1).toUpperCase(Locale.ROOT) +
+                            fieldName.toString().substring(1);
+                    Method getter = source.getClass().getMethod("get" + fieldNameCap);
+                    Method setter = targetClass.getMethod("set" + fieldNameCap, targetClass.
+                            getDeclaredField(fieldName.toString()).getType());
+                    Object value = getter.invoke(source);
+                    if (getter.getReturnType() == Timestamp.class)
+                        value = stamp2str((Timestamp) value);
+                    if (setter.getParameterTypes()[0] == Timestamp.class)
+                        value = Timestamp.valueOf((String) value);
+                    setter.invoke(target, value);
+                }
             }
+            return target;
+        } catch (Exception e) {
+            return null;
         }
-        return target;
     }
 
     public static List<?> allConvert(List<?> source, Class<?> targetClass) {
-        return source.stream().map(x -> {
-            try {
-                return convert(x,targetClass);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }).collect(Collectors.toList());
+        return source.stream().map(x -> convert(x,targetClass)).collect(Collectors.toList());
     }
 }
