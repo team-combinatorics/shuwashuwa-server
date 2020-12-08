@@ -80,18 +80,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO) {
+    public void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO) {
         VolunteerApplicationPO.VolunteerApplicationPOBuilder volunteerApplicationPOBuilder
                 = VolunteerApplicationPO.builder();
         volunteerApplicationPOBuilder.userId(userid);
         if(DTOUtil.fieldExistNull(volunteerApplicationAdditionDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationAdditionDTO.getCardPicLocation());
-        volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationAdditionDTO.getReasonForApplication());
+        volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationDTO.getCardPicLocation());
+        volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationDTO.getReasonForApplication());
         VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationPOBuilder.build();
         applicationDao.insert(volunteerApplicationPO);
 
-        imageStorageService.setUseful(volunteerApplicationAdditionDTO.getCardPicLocation());
+        imageStorageService.setUseful(volunteerApplicationDTO.getCardPicLocation());
     }
 
     @Override
