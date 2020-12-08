@@ -3,7 +3,7 @@
 # https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
 # Ubuntu 20.04 image packs MySQL 8.0.22
-# which matches our envirmonment
+# which matches our environment
 # Using docker-compose directly is not quite suitable for github actions
 # Since our docker configuration packs its artifacts and gets dependencies from custom repo
 
@@ -12,11 +12,12 @@ name: Build and Test
 on:
   push:
     branches: 
-      - main
+      - RELEASE
       - 12f23eddde
   pull_request:
-    branches: 
+    branches:
       - main
+      - RELEASE
       - 12f23eddde
 
 env:
