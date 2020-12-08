@@ -13,7 +13,7 @@ import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.UserService;
-import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) {
-        if(RequestCheckUtil.fieldAllNull(updateUserInfoDto))
+        if(DTOUtil.fieldAllNull(updateUserInfoDto))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         userDao.updateUserInfo(userid, updateUserInfoDto);
     }
@@ -80,23 +80,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO) {
+    public void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO) {
         VolunteerApplicationPO.VolunteerApplicationPOBuilder volunteerApplicationPOBuilder
                 = VolunteerApplicationPO.builder();
         volunteerApplicationPOBuilder.userId(userid);
-        if(RequestCheckUtil.fieldExistNull(volunteerApplicationDTO))
+        if(DTOUtil.fieldExistNull(volunteerApplicationAdditionDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationDTO.getCardPicLocation());
-        volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationDTO.getReasonForApplication());
+        volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationAdditionDTO.getCardPicLocation());
+        volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationAdditionDTO.getReasonForApplication());
         VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationPOBuilder.build();
         applicationDao.insert(volunteerApplicationPO);
 
-        imageStorageService.setUseful(volunteerApplicationDTO.getCardPicLocation());
+        imageStorageService.setUseful(volunteerApplicationAdditionDTO.getCardPicLocation());
     }
 
     @Override
-    public List<VolunteerApplicationPO> listUnauditedVolunteerApplication() {
-        return applicationDao.listApplicationsByCondition(SelectApplicationCO.builder().status(0).build());
+    public List<VolunteerApplicationResponseForAdminDTO> listUnauditedVolunteerApplication() {
+        final List<VolunteerApplicationPO> raw = applicationDao.listApplicationsByCondition(
+                SelectApplicationCO.builder().status(0).build());
+        //todo 转换；实现查看结果方法，给个url
+        return null;
+    }
+
+    @Override
+    public List<VolunteerApplicationResultDTO> listVolunteerApplicationOf(int userid) {
+        return null;
     }
 
     @Override

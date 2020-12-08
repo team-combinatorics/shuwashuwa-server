@@ -10,7 +10,6 @@ import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.model.dto.*;
-import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.service.UserService;
@@ -89,7 +88,7 @@ public class UserController {
     })
     @AllAccess
     public CommonResult<String> receiveApplicationInfo(@RequestHeader("token") String token,
-                                                       @RequestBody VolunteerApplicationDTO application) {
+                                                       @RequestBody VolunteerApplicationAdditionDTO application) {
         int userid = TokenUtil.extractUserid(token);
         System.out.println(userid+"提交了志愿者申请");
         userService.addVolunteerApplication(userid,application);
@@ -105,7 +104,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AdminAccess
-    public CommonResult<List<VolunteerApplicationPO>> getUnauditedApplicationList() {
+    public CommonResult<List<VolunteerApplicationResponseForAdminDTO>> getUnauditedApplicationList() {
         return new CommonResult<>(200,"请求成功",userService.listUnauditedVolunteerApplication());
     }
 

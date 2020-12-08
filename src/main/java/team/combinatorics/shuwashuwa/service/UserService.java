@@ -17,9 +17,11 @@ public interface UserService {
 
     UpdateUserInfoDTO getUserInfo(int userid) throws Exception;
 
-    void addVolunteerApplication(int userid, VolunteerApplicationDTO volunteerApplicationDTO);
+    void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO);
 
-    List<VolunteerApplicationPO> listUnauditedVolunteerApplication();
+    List<VolunteerApplicationResponseForAdminDTO> listUnauditedVolunteerApplication();
+
+    List<VolunteerApplicationResultDTO> listVolunteerApplicationOf(int userid);
 
     void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO);
 
