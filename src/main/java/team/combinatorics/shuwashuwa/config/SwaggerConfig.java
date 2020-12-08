@@ -55,7 +55,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Shuwashuwa-server API Doc")
-                .description("Li Baolin is da shuai ge")
+                .description("Maruyama Aya desu")
                 .version("1.0")
                 .license("GPL-3.0 License")
                 .build();
