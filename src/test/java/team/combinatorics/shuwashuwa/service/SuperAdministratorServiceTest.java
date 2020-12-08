@@ -132,5 +132,7 @@ public class SuperAdministratorServiceTest {
                 .build();
         Assert.assertEquals(adminDTO1, fetchAdminDTO);
 
+        userDao.deleteAllUsers();
+
     }
 }
