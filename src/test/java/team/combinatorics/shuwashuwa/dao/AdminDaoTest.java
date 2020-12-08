@@ -33,6 +33,9 @@ public class AdminDaoTest {
 
         Assert.assertNull(adminPO.getId());
 
+        List<AdminPO> list = adminDao.listAdmins();
+        int n = list.size();
+
         // 测试新建管理员与获取管理员信息，Dao层不进行新建管理员时信息是否完整的判断
         Assert.assertEquals(1, adminDao.insert(adminPO));
 
@@ -52,15 +55,15 @@ public class AdminDaoTest {
         Assert.assertEquals(adminPO.getStudentId(), fetch.getStudentId());
 
         // 测试获取管理员列表
-        List<AdminPO> list = adminDao.listAdmins();
-        Assert.assertEquals(1, list.size());
-        Assert.assertEquals(adminPO.getUserid(), list.get(0).getUserid());
-        Assert.assertEquals(adminPO.getUserName(), list.get(0).getUserName());
-        Assert.assertEquals(adminPO.getPhoneNumber(), list.get(0).getPhoneNumber());
-        Assert.assertEquals(adminPO.getEmail(), list.get(0).getEmail());
-        Assert.assertEquals(adminPO.getIdentity(), list.get(0).getIdentity());
-        Assert.assertEquals(adminPO.getDepartment(), list.get(0).getDepartment());
-        Assert.assertEquals(adminPO.getStudentId(), list.get(0).getStudentId());
+        list = adminDao.listAdmins();
+        Assert.assertEquals(n+1, list.size());
+        Assert.assertEquals(adminPO.getUserid(), list.get(n).getUserid());
+        Assert.assertEquals(adminPO.getUserName(), list.get(n).getUserName());
+        Assert.assertEquals(adminPO.getPhoneNumber(), list.get(n).getPhoneNumber());
+        Assert.assertEquals(adminPO.getEmail(), list.get(n).getEmail());
+        Assert.assertEquals(adminPO.getIdentity(), list.get(n).getIdentity());
+        Assert.assertEquals(adminPO.getDepartment(), list.get(n).getDepartment());
+        Assert.assertEquals(adminPO.getStudentId(), list.get(n).getStudentId());
 
         // 测试更新管理员信息
         AdminPO update = AdminPO.builder()
@@ -77,7 +80,7 @@ public class AdminDaoTest {
         // 测试删除管理员
         Assert.assertEquals(1, adminDao.deleteByID(adminID));
         list = adminDao.listAdmins();
-        Assert.assertEquals(0, list.size());
+        Assert.assertEquals(n, list.size());
 
     }
 }
