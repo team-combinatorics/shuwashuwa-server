@@ -108,6 +108,21 @@ public class UserController {
     }
 
     /**
+     * 获取用户自己的志愿者申请记录
+     */
+    @ApiOperation(value = "获取志愿者申请记录", notes = "筛选当前用户的申请", httpMethod = "GET")
+    @RequestMapping(value = "/application/mine", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @AdminAccess
+    public CommonResult<List<VolunteerApplicationResultDTO>> getMyApplicationList(
+            @RequestHeader("token") String token) {
+        return new CommonResult<>(200,"请求成功",
+                userService.listVolunteerApplicationOf(TokenUtil.extractUserid(token)));
+    }
+
+    /**
      * 处理志愿者申请的审核
      */
     @ApiOperation(value = "审核志愿者申请", notes = "限管理员调用", httpMethod = "PATCH")
