@@ -65,10 +65,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserPO getUserInfo(int userid) {
+    public UpdateUserInfoDTO getUserInfo(int userid) {
         UserPO userPO = userDao.getUserByUserid(userid);
-        userPO.setOpenid("你无权获取openid");
-        return userPO;
+        return UpdateUserInfoDTO.builder()
+                .userName(userPO.getUserName())
+                .phoneNumber(userPO.getPhoneNumber())
+                .email(userPO.getEmail())
+                .identity(userPO.getIdentity())
+                .department(userPO.getDepartment())
+                .grade(userPO.getGrade())
+                .studentId(userPO.getStudentId())
+                .comment(userPO.getComment())
+                .build();
     }
 
     @Override
