@@ -13,7 +13,7 @@ import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.UserService;
-import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) {
-        if(RequestCheckUtil.fieldAllNull(updateUserInfoDto))
+        if(DTOUtil.fieldAllNull(updateUserInfoDto))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         userDao.updateUserInfo(userid, updateUserInfoDto);
     }
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
         VolunteerApplicationPO.VolunteerApplicationPOBuilder volunteerApplicationPOBuilder
                 = VolunteerApplicationPO.builder();
         volunteerApplicationPOBuilder.userId(userid);
-        if(RequestCheckUtil.fieldExistNull(volunteerApplicationDTO))
+        if(DTOUtil.fieldExistNull(volunteerApplicationDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         volunteerApplicationPOBuilder.cardPicLocation(volunteerApplicationDTO.getCardPicLocation());
         volunteerApplicationPOBuilder.reasonForApplication(volunteerApplicationDTO.getReasonForApplication());
