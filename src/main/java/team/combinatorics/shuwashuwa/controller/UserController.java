@@ -11,7 +11,6 @@ import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
-import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -53,11 +52,11 @@ public class UserController {
     })
     @AllAccess
     public CommonResult<String> updateUserInfo(@RequestHeader("token") String token,
-                                               @RequestBody UpdateUserInfoDTO updateUserInfoDto) throws Exception {
+                                               @RequestBody UserInfoDTO userInfoDto) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         System.out.println("更新" + userid + "的用户信息");
-        System.out.println(updateUserInfoDto.toString());
-        userService.updateUserInfo(userid, updateUserInfoDto);
+        System.out.println(userInfoDto.toString());
+        userService.updateUserInfo(userid, userInfoDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
     }
 
@@ -71,9 +70,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<UpdateUserInfoDTO> getUserInfo(@RequestHeader("token") String token) throws Exception {
+    public CommonResult<UserInfoDTO> getUserInfo(@RequestHeader("token") String token) throws Exception {
         int userid = TokenUtil.extractUserid(token);
-        UpdateUserInfoDTO userPO = userService.getUserInfo(userid);
+        UserInfoDTO userPO = userService.getUserInfo(userid);
         System.out.println(userid + "请求个人信息");
         return new CommonResult<>(200, "请求成功", userPO);
     }

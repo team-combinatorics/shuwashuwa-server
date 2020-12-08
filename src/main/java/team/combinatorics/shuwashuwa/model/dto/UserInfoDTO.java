@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("更新用户信息时传输的数据")
-public class UpdateUserInfoDTO {
+public class UserInfoDTO {
     @ApiModelProperty("用户姓名")
     private String userName;
     @ApiModelProperty("用户手机号")

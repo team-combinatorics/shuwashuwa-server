@@ -55,7 +55,7 @@
         where openid = #{openid}
     </select>
 
-    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.dto.UpdateUserInfoDTO">
+    <update id="updateUserInfo" parameterType="team.combinatorics.shuwashuwa.model.dto.UserInfoDTO">
         update user
         <trim prefix="SET" suffixOverrides=",">
             <if test="user.userName != null">
