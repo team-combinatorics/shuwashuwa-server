@@ -14,7 +14,6 @@ import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;

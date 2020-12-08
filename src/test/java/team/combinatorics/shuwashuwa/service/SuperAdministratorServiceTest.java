@@ -30,7 +30,7 @@ public class SuperAdministratorServiceTest {
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 3"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 4"));
 
-        int userID = 3;
+        int userID = userDao.getUserByOpenid("fake openid 3").getId();
         // 测试超管添加管理员的服务
         AdminDTO adminDTO = AdminDTO.builder()
                 .userid(Integer.toString(userID))
@@ -89,7 +89,7 @@ public class SuperAdministratorServiceTest {
         Assert.assertEquals(adminDTO, fetchAdminDTO);
 
         // 测试新增管理员后对列表的更新
-        int userID1 = 4;
+        int userID1 = userDao.getUserByOpenid("fake openid 4").getId();
         AdminDTO adminDTO1 = AdminDTO.builder()
                 .userid(Integer.toString(userID1))
                 .userName("leesou")
@@ -131,6 +131,8 @@ public class SuperAdministratorServiceTest {
                 .studentId(allAdmins.get(0).getStudentId())
                 .build();
         Assert.assertEquals(adminDTO1, fetchAdminDTO);
+
+        userDao.deleteAllUsers();
 
     }
 }
