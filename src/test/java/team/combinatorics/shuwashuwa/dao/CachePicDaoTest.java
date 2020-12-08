@@ -20,6 +20,10 @@ public class CachePicDaoTest {
 
     @Test
     public void simpleTest() {
+        int base = 0;
+
+        assertEquals(0, cachePicDao.countCachePic());
+
         // 插入十张图片
         for (int i = 1; i <= 5; i++) {
             CachePicPO cachePicPO = CachePicPO.builder()
@@ -27,7 +31,9 @@ public class CachePicDaoTest {
                     .picLocation("Location" + i)
                     .build();
             cachePicDao.insert(cachePicPO);
-            assertEquals(i, cachePicPO.getId().intValue());
+            if(i==1)
+                base = cachePicPO.getId()-1;
+            assertEquals(i + base, cachePicPO.getId().intValue());
         }
         for (int i = 1; i <= 5; i++) {
             CachePicPO cachePicPO = CachePicPO.builder()
@@ -35,7 +41,7 @@ public class CachePicDaoTest {
                     .picLocation("Location" + i + 5)
                     .build();
             cachePicDao.insert(cachePicPO);
-            assertEquals(i + 5, cachePicPO.getId().intValue());
+            assertEquals(i + base + 5, cachePicPO.getId().intValue());
         }
 
         for (int i = 1; i <= 5; i++) {
@@ -43,14 +49,14 @@ public class CachePicDaoTest {
             assertEquals(2, cachePicDao.getCachePicByLocation("Location" + i + 5).getUserId().intValue());
         }
         // 测试selectUSerIDByCacheID
-        assertEquals(1, cachePicDao.getUserIDByCacheID(2).intValue());
-        assertEquals(1, cachePicDao.getUserIDByCacheID(5).intValue());
-        assertEquals(2, cachePicDao.getUserIDByCacheID(6).intValue());
-        assertEquals(2, cachePicDao.getUserIDByCacheID(9).intValue());
+        assertEquals(1, cachePicDao.getUserIDByCacheID(base+2).intValue());
+        assertEquals(1, cachePicDao.getUserIDByCacheID(base+5).intValue());
+        assertEquals(2, cachePicDao.getUserIDByCacheID(base+6).intValue());
+        assertEquals(2, cachePicDao.getUserIDByCacheID(base+9).intValue());
 
-        assertEquals(1, cachePicDao.getCachePicByID(1).getUserId().intValue());
-        assertEquals(1, cachePicDao.getCachePicByID(5).getUserId().intValue());
-        assertEquals(2, cachePicDao.getCachePicByID(6).getUserId().intValue());
+        assertEquals(1, cachePicDao.getCachePicByID(base+1).getUserId().intValue());
+        assertEquals(1, cachePicDao.getCachePicByID(base+5).getUserId().intValue());
+        assertEquals(2, cachePicDao.getCachePicByID(base+6).getUserId().intValue());
 
         assertEquals(5, cachePicDao.listCachePicsByCondition(CachePicCO.builder()
                 .userId(2)
