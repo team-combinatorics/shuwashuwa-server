@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
-import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
@@ -18,7 +17,7 @@ import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
-import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -114,7 +113,7 @@ public class SuperAdministratorController {
     public CommonResult<String> addNewAdministrator(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO) {
 
         System.out.println(adminDTO.getUserid());
-        if(RequestCheckUtil.fieldExistNull(adminDTO)) {
+        if(DTOUtil.fieldExistNull(adminDTO)) {
             return new CommonResult<>(40010, "添加失败，信息不完整", "You need to fill all information");
         }
         System.out.println(adminDTO.getUserid()+"将被添加为管理员");
@@ -181,7 +180,7 @@ public class SuperAdministratorController {
     })
     @SUAccess
     public CommonResult<String> updateAdministratorInfo(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO) {
-        if(RequestCheckUtil.fieldAllNull(adminDTO))
+        if(team.combinatorics.shuwashuwa.utils.DTOUtil.fieldAllNull(adminDTO))
             return new CommonResult<>(40010, "更新失败，信息不能全为空", "You should fill administrator info!");
         System.out.println("即将更新用户id为"+adminDTO.getUserid()+"的管理员的信息");
         int cnt = superAdministratorService.updateAdministratorInfo(adminDTO);

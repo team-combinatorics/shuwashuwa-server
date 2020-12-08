@@ -15,8 +15,7 @@ import team.combinatorics.shuwashuwa.model.po.ActivityInfoPO;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
 import team.combinatorics.shuwashuwa.model.pojo.ActivityTimeSlot;
 import team.combinatorics.shuwashuwa.service.ActivityService;
-import team.combinatorics.shuwashuwa.utils.RequestCheckUtil;
-import team.combinatorics.shuwashuwa.utils.TimeFormatUtil;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -69,7 +68,7 @@ public class ActivityServiceImpl implements ActivityService {
             activityInfoPO.setStartTime(Timestamp.valueOf(activityUpdateDTO.getStartTime()));
         if(activityUpdateDTO.getEndTime()!=null)
             activityInfoPO.setEndTime(Timestamp.valueOf(activityUpdateDTO.getEndTime()));
-        if(!RequestCheckUtil.fieldAllNull(activityInfoPO))
+        if(!DTOUtil.fieldAllNull(activityInfoPO))
         {
             activityInfoPO.setId(activityUpdateDTO.getActivityId());
             activityInfoDao.update(activityInfoPO);
@@ -122,8 +121,8 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityTimeSlotDTO> converted = new Vector<>();
         for(ActivityTimeSlot timeSlot: raw) {
             converted.add(new ActivityTimeSlotDTO(timeSlot.getTimeSlot(),
-                    TimeFormatUtil.stamp2str(timeSlot.getStartTime()),
-                    TimeFormatUtil.stamp2str(timeSlot.getEndTime())));
+                    DTOUtil.stamp2str(timeSlot.getStartTime()),
+                    DTOUtil.stamp2str(timeSlot.getEndTime())));
         }
         return converted;
     }
@@ -132,10 +131,10 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityResponseDTO> converted = new Vector<>();
         for (ActivityInfoPO activity: raw) {
             converted.add(ActivityResponseDTO.builder()
-                    .createTime(TimeFormatUtil.stamp2str(activity.getCreateTime()))
-                    .updatedTime(TimeFormatUtil.stamp2str(activity.getUpdatedTime()))
-                    .startTime(TimeFormatUtil.stamp2str(activity.getStartTime()))
-                    .endTime(TimeFormatUtil.stamp2str(activity.getEndTime()))
+                    .createTime(DTOUtil.stamp2str(activity.getCreateTime()))
+                    .updatedTime(DTOUtil.stamp2str(activity.getUpdatedTime()))
+                    .startTime(DTOUtil.stamp2str(activity.getStartTime()))
+                    .endTime(DTOUtil.stamp2str(activity.getEndTime()))
                     .activityName(activity.getActivityName())
                     .id(activity.getId())
                     .location(activity.getLocation())
