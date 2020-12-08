@@ -19,7 +19,7 @@ public class UserDaoTest {
     @Test
     public void weakTest() {
         // 插入单个用户的测试
-        int num=6+1;
+        int num=6;
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 2"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 3"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 4"));
