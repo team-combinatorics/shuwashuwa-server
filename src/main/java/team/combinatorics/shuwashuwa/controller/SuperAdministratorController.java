@@ -12,7 +12,6 @@ import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
-import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
@@ -134,7 +133,7 @@ public class SuperAdministratorController {
             @ApiResponse(code = 200, message = "获取成功"),
     })
     @SUAccess
-    public CommonResult<List<AdminPO>> getAdministratorList() {
+    public CommonResult<List<AdminDTO>> getAdministratorList() {
 
         return new CommonResult<>(200, "获取成功", superAdministratorService.getAdministratorList());
     }

@@ -11,6 +11,7 @@ import team.combinatorics.shuwashuwa.utils.MD5Util;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import java.util.List;
+import java.util.Vector;
 
 @Service
 @AllArgsConstructor
@@ -65,8 +66,22 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     }
 
     @Override
-    public List<AdminPO> getAdministratorList() {
-        return adminDao.listAdmins();
+    public List<AdminDTO> getAdministratorList() {
+        List<AdminPO> list = adminDao.listAdmins();
+        List<AdminDTO> returnList = new Vector<>();
+        for(AdminPO adminPO:list) {
+            AdminDTO adminDTO = AdminDTO.builder()
+                    .userid(adminPO.getUserid())
+                    .userName(adminPO.getUserName())
+                    .phoneNumber(adminPO.getPhoneNumber())
+                    .email(adminPO.getEmail())
+                    .identity(adminPO.getIdentity())
+                    .department(adminPO.getDepartment())
+                    .studentId(adminPO.getStudentId())
+                    .build();
+            returnList.add(adminDTO);
+        }
+        return returnList;
     }
 
     @Override

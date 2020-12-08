@@ -9,12 +9,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
-import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 
 import java.util.List;
 
-/*TODO: 完成对超管服务层功能的测试*/
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
 public class SuperAdministratorServiceTest {
@@ -53,7 +51,7 @@ public class SuperAdministratorServiceTest {
         Assert.assertEquals(adminDTO, fetchAdminDTO);
 
         // 测试超管获取管理员列表的服务
-        List<AdminPO> allAdmins = superAdministratorService.getAdministratorList();
+        List<AdminDTO> allAdmins = superAdministratorService.getAdministratorList();
         Assert.assertEquals(1, allAdmins.size());
         fetchAdminDTO = AdminDTO.builder()
                 .userid(allAdmins.get(0).getUserid())
