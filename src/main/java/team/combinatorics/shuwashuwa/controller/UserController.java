@@ -72,9 +72,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<UserPO> getUserInfo(@RequestHeader("token") String token) throws Exception {
+    public CommonResult<UpdateUserInfoDTO> getUserInfo(@RequestHeader("token") String token) throws Exception {
         int userid = TokenUtil.extractUserid(token);
-        UserPO userPO = userService.getUserInfo(userid);
+        UpdateUserInfoDTO userPO = userService.getUserInfo(userid);
         System.out.println(userid + "请求个人信息");
         return new CommonResult<>(200, "请求成功", userPO);
     }
