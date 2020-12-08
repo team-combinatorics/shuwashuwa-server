@@ -18,6 +18,7 @@ import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -86,15 +87,19 @@ public class UserServiceImpl implements UserService {
     public List<VolunteerApplicationResponseForAdminDTO> listUnauditedVolunteerApplication() {
         final List<VolunteerApplicationPO> raw = applicationDao.listApplicationsByCondition(
                 SelectApplicationCO.builder().status(0).build());
-        return (List<VolunteerApplicationResponseForAdminDTO>)
-                DTOUtil.allConvert(raw,VolunteerApplicationResponseForAdminDTO.class);
+        return raw.stream().map(
+                        (x) -> (VolunteerApplicationResponseForAdminDTO)
+                                DTOUtil.convert(x,VolunteerApplicationResponseForAdminDTO.class)
+                ).collect(Collectors.toList());
     }
 
     @Override
     public List<VolunteerApplicationResultDTO> listVolunteerApplicationOf(int userid) {
         final List<VolunteerApplicationPO> raw = applicationDao.listApplicationsByUserId(userid);
-        return (List<VolunteerApplicationResultDTO>)
-                DTOUtil.allConvert(raw,VolunteerApplicationResponseForAdminDTO.class);
+        return raw.stream().map(
+                (x) -> (VolunteerApplicationResultDTO)
+                        DTOUtil.convert(x,VolunteerApplicationResultDTO.class)
+        ).collect(Collectors.toList());
     }
 
     @Override
