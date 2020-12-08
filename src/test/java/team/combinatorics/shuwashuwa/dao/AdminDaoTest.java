@@ -30,12 +30,16 @@ public class AdminDaoTest {
                 .department("eecs")
                 .studentId("114514")
                 .build();
+
+        Assert.assertNull(adminPO.getId());
+
         // 测试新建管理员与获取管理员信息，Dao层不进行新建管理员时信息是否完整的判断
         Assert.assertEquals(1, adminDao.insert(adminPO));
 
         // 测试把UserID转换为管理员id
-        int adminID = adminDao.getAdminIDByUserID(3);
-        Assert.assertEquals(1, adminID);
+        Integer adminID = adminDao.getAdminIDByUserID(3);
+        Assert.assertNotNull(adminPO.getId());
+        Assert.assertEquals(adminPO.getId(), adminID);
 
         // 测试从使用管理员id获取数据库中获取信息
         AdminPO fetch = adminDao.getByID(adminID);
