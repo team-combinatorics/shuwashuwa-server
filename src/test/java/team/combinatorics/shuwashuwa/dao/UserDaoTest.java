@@ -29,11 +29,11 @@ public class UserDaoTest {
 
         // 更改一个用户信息的测试，同时测试利用openid和userid来查找这个被修改的用户，并获取被修改的信息
         // 更改userName
-        userDao.updateUserInfo(2, UserInfoDTO.builder()
+        int userid2 = userDao.getUserByOpenid("fake openid 2").getId();
+        userDao.updateUserInfo(userid2, UserInfoDTO.builder()
                 .userName("misaki")
                 .build());
         Assert.assertEquals("misaki", userDao.getUserByOpenid("fake openid 2").getUserName());
-        int userid2 = userDao.getUserByOpenid("fake openid 2").getId();
         Assert.assertEquals("misaki", userDao.getUserByUserid(userid2).getUserName());
 
         // 更改comment
@@ -50,7 +50,7 @@ public class UserDaoTest {
                 .build());
         Assert.assertEquals("114514@1919.810", userDao.getUserByUserid(userid2+1).getEmail());
         Assert.assertEquals("114514@1919.810", userDao.getUserByOpenid("fake openid 3").getEmail());
-        Assert.assertEquals("24 years old, a student.", userDao.getUserByUserid(3).getComment());
+        Assert.assertEquals("24 years old, a student.", userDao.getUserByUserid(userid2+1).getComment());
         Assert.assertEquals("24 years old, a student.", userDao.getUserByOpenid("fake openid 3").getComment());
 
         // 更改用户权限的测试--志愿者
