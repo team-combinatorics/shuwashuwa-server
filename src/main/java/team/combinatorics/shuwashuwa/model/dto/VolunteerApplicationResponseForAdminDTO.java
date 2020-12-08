@@ -17,6 +17,8 @@ public class VolunteerApplicationResponseForAdminDTO {
     private Integer id;
     @ApiModelProperty("发起申请的用户")
     private Integer userId;
+    @ApiModelProperty("申请时间，以yyyy-MM-dd HH:mm:ss表示")
+    private String createTime;
     @ApiModelProperty("申请理由")
     private String reasonForApplication;
     @ApiModelProperty("学生证图片的云端文件名")
