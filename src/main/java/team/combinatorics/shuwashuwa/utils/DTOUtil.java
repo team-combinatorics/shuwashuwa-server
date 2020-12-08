@@ -92,11 +92,8 @@ public class DTOUtil {
             }
             return target;
         } catch (Exception e) {
+            System.err.println("DTO convert failed");
             return null;
         }
-    }
-
-    public static List<?> allConvert(List<?> source, Class<?> targetClass) {
-        return source.stream().map(x -> convert(x,targetClass)).collect(Collectors.toList());
     }
 }

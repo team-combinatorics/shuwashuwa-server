@@ -1,8 +1,6 @@
 package team.combinatorics.shuwashuwa.service;
 
 import team.combinatorics.shuwashuwa.model.dto.*;
-import team.combinatorics.shuwashuwa.model.po.UserPO;
-import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
 import java.util.List;
 
@@ -13,9 +11,9 @@ public interface UserService {
 
     void deleteAllUsers();
 
-    void updateUserInfo(int userid, UpdateUserInfoDTO updateUserInfoDto) throws Exception;
+    void updateUserInfo(int userid, UserInfoDTO userInfoDto) throws Exception;
 
-    UpdateUserInfoDTO getUserInfo(int userid) throws Exception;
+    UserInfoDTO getUserInfo(int userid) throws Exception;
 
     void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO);
 

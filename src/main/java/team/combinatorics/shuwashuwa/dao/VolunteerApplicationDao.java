@@ -1,10 +1,8 @@
 package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
