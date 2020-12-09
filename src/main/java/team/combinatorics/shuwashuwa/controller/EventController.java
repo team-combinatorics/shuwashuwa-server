@@ -6,15 +6,15 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO;
+import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Api("维修事件接口说明")
 @RestController
@@ -28,12 +28,11 @@ public class EventController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiResponses({@ApiResponse(code = 200, message = "请求成功")})
     @AllAccess
-    public CommonResult<String> handleFormCommit(@RequestHeader @NotNull(message = "用户Token不能为空") String token,
-                                                 @RequestBody @NotNull(message = "维修单信息不能为空") ServiceFormDTO serviceFormDTO,
-                                                 @RequestBody Integer timeSlot,
-                                                 @RequestBody  @NotNull(message = "活动id不能为空") Integer activityID) {
+    public CommonResult<String> handleFormCommit(
+            @RequestHeader @NotNull(message = "用户Token不能为空") String token,
+            @RequestBody @NotNull(message = "维修单信息不能为空") ServiceFormDTO serviceFormDTO) {
         int userid = TokenUtil.extractUserid(token);
-        eventService.commitForm(userid, serviceFormDTO, timeSlot, activityID);
+        eventService.commitForm(userid, serviceFormDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
 
@@ -42,22 +41,27 @@ public class EventController {
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @AdminAccess
     public CommonResult<String> handleFormAcceptance() {
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @AdminAccess
     public CommonResult<String> handleFormRejection() {
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @VolunteerAccess
     public CommonResult<String> handleOrderTaking() {
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @VolunteerAccess
     public CommonResult<String> handleVolunteerComment() {
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @AllAccess
     public CommonResult<String> handleClientComment() {
         return new CommonResult<>(200,"请求成功","success");
     }

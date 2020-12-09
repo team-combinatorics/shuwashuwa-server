@@ -5,9 +5,10 @@ import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.ServiceEventDao;
 import team.combinatorics.shuwashuwa.dao.ServiceFormDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
+import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
+import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.service.EventService;
@@ -22,29 +23,48 @@ public class EventServiceImpl implements EventService {
     private final ServiceFormDao serviceFormDao;
 
     @Override
-    public void commitForm(int userid, ServiceFormDTO serviceFormDTO, Integer timeSlot, Integer activityID) {
-        ServiceFormPO serviceFormPO = (ServiceFormPO) DTOUtil.convert(serviceFormDTO, ServiceFormPO.class);
-        // 每个活动中用户应该只有一个维修事件，所以这个条件查询的list长度应该为0或者1
-        List<ServiceEventResponseDTO> list = serviceEventDao.listServiceEventsByCondition(SelectServiceEventCO.builder()
-                .userId(userid)
-                .activityId(activityID)
-                .build());
-        if(list.size()==0) { // 第一次提交，不存在维修事件，那么新建一个
-            ServiceEventPO serviceEventPO = ServiceEventPO.builder()
-                    .userId(userid)
-                    .status(0)
-                    .activityId(activityID)
-                    .timeSlot(timeSlot)
-                    .build();
-            int cntEvent = serviceEventDao.insert(serviceEventPO);
+    public void commitForm(int userid, ServiceFormDTO serviceFormDTO) {
+        //参数检查
+        if(DTOUtil.fieldExistNull(serviceFormDTO))
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        //分别提取维修单和维修事件信息
+        ServiceFormPO newFormPO = (ServiceFormPO) DTOUtil.convert(serviceFormDTO, ServiceFormPO.class);
+        ServiceEventPO newEventPO = (ServiceEventPO) DTOUtil.convert(serviceFormDTO, ServiceEventPO.class);
+        assert newEventPO!=null;
+        assert newFormPO!=null;
+        newEventPO.setUserId(userid);
+        Integer eventId,formId;
 
-            /* TODO: 需要进行是否存在维修单草稿的判断 */
-            serviceFormPO.setServiceEventId(serviceEventPO.getId());
+        // 获取维修事件序号，若不存在则插入一个
+        // TODO @kinami0331:来个根据userId和activityId直接查
+        List<ServiceEventResponseDTO> list = serviceEventDao.listServiceEventsByCondition(
+                SelectServiceEventCO.builder()
+                .userId(userid)
+                .activityId(serviceFormDTO.getActivityId())
+                .build()
+        );
+        if(list.size()==0)
+        {
+            serviceEventDao.insert(newEventPO);
+            eventId = newEventPO.getId();
         }
-        else { // 第二次及以上的提交，存在维修事件
-            /* TODO: 需要进行是否存在维修单草稿的判断 */
-            serviceFormPO.setServiceEventId(list.get(0).getId());
+        else {
+            eventId = list.get(0).getId();
         }
-        int cntForm = serviceFormDao.insert(serviceFormPO);
+
+        //更新维修单
+        //todo 判断草稿标记
+        newFormPO.setServiceEventId(eventId);
+        serviceFormDao.insert(newFormPO);
+        //todo 若有草稿标记，更新而不是插入
+        //todo 给formId赋值
+
+        //关联图片
+        //todo 根据formId调用图片存储服务
+
+        //更新维修事件
+        serviceEventDao.updateAppointment(list.get(0).getId(), newEventPO.getActivityId(), newEventPO.getTimeSlot());
+        //todo 更新主状态为审核中
+        //todo 更新草稿标记为假
     }
 }

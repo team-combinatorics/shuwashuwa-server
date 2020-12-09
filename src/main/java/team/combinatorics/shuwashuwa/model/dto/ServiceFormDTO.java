@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,6 +16,12 @@ import java.sql.Date;
 @NoArgsConstructor
 @ApiModel("用户填写维修单时需要上传的数据")
 public class ServiceFormDTO {
+    @ApiModelProperty("选择的活动序号")
+    private Integer activityId;
+
+    @ApiModelProperty("选择的活动时间段")
+    private Integer timeSlot;
+
     @ApiModelProperty("电脑品牌")
     private String brand;
 
@@ -25,7 +32,7 @@ public class ServiceFormDTO {
     private String cpuModel;
 
     @ApiModelProperty("是否拥有独立显卡")
-    private boolean hasDiscreteGraphics;
+    private Boolean hasDiscreteGraphics;
 
     @ApiModelProperty("显卡型号")
     private String graphicsModel;
@@ -44,4 +51,7 @@ public class ServiceFormDTO {
 
     @ApiModelProperty("问题种类--硬件or软件")
     private String problemType;
+
+    @ApiModelProperty("图片文件名列表（图片应已调用相关接口上传）")
+    private List<String> imageList;
 }
