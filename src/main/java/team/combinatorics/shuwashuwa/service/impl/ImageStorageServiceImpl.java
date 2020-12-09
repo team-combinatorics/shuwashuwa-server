@@ -40,6 +40,10 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
     @Override
     public synchronized String store(int userid, MultipartFile file) throws KnownException {
+        File dir = new File(STORAGE_DIR);
+        if(!dir.exists())
+            dir.mkdir();
+
         //生成随机唯一的文件名，但保留后缀
         String receivedFileName = file.getOriginalFilename();
         assert receivedFileName != null;
