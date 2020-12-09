@@ -16,7 +16,8 @@ public enum ErrorInfoEnum {
     STORAGE_FAILURE(40008,"文件存储失败"),
     IMAGE_NOT_YOURS(40009,"试图访问其他用户上传的图片"),
     PARAMETER_LACKING(40010,"请求结构中缺少必需的参数"),
-    WRONG_SUPER_ADMINISTRATOR_INFO(40011, "超级管理员用户名/密码错误");
+    WRONG_SUPER_ADMINISTRATOR_INFO(40011, "超级管理员用户名/密码错误"),
+    DUPLICATED_PROMOTION(40012,"用户已具有希望获得的身份");
 
     private final Integer errCode;
     private final String errMsg;

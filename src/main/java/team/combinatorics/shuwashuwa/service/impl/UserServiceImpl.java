@@ -73,13 +73,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO additionDTO) {
+        //参数检查
         if(DTOUtil.fieldExistNull(additionDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+
+        //重复申请检查
+        if(userDao.getUserByUserid(userid).isVolunteer())
+            throw new KnownException(ErrorInfoEnum.DUPLICATED_PROMOTION);
+
+        //插入新的申请
         VolunteerApplicationPO volunteerApplicationPO =
                 (VolunteerApplicationPO) DTOUtil.convert(additionDTO,VolunteerApplicationPO.class);
         volunteerApplicationPO.setId(userid);
         applicationDao.insert(volunteerApplicationPO);
 
+        //存档图片
         imageStorageService.setUseful(additionDTO.getCardPicLocation());
     }
 
@@ -109,8 +117,10 @@ public class UserServiceImpl implements UserService {
         applicationDao.updateApplicationByAdmin(userid, updateDTO);
         VolunteerApplicationPO po = applicationDao.getApplicationByFormId(updateDTO.getFormID());
         imageStorageService.delete(po.getCardPicLocation());
-        if (updateDTO.getStatus() == 1)
-            userDao.updateUserVolunteerAuthority(applicationDao.getApplicationByFormId(updateDTO.getFormID()).getUserId(), true);
+        if (updateDTO.getStatus() == 1) {
+            Integer promotedUserId = applicationDao.getApplicationByFormId(updateDTO.getFormID()).getUserId();
+            userDao.updateUserVolunteerAuthority(promotedUserId, true);
+        }
     }
 
 }
