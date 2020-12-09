@@ -5,7 +5,7 @@ class_dic = {
     'tinyint': 'Integer',
     'datetime': 'Timestamp',
     'date': 'Date',
-    'boolean': 'boolean',
+    'boolean': 'Boolean',
     'int unsigned': 'Integer'
 }
 
