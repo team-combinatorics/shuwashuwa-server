@@ -7,6 +7,7 @@ import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.MD5Util;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -48,15 +49,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
 
     @Override
     public int addAdministrator(AdminDTO adminDTO) {
-        AdminPO adminPO = AdminPO.builder()
-                .userid(adminDTO.getUserid())
-                .userName(adminDTO.getUserName())
-                .phoneNumber(adminDTO.getPhoneNumber())
-                .email(adminDTO.getEmail())
-                .identity(adminDTO.getIdentity())
-                .department(adminDTO.getDepartment())
-                .studentId(adminDTO.getStudentId())
-                .build();
+        AdminPO adminPO = (AdminPO) DTOUtil.convert(adminDTO,AdminPO.class);
         System.out.println(adminPO.getUserid());
         int cnt = adminDao.insert(adminPO);
         if(cnt == 1) {
@@ -70,15 +63,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         List<AdminPO> list = adminDao.listAdmins();
         List<AdminDTO> returnList = new Vector<>();
         for(AdminPO adminPO:list) {
-            AdminDTO adminDTO = AdminDTO.builder()
-                    .userid(adminPO.getUserid())
-                    .userName(adminPO.getUserName())
-                    .phoneNumber(adminPO.getPhoneNumber())
-                    .email(adminPO.getEmail())
-                    .identity(adminPO.getIdentity())
-                    .department(adminPO.getDepartment())
-                    .studentId(adminPO.getStudentId())
-                    .build();
+            AdminDTO adminDTO = (AdminDTO) DTOUtil.convert(adminPO,AdminDTO.class);
             returnList.add(adminDTO);
         }
         return returnList;
@@ -97,29 +82,14 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         AdminPO adminPO = adminDao.getByID(adminID);
         if(adminPO == null)
             return null;
-        return AdminDTO.builder()
-                .userid(adminPO.getUserid())
-                .userName((adminPO.getUserName()))
-                .phoneNumber(adminPO.getPhoneNumber())
-                .email(adminPO.getEmail())
-                .identity(adminPO.getIdentity())
-                .department(adminPO.getDepartment())
-                .studentId(adminPO.getStudentId())
-                .build();
+        return (AdminDTO) DTOUtil.convert(adminPO,AdminDTO.class);
     }
 
     @Override
     public int updateAdministratorInfo(AdminDTO adminDTO) {
         int adminID = adminDao.getAdminIDByUserID(Integer.parseInt(adminDTO.getUserid()));
-        AdminPO adminPO = AdminPO.builder()
-                .id(adminID)
-                .userName(adminDTO.getUserName())
-                .phoneNumber(adminDTO.getPhoneNumber())
-                .email(adminDTO.getEmail())
-                .identity(adminDTO.getIdentity())
-                .department(adminDTO.getDepartment())
-                .studentId(adminDTO.getStudentId())
-                .build();
+        AdminPO adminPO = (AdminPO) DTOUtil.convert(adminDTO,AdminPO.class);
+        adminPO.setId(adminID);
         return adminDao.update(adminPO);
     }
 }
