@@ -5,7 +5,9 @@ updated_time,datetime,NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMES
 user_id,int unsigned,NOT NULL,发起维修请求的用户id,1,,,
 volunteer_id,int unsigned,DEFAULT NULL,负责维修的志愿者,1,,,
 repairing_result,varchar(100),DEFAULT NULL,志愿者填写的维修结果,,,,
-status,tinyint,NOT NULL DEFAULT 0,该维修请求的状态,1,,,
 feedback,varchar(100),DEFAULT NULL,用户反馈信息,,,,
 activity_id,int,DEFAULT NULL,预约活动id,1,,,
 time_slot,int,DEFAULT NULL,预约时间段,,,,
+status,tinyint,DEFAULT 0,状态,1,"","",""
+is_draft,boolean,DEFAULT 0,是否为草稿状态,1,"","",""
+is_closed,boolean,DEFAULT 0,是否为关闭状态,1,"","",""

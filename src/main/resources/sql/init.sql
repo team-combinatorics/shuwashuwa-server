@@ -80,14 +80,18 @@ CREATE TABLE `service_event`
     `user_id`          INT UNSIGNED                NOT NULL COMMENT '发起维修请求的用户id',
     `volunteer_id`     INT UNSIGNED                         DEFAULT NULL COMMENT '负责维修的志愿者',
     `repairing_result` VARCHAR(100)                         DEFAULT NULL COMMENT '志愿者填写的维修结果',
-    `status`           TINYINT                     NOT NULL DEFAULT 0 COMMENT '该维修请求的状态',
     `feedback`         VARCHAR(100)                         DEFAULT NULL COMMENT '用户反馈信息',
     `activity_id`      INT                                  DEFAULT NULL COMMENT '预约活动id',
     `time_slot`        INT                                  DEFAULT NULL COMMENT '预约时间段',
+    `status`           TINYINT                              DEFAULT 0 COMMENT '状态',
+    `is_draft`         BOOLEAN                              DEFAULT 0 COMMENT '是否为草稿状态',
+    `is_closed`        BOOLEAN                              DEFAULT 0 COMMENT '是否为关闭状态',
     INDEX idx_user_id (user_id),
     INDEX idx_volunteer_id (volunteer_id),
-    INDEX idx_status (status),
     INDEX idx_activity_id (activity_id),
+    INDEX idx_status (status),
+    INDEX idx_is_draft (is_draft),
+    INDEX idx_is_closed (is_closed),
     PRIMARY KEY pk_id (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -112,9 +116,7 @@ CREATE TABLE `service_form`
     `reply_user_id`         INT UNSIGNED                         DEFAULT NULL COMMENT '提供建议的人的id',
     `description_advice`    VARCHAR(100)                         DEFAULT NULL COMMENT '描述修改建议',
     `service_event_id`      INT UNSIGNED                NOT NULL COMMENT '关联的维修事件的id',
-    `status`                TINYINT                              DEFAULT 0 COMMENT '维修单状态：待审核，未通过，通过',
     INDEX idx_service_event_id (service_event_id),
-    INDEX idx_status (status),
     PRIMARY KEY pk_id (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
