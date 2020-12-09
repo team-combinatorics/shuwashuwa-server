@@ -23,6 +23,6 @@ public class ServiceEventPO {
     private Integer activityId;
     private Integer timeSlot;
     private Integer status;
-    private boolean draft;
-    private boolean closed;
+    private Boolean draft;
+    private Boolean closed;
 }

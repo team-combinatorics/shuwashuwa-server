@@ -21,11 +21,11 @@ public class ServiceForm {
     private String brand;
     private String computerModel;
     private String cpuModel;
-    private boolean hasDiscreteGraphics;
+    private Boolean hasDiscreteGraphics;
     private String graphicsModel;
     private String laptopType;
     private Date boughtTime;
-    private boolean underWarranty;
+    private Boolean underWarranty;
     private String problemDescription;
     private String problemType;
     private List<ServicePic> pictures;

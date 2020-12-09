@@ -23,7 +23,7 @@ public class ServiceEventUpdateByVolunteerDTO {
     private Integer status;
     // TODO (to leesou and leo_h) 注意这个用于更新的dto添加了两个在维修事件中补充的属性，请修改对应的地方
     @ApiModelProperty("是否有草稿状态的维修单")
-    private boolean draft;
+    private Boolean draft;
     @ApiModelProperty("该维修事件是否关闭")
-    private boolean closed;
+    private Boolean closed;
 }

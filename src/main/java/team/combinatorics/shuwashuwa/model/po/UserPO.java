@@ -25,7 +25,7 @@ public class UserPO {
     private String grade;
     private String studentId;
     private String comment;
-    private boolean volunteer;
-    private boolean admin;
-    private boolean su;
+    private Boolean volunteer;
+    private Boolean admin;
+    private Boolean su;
 }
