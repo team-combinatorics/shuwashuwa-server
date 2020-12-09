@@ -40,4 +40,12 @@ public class SelectServiceEventCO {
      * 预约时间段
      */
     private Integer timeSlot;
+    /**
+     * 草稿状态
+     */
+    private Boolean draft;
+    /**
+     * 是否关闭
+     */
+    private Boolean closed;
 }

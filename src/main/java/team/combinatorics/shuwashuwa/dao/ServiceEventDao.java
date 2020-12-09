@@ -53,6 +53,8 @@ public interface ServiceEventDao {
      */
     ServiceEventResponseDTO getServiceEventByID(@Param("id") int id);
 
+    // TODO (to leesou and leo_h) 更新了这里的条件查询，可以用来做筛选
+    // 草稿 and未中止就是closed = false and draft = true
     /**
      * 条件检索
      *
@@ -60,6 +62,9 @@ public interface ServiceEventDao {
      * @return 一个维修单列表
      */
     List<ServiceEventResponseDTO> listServiceEventsByCondition(@Param("condition") SelectServiceEventCO selectServiceEventCO);
+
     // TODO 这里应该写几个简单的查询语句，例如通过维修单id查找对应的用户，通过维修单id查找当前状态等
+
+
 
 }

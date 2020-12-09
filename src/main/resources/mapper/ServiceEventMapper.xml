@@ -65,7 +65,8 @@
         where id = #{id}
     </select>
 
-    <select id="listServiceEventsByCondition" resultMap="serviceEventResultMap">
+    <select id="listServiceEventsByCondition" resultMap="serviceEventResultMap"
+            parameterType="team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO">
         select id,
         user_id,
         volunteer_id,
@@ -98,6 +99,12 @@
             </if>
             <if test="condition.timeSlot != null">
                 and time_slot = #{condition.timeSlot}
+            </if>
+            <if test="condition.draft != null">
+                and is_draft = #{condition.draft}
+            </if>
+            <if test="condition.timeSlot != null">
+                and is_closed = #{condition.is_closed}
             </if>
         </where>
     </select>
