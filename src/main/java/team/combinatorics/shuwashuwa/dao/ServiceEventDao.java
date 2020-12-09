@@ -46,6 +46,7 @@ public interface ServiceEventDao {
      */
     void updateFeedback(@Param("id") int id, @Param("feedback") String feedback);
 
+    // TODO (to leesou and leo_h) ServiceEventResponseDTO已修改，请检查有无冲突的地方
     /**
      * @param id 维修请求id
      * @return 一个完整的维修单结构

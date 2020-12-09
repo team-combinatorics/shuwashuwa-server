@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
@@ -18,8 +19,10 @@ public class ServiceEventPO {
     private Integer userId;
     private Integer volunteerId;
     private String repairingResult;
-    private Integer status;
     private String feedback;
     private Integer activityId;
     private Integer timeSlot;
+    private Integer status;
+    private boolean draft;
+    private boolean closed;
 }

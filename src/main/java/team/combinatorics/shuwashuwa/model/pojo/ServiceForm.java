@@ -31,5 +31,4 @@ public class ServiceForm {
     private List<ServicePic> pictures;
     private Integer replyUserId;
     private String descriptionAdvice;
-    private Integer status;
 }

@@ -8,10 +8,12 @@
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="volunteer_id" jdbcType="INTEGER" property="volunteerId"/>
         <result column="repairing_result" jdbcType="VARCHAR" property="repairingResult"/>
-        <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="feedback" jdbcType="VARCHAR" property="feedback"/>
         <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="is_draft" jdbcType="BOOLEAN" property="draft"/>
+        <result column="is_closed" jdbcType="BOOLEAN" property="closed"/>
         <collection property="serviceForms"
                     select="team.combinatorics.shuwashuwa.dao.ServiceFormDao.listServiceFormsByServiceEventID"
                     ofType="team.combinatorics.shuwashuwa.model.pojo.ServiceForm"
@@ -53,10 +55,12 @@
                user_id,
                volunteer_id,
                repairing_result,
-               status,
                feedback,
                activity_id,
-               time_slot
+               time_slot,
+               status,
+               is_draft,
+               is_closed
         from service_event
         where id = #{id}
     </select>
@@ -66,10 +70,12 @@
         user_id,
         volunteer_id,
         repairing_result,
-        status,
         feedback,
         activity_id,
-        time_slot
+        time_slot,
+        status,
+        is_draft,
+        is_closed
         from service_event
         <where>
             <if test="condition.beginTime != null">

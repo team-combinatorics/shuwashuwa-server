@@ -86,7 +86,6 @@ public class ServiceEventDaoTest {
         serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
                 .advice("没救了，换电脑吧")
                 .formID(1)
-                .status(1)
                 .build());
 
         // 给维修单1分配图片
@@ -115,7 +114,6 @@ public class ServiceEventDaoTest {
         serviceFormDao.updateAdvice(114514, ServiceFormUpdateDTO.builder()
                 .advice("就是不给你过，爬爬爬")
                 .formID(2)
-                .status(1)
                 .build());
         // 给维修单2分配图片
         for (int i = 1; i <= 2; i++) {
@@ -144,7 +142,6 @@ public class ServiceEventDaoTest {
         serviceFormDao.updateAdvice(1919810, ServiceFormUpdateDTO.builder()
                 .advice("算了，给你过了")
                 .formID(3)
-                .status(1)
                 .build());
         // 给维修单3分配图片
         for (int i = 1; i <= 3; i++) {

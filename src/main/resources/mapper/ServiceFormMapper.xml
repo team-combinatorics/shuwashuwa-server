@@ -17,7 +17,6 @@
         <result column="problem_type" jdbcType="VARCHAR" property="problemType"/>
         <result column="reply_user_id" jdbcType="INTEGER" property="replyUserId"/>
         <result column="description_advice" jdbcType="VARCHAR" property="descriptionAdvice"/>
-        <result column="status" jdbcType="TINYINT" property="status"/>
         <collection property="pictures" select="team.combinatorics.shuwashuwa.dao.ServicePicDao.listServicePicsByFormId"
                     ofType="team.combinatorics.shuwashuwa.model.pojo.ServicePic"
                     javaType="java.util.ArrayList"
@@ -36,8 +35,7 @@
     <update id="updateAdvice" parameterType="team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO">
         update service_form
         set reply_user_id      = #{adminID},
-            description_advice = #{updateInfo.advice},
-            status             = #{updateInfo.status}
+            description_advice = #{updateInfo.advice}
         where id = #{updateInfo.formID}
     </update>
 
@@ -54,8 +52,7 @@
                problem_description,
                problem_type,
                reply_user_id,
-               description_advice,
-               status
+               description_advice
         from service_form
         where id = #{id}
     </select>
@@ -73,8 +70,7 @@
                problem_description,
                problem_type,
                reply_user_id,
-               description_advice,
-               status
+               description_advice
         from service_form
         where service_event_id = #{eventID}
     </select>

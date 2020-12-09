@@ -44,7 +44,6 @@ public class ServiceFormTest {
         serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
                 .advice("没救了，换电脑吧")
                 .formID(1)
-                .status(1)
                 .build());
 
         for (int i = 1; i <= 4; i++) {
@@ -77,7 +76,6 @@ public class ServiceFormTest {
         serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
                 .advice("就是不给你过，爬爬爬")
                 .formID(1)
-                .status(1)
                 .build());
         for (int i = 1; i <= 2; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(2).build();

@@ -29,5 +29,4 @@ public class ServiceFormPO {
     private Integer replyUserId;
     private String descriptionAdvice;
     private Integer serviceEventId;
-    private Integer status;
 }
