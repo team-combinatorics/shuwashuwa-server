@@ -28,6 +28,7 @@ public interface ServiceFormDao {
     void updateAdvice(@Param("adminID") int adminID, @Param("updateInfo") ServiceFormUpdateDTO serviceFormUpdateDTO);
 
     // TODO (to leesou and leo_h)，注意这里的ServiceForm发生了改变，删去了status这个属性，虽说这个你们应该用不到，但还是检查下
+
     /**
      * 根据form id寻找form
      *
@@ -44,4 +45,11 @@ public interface ServiceFormDao {
      */
     List<ServiceForm> listServiceFormsByServiceEventID(@Param("eventID") int eventID);
 
+    /**
+     * 根据维修事件id获取最后一个维修单的id
+     *
+     * @param eventID 维修事件id
+     * @return 最后一个维修单的id
+     */
+    Integer getLastFormIDByEventID(@Param("eventID") int eventID);
 }

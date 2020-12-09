@@ -76,4 +76,9 @@
     </select>
 
 
+    <select id="getLastFormIDByEventID" parameterType="int" resultType="Integer">
+        select max(id)
+        from service_form
+        where service_event_id = #{eventID}
+    </select>
 </mapper>
