@@ -91,7 +91,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         if(cachePicPO == null)
             return;
         if(cachePicPO.getUserId() != userid)
-            throw new KnownException(ErrorInfoEnum.IMAGE_NOT_YOURS);
+            throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
 
         //删除图片
         delete(path);
