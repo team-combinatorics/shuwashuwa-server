@@ -1,32 +1,36 @@
 # 后端小组的Todo
 
-## 待完成
-
-- 增加一个重建数据库的接口以供测试
-
-- 若把活动编号移动到维修单，ServiceEvent的创建就只用userid，不如改参数
-  
-- 想要根据活动编号获得userid和status，现在只能取出一个十分详细的DTO，有点蠢
+## 紧急
 
 - 给定维修单编号和ServiceFormPO，来个更新的接口
 
+- 把活动id和时间段选取移动到维修单属性
+
 - 怎么更新维修事件状态
+
+- 怎么设置维修单的审核管理员，以及维修事件的接单志愿者
 
 - ServiceFormRejectionDTO(~~ServiceFormUpdateDTO~~)里只有一个formId和一个string，建议删掉这个DTO，直球变成dao更新方法的两个参数（事实上，管理员并不需要发送维修单的id，而是直接操作维修事件。所以这个DTO我需要重新设计，数据库不用的话先删掉）
 
 - ServiceCompleteDTO(~~ServiceEventUpdateByVolunteerDTO~~)同上，没必要DTO
 
-- 考虑一下是不是可以把维修单的创建时间和修改时间返回给前端
+- 设计签到接口逻辑
+
+## 次要
 
 - ServicePic已经不必返回id，有个url就行
 
-## 进行中
+- 若把活动编号移动到维修单，ServiceEvent的创建就只用userid，不如改参数
 
-### kinami
+- 想要根据活动编号获得userid和status，现在只能取出一个十分详细的DTO，有点蠢
 
-### leo_h
+- 增加一个重建数据库的接口以供测试
+  
+- 考虑一下是不是可以把维修单的创建时间和修改时间返回给前端
 
-### leesou
+- 缩略图实现
+
+- 用户通知
 
 
 
