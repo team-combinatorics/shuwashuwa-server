@@ -64,6 +64,8 @@ public interface EventService {
      */
     void updateFeedback(int userid, ServiceEventUniversalDTO stringUpdateDTO);
 
+    void shutdownService(int userid, Integer serviceEventId);
+
     /**
      * 返回未审核的维修事件
      */
@@ -79,6 +81,6 @@ public interface EventService {
      * 返回指定用户需要完善维修信息的维修事件
      * @param userid 查询的用户id
      */
-    List<ServiceEventDetailDTO> listBadServicesOf(int userid);
+    List<ServiceEventDetailDTO> listServiceToEditOf(int userid);
 
 }

@@ -1,21 +1,20 @@
 package team.combinatorics.shuwashuwa.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceEventUniversalDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Api("维修事件接口说明")
 @RestController
@@ -25,8 +24,8 @@ public class EventController {
 
     private final EventService eventService;
 
-    @ApiOperation(value = "处理维修事件创建", httpMethod = "POST",
-            notes = "创建一个空的维修事件并返回，返回结构与查询一致")
+    @ApiOperation(value = "创建维修事件", httpMethod = "POST",
+            notes = "创建并返回一个空的维修事件，返回结构与查询一致")
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiResponses({@ApiResponse(code = 200, message = "请求成功")})
     @AllAccess
@@ -60,29 +59,105 @@ public class EventController {
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @RequestMapping(value = "/audit", method = RequestMethod.DELETE)
     @AdminAccess
-    public CommonResult<String> handleFormAcceptance() {
+    public CommonResult<String> handleFormAcceptance(
+            @RequestHeader("token") String token,
+            @RequestBody ServiceEventUniversalDTO messageDTO
+            ) {
+        int userid = TokenUtil.extractUserid(token);
+        eventService.acceptForm(userid,messageDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @RequestMapping(value = "/audit", method = RequestMethod.PUT)
     @AdminAccess
-    public CommonResult<String> handleFormRejection() {
+    public CommonResult<String> handleFormRejection(
+            @RequestHeader("token") String token,
+            @RequestBody ServiceEventUniversalDTO reasonDTO
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        eventService.rejectForm(userid,reasonDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @RequestMapping(value = "/work", method = RequestMethod.PUT)
     @VolunteerAccess
-    public CommonResult<String> handleOrderTaking() {
+    public CommonResult<String> handleOrderTaking(
+            @RequestHeader("token") String token,
+            @RequestBody Integer serviceEventId
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        eventService.takeOrder(userid,serviceEventId);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @RequestMapping(value = "/work", method = RequestMethod.DELETE)
     @VolunteerAccess
-    public CommonResult<String> handleVolunteerComment() {
+    public CommonResult<String> handleOrderGiveUp(
+          @RequestHeader("token") String token,
+          @RequestBody Integer serviceEventId
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        eventService.giveUpOrder(userid,serviceEventId);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @RequestMapping(value = "/complete", method = RequestMethod.PUT)
+    @VolunteerAccess
+    public CommonResult<String> handleServiceCompletion(
+          @RequestHeader("token") String token,
+          @RequestBody ServiceEventUniversalDTO resultDTO
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        eventService.completeOrder(userid,resultDTO);
+        return new CommonResult<>(200,"请求成功","success");
+    }
+
+    @RequestMapping(value = "/feedback", method = RequestMethod.PUT)
     @AllAccess
-    public CommonResult<String> handleClientComment() {
+    public CommonResult<String> handleFeedback(
+            @RequestHeader("token") String token,
+            @RequestBody ServiceEventUniversalDTO feedbackDTO
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        eventService.updateFeedback(userid,feedbackDTO);
         return new CommonResult<>(200,"请求成功","success");
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @AllAccess
+    public CommonResult<String> handleShutdown(
+            @RequestHeader("token") String token,
+            @RequestBody Integer serviceEventId
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        eventService.shutdownService(userid,serviceEventId);
+        return new CommonResult<>(200,"请求成功","success");
+    }
+
+    @RequestMapping(value = "/audit", method = RequestMethod.GET)
+    @AdminAccess
+    public CommonResult<List<ServiceEventDetailDTO>> getUnaudited() {
+        return new CommonResult<>(200,"请求成功",eventService.listUnauditedEvents());
+    }
+
+    @RequestMapping(value = "/mine", method = RequestMethod.GET)
+    @AdminAccess
+    public CommonResult<List<ServiceEventDetailDTO>> getServicesCreated(
+            @RequestHeader("token") String token
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        return new CommonResult<>(200,"请求成功",eventService.listServicesCreatedBy(userid));
+    }
+
+    @RequestMapping(value = "/draft", method = RequestMethod.GET)
+    @AdminAccess
+    public CommonResult<List<ServiceEventDetailDTO>> getServicesToEdit(
+            @RequestHeader("token") String token
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        return new CommonResult<>(200,"请求成功",eventService.listServiceToEditOf(userid));
     }
 
 }

@@ -115,6 +115,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public void shutdownService(int userid, Integer serviceEventId) {
+
+    }
+
+    @Override
     public List<ServiceEventDetailDTO> listUnauditedEvents() {
         return null;
     }
@@ -125,7 +130,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ServiceEventDetailDTO> listBadServicesOf(int userid) {
+    public List<ServiceEventDetailDTO> listServiceToEditOf(int userid) {
         return null;
     }
 }
