@@ -12,6 +12,8 @@
 
 - 怎么更新维修事件状态
 
+- ServiceFormRejectionDTO(~~ServiceFormUpdateDTO~~)里只有一个formId和一个string，建议删掉这个DTO，直球变成dao更新方法的两个参数（事实上，管理员并不需要发送维修单的id，而是直接操作维修事件。所以这个DTO我需要重新设计，数据库不用的话先删掉）
+
 ## 进行中
 
 ### kinami
