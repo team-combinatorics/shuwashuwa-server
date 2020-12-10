@@ -1,14 +1,22 @@
 package team.combinatorics.shuwashuwa.service;
 
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
 
 public interface EventService {
 
     /**
-     * 用户提交维修单。如果是第一次提交，会创建对应的维修事件，此外还会对应地修改维修单数据库
-     * @param serviceFormDTO 用户提交的内容
+     * 创建一个空的维修事件，仅包含一个草稿
+     * @param userid 预约维修的用户的ID
      */
-    void commitForm(int userid, ServiceFormDTO serviceFormDTO);
+    ServiceEventDetailDTO createNewEvent(int userid);
 
-//    void takeOrder(int userid, )
+    /**
+     * 用户上传维修单
+     * @param userid 上传维修单的用户id，用于验证
+     * @param serviceFormSubmitDTO 维修单信息
+     * @param isDraft 若为false，表示交付审核
+     */
+    void submitForm(int userid, ServiceFormSubmitDTO serviceFormSubmitDTO, boolean isDraft);
+
 }
