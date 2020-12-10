@@ -24,3 +24,4 @@ public class ServiceCompleteDTO {
     @ApiModelProperty("该维修事件是否关闭")
     private Boolean closed;
 }
+//todo 这东西大概没啥大用

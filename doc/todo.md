@@ -14,6 +14,10 @@
 
 - ServiceFormRejectionDTO(~~ServiceFormUpdateDTO~~)里只有一个formId和一个string，建议删掉这个DTO，直球变成dao更新方法的两个参数（事实上，管理员并不需要发送维修单的id，而是直接操作维修事件。所以这个DTO我需要重新设计，数据库不用的话先删掉）
 
+- ServiceCompleteDTO(~~ServiceEventUpdateByVolunteerDTO~~)同上，没必要DTO
+
+- 考虑一下是不是可以把维修单的创建时间和修改时间返回给前端
+
 ## 进行中
 
 ### kinami
