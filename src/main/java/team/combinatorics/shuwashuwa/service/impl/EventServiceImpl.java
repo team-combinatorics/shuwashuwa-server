@@ -21,6 +21,15 @@ public class EventServiceImpl implements EventService {
     private final ServiceFormDao serviceFormDao;
     private final ImageStorageService imageStorageService;
 
+    /*维修事件Status属性说明
+    * 0:等待用户编辑
+    * 1:等待管理员审核
+    * 2:审核通过（待签到）
+    * 3:等待志愿者接单
+    * 4:维修中
+    * 5:维修完成
+    * */
+
     @Override
     public ServiceEventDetailDTO createNewEvent(int userid) {
         ServiceEventPO eventPO = ServiceEventPO.builder().userId(userid).build();
@@ -39,11 +48,14 @@ public class EventServiceImpl implements EventService {
 
         //获取维修事件的创建者和状态
         //todo @kinami 我只想要PO
-        ServiceEventDetailDTO eventDetail = serviceEventDao.getServiceEventByID(serviceFormSubmitDTO.getServiceEventId());
+        ServiceEventDetailDTO eventDetail =
+                serviceEventDao.getServiceEventByID(serviceFormSubmitDTO.getServiceEventId());
 
         //检查权限
         if(eventDetail.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+        if(eventDetail.getStatus() >=3)
+            throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
 
         //提取维修单信息
         ServiceFormPO newFormPO = (ServiceFormPO) DTOUtil.convert(serviceFormSubmitDTO, ServiceFormPO.class);
@@ -60,10 +72,11 @@ public class EventServiceImpl implements EventService {
             serviceFormDao.insert(newFormPO);
         }
 
-        //设置图片关联
-        for(String imagePath: serviceFormSubmitDTO.getImageList()) {
-            imageStorageService.bindWithService(imagePath,newFormPO.getId());
-        }
+        //若正式提交，设置图片关联
+        if(!isDraft)
+            for(String imagePath: serviceFormSubmitDTO.getImageList()) {
+                imageStorageService.bindWithService(imagePath,newFormPO.getId());
+            }
 
         //todo @kinami 更新维修事件状态（三个都要）
     }
