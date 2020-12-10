@@ -29,16 +29,21 @@ public class ServiceEventDetailDTO {
     private List<ServiceForm> serviceForms;
     @ApiModelProperty("由志愿者填写的维修结果")
     private String repairingResult;
-    //TODO 需要在这里说明每个数字代表什么状态，例如等待审核，等待开始活动，已签到等待维修等
     @ApiModelProperty("用户反馈")
     private String feedback;
     @ApiModelProperty("参加的活动的id")
     private Integer activityId;
     @ApiModelProperty("预约的时间段")
     private Integer timeSlot;
-    @ApiModelProperty("该次维修状态状态, 0表示提交以后待审核")
+    @ApiModelProperty("该次维修处于的状态,可能状态如下:\n" +
+            "0:等待用户编辑\n" +
+            "1:等待管理员审核\n" +
+            "2:审核通过（待签到）\n" +
+            "3:等待志愿者接单\n" +
+            "4:维修中\n" +
+            "5:维修完成\n")
     private Integer status;
-    @ApiModelProperty("该维修单是否处于草稿状态")
+    @ApiModelProperty("是否存在维修单草稿，若为真，则serviceForms中的最后一项是用户保存的草稿")
     private Boolean draft;
     @ApiModelProperty("该维修单是否已关闭")
     private Boolean closed;

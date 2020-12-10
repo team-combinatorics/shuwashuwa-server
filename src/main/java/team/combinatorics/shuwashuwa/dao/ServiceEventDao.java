@@ -59,7 +59,7 @@ public interface ServiceEventDao {
      */
     List<ServiceEventDetailDTO> listServiceEventsByCondition(@Param("condition") SelectServiceEventCO selectServiceEventCO);
 
-    // TODO 这里应该写几个简单的查询语句，例如通过维修单id查找对应的用户，通过维修单id查找当前状态等
+    // TODO 这里应该写几个简单的查询语句，例如通过维修事件id查找对应的用户，通过维修事件id查找当前状态等
 
 
 
