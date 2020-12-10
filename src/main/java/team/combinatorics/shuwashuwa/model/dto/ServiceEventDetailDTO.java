@@ -35,13 +35,13 @@ public class ServiceEventDetailDTO {
     private Integer activityId;
     @ApiModelProperty("预约的时间段")
     private Integer timeSlot;
-    @ApiModelProperty("该次维修处于的状态,可能状态如下:\n" +
+    @ApiModelProperty(value = "该次维修处于的状态,可能状态如下:\n" +
             "0:等待用户编辑\n" +
             "1:等待管理员审核\n" +
             "2:审核通过（待签到）\n" +
             "3:等待志愿者接单\n" +
             "4:维修中\n" +
-            "5:维修完成\n")
+            "5:维修完成\n",allowableValues = "0,1,2,3,4,5")
     private Integer status;
     @ApiModelProperty("是否存在维修单草稿，若为真，则serviceForms中的最后一项是用户保存的草稿")
     private Boolean draft;

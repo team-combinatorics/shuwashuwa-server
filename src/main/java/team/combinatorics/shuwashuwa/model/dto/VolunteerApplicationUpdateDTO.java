@@ -19,6 +19,6 @@ public class VolunteerApplicationUpdateDTO {
     private Integer formID;
     @ApiModelProperty("管理员的回复")
     private String replyByAdmin;
-    @ApiModelProperty("管理员给出的状态")
+    @ApiModelProperty(value = "管理员给出的状态,1表示通过,2表示拒绝",allowableValues = "1,2")
     private Integer status;
 }

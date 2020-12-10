@@ -17,9 +17,9 @@ public class VolunteerApplicationResultDTO {
     private Integer id;
     @ApiModelProperty("申请理由")
     private String reasonForApplication;
-    @ApiModelProperty("申请时间，以yyyy-MM-dd HH:mm:ss表示")
+    @ApiModelProperty(value = "申请时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String createTime;
-    @ApiModelProperty("审核时间，以yyyy-MM-dd HH:mm:ss表示")
+    @ApiModelProperty(value = "审核时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String updatedTime;
     @ApiModelProperty("管理员回复")
     private String replyByAdmin;
