@@ -83,4 +83,8 @@ public interface EventService {
      */
     List<ServiceEventDetailDTO> listServiceToEditOf(int userid);
 
+    /**
+     * 返回未审核的维修事件
+     */
+    List<ServiceEventDetailDTO> listPendingEvents(Integer activityId);
 }

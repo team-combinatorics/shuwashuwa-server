@@ -133,4 +133,9 @@ public class EventServiceImpl implements EventService {
     public List<ServiceEventDetailDTO> listServiceToEditOf(int userid) {
         return null;
     }
+
+    @Override
+    public List<ServiceEventDetailDTO> listPendingEvents(Integer activityId) {
+        return null;
+    }
 }

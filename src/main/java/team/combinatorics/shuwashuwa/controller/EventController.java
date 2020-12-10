@@ -171,4 +171,13 @@ public class EventController {
         return new CommonResult<>(200,"请求成功",eventService.listServiceToEditOf(userid));
     }
 
+    @ApiOperation("[志愿者]获取某活动待接单的维修事件列表")
+    @RequestMapping(value = "/work", method = RequestMethod.GET)
+    @AllAccess
+    public CommonResult<List<ServiceEventDetailDTO>> getAvailableOrder(
+            @RequestBody @ApiParam("要查询的活动") Integer activityId
+    ) {
+        return new CommonResult<>(200,"请求成功",eventService.listPendingEvents(activityId));
+    }
+
 }
