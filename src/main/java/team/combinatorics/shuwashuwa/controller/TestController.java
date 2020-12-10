@@ -13,7 +13,7 @@ import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 
-@Api(value = "测试用接口")
+@Api(value = "测试用接口",hidden = true)
 @RestController
 @RequestMapping("/test")
 public class TestController {

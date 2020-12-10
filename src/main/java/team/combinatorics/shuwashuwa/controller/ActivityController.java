@@ -1,9 +1,6 @@
 package team.combinatorics.shuwashuwa.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,22 +21,16 @@ import java.util.List;
 public class ActivityController {
     ActivityService activityService;
 
-    @ApiOperation(value = "查看所有活动", notes = "返回所有发起过而未被取消的活动", httpMethod = "GET")
+    @ApiOperation(value = "查看所有活动")
     @RequestMapping(value = "", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleListRequest() {
         System.out.println("请求活动列表");
         return new CommonResult<>(200, "请求成功", activityService.listAllActivity());
     }
 
-    @ApiOperation(value = "查看未开始活动", notes = "返回开始时间在请求时间之后的活动列表", httpMethod = "GET")
+    @ApiOperation(value = "查看未开始活动")
     @RequestMapping(value = "/coming", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleComingListRequest() {
         System.out.println("请求未开始活动列表");
@@ -50,13 +41,11 @@ public class ActivityController {
     /**
      * 查看一个活动的时间段列表
      */
-    @ApiOperation(value = "查看一个活动的时间段列表", notes = "返回格式化时间段的列表", httpMethod = "GET")
+    @ApiOperation(value = "查看一个活动的时间段列表")
     @RequestMapping(value = "/slot", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
     @AllAccess
-    public CommonResult<List<ActivityTimeSlotDTO>> handleTimeSlotRequest(@RequestBody Integer activityId) {
+    public CommonResult<List<ActivityTimeSlotDTO>> handleTimeSlotRequest(
+            @RequestBody @ApiParam("活动ID") Integer activityId) {
         System.out.println("请求活动"+activityId+"时间段");
         return new CommonResult<>(200, "请求成功", activityService.listTimeSlots(activityId));
     }

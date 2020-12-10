@@ -1,9 +1,6 @@
 package team.combinatorics.shuwashuwa.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,15 +31,15 @@ public class SuperAdministratorController {
     /**
      * 超级管理员登录系统
      */
-    @ApiOperation(value = "超级管理员登录", notes = "通过输入内置的超级管理员用户名和密码进行登录", httpMethod = "GET")
+    @ApiOperation(value = "[无需token]超级管理员登录", notes = "通过输入内置的超级管理员用户名和密码进行登录")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "登录成功"),
             @ApiResponse(code = 40011, message = "用户名或密码错误")
     })
     @NoToken
-    public CommonResult<String> loginHandler(@NotNull(message = "用户名不能为空") String userName,
-                                             @NotNull(message = "密码不能为空") String password) {
+    public CommonResult<String> loginHandler(@NotNull(message = "用户名不能为空") @ApiParam("超管用户名") String userName,
+                                             @NotNull(message = "密码不能为空") @ApiParam("超管密码") String password) {
 
         String token = superAdministratorService.checkInfo(userName, password);
         if(token != null) {
@@ -56,15 +53,17 @@ public class SuperAdministratorController {
     /**
      * 超级管理员修改密码
      */
-    @ApiOperation(value = "修改超级管理员密码", notes = "比对输入的原始密码后，将新密码转换为MD5格式后储存至数据库", httpMethod = "PUT")
+    @ApiOperation(value = "修改超级管理员密码", notes = "比对输入的原始密码后，将新密码转换为MD5格式后储存至数据库")
     @RequestMapping(value = "/change", method = RequestMethod.PUT)
     @ApiResponses({
             @ApiResponse(code = 200, message = "修改成功"),
             @ApiResponse(code = 40011, message = "原始密码错误")
     })
     @SUAccess
-    public CommonResult<String> changePassword(@RequestHeader @NotNull(message = "原始密码不能为空") String oldPassword,
-                                               @RequestHeader @NotNull(message = "新密码不能为空") String newPassword) {
+    public CommonResult<String> changePassword(
+            @RequestHeader @NotNull(message = "原始密码不能为空") @ApiParam("原始密码") String oldPassword,
+            @RequestHeader @NotNull(message = "新密码不能为空") @ApiParam("新密码") String newPassword
+    ) {
         boolean success = superAdministratorService.changePassword(oldPassword, newPassword);
         if(success)
             return new CommonResult<>(200, "修改成功", "Change password successfully!");
@@ -75,11 +74,8 @@ public class SuperAdministratorController {
     /**
      * 超管获取缓存图片数量
      */
-    @ApiOperation(value = "获取缓存图片数量", notes = "超管专属", httpMethod = "GET")
+    @ApiOperation(value = "获取缓存图片数量")
     @RequestMapping(value = "/cache", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "获取成功")
-    })
     @SUAccess
     public CommonResult<Integer> getImageCacheNumber() {
         return new CommonResult<>(200,"请求成功",storageService.countCacheImages());
@@ -88,13 +84,13 @@ public class SuperAdministratorController {
     /**
      * 超管删除所有缓存图片
      */
-    @ApiOperation(value = "删除指定日期前的所有缓存图片", notes = "超管专属", httpMethod = "DELETE")
+    @ApiOperation(value = "删除指定日期前的所有缓存图片")
     @RequestMapping(value = "/cache", method = RequestMethod.DELETE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "删除成功")
     })
     @SUAccess
-    public CommonResult<String> handleImageCacheClear(@RequestParam("days") int days) {
+    public CommonResult<String> handleImageCacheClear(@RequestParam("days") @ApiParam("指定的天数") int days) {
         storageService.clearCacheByTime(days);
         return new CommonResult<>(200,"删除成功","deleted");
     }
@@ -102,14 +98,16 @@ public class SuperAdministratorController {
     /**
      * 超管添加管理员
      */
-    @ApiOperation(value = "根据输入的信息添加新的管理员", notes = "超管专属", httpMethod = "POST")
+    @ApiOperation(value = "根据输入的信息添加新的管理员")
     @RequestMapping(value = "/admin", method = RequestMethod.POST)
     @ApiResponses({
             @ApiResponse(code = 200, message = "添加成功"),
             @ApiResponse(code = 40010, message = "添加失败，信息不完整")
     })
     @SUAccess
-    public CommonResult<String> addNewAdministrator(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO) {
+    public CommonResult<String> addNewAdministrator(
+            @RequestBody @NotNull(message = "管理员信息不能为空") @ApiParam("管理员信息") AdminDTO adminDTO
+    ) {
 
         System.out.println(adminDTO.getUserid());
         if(DTOUtil.fieldExistNull(adminDTO)) {
@@ -127,7 +125,7 @@ public class SuperAdministratorController {
     /**
      * 超管获取管理员列表
      */
-    @ApiOperation(value = "超级管理员获取所有管理员的列表", notes = "超管专属", httpMethod = "GET")
+    @ApiOperation(value = "超级管理员获取所有管理员的列表")
     @RequestMapping(value = "/admin/list", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "获取成功"),
@@ -141,13 +139,15 @@ public class SuperAdministratorController {
     /**
      * 超管删除管理员
      */
-    @ApiOperation(value = "根据输入的信息删除对应的管理员", notes = "超管专属", httpMethod = "DELETE")
+    @ApiOperation(value = "根据输入的信息删除对应的管理员", notes = "超管专属")
     @RequestMapping(value = "/admin", method = RequestMethod.DELETE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "删除成功"),
     })
     @SUAccess
-    public CommonResult<String> deleteAdministrator(@RequestParam @NotNull(message = "用户id不能为空") int userID){
+    public CommonResult<String> deleteAdministrator(
+            @RequestParam @NotNull(message = "用户id不能为空") @ApiParam("要删除管理员权限的用户id") int userID
+    ){
         int cnt = superAdministratorService.deleteAdministrator(userID);
         if(cnt == 1)
             return new CommonResult<>(200, "删除成功", "success");
@@ -158,27 +158,31 @@ public class SuperAdministratorController {
     /**
      * 超管获取单个管理员的信息
      */
-    @ApiOperation(value = "超级管理员获取单个管理员的详细信息", notes = "超管专属", httpMethod = "GET")
+    @ApiOperation(value = "超级管理员获取单个管理员的详细信息")
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "获取成功"),
     })
     @SUAccess
-    public CommonResult<AdminDTO> getAdministratorInfo(@NotNull(message = "用户id不能为空") int userID) {
+    public CommonResult<AdminDTO> getAdministratorInfo(
+            @NotNull(message = "用户id不能为空") @ApiParam("要获取管理员信息的用户id") int userID
+    ) {
         return new CommonResult<>(200, "获取成功", superAdministratorService.getAdministratorInfo(userID));
     }
 
     /**
      * 超管修改管理员信息
      */
-    @ApiOperation(value = "根据输入修改管理员信息", notes = "超管专属", httpMethod = "PATCH")
+    @ApiOperation(value = "根据输入修改管理员信息")
     @RequestMapping(value = "/admin", method = RequestMethod.PATCH)
     @ApiResponses({
             @ApiResponse(code = 200, message = "更新成功"),
             @ApiResponse(code = 40010, message = "更新失败，信息不能全为空")
     })
     @SUAccess
-    public CommonResult<String> updateAdministratorInfo(@RequestBody @NotNull(message = "管理员信息不能为空") AdminDTO adminDTO) {
+    public CommonResult<String> updateAdministratorInfo(
+            @RequestBody @NotNull(message = "管理员信息不能为空") @ApiParam("管理员信息") AdminDTO adminDTO
+    ) {
         if(team.combinatorics.shuwashuwa.utils.DTOUtil.fieldAllNull(adminDTO))
             return new CommonResult<>(40010, "更新失败，信息不能全为空", "You should fill administrator info!");
         System.out.println("即将更新用户id为"+adminDTO.getUserid()+"的管理员的信息");
@@ -192,13 +196,12 @@ public class SuperAdministratorController {
     /**
      * 超管发起一次活动
      */
-    @ApiOperation(value = "发起活动", notes = "su专属", httpMethod = "POST")
+    @ApiOperation(value = "发起活动")
     @RequestMapping(value = "/activity", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
     @SUAccess
-    public CommonResult<String> handleActivityLaunch(@RequestBody ActivityLaunchDTO activityLaunchDTO) {
+    public CommonResult<String> handleActivityLaunch(
+            @RequestBody @ApiParam("活动发起传输对象") ActivityLaunchDTO activityLaunchDTO
+    ) {
         System.out.println("发起活动");
         activityService.insertActivity(activityLaunchDTO);
         return new CommonResult<>(200, "请求成功", "success");
@@ -207,13 +210,12 @@ public class SuperAdministratorController {
     /**
      * 超管更新活动信息
      */
-    @ApiOperation(value = "更新活动信息", notes = "su专属", httpMethod = "PATCH")
+    @ApiOperation(value = "更新活动信息")
     @RequestMapping(value = "/activity", method = RequestMethod.PATCH)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
     @SUAccess
-    public CommonResult<String> handleActivityUpdate(@RequestBody ActivityUpdateDTO activityUpdateDTO) {
+    public CommonResult<String> handleActivityUpdate(
+            @RequestBody @ApiParam("活动更新传输对象") ActivityUpdateDTO activityUpdateDTO
+    ) {
         System.out.println("更新活动"+ activityUpdateDTO.getActivityId());
         activityService.updateActivity(activityUpdateDTO);
         return new CommonResult<>(200, "请求成功", "success");
@@ -222,13 +224,10 @@ public class SuperAdministratorController {
     /**
      * 超管取消一次活动
      */
-    @ApiOperation(value = "移除活动", notes = "su专属", httpMethod = "DELETE")
+    @ApiOperation(value = "移除活动")
     @RequestMapping(value = "/activity", method = RequestMethod.DELETE)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
     @SUAccess
-    public CommonResult<String> handleActivityDelete(@RequestBody Integer activityId) {
+    public CommonResult<String> handleActivityDelete(@RequestBody @ApiParam("要删除的活动编号") Integer activityId) {
         System.out.println("移除活动"+activityId);
         activityService.removeActivity(activityId);
         return new CommonResult<>(200, "请求成功", "success");

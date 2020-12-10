@@ -24,126 +24,136 @@ public class EventController {
 
     private final EventService eventService;
 
-    @ApiOperation(value = "创建维修事件", httpMethod = "POST",
-            notes = "创建并返回一个空的维修事件，返回结构与查询一致")
+    @ApiOperation(value = "创建维修事件",
+            notes = "返回一个空的维修事件")
     @RequestMapping(value = "", method = RequestMethod.POST)
-    @ApiResponses({@ApiResponse(code = 200, message = "请求成功")})
     @AllAccess
     public CommonResult<ServiceEventDetailDTO> handleServiceEventCreation(
-            @RequestHeader @NotNull(message = "用户Token不能为空") String token) {
+            @RequestHeader("token") String token) {
         int userid = TokenUtil.extractUserid(token);
         return new CommonResult<>(200,"请求成功",eventService.createNewEvent(userid));
     }
 
-    @ApiOperation(value = "处理维修单提交", notes = "需要预先创建维修事件", httpMethod = "POST")
+    @ApiOperation(value = "处理维修单提交", notes = "需要预先创建维修事件")
     @RequestMapping(value = "/commit", method = RequestMethod.POST)
-    @ApiResponses({@ApiResponse(code = 200, message = "请求成功")})
     @AllAccess
     public CommonResult<String> handleFormCommit(
-            @RequestHeader @NotNull(message = "用户Token不能为空") String token,
-            @RequestBody @NotNull(message = "维修单信息不能为空") ServiceFormSubmitDTO serviceFormSubmitDTO) {
+            @RequestHeader("token") String token,
+            @RequestBody @NotNull(message = "请上传维修单信息") @ApiParam("维修事件的id，以及维修单的信息")
+                    ServiceFormSubmitDTO serviceFormSubmitDTO
+    ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.submitForm(userid, serviceFormSubmitDTO,false);
         return new CommonResult<>(200,"请求成功","success");
     }
 
-    @ApiOperation(value = "处理维修单草稿保存", notes = "需要预先创建维修事件", httpMethod = "PUT")
+    @ApiOperation(value = "处理维修单草稿保存", notes = "需要预先创建维修事件")
     @RequestMapping(value = "/draft", method = RequestMethod.PUT)
-    @ApiResponses({@ApiResponse(code = 200, message = "请求成功")})
     @AllAccess
     public CommonResult<String> handleFormSaving(
-            @RequestHeader @NotNull(message = "用户Token不能为空") String token,
-            @RequestBody @NotNull(message = "维修单信息不能为空") ServiceFormSubmitDTO serviceFormSubmitDTO) {
+            @RequestHeader("token") String token,
+            @RequestBody @NotNull(message = "请上传维修单信息") @ApiParam("维修事件的id，以及维修单的信息")
+                    ServiceFormSubmitDTO serviceFormSubmitDTO
+    ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.submitForm(userid, serviceFormSubmitDTO,true);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation(value = "[管理员]维修单审核通过")
     @RequestMapping(value = "/audit", method = RequestMethod.DELETE)
     @AdminAccess
     public CommonResult<String> handleFormAcceptance(
             @RequestHeader("token") String token,
-            @RequestBody ServiceEventUniversalDTO messageDTO
-            ) {
+            @RequestBody @ApiParam("维修事件Id和留言（可选）") ServiceEventUniversalDTO messageDTO
+    ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.acceptForm(userid,messageDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation("[管理员]维修单审核不通过")
     @RequestMapping(value = "/audit", method = RequestMethod.PUT)
     @AdminAccess
     public CommonResult<String> handleFormRejection(
             @RequestHeader("token") String token,
-            @RequestBody ServiceEventUniversalDTO reasonDTO
+            @RequestBody @ApiParam("维修事件Id和拒绝理由") ServiceEventUniversalDTO reasonDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.rejectForm(userid,reasonDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation("[志愿者]接单")
     @RequestMapping(value = "/work", method = RequestMethod.PUT)
     @VolunteerAccess
     public CommonResult<String> handleOrderTaking(
             @RequestHeader("token") String token,
-            @RequestBody Integer serviceEventId
+            @RequestBody @ApiParam("维修事件Id") Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.takeOrder(userid,serviceEventId);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation("[志愿者]退回已接维修单")
     @RequestMapping(value = "/work", method = RequestMethod.DELETE)
     @VolunteerAccess
     public CommonResult<String> handleOrderGiveUp(
           @RequestHeader("token") String token,
-          @RequestBody Integer serviceEventId
+          @RequestBody @ApiParam("维修事件Id") Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.giveUpOrder(userid,serviceEventId);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation("[志愿者]完成维修单并填写结果")
     @RequestMapping(value = "/complete", method = RequestMethod.PUT)
     @VolunteerAccess
     public CommonResult<String> handleServiceCompletion(
           @RequestHeader("token") String token,
-          @RequestBody ServiceEventUniversalDTO resultDTO
+          @RequestBody @ApiParam("维修事件Id和维修结果") ServiceEventUniversalDTO resultDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.completeOrder(userid,resultDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation(value = "用户对维修进行反馈",notes = "会覆盖之前的反馈")
     @RequestMapping(value = "/feedback", method = RequestMethod.PUT)
     @AllAccess
     public CommonResult<String> handleFeedback(
             @RequestHeader("token") String token,
-            @RequestBody ServiceEventUniversalDTO feedbackDTO
+            @RequestBody @ApiParam("维修事件Id和反馈内容") ServiceEventUniversalDTO feedbackDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.updateFeedback(userid,feedbackDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation(value = "中止维修事件，取消预订", notes = "签到后不允许取消")
     @RequestMapping(value = "", method = RequestMethod.DELETE)
     @AllAccess
     public CommonResult<String> handleShutdown(
             @RequestHeader("token") String token,
-            @RequestBody Integer serviceEventId
+            @RequestBody @ApiParam("维修事件Id") Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.shutdownService(userid,serviceEventId);
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation("[管理员]获取待审核维修事件列表")
     @RequestMapping(value = "/audit", method = RequestMethod.GET)
     @AdminAccess
     public CommonResult<List<ServiceEventDetailDTO>> getUnaudited() {
         return new CommonResult<>(200,"请求成功",eventService.listUnauditedEvents());
     }
 
+    @ApiOperation("获取自己发起的维修事件列表")
     @RequestMapping(value = "/mine", method = RequestMethod.GET)
-    @AdminAccess
+    @AllAccess
     public CommonResult<List<ServiceEventDetailDTO>> getServicesCreated(
             @RequestHeader("token") String token
     ) {
@@ -151,8 +161,9 @@ public class EventController {
         return new CommonResult<>(200,"请求成功",eventService.listServicesCreatedBy(userid));
     }
 
+    @ApiOperation("获取待填的维修事件列表")
     @RequestMapping(value = "/draft", method = RequestMethod.GET)
-    @AdminAccess
+    @AllAccess
     public CommonResult<List<ServiceEventDetailDTO>> getServicesToEdit(
             @RequestHeader("token") String token
     ) {

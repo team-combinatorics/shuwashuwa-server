@@ -1,9 +1,6 @@
 package team.combinatorics.shuwashuwa.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
@@ -26,14 +23,16 @@ public class UserController {
     /**
      * 注册
      */
-    @ApiOperation(value = "登录", notes = "通过微信提供的临时登录凭证进行登录", httpMethod = "GET")
+    @ApiOperation(value = "[无需token]登录", notes = "通过微信提供的临时登录凭证进行登录")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
 
     })
     @NoToken
-    public CommonResult<LogInSuccessDTO> loginHandler(LogInInfoDTO logInInfoDto) throws Exception {
+    public CommonResult<LogInSuccessDTO> loginHandler(
+            @ApiParam("微信登录信息") LogInInfoDTO logInInfoDto
+    ) throws Exception {
         System.out.println("用户登录 @Controller");
         System.out.println("Code:" + logInInfoDto.getCode());
         LogInSuccessDTO logInSuccessDto = userService.wechatLogin(logInInfoDto);
@@ -45,14 +44,15 @@ public class UserController {
     /**
      * 更新用户信息
      */
-    @ApiOperation(value = "更新用户信息", notes = "根据传入的数据结构对数据库中用户的相应表项进行更新", httpMethod = "PUT")
+    @ApiOperation(value = "更新用户信息", notes = "根据传入的数据结构对数据库中用户的相应表项进行更新")
     @RequestMapping(value = "/info", method = RequestMethod.PUT)
     @ApiResponses({
             @ApiResponse(code = 200, message = "更新成功")
     })
     @AllAccess
     public CommonResult<String> updateUserInfo(@RequestHeader("token") String token,
-                                               @RequestBody UserInfoDTO userInfoDto) throws Exception {
+                                               @RequestBody @ApiParam("用户信息") UserInfoDTO userInfoDto
+    ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         System.out.println("更新" + userid + "的用户信息");
         System.out.println(userInfoDto.toString());
@@ -64,7 +64,7 @@ public class UserController {
     /**
      * 获取用户信息
      */
-    @ApiOperation(value = "获取当前用户信息", notes = "根据当前token中的userid获取用户信息", httpMethod = "GET")
+    @ApiOperation(value = "获取当前用户信息", notes = "根据当前token中的userid获取用户信息")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
@@ -80,14 +80,16 @@ public class UserController {
     /**
      * 接收志愿者申请
      */
-    @ApiOperation(value = "接收当前用户的申请", notes = "根据传入的token解析userid，再储存申请表", httpMethod = "POST")
+    @ApiOperation(value = "接收当前用户的申请", notes = "已经是管理员的用户不能提交申请")
     @RequestMapping(value = "/application", method = RequestMethod.POST)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
+            @ApiResponse(code = 200, message = "申请完成")
     })
     @AllAccess
-    public CommonResult<String> receiveApplicationInfo(@RequestHeader("token") String token,
-                                                       @RequestBody VolunteerApplicationAdditionDTO application) {
+    public CommonResult<String> receiveApplicationInfo(
+            @RequestHeader("token") String token,
+            @RequestBody @ApiParam("新增的申请表内容") VolunteerApplicationAdditionDTO application
+    ) {
         int userid = TokenUtil.extractUserid(token);
         System.out.println(userid+"提交了志愿者申请");
         userService.addVolunteerApplication(userid,application);
@@ -97,7 +99,7 @@ public class UserController {
     /**
      * 获取待审核志愿者申请
      */
-    @ApiOperation(value = "获取待审核志愿者申请", notes = "限管理员调用，返回List", httpMethod = "GET")
+    @ApiOperation(value = "[管理员]获取待审核志愿者申请")
     @RequestMapping(value = "/application", method = RequestMethod.GET)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
@@ -110,12 +112,9 @@ public class UserController {
     /**
      * 获取用户自己的志愿者申请记录
      */
-    @ApiOperation(value = "获取志愿者申请记录", notes = "筛选当前用户的申请", httpMethod = "GET")
+    @ApiOperation(value = "获取当前用户志愿者申请记录")
     @RequestMapping(value = "/application/mine", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
-    @AdminAccess
+    @AllAccess
     public CommonResult<List<VolunteerApplicationResultDTO>> getMyApplicationList(
             @RequestHeader("token") String token) {
         return new CommonResult<>(200,"请求成功",
@@ -125,14 +124,16 @@ public class UserController {
     /**
      * 处理志愿者申请的审核
      */
-    @ApiOperation(value = "审核志愿者申请", notes = "限管理员调用", httpMethod = "PATCH")
-    @RequestMapping(value = "/application", method = RequestMethod.PATCH)
+    @ApiOperation(value = "[管理员]审核志愿者申请")
+    @RequestMapping(value = "/application", method = RequestMethod.PUT)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AdminAccess
-    public CommonResult<String> receiveApplicationAudition(@RequestHeader("token") String token,
-                                                           @RequestBody VolunteerApplicationUpdateDTO updateDTO) {
+    public CommonResult<String> receiveApplicationAudition(
+            @RequestHeader("token") String token,
+            @RequestBody @ApiParam("审核结果") VolunteerApplicationUpdateDTO updateDTO
+    ) {
         int userid = TokenUtil.extractUserid(token);
         System.out.println(userid+"审核了编号为"+updateDTO.getFormID()+"的申请");
         userService.completeApplicationAudition(userid,updateDTO);
@@ -143,7 +144,7 @@ public class UserController {
     /**
      * 删除单个用户，测试用
      */
-    @ApiOperation(value = "删除单个用户", notes = "删除单个用户，测试用", httpMethod = "DELETE")
+    @ApiOperation(value = "[测试用]删除单个用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "删除成功"),
             @ApiResponse(code = 40001, message = "不存在的用户ID")
@@ -161,7 +162,7 @@ public class UserController {
     /**
      * 删除所有用户，测试用
      */
-    @ApiOperation(value = "删除所有用户", notes = "删除所有用户，测试用", httpMethod = "DELETE")
+    @ApiOperation(value = "[测试用]删除所有用户")
     @ApiResponses({
             @ApiResponse(code = 200, message = "删除成功"),
     })
