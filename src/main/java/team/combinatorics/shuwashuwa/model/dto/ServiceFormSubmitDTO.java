@@ -14,8 +14,11 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户填写维修单时需要上传的数据")
-public class ServiceFormDTO {
+@ApiModel("用户初次提交或保存维修单需要上传的数据")
+public class ServiceFormSubmitDTO {
+    @ApiModelProperty("要修改的维修事件序号")
+    private Integer serviceEventId;
+
     @ApiModelProperty("选择的活动序号")
     private Integer activityId;
 

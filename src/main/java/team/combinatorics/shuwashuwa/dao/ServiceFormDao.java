@@ -2,7 +2,7 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
 
@@ -22,9 +22,9 @@ public interface ServiceFormDao {
      * 管理员更新维修单信息
      *
      * @param adminID              管理员id
-     * @param serviceFormUpdateDTO 更新的内容
+     * @param serviceFormRejectionDTO 更新的内容
      */
-    void updateAdvice(@Param("adminID") int adminID, @Param("updateInfo") ServiceFormUpdateDTO serviceFormUpdateDTO);
+    void updateAdvice(@Param("adminID") int adminID, @Param("updateInfo") ServiceFormRejectionDTO serviceFormRejectionDTO);
 
     /**
      * 根据form id寻找form

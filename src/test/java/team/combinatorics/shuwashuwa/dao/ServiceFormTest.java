@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
 
@@ -41,7 +41,7 @@ public class ServiceFormTest {
         serviceFormDao.insert(serviceFormPO);
         System.out.println(serviceFormPO.getId());
 
-        serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
+        serviceFormDao.updateAdvice(233, ServiceFormRejectionDTO.builder()
                 .advice("没救了，换电脑吧")
                 .formID(1)
                 .build());
@@ -73,7 +73,7 @@ public class ServiceFormTest {
         serviceFormDao.insert(serviceFormPO);
         System.out.println(serviceFormPO.getId());
 
-        serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
+        serviceFormDao.updateAdvice(233, ServiceFormRejectionDTO.builder()
                 .advice("就是不给你过，爬爬爬")
                 .formID(1)
                 .build());

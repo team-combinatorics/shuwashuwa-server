@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("返回给前端的维修单信息结构")
-public class ServiceEventResponseDTO {
+public class ServiceEventDetailDTO {
     @ApiModelProperty("维修请求id")
     private Integer id;
     @ApiModelProperty("发起维修申请的用户id")
@@ -40,7 +39,7 @@ public class ServiceEventResponseDTO {
     @ApiModelProperty("该次维修状态状态, 0表示提交以后待审核")
     private Integer status;
     @ApiModelProperty("该维修单是否处于草稿状态")
-    private boolean draft;
+    private Boolean draft;
     @ApiModelProperty("该维修单是否已关闭")
-    private boolean closed;
+    private Boolean closed;
 }

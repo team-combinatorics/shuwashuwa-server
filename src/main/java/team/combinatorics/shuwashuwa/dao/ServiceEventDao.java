@@ -3,8 +3,8 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventUpdateByVolunteerDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceCompleteDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 
 import java.util.List;
@@ -23,10 +23,10 @@ public interface ServiceEventDao {
      * 志愿者更新维修结果和状态，这两个必须都不为空
      *
      * @param volunteerID                      志愿者id
-     * @param serviceEventUpdateByVolunteerDTO 更新的内容
+     * @param serviceCompleteDTO 更新的内容
      */
     void updateByVolunteer(@Param("volunteerID") int volunteerID,
-                           @Param("updateInfo") ServiceEventUpdateByVolunteerDTO serviceEventUpdateByVolunteerDTO);
+                           @Param("updateInfo") ServiceCompleteDTO serviceCompleteDTO);
 
     /**
      * 用户更新预约时间，需要验证该维修单是当前用户的
@@ -49,7 +49,7 @@ public interface ServiceEventDao {
      * @param id 维修请求id
      * @return 一个完整的维修单结构
      */
-    ServiceEventResponseDTO getServiceEventByID(@Param("id") int id);
+    ServiceEventDetailDTO getServiceEventByID(@Param("id") int id);
 
     /**
      * 条件检索
@@ -57,7 +57,7 @@ public interface ServiceEventDao {
      * @param selectServiceEventCO 根据条件来检索维修单，条件说名见类说明
      * @return 一个维修单列表
      */
-    List<ServiceEventResponseDTO> listServiceEventsByCondition(@Param("condition") SelectServiceEventCO selectServiceEventCO);
+    List<ServiceEventDetailDTO> listServiceEventsByCondition(@Param("condition") SelectServiceEventCO selectServiceEventCO);
 
     // TODO 这里应该写几个简单的查询语句，例如通过维修单id查找对应的用户，通过维修单id查找当前状态等
 

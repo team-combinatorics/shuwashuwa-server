@@ -3,7 +3,7 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ServiceEventDao">
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO" id="serviceEventResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO" id="serviceEventResultMap">
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="volunteer_id" jdbcType="INTEGER" property="volunteerId"/>
@@ -29,7 +29,7 @@
     </insert>
 
     <update id="updateByVolunteer"
-            parameterType="team.combinatorics.shuwashuwa.model.dto.ServiceEventUpdateByVolunteerDTO">
+            parameterType="team.combinatorics.shuwashuwa.model.dto.ServiceCompleteDTO">
         update service_event
         set volunteer_id=#{volunteerID},
             repairing_result=#{updateInfo.repairingResult},

@@ -32,7 +32,7 @@
                 #{form.problemDescription}, #{form.problemType}, #{form.serviceEventId})
     </insert>
 
-    <update id="updateAdvice" parameterType="team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO">
+    <update id="updateAdvice" parameterType="team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO">
         update service_form
         set reply_user_id      = #{adminID},
             description_advice = #{updateInfo.advice}

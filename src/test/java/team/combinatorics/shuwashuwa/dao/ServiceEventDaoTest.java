@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventUpdateByVolunteerDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceCompleteDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
@@ -38,7 +38,7 @@ public class ServiceEventDaoTest {
         serviceEventDao.insert(serviceEventPO);
         System.out.println(serviceEventPO.getId());
         serviceEventDao.updateByVolunteer(1,
-                ServiceEventUpdateByVolunteerDTO.builder()
+                ServiceCompleteDTO.builder()
                         .eventID(1)
                         .repairingResult("修不了，告辞")
                         .status(2)
@@ -58,7 +58,7 @@ public class ServiceEventDaoTest {
         serviceEventDao.insert(serviceEventPO);
         System.out.println(serviceEventPO.getId());
         serviceEventDao.updateByVolunteer(1,
-                ServiceEventUpdateByVolunteerDTO.builder()
+                ServiceCompleteDTO.builder()
                         .eventID(1)
                         .repairingResult("修不了，告辞")
                         .status(2)
@@ -83,7 +83,7 @@ public class ServiceEventDaoTest {
         System.out.println(serviceFormPO.getId());
 
         // 给维修单1回复
-        serviceFormDao.updateAdvice(233, ServiceFormUpdateDTO.builder()
+        serviceFormDao.updateAdvice(233, ServiceFormRejectionDTO.builder()
                 .advice("没救了，换电脑吧")
                 .formID(1)
                 .build());
@@ -111,7 +111,7 @@ public class ServiceEventDaoTest {
         System.out.println(serviceFormPO.getId());
 
         // 给维修单2回复
-        serviceFormDao.updateAdvice(114514, ServiceFormUpdateDTO.builder()
+        serviceFormDao.updateAdvice(114514, ServiceFormRejectionDTO.builder()
                 .advice("就是不给你过，爬爬爬")
                 .formID(2)
                 .build());
@@ -139,7 +139,7 @@ public class ServiceEventDaoTest {
         System.out.println(serviceFormPO.getId());
 
         // 给维修单2回复
-        serviceFormDao.updateAdvice(1919810, ServiceFormUpdateDTO.builder()
+        serviceFormDao.updateAdvice(1919810, ServiceFormRejectionDTO.builder()
                 .advice("算了，给你过了")
                 .formID(3)
                 .build());
