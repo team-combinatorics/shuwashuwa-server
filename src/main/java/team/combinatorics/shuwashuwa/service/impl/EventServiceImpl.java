@@ -7,12 +7,15 @@ import team.combinatorics.shuwashuwa.dao.ServiceFormDao;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceEventUniversalDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -81,4 +84,48 @@ public class EventServiceImpl implements EventService {
         //todo @kinami 更新维修事件状态（三个都要）
     }
 
+    @Override
+    public void rejectForm(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
+
+    }
+
+    @Override
+    public void acceptForm(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
+
+    }
+
+    @Override
+    public void takeOrder(int userid, Integer serviceEventId) {
+
+    }
+
+    @Override
+    public void giveUpOrder(int userid, Integer serviceEventId) {
+
+    }
+
+    @Override
+    public void completeOrder(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
+
+    }
+
+    @Override
+    public void updateFeedback(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
+
+    }
+
+    @Override
+    public List<ServiceEventDetailDTO> listUnauditedEvents() {
+        return null;
+    }
+
+    @Override
+    public List<ServiceEventDetailDTO> listServicesCreatedBy(int userid) {
+        return null;
+    }
+
+    @Override
+    public List<ServiceEventDetailDTO> listBadServicesOf(int userid) {
+        return null;
+    }
 }
