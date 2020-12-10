@@ -43,7 +43,7 @@ public class SwaggerConfig {
                 // 过滤条件
                 .apis(RequestHandlerSelectors.any())
                 // 控制哪些路径的api会被显示出来
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.ant("/api/**"))
                 .build();
     }
 
@@ -55,7 +55,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Shuwashuwa-server API Doc")
-                .description("Maruyama Aya desu")
+                .description("没有加[]的表示有token就能用，所有一级参数都是必需（不能为null）")
                 .version("1.0")
                 .license("GPL-3.0 License")
                 .build();
