@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 public class ActivityTimeSlotDTO {
     @ApiModelProperty("时间段序号")
     private Integer timeSlot;
-    @ApiModelProperty("开始时间，以yyyy-MM-dd HH:mm:ss表示")
+    @ApiModelProperty(value = "开始时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String startTime;
-    @ApiModelProperty("结束时间，以yyyy-MM-dd HH:mm:ss表示")
+    @ApiModelProperty(value = "结束时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String endTime;
 }

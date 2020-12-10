@@ -15,9 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @ApiModel("创建活动时上传的数据")
 public class ActivityLaunchDTO {
-    @ApiModelProperty("开始时间，以yyyy-MM-dd HH:mm:ss表示")
+    @ApiModelProperty(value = "开始时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String startTime;
-    @ApiModelProperty("结束时间，以yyyy-MM-dd HH:mm:ss表示")
+    @ApiModelProperty(value = "结束时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String endTime;
     @ApiModelProperty("活动地点")
     private String location;
