@@ -1,7 +1,6 @@
 package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
@@ -26,8 +25,6 @@ public interface ServiceFormDao {
      * @param serviceFormUpdateDTO 更新的内容
      */
     void updateAdvice(@Param("adminID") int adminID, @Param("updateInfo") ServiceFormUpdateDTO serviceFormUpdateDTO);
-
-    // TODO (to leesou and leo_h)，注意这里的ServiceForm发生了改变，删去了status这个属性，虽说这个你们应该用不到，但还是检查下
 
     /**
      * 根据form id寻找form

@@ -56,9 +56,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             throw new KnownException(ErrorInfoEnum.USER_NOT_EXISTING);
 
         if (method.isAnnotationPresent(AllAccess.class) ||
-                method.isAnnotationPresent(AdminAccess.class) && currentUserPO.isAdmin() ||
-                method.isAnnotationPresent(VolunteerAccess.class) && currentUserPO.isVolunteer() ||
-                method.isAnnotationPresent(SUAccess.class) && currentUserPO.isSu())
+                method.isAnnotationPresent(AdminAccess.class) && currentUserPO.getAdmin() ||
+                method.isAnnotationPresent(VolunteerAccess.class) && currentUserPO.getVolunteer() ||
+                method.isAnnotationPresent(SUAccess.class) && currentUserPO.getSu())
             return true;
         else throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
     }

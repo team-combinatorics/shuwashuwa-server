@@ -44,7 +44,7 @@ public class SuperAdministratorServiceTest {
         Assert.assertEquals(1, superAdministratorService.addAdministrator(adminDTO));
         UserPO userPO = userDao.getUserByUserid(userID);
         // 添加成功，user表中对应的表项也应该被修改
-        Assert.assertTrue(userPO.isAdmin());
+        Assert.assertTrue(userPO.getAdmin());
 
         // 测试超管获取单个管理员信息的服务
         AdminDTO fetchAdminDTO = superAdministratorService.getAdministratorInfo(userID);
@@ -101,7 +101,7 @@ public class SuperAdministratorServiceTest {
                 .build();
         Assert.assertEquals(1, superAdministratorService.addAdministrator(adminDTO1));
         UserPO userPO1 = userDao.getUserByUserid(userID1);
-        Assert.assertTrue(userPO1.isAdmin());
+        Assert.assertTrue(userPO1.getAdmin());
         allAdmins = superAdministratorService.getAdministratorList();
         Assert.assertEquals(2, allAdmins.size());
         fetchAdminDTO = AdminDTO.builder()

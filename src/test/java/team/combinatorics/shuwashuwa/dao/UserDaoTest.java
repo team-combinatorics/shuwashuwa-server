@@ -55,13 +55,13 @@ public class UserDaoTest {
 
         // 更改用户权限的测试--志愿者
         userDao.updateUserVolunteerAuthority(userid2+4, true);
-        Assert.assertTrue(userDao.getUserByUserid(userid2+4).isVolunteer());
-        Assert.assertTrue(userDao.getUserByOpenid("fake openid 6").isVolunteer());
+        Assert.assertTrue(userDao.getUserByUserid(userid2+4).getVolunteer());
+        Assert.assertTrue(userDao.getUserByOpenid("fake openid 6").getVolunteer());
 
         // 更改用户权限的测试--管理员
         userDao.updateUserAdminAuthority(userid2+4, true);
-        Assert.assertTrue(userDao.getUserByUserid(userid2+4).isAdmin());
-        Assert.assertTrue(userDao.getUserByOpenid("fake openid 6").isAdmin());
+        Assert.assertTrue(userDao.getUserByUserid(userid2+4).getAdmin());
+        Assert.assertTrue(userDao.getUserByOpenid("fake openid 6").getAdmin());
 
         // 删除单个用户的测试--使用userid
         Assert.assertEquals(1, userDao.deleteUserByUserid(userid2+2)); //删除一个已存在的用户

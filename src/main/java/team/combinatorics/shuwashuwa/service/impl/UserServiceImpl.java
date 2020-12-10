@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
         //重复申请检查
-        if(userDao.getUserByUserid(userid).isVolunteer())
+        if(userDao.getUserByUserid(userid).getVolunteer())
             throw new KnownException(ErrorInfoEnum.DUPLICATED_PROMOTION);
 
         //插入新的申请

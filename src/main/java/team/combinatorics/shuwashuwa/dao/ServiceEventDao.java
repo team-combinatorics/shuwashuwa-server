@@ -1,7 +1,6 @@
 package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventResponseDTO;
@@ -46,15 +45,12 @@ public interface ServiceEventDao {
      */
     void updateFeedback(@Param("id") int id, @Param("feedback") String feedback);
 
-    // TODO (to leesou and leo_h) ServiceEventResponseDTO已修改，请检查有无冲突的地方
     /**
      * @param id 维修请求id
      * @return 一个完整的维修单结构
      */
     ServiceEventResponseDTO getServiceEventByID(@Param("id") int id);
 
-    // TODO (to leesou and leo_h) 更新了这里的条件查询，可以用来做筛选
-    // 草稿 and未中止就是closed = false and draft = true
     /**
      * 条件检索
      *
