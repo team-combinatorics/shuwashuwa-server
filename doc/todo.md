@@ -14,7 +14,7 @@
 
 - ServiceCompleteDTO(~~ServiceEventUpdateByVolunteerDTO~~)同上，没必要DTO
 
-- 设计签到接口逻辑
+- 把所有指定活动id，指定用户id，主要状态为过审，未关闭的活动的状态设为待接单（签到），有优雅的接口吗
 
 ## 次要
 
