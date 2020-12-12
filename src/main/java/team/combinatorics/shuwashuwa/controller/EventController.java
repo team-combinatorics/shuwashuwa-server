@@ -84,8 +84,20 @@ public class EventController {
         return new CommonResult<>(200,"请求成功","success");
     }
 
+    @ApiOperation("用户活动现场签到")
+    @RequestMapping(value = "/queue", method = RequestMethod.PUT)
+    @VolunteerAccess
+    public CommonResult<String> handlePresence(
+            @RequestHeader("token") String token,
+            @RequestBody @ApiParam("活动Id，从二维码参数获取") Integer activityId
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        eventService.setActive(userid,activityId);
+        return new CommonResult<>(200,"请求成功","success");
+    }
+
     @ApiOperation("[志愿者]接单")
-    @RequestMapping(value = "/work", method = RequestMethod.PUT)
+    @RequestMapping(value = "/work", method = RequestMethod.DELETE)
     @VolunteerAccess
     public CommonResult<String> handleOrderTaking(
             @RequestHeader("token") String token,
@@ -97,7 +109,7 @@ public class EventController {
     }
 
     @ApiOperation("[志愿者]退回已接维修单")
-    @RequestMapping(value = "/work", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/work", method = RequestMethod.PUT)
     @VolunteerAccess
     public CommonResult<String> handleOrderGiveUp(
           @RequestHeader("token") String token,

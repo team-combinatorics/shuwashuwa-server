@@ -95,6 +95,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public void setActive(int userid, Integer activityId) {
+
+    }
+
+    @Override
     public void takeOrder(int userid, Integer serviceEventId) {
 
     }
@@ -138,4 +143,5 @@ public class EventServiceImpl implements EventService {
     public List<ServiceEventDetailDTO> listPendingEvents(Integer activityId) {
         return null;
     }
+
 }
