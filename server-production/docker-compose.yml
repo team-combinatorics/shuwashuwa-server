@@ -11,9 +11,15 @@ services:
         volumes:
             - ${WWWROOT}:/var/www/html
             - ${CONFIG_PATH}:/etc/caddy/Caddyfile
-            - ${SSL}:/root/.local/share/caddy/acme/acme-v02.api.letsencrypt.org/
+            - ${SSL_CERT}:/ssl/cert.pem
+            - ${SSL_KEY}:/ssl/cert.key
         environment:
             - DOMAIN
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1m"
+                max-file: "10"
 
     mysql:
         image: mysql:8.0.22

@@ -73,4 +73,4 @@ if [[ -z $WX_APPID || -z $WX_SECRET ]]; then
 fi
 
 # run docker
-docker-compose up --build | tee docker-log.txt
+docker-compose up --build -d

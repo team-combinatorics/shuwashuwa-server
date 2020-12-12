@@ -3,6 +3,7 @@ target/
 
 */db/
 */pic/
+*/ssl/
 
 !**/src/main/**/target/
 !**/src/test/**/target/
