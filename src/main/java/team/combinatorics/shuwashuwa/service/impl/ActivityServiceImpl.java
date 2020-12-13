@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -103,16 +104,10 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<ActivityResponseDTO> listAllActivity() {
-        final List<ActivityInfoPO> raw = activityInfoDao.listByCondition(SelectActivityCO.builder().build());
-        return formattedActivityList(raw);
-    }
-
-    @Override
-    public List<ActivityResponseDTO> listComingActivity() {
-        final List<ActivityInfoPO> raw = activityInfoDao.listByCondition(SelectActivityCO.builder()
-                .beginTime(Timestamp.valueOf(LocalDateTime.now())).build());
-        return formattedActivityList(raw);
+    public List<ActivityResponseDTO> listActivityByConditions(SelectActivityCO co) {
+        return activityInfoDao.listByCondition(co).stream()
+                .map(x -> (ActivityResponseDTO)DTOUtil.convert(x,ActivityResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

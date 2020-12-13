@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.service;
 
+import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
@@ -14,9 +15,7 @@ public interface ActivityService {
 
     void removeActivity(int id);
 
-    List<ActivityResponseDTO> listAllActivity();
-
-    List<ActivityResponseDTO> listComingActivity();
+    List<ActivityResponseDTO> listActivityByConditions(SelectActivityCO co);
 
     List<ActivityTimeSlotDTO> listTimeSlots(Integer activityId);
 
