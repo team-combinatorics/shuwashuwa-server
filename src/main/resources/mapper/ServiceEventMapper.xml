@@ -11,6 +11,7 @@
         <result column="feedback" jdbcType="VARCHAR" property="feedback"/>
         <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
+        <result column="problem_summary" jdbcType="VARCHAR" property="problemSummary"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="is_draft" jdbcType="BOOLEAN" property="draft"/>
         <result column="is_closed" jdbcType="BOOLEAN" property="closed"/>
@@ -22,19 +23,30 @@
         </collection>
     </resultMap>
 
+    <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO" id="serviceAbstractResultMap">
+        <result column="id" jdbcType="INTEGER" property="serviceEventId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="computer_model" jdbcType="VARCHAR" property="computerModel"/>
+        <result column="problem_summary" jdbcType="VARCHAR" property="problemSummary"/>
+    </resultMap>
+
+    <insert id="insertByUserID" parameterType="int">
+        insert into service_event(user_id)
+        values (#{userID})
+    </insert>
+
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="serviceEvent.id"
             parameterType="team.combinatorics.shuwashuwa.model.po.ServiceEventPO">
         insert into service_event(user_id, activity_id, time_slot)
         values (#{serviceEvent.userId}, #{serviceEvent.activityId}, #{serviceEvent.timeSlot})
     </insert>
 
-    <update id="updateByVolunteer"
-            parameterType="team.combinatorics.shuwashuwa.model.dto.ServiceCompleteDTO">
+    <update id="updateByVolunteer">
         update service_event
         set volunteer_id=#{volunteerID},
-            repairing_result=#{updateInfo.repairingResult},
-            status=#{updateInfo.status}
-        where id = #{updateInfo.eventID}
+            repairing_result=#{result}
+        where id = #{eventID}
     </update>
 
     <update id="updateAppointment">
@@ -50,6 +62,41 @@
         where id = #{id}
     </update>
 
+    <select id="countServiceEventsByCondition"
+            parameterType="team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO"
+            resultType="int">
+        select count(*) from service_event
+        <where>
+            <if test="condition.beginTime != null">
+                create_time >= #{condition.beginTime}
+            </if>
+            <if test="condition.endTime != null">
+                and create_time &lt;= #{condition.endTime}
+            </if>
+            <if test="condition.userID != null">
+                and user_id = #{condition.userId}
+            </if>
+            <if test="condition.volunteerId != null">
+                and volunteer_id = #{condition.volunteerId}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.activityId != null">
+                and activity_id = #{condition.activityId}
+            </if>
+            <if test="condition.timeSlot != null">
+                and time_slot = #{condition.timeSlot}
+            </if>
+            <if test="condition.draft != null">
+                and is_draft = #{condition.draft}
+            </if>
+            <if test="condition.timeSlot != null">
+                and is_closed = #{condition.is_closed}
+            </if>
+        </where>
+    </select>
+
     <select id="getServiceEventByID" resultMap="serviceEventResultMap">
         select id,
                user_id,
@@ -58,6 +105,7 @@
                feedback,
                activity_id,
                time_slot,
+               problem_summary,
                status,
                is_draft,
                is_closed
@@ -67,13 +115,15 @@
 
     <select id="listServiceEventsByCondition" resultMap="serviceEventResultMap"
             parameterType="team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO">
-        select id,
+        select
+        id,
         user_id,
         volunteer_id,
         repairing_result,
         feedback,
         activity_id,
         time_slot,
+        problem_summary,
         status,
         is_draft,
         is_closed
@@ -108,4 +158,5 @@
             </if>
         </where>
     </select>
+
 </mapper>

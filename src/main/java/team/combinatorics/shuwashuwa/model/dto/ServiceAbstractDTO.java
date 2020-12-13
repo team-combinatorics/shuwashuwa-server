@@ -21,9 +21,6 @@ public class ServiceAbstractDTO {
     private Integer userId;
     @ApiModelProperty("电脑型号")
     private String computerModel;
-    @ApiModelProperty("问题描述")
-    private String problemDescription;
-    //todo 数据库里还没有这个列吧
     @ApiModelProperty("问题概括")
     private String problemSummary;
 }

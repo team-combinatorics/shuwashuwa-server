@@ -21,6 +21,7 @@ public class ServiceEventPO {
     private String feedback;
     private Integer activityId;
     private Integer timeSlot;
+    private String problemSummary;
     private Integer status;
     private Boolean draft;
     private Boolean closed;
