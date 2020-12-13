@@ -6,6 +6,7 @@ import team.combinatorics.shuwashuwa.dao.ServiceEventDao;
 import team.combinatorics.shuwashuwa.dao.ServiceFormDao;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
+import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventUniversalDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
@@ -125,23 +126,27 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ServiceEventDetailDTO> listUnauditedEvents() {
+    public List<ServiceAbstractDTO> listUnauditedEvents() {
         return null;
     }
 
     @Override
-    public List<ServiceEventDetailDTO> listServicesCreatedBy(int userid) {
+    public List<ServiceAbstractDTO> listServicesCreatedBy(int userid) {
         return null;
     }
 
     @Override
-    public List<ServiceEventDetailDTO> listServiceToEditOf(int userid) {
+    public List<ServiceAbstractDTO> listServiceToEditOf(int userid) {
         return null;
     }
 
     @Override
-    public List<ServiceEventDetailDTO> listPendingEvents(Integer activityId) {
+    public List<ServiceAbstractDTO> listPendingEvents(Integer activityId) {
         return null;
     }
 
+    @Override
+    public ServiceEventDetailDTO getServiceDetail(Integer eventId) {
+        return serviceEventDao.getServiceEventByID(eventId);
+    }
 }

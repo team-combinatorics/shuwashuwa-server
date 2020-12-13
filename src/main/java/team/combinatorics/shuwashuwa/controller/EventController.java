@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
+import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventUniversalDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
@@ -159,14 +160,14 @@ public class EventController {
     @ApiOperation("[管理员]获取待审核维修事件列表")
     @RequestMapping(value = "/audit", method = RequestMethod.GET)
     @AdminAccess
-    public CommonResult<List<ServiceEventDetailDTO>> getUnaudited() {
+    public CommonResult<List<ServiceAbstractDTO>> getUnaudited() {
         return new CommonResult<>(200,"请求成功",eventService.listUnauditedEvents());
     }
 
     @ApiOperation("获取自己发起的维修事件列表")
     @RequestMapping(value = "/mine", method = RequestMethod.GET)
     @AllAccess
-    public CommonResult<List<ServiceEventDetailDTO>> getServicesCreated(
+    public CommonResult<List<ServiceAbstractDTO>> getServicesCreated(
             @RequestHeader("token") String token
     ) {
         int userid = TokenUtil.extractUserid(token);
@@ -176,7 +177,7 @@ public class EventController {
     @ApiOperation("获取待填的维修事件列表")
     @RequestMapping(value = "/draft", method = RequestMethod.GET)
     @AllAccess
-    public CommonResult<List<ServiceEventDetailDTO>> getServicesToEdit(
+    public CommonResult<List<ServiceAbstractDTO>> getServicesToEdit(
             @RequestHeader("token") String token
     ) {
         int userid = TokenUtil.extractUserid(token);
@@ -185,11 +186,20 @@ public class EventController {
 
     @ApiOperation("[志愿者]获取某活动待接单的维修事件列表")
     @RequestMapping(value = "/work", method = RequestMethod.GET)
-    @AllAccess
-    public CommonResult<List<ServiceEventDetailDTO>> getAvailableOrder(
+    @VolunteerAccess
+    public CommonResult<List<ServiceAbstractDTO>> getAvailableOrder(
             @RequestBody @ApiParam("要查询的活动") Integer activityId
     ) {
         return new CommonResult<>(200,"请求成功",eventService.listPendingEvents(activityId));
+    }
+
+    @ApiOperation("获取一次维修事件的详情")
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    @AllAccess
+    public CommonResult<ServiceEventDetailDTO> getServiceDetail(
+            @RequestBody @ApiParam("要查询的维修事件") Integer eventId
+    ) {
+        return new CommonResult<>(200,"请求成功",eventService.getServiceDetail(eventId));
     }
 
 }

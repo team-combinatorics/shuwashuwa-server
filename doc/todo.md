@@ -10,7 +10,7 @@
 
 - 请把简化版的问题描述放进数据库，以及相关的数据对象（不会起名的话我建议problemSummary）
 
-- 怎么设置维修单的审核管理员，以及维修事件的接单志愿者
+- 怎么设置审核维修单的管理员，以及维修事件的接单志愿者
 
 - ServiceFormRejectionDTO(~~ServiceFormUpdateDTO~~)里只有一个formId和一个string，建议删掉这个DTO，直球变成dao更新方法的两个参数（事实上，管理员并不需要发送维修单的id，而是直接操作维修事件。所以这个DTO我需要重新设计，数据库不用的话先删掉）
 
@@ -57,7 +57,7 @@
     - 话说这里还是用UpdateUserInfoDto类吧？
     - 这是一个GET请求，参数是code
     
-- 为了书写方便，把kinami之前在登陆中写的与微信交互的代码挪到了WecahtUtil类中，设置成Component，自动注入
+- 为了书写方便，把kinami之前在登陆中写的与微信交互的代码挪到了WechatUtil类中，设置成Component，自动注入
 
 - 关于这几个方法下一步应该需要做的（我目前想到的）
     - 用户信息的两个服务待完善Dao层的实现
