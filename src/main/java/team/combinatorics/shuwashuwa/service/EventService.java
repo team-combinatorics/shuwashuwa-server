@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.service;
 
+import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventUniversalDTO;
@@ -70,26 +71,10 @@ public interface EventService {
     void shutdownService(int userid, Integer serviceEventId);
 
     /**
-     * 返回未审核的维修事件
+     * 按条件对象筛选维修事件
+     * @param co 用于筛选的条件对象
      */
-    List<ServiceAbstractDTO> listUnauditedEvents();
-
-    /**
-     * 返回指定用户创建的维修事件
-     * @param userid 查询的用户id
-     */
-    List<ServiceAbstractDTO> listServicesCreatedBy(int userid);
-
-    /**
-     * 返回指定用户需要完善维修信息的维修事件
-     * @param userid 查询的用户id
-     */
-    List<ServiceAbstractDTO> listServiceToEditOf(int userid);
-
-    /**
-     * 返回未审核的维修事件
-     */
-    List<ServiceAbstractDTO> listPendingEvents(Integer activityId);
+    List<ServiceAbstractDTO> listServiceEvents(SelectServiceEventCO co);
 
     ServiceEventDetailDTO getServiceDetail(Integer eventId);
 }

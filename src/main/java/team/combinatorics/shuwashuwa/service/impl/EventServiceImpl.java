@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.ServiceEventDao;
 import team.combinatorics.shuwashuwa.dao.ServiceFormDao;
+import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
@@ -126,22 +127,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ServiceAbstractDTO> listUnauditedEvents() {
-        return null;
-    }
-
-    @Override
-    public List<ServiceAbstractDTO> listServicesCreatedBy(int userid) {
-        return null;
-    }
-
-    @Override
-    public List<ServiceAbstractDTO> listServiceToEditOf(int userid) {
-        return null;
-    }
-
-    @Override
-    public List<ServiceAbstractDTO> listPendingEvents(Integer activityId) {
+    public List<ServiceAbstractDTO> listServiceEvents(SelectServiceEventCO co) {
         return null;
     }
 

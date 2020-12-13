@@ -6,7 +6,7 @@
 
 - 把活动id和时间段选取移动到维修单属性
 
-- 怎么更新维修事件状态
+- 更新维修事件状态（三个状态都需要）
 
 - 请把简化版的问题描述放进数据库，以及相关的数据对象（不会起名的话我建议problemSummary）
 
@@ -18,11 +18,13 @@
 
 - 把所有指定活动id，指定用户id，主要状态为过审，未关闭的活动的状态设为待接单（签到），有优雅的接口吗
 
+- 要根据SelectServiceEventCO来select出ServiceAbstractDTO而不是ServiceEventDetailDTO
+
+- SelectActivityCO中缺少根据活动结束时间范围筛选
+
 ## 次要
 
 - ServicePic已经不必返回id，有个url就行
-
-- 增加一个查询ServiceSummaryDTO的dao方法
 
 - 若把活动编号移动到维修单，ServiceEvent的创建就只用userid，不如改参数
 
