@@ -26,8 +26,8 @@ public class ImageController {
     })
     @AllAccess
     public CommonResult<String> handleImageUpload(
-            @RequestParam("file") @ApiParam("用form-data传输的文件") MultipartFile file,
-            @RequestHeader("token") String token
+            @RequestParam("file") @ApiParam(value = "用form-data传输的文件",required = true) MultipartFile file,
+            @RequestHeader("token") @ApiParam(hidden = true) String token
     ) {
         int userid = TokenUtil.extractUserid(token);
         String location = storageService.store(userid,file);
@@ -42,8 +42,8 @@ public class ImageController {
     })
     @AllAccess
     public CommonResult<String> handleCancelUse(
-            @RequestBody @ApiParam(value = "上传时返回的文件路径",example = "114-514.png") String path,
-            @RequestHeader("token") String token
+            @RequestBody @ApiParam(value = "上传时返回的文件路径",example = "114-514.png",required = true) String path,
+            @RequestHeader("token") @ApiParam(hidden = true) String token
     ) {
         int userid = TokenUtil.extractUserid(token);
         storageService.setUseless(userid, path);

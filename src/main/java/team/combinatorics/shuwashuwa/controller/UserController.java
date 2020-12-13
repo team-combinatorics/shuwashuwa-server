@@ -70,7 +70,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<UserInfoDTO> getUserInfo(@RequestHeader("token") String token) throws Exception {
+    public CommonResult<UserInfoDTO> getUserInfo(
+            @RequestHeader("token") @ApiParam(hidden = true) String token
+    ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         UserInfoDTO userPO = userService.getUserInfo(userid);
         System.out.println(userid + "请求个人信息");
@@ -87,8 +89,8 @@ public class UserController {
     })
     @AllAccess
     public CommonResult<String> receiveApplicationInfo(
-            @RequestHeader("token") String token,
-            @RequestBody @ApiParam("新增的申请表内容") VolunteerApplicationAdditionDTO application
+            @RequestHeader("token") @ApiParam(hidden = true) String token,
+            @RequestBody @ApiParam(value = "新增的申请表内容",required = true) VolunteerApplicationAdditionDTO application
     ) {
         int userid = TokenUtil.extractUserid(token);
         System.out.println(userid+"提交了志愿者申请");
@@ -101,9 +103,6 @@ public class UserController {
      */
     @ApiOperation(value = "[管理员]获取待审核志愿者申请")
     @RequestMapping(value = "/application", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
     @AdminAccess
     public CommonResult<List<VolunteerApplicationResponseForAdminDTO>> getUnauditedApplicationList() {
         return new CommonResult<>(200,"请求成功",userService.listUnauditedVolunteerApplication());
@@ -116,7 +115,7 @@ public class UserController {
     @RequestMapping(value = "/application/mine", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<VolunteerApplicationResultDTO>> getMyApplicationList(
-            @RequestHeader("token") String token) {
+            @RequestHeader("token") @ApiParam(hidden = true) String token) {
         return new CommonResult<>(200,"请求成功",
                 userService.listVolunteerApplicationOf(TokenUtil.extractUserid(token)));
     }
@@ -131,8 +130,8 @@ public class UserController {
     })
     @AdminAccess
     public CommonResult<String> receiveApplicationAudition(
-            @RequestHeader("token") String token,
-            @RequestBody @ApiParam("审核结果") VolunteerApplicationUpdateDTO updateDTO
+            @RequestHeader("token")  @ApiParam(hidden = true) String token,
+            @RequestBody @ApiParam(value = "审核结果",required = true) VolunteerApplicationUpdateDTO updateDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
         System.out.println(userid+"审核了编号为"+updateDTO.getFormID()+"的申请");
@@ -143,6 +142,7 @@ public class UserController {
 
     /**
      * 删除单个用户，测试用
+     * todo 真的还用吗
      */
     @ApiOperation(value = "[测试用]删除单个用户")
     @ApiResponses({
@@ -151,7 +151,9 @@ public class UserController {
     })
     @RequestMapping(value = "/deleteOne", method = RequestMethod.DELETE)
     @NoToken
-    public CommonResult<String> deleteOneUser(@RequestHeader("token") String token) throws Exception {
+    public CommonResult<String> deleteOneUser(
+            @RequestHeader("token") @ApiParam(hidden = true) String token
+    ) throws Exception {
         int cnt = userService.deleteOneUser(TokenUtil.extractUserid(token));
         if (cnt > 0) {
             return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
@@ -161,6 +163,7 @@ public class UserController {
 
     /**
      * 删除所有用户，测试用
+     * todo 真的还用吗
      */
     @ApiOperation(value = "[测试用]删除所有用户")
     @ApiResponses({

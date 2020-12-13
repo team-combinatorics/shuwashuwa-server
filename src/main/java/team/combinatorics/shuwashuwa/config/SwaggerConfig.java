@@ -55,7 +55,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Shuwashuwa-server API Doc")
-                .description("没有加[]的表示有token就能用，所有一级参数都是必需（不能为null）")
+                .description("没有加[]的表示有token就能用")
                 .version("1.0")
                 .license("GPL-3.0 License")
                 .build();
