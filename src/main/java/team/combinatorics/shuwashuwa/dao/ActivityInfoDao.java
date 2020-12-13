@@ -16,10 +16,10 @@ public interface ActivityInfoDao {
     /**
      * 插入一个活动，开始时间、结束时间、地点都不为空，活动状态初始为0，不用插入
      *
-     * @param activityTimeSlotPO 要插入的活动信息
+     * @param activityInfoPO 要插入的活动信息
      * @return 插入成功的数量，如果为0表示不成功
      */
-    int insert(@Param("activity") ActivityInfoPO activityTimeSlotPO);
+    int insert(@Param("activity") ActivityInfoPO activityInfoPO);
 
     /**
      * 根据不为null的项更新活动信息，只能更新活动开始时间、结束时间、地点、名称，不能更新状态

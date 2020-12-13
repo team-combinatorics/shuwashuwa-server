@@ -28,18 +28,18 @@ public class ActivityController {
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleListRequest(
             @RequestParam("startLower") @ApiParam("开始时间下界") String startTimeLowerBound,
-            @RequestParam("startUpper")  @ApiParam("开始时间上界") String startTimeUpperBound,
-            @RequestParam("endLower")  @ApiParam("结束时间下界") String endTimeLowerBound,
-            @RequestParam("endUpper")  @ApiParam("结束时间上界") String endTimeUpperBound
+            @RequestParam("startUpper") @ApiParam("开始时间上界") String startTimeUpperBound,
+            @RequestParam("endLower") @ApiParam("结束时间下界") String endTimeLowerBound,
+            @RequestParam("endUpper") @ApiParam("结束时间上界") String endTimeUpperBound
 
     ) {
         System.out.println("请求活动列表");
         return new CommonResult<>(200, "请求成功",
                 activityService.listActivityByConditions(
-                    SelectActivityCO.builder()
-                        .beginTime(Timestamp.valueOf(startTimeLowerBound))
-                        .endTime(Timestamp.valueOf(startTimeUpperBound))
-                    .build()
+                        SelectActivityCO.builder()
+                                .startTimeLowerBound(Timestamp.valueOf(startTimeLowerBound))
+                                .startTimeUpperBound(Timestamp.valueOf(startTimeUpperBound))
+                                .build()
                 )
         );
     }
@@ -48,8 +48,8 @@ public class ActivityController {
     @RequestMapping(value = "/slot", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ActivityTimeSlotDTO>> handleTimeSlotRequest(
-            @RequestParam("activity") @ApiParam(value = "活动ID",required = true) Integer activityId) {
-        System.out.println("请求活动"+activityId+"时间段");
+            @RequestParam("activity") @ApiParam(value = "活动ID", required = true) Integer activityId) {
+        System.out.println("请求活动" + activityId + "时间段");
         return new CommonResult<>(200, "请求成功", activityService.listTimeSlots(activityId));
     }
 
@@ -59,9 +59,9 @@ public class ActivityController {
     @UserParam("user")
     public CommonResult<Boolean> attendingActivity(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestParam("activity") @ApiParam(value = "活动id",required = true) Integer activityId
+            @RequestParam("activity") @ApiParam(value = "活动id", required = true) Integer activityId
     ) {
         int userid = TokenUtil.extractUserid(token);
-        return new CommonResult<>(200,"请求成功",activityService.haveAttended(userid,activityId));
+        return new CommonResult<>(200, "请求成功", activityService.haveAttended(userid, activityId));
     }
 }

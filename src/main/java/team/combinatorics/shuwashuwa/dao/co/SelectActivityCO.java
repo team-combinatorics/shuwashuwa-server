@@ -13,13 +13,21 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class SelectActivityCO {
     /**
-     * 筛选时间段（左边界）
+     * 开始时间下界
      */
-    private Timestamp beginTime;
+    private Timestamp startTimeLowerBound;
     /**
-     * 筛选时间段（右边界）
+     * 开始时间上界
      */
-    private Timestamp endTime;
+    private Timestamp startTimeUpperBound;
+    /**
+     * 结束时间下界
+     */
+    private Timestamp endTimeLowerBound;
+    /**
+     * 结束时间上界
+     */
+    private Timestamp endTimeUpperBound;
     /**
      * 状态
      */
