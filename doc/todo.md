@@ -8,6 +8,8 @@
 
 - 怎么更新维修事件状态
 
+- 请把简化版的问题描述放进数据库，以及相关的数据对象（不会起名的话我建议problemSummary）
+
 - 怎么设置维修单的审核管理员，以及维修事件的接单志愿者
 
 - ServiceFormRejectionDTO(~~ServiceFormUpdateDTO~~)里只有一个formId和一个string，建议删掉这个DTO，直球变成dao更新方法的两个参数（事实上，管理员并不需要发送维修单的id，而是直接操作维修事件。所以这个DTO我需要重新设计，数据库不用的话先删掉）
@@ -19,6 +21,8 @@
 ## 次要
 
 - ServicePic已经不必返回id，有个url就行
+
+- 增加一个查询ServiceSummaryDTO的dao方法
 
 - 若把活动编号移动到维修单，ServiceEvent的创建就只用userid，不如改参数
 
