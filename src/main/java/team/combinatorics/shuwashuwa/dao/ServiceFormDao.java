@@ -21,10 +21,17 @@ public interface ServiceFormDao {
     /**
      * 管理员更新维修单信息
      *
-     * @param adminID              管理员id
+     * @param adminID                 管理员id
      * @param serviceFormRejectionDTO 更新的内容
      */
     void updateAdvice(@Param("adminID") int adminID, @Param("updateInfo") ServiceFormRejectionDTO serviceFormRejectionDTO);
+
+
+    /**
+     * 更新维修单信息，不能全为空
+     * @param serviceFormPO 一个维修单结构
+     */
+    int update(@Param("form") ServiceFormPO serviceFormPO);
 
     /**
      * 根据form id寻找form

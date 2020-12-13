@@ -81,4 +81,51 @@
         from service_form
         where service_event_id = #{eventID}
     </select>
+
+    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.ServiceFormPO">
+        update service_form
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serviceForm.brand != null">
+                brand = #{serviceForm.brand},
+            </if>
+            <if test="serviceForm.computerModel != null">
+                computer_model = #{serviceForm.computerModel},
+            </if>
+            <if test="serviceForm.cpuModel != null">
+                cpu_model = #{serviceForm.cpuModel},
+            </if>
+            <if test="serviceForm.hasDiscreteGraphics != null">
+                has_discrete_graphics = #{serviceForm.hasDiscreteGraphics},
+            </if>
+            <if test="serviceForm.graphicsModel != null">
+                graphics_model = #{serviceForm.graphicsModel},
+            </if>
+            <if test="serviceForm.laptopType != null">
+                laptop_type = #{serviceForm.laptopType},
+            </if>
+            <if test="serviceForm.boughtTime != null">
+                bought_time = #{serviceForm.boughtTime},
+            </if>
+            <if test="serviceForm.underWarranty != null">
+                is_under_warranty = #{serviceForm.underWarranty},
+            </if>
+            <if test="serviceForm.problemDescription != null">
+                problem_description = #{serviceForm.problemDescription},
+            </if>
+            <if test="serviceForm.problemType != null">
+                problem_type = #{serviceForm.problemType},
+            </if>
+            <if test="serviceForm.replyUserId != null">
+                reply_user_id = #{serviceForm.replyUserId},
+            </if>
+            <if test="serviceForm.descriptionAdvice != null">
+                description_advice = #{serviceForm.descriptionAdvice},
+            </if>
+            <if test="serviceForm.serviceEventId != null">
+                service_event_id = #{serviceForm.serviceEventId},
+            </if>
+        </trim>
+        where id = #{serviceForm.id}
+    </update>
+
 </mapper>
