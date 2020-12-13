@@ -62,6 +62,25 @@
         where id = #{id}
     </update>
 
+    <update id="updateStatus">
+        update service_event
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    <update id="updateDraft">
+        update service_event
+        set is_draft = #{draft}
+        where id = #{id}
+    </update>
+
+    <update id="updateClosed">
+        update service_event
+        set is_closed = #{closed}
+        where id = #{id}
+    </update>
+
+
     <select id="countServiceEventsByCondition"
             parameterType="team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO"
             resultType="int">

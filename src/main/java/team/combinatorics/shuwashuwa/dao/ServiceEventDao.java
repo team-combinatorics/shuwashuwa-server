@@ -48,9 +48,33 @@ public interface ServiceEventDao {
      *
      * @param id       维修单id
      * @param feedback 用户反馈
+     * @return 发生变动的数量，应当为1，为0表示操作失败
      */
-    void updateFeedback(@Param("id") int id, @Param("feedback") String feedback);
+    int updateFeedback(@Param("id") int id, @Param("feedback") String feedback);
 
+    /**
+     * 更新事件状态
+     *
+     * @param status 状态
+     * @return 发生变动的数量，应当为1，为0表示操作失败
+     */
+    int updateStatus(@Param("id") int id, @Param("status") int status);
+
+    /**
+     * 更新草稿状态
+     *
+     * @param draft 状态
+     * @return 发生变动的数量，应当为1，为0表示操作失败
+     */
+    int updateDraft(@Param("id") int id, @Param("draft") boolean draft);
+
+    /**
+     * 更新关闭状态
+     *
+     * @param closed 状态
+     * @return 发生变动的数量，应当为1，为0表示操作失败
+     */
+    int updateClosed(@Param("id") int id, @Param("closed") boolean closed);
 
     /**
      * @param id 维修请求id
@@ -69,8 +93,10 @@ public interface ServiceEventDao {
             @Param("condition") SelectServiceEventCO selectServiceEventCO);
 
     // TODO 尬住了，之后再说
+
     /**
      * 条件检索，获取摘要列表
+     *
      * @param selectServiceEventCO 条件
      * @return 摘要列表
      */
