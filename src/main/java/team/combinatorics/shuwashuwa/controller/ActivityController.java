@@ -1,14 +1,17 @@
 package team.combinatorics.shuwashuwa.controller;
 
 import io.swagger.annotations.*;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
+import team.combinatorics.shuwashuwa.annotation.UserParam;
 import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.ActivityService;
+import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -20,7 +23,7 @@ import java.util.List;
 public class ActivityController {
     ActivityService activityService;
 
-    @ApiOperation(value = "根据条件筛选活动列表")
+    @ApiOperation("根据条件筛选活动列表")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleListRequest(
@@ -41,7 +44,7 @@ public class ActivityController {
         );
     }
 
-    @ApiOperation(value = "查看一个活动的时间段列表")
+    @ApiOperation("查看一个活动的时间段列表")
     @RequestMapping(value = "/slot", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ActivityTimeSlotDTO>> handleTimeSlotRequest(
@@ -50,4 +53,14 @@ public class ActivityController {
         return new CommonResult<>(200, "请求成功", activityService.listTimeSlots(activityId));
     }
 
+    @ApiOperation("查询某用户在某活动中是否进行有效签到")
+    @RequestMapping(value = "/attend", method = RequestMethod.GET)
+    @AllAccess
+    @UserParam("user")
+    public CommonResult<Boolean> attendingActivity(
+            @RequestHeader("token") @ApiParam(hidden = true) String token
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        return new CommonResult<>(200,"请求成功",true);
+    }
 }

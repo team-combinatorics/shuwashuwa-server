@@ -19,4 +19,6 @@ public interface ActivityService {
 
     List<ActivityTimeSlotDTO> listTimeSlots(Integer activityId);
 
+    Boolean haveAttended(int userId,int activityId);
+
 }

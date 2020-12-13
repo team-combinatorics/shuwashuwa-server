@@ -4,13 +4,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.ActivityInfoDao;
 import team.combinatorics.shuwashuwa.dao.ActivityTimeSlotDao;
+import team.combinatorics.shuwashuwa.dao.ServiceEventDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.dto.ActivityResponseDTO;
-import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
-import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
-import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ActivityInfoPO;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
 import team.combinatorics.shuwashuwa.model.pojo.ActivityTimeSlot;
@@ -18,7 +16,6 @@ import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Vector;
 import java.util.stream.Collectors;
@@ -28,6 +25,7 @@ import java.util.stream.Collectors;
 public class ActivityServiceImpl implements ActivityService {
     ActivityInfoDao activityInfoDao;
     ActivityTimeSlotDao timeSlotDao;
+    ServiceEventDao serviceEventDao;
 
     @Override
     public void insertActivity(ActivityLaunchDTO activityLaunchDTO) {
@@ -137,5 +135,11 @@ public class ActivityServiceImpl implements ActivityService {
                     .build());
         }
         return converted;
+    }
+
+    @Override
+    public Boolean haveAttended(int userId, int activityId) {
+        //todo 假的
+        return true;
     }
 }

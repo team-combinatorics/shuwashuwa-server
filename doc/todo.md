@@ -4,7 +4,7 @@
 
 - 给定维修单编号和ServiceFormPO，来个更新的接口
 
-- 把活动id和时间段选取移动到维修单属性
+- 把活动id和时间段选取移动到维修单属性（或者两处都有，等审核过了再set维修事件的活动选择
 
 - 更新维修事件状态（三个状态都需要）
 
@@ -21,6 +21,8 @@
 - 要根据SelectServiceEventCO来select出ServiceAbstractDTO而不是ServiceEventDetailDTO
 
 - SelectActivityCO中缺少根据活动结束时间范围筛选
+
+- 指定活动id、用户id，看有没有对应的已签到维修事件
 
 ## 次要
 
