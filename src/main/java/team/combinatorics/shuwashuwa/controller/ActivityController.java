@@ -58,9 +58,10 @@ public class ActivityController {
     @AllAccess
     @UserParam("user")
     public CommonResult<Boolean> attendingActivity(
-            @RequestHeader("token") @ApiParam(hidden = true) String token
+            @RequestHeader("token") @ApiParam(hidden = true) String token,
+            @RequestParam("activity") @ApiParam(value = "活动id",required = true) Integer activityId
     ) {
         int userid = TokenUtil.extractUserid(token);
-        return new CommonResult<>(200,"请求成功",true);
+        return new CommonResult<>(200,"请求成功",activityService.haveAttended(userid,activityId));
     }
 }
