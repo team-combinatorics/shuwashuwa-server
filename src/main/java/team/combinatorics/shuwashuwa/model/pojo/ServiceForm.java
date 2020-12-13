@@ -56,9 +56,16 @@ public class ServiceForm {
     @ApiModelProperty("关联到此维修单的图片列表")
     private List<ServicePic> pictures;
 
+    // TODO 这里之前误写成了replyUserID，请检查是否有影响
     @ApiModelProperty("审核维修单的管理员Id")
-    private Integer replyUserId;
+    private Integer replyAdminId;
 
     @ApiModelProperty("审核意见")
     private String descriptionAdvice;
+
+    @ApiModelProperty("预约活动id")
+    private Integer activityId;
+
+    @ApiModelProperty("活动时间段")
+    private Integer timeSlot;
 }
