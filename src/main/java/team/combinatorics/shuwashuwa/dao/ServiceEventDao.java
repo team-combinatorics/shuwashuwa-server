@@ -32,15 +32,23 @@ public interface ServiceEventDao {
     int insert(@Param("serviceEvent") ServiceEventPO serviceEventPO);
 
     /**
-     * 志愿者更新维修结果和状态，这两个必须都不为空
+     * 志愿者更新维修结果和状态，志愿者id应当不是必要的，因为志愿者需要首先接单才行
      *
      * @param eventID     维修事件id
-     * @param volunteerID 志愿者id
      * @param result      志愿者的反馈结果
+     * @return 发生变动的数量，应当为1，为0表示操作失败
      */
-    void updateByVolunteer(@Param("eventID") int eventID,
-                           @Param("volunteerID") int volunteerID,
-                           @Param("result") String result);
+    int updateByVolunteer(@Param("eventID") int eventID,
+                          @Param("result") String result);
+
+    /**
+     * 更新志愿者信息，志愿者接单时设置
+     * @param eventID 维修事件id
+     * @param volunteerID 志愿者id
+     * @return 发生变动的数量，应当为1，为0表示操作失败
+     */
+    int updateVolunteerInfo(@Param("eventID") int eventID,
+                            @Param("volunteerID") int volunteerID);
 
 
     /**

@@ -92,11 +92,19 @@ public class ServiceEventDaoTest {
 
     @Test
     public void updateByVolunteerTest() {
-        serviceEventDao.updateByVolunteer(1, 3, "没救了，爬");
+        serviceEventDao.updateByVolunteer(1, "没救了，爬");
         Assert.assertEquals("没救了，爬", serviceEventDao.getServiceEventByID(1).getRepairingResult());
-        Assert.assertEquals(3, serviceEventDao.getServiceEventByID(1).getVolunteerId().intValue());
-        serviceEventDao.updateByVolunteer(2, 6, "我修不好，我爬");
+
+        serviceEventDao.updateByVolunteer(2, "我修不好，我爬");
         Assert.assertEquals("我修不好，我爬", serviceEventDao.getServiceEventByID(2).getRepairingResult());
+
+    }
+
+    @Test
+    public void updateVolunteerInfo() {
+        serviceEventDao.updateVolunteerInfo(1, 3);
+        Assert.assertEquals(3, serviceEventDao.getServiceEventByID(1).getVolunteerId().intValue());
+        serviceEventDao.updateVolunteerInfo(2, 6);
         Assert.assertEquals(6, serviceEventDao.getServiceEventByID(2).getVolunteerId().intValue());
     }
 

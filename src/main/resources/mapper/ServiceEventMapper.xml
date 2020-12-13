@@ -44,8 +44,13 @@
 
     <update id="updateByVolunteer">
         update service_event
-        set volunteer_id=#{volunteerID},
-            repairing_result=#{result}
+        set repairing_result=#{result}
+        where id = #{eventID}
+    </update>
+
+    <update id="updateVolunteerInfo">
+        update service_event
+        set volunteer_id=#{volunteerID}
         where id = #{eventID}
     </update>
 
