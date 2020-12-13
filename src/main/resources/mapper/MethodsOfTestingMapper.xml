@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="team.combinatorics.shuwashuwa.dao.MethodsOfTesting">
+
+    <delete id="truncateAllTables">
+        truncate user;
+        truncate activity_info;
+        truncate activity_time_slot;
+        truncate admin;
+        truncate cache_pic;
+        truncate service_event;
+        truncate service_form;
+        truncate service_pic;
+        truncate volunteer;
+        truncate volunteer_application;
+        INSERT INTO user(openid, user_name, identity, is_su)
+        VALUES ('1da5505af2a5ba46a749eaa6b1a92003', 'shuwashuwa', '超级管理员', 1);
+    </delete>
+
+
+</mapper>
