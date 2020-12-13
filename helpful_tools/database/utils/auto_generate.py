@@ -55,7 +55,7 @@ def complite_sql_file():
     sql_file = open("sql/init.sql", 'a', encoding="utf-8")
     sql_file.write('\nINSERT INTO user(openid, user_name, identity, is_su)\n' +
                    'VALUES (\'1da5505af2a5ba46a749eaa6b1a92003\'' +
-                   ', \'shuwashuwa\', \'超级管理员\', 1)')
+                   ', \'shuwashuwa\', \'超级管理员\', 1);')
     sql_file.close()
 
 

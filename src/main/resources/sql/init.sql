@@ -81,8 +81,9 @@ CREATE TABLE `service_event`
     `volunteer_id`     INT UNSIGNED                         DEFAULT NULL COMMENT '负责维修的志愿者',
     `repairing_result` VARCHAR(100)                         DEFAULT NULL COMMENT '志愿者填写的维修结果',
     `feedback`         VARCHAR(100)                         DEFAULT NULL COMMENT '用户反馈信息',
-    `activity_id`      INT                                  DEFAULT NULL COMMENT '预约活动id',
-    `time_slot`        INT                                  DEFAULT NULL COMMENT '预约时间段',
+    `activity_id`      INT                                  DEFAULT NULL COMMENT '预约活动id，审核通过后才确定',
+    `time_slot`        INT                                  DEFAULT NULL COMMENT '预约时间段，审核通过后才确定',
+    `problem_summary`  VARCHAR(100)                         DEFAULT NULL COMMENT '问题概括',
     `status`           TINYINT                              DEFAULT 0 COMMENT '状态',
     `is_draft`         BOOLEAN                              DEFAULT 0 COMMENT '是否为草稿状态',
     `is_closed`        BOOLEAN                              DEFAULT 0 COMMENT '是否为关闭状态',
@@ -113,8 +114,10 @@ CREATE TABLE `service_form`
     `is_under_warranty`     BOOLEAN                              DEFAULT NULL COMMENT '是否在保',
     `problem_description`   VARCHAR(100)                         DEFAULT NULL COMMENT '问题描述',
     `problem_type`          VARCHAR(10)                          DEFAULT NULL COMMENT '问题类型（硬件/软件）',
-    `reply_user_id`         INT UNSIGNED                         DEFAULT NULL COMMENT '提供建议的人的id',
+    `reply_admin_id`        INT UNSIGNED                         DEFAULT NULL COMMENT '提供建议的人的id',
     `description_advice`    VARCHAR(100)                         DEFAULT NULL COMMENT '描述修改建议',
+    `activity_id`           INT                                  DEFAULT NULL COMMENT '"活动id，草稿时用"',
+    `time_slot`             INT                                  DEFAULT NULL COMMENT '"活动时间段"',
     `service_event_id`      INT UNSIGNED                NOT NULL COMMENT '关联的维修事件的id',
     INDEX idx_service_event_id (service_event_id),
     PRIMARY KEY pk_id (`id`)
@@ -241,4 +244,4 @@ CREATE TABLE `r_user_volunteer_application`
 
 
 INSERT INTO user(openid, user_name, identity, is_su)
-VALUES ('1da5505af2a5ba46a749eaa6b1a92003', 'shuwashuwa', '超级管理员', 1)
+VALUES ('1da5505af2a5ba46a749eaa6b1a92003', 'shuwashuwa', '超级管理员', 1);
