@@ -31,7 +31,7 @@ public class UserController {
     })
     @NoToken
     public CommonResult<LogInSuccessDTO> loginHandler(
-            @ApiParam("微信登录信息") LogInInfoDTO logInInfoDto
+            @ApiParam(value = "微信登录信息",required = true) LogInInfoDTO logInInfoDto
     ) throws Exception {
         System.out.println("用户登录 @Controller");
         System.out.println("Code:" + logInInfoDto.getCode());
@@ -50,8 +50,8 @@ public class UserController {
             @ApiResponse(code = 200, message = "更新成功")
     })
     @AllAccess
-    public CommonResult<String> updateUserInfo(@RequestHeader("token") String token,
-                                               @RequestBody @ApiParam("用户信息") UserInfoDTO userInfoDto
+    public CommonResult<String> updateUserInfo(@RequestHeader("token") @ApiParam(hidden = true) String token,
+                                               @RequestBody @ApiParam(value = "用户信息",required = true) UserInfoDTO userInfoDto
     ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         System.out.println("更新" + userid + "的用户信息");
