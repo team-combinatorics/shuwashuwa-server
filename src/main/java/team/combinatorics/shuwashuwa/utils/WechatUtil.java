@@ -22,7 +22,7 @@ final public class WechatUtil {
     private static final String ACTIVITYID = PropertiesConstants.WX_ACTIVITY;
     private static final RestTemplate restTemplate = new RestTemplate();
 
-    public static JsonNode getWechatInfo(String code) throws Exception {
+    public static String getOpenID(String code) throws Exception {
         //拼接url
         String url = "https://api.weixin.qq.com/sns/jscode2session?"
                 + "appid=" + APPID
@@ -39,7 +39,7 @@ final public class WechatUtil {
             System.out.println(root.path("errcode") + " " + root.path("errmsg"));
             throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
         }
-        return root;
+        return root.path("openid").asText();
     }
 
     public static String getWechatAccessToken() throws Exception {

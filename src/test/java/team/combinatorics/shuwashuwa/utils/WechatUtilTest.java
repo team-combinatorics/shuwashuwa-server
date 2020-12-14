@@ -22,9 +22,8 @@ public class WechatUtilTest {
 
     @Test
     public void testSendNotice() throws Exception {
-        String rescode = "001YRCkl2dzq964kmBml2QsgiD4YRCki";
-        JsonNode root = WechatUtil.getWechatInfo(rescode);
-        String openID = root.path("openid").asText();
+        String rescode = "061QdCFa123e9A0bdAGa1K7hZ70QdCFb";
+        String openID = WechatUtil.getOpenID(rescode);
 
         Map<String, String> data = new HashMap<>();
         data.put("thing4", "45甲331");
