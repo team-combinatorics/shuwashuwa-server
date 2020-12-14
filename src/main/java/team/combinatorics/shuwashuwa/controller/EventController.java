@@ -152,10 +152,10 @@ public class EventController {
     @AllAccess
     @UserParam("client")
     public CommonResult<List<ServiceAbstractDTO>> getServiceEventList(
-            @RequestParam("client") @ApiParam("创建维修事件的用户id") Integer clientId,
-            @RequestParam("volunteer") @ApiParam("接单的志愿者id") Integer volunteerId,
-            @RequestParam("activity") @ApiParam("报名的活动id") Integer activityId,
-            @RequestParam("status") @ApiParam(value = "该次维修处于的状态,可能状态如下:\n" +
+            @RequestParam(value = "client",required = false) @ApiParam("创建维修事件的用户id") Integer clientId,
+            @RequestParam(value = "volunteer",required = false) @ApiParam("接单的志愿者id") Integer volunteerId,
+            @RequestParam(value = "activity",required = false) @ApiParam("报名的活动id") Integer activityId,
+            @RequestParam(value = "status",required = false) @ApiParam(value = "该次维修处于的状态,可能状态如下:\n" +
                     "0:等待用户编辑\n" +
                     "1:等待管理员审核\n" +
                     "2:审核通过（待签到）\n" +
@@ -163,10 +163,10 @@ public class EventController {
                     "4:维修中\n" +
                     "5:维修完成\n",
                     allowableValues = "0,1,2,3,4,5") Integer status,
-            @RequestParam("draft") @ApiParam("是否有云端保存的草稿") Boolean draftSaved,
-            @RequestParam("closed") @ApiParam("维修事件是否关闭") Boolean closed,
-            @RequestParam("createLower") @ApiParam("创建时间下界") String createTimeLowerBound,
-            @RequestParam("createUpper") @ApiParam("创建时间上界") String createTimeUpperBound
+            @RequestParam(value = "draft",required = false) @ApiParam("是否有云端保存的草稿") Boolean draftSaved,
+            @RequestParam(value = "closed",required = false) @ApiParam("维修事件是否关闭") Boolean closed,
+            @RequestParam(value = "createLower",required = false) @ApiParam("创建时间下界") String createTimeLowerBound,
+            @RequestParam(value = "createUpper",required = false) @ApiParam("创建时间上界") String createTimeUpperBound
     ) {
         SelectServiceEventCO serviceEventCO = SelectServiceEventCO
                 .builder()

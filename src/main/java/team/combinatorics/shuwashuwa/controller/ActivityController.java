@@ -27,10 +27,10 @@ public class ActivityController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleListRequest(
-            @RequestParam("startLower") @ApiParam("开始时间下界") String startTimeLowerBound,
-            @RequestParam("startUpper") @ApiParam("开始时间上界") String startTimeUpperBound,
-            @RequestParam("endLower") @ApiParam("结束时间下界") String endTimeLowerBound,
-            @RequestParam("endUpper") @ApiParam("结束时间上界") String endTimeUpperBound
+            @RequestParam(value = "startLower",required = false) @ApiParam("开始时间下界") String startTimeLowerBound,
+            @RequestParam(value = "startUpper",required = false) @ApiParam("开始时间上界") String startTimeUpperBound,
+            @RequestParam(value = "endLower",required = false) @ApiParam("结束时间下界") String endTimeLowerBound,
+            @RequestParam(value = "endUpper",required = false) @ApiParam("结束时间上界") String endTimeUpperBound
 
     ) {
         System.out.println("请求活动列表");
@@ -51,7 +51,7 @@ public class ActivityController {
     @VolunteerAccess
     public CommonResult<String> handlePresence(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "活动Id，从二维码参数获取",required = true) Integer activityId
+            @RequestParam(value = "activity") @ApiParam(value = "活动Id，从二维码参数获取",required = true) Integer activityId
     ) {
         int userid = TokenUtil.extractUserid(token);
         activityService.setActive(userid,activityId);
