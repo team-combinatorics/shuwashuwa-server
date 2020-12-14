@@ -22,8 +22,13 @@ public class ActivityTimeSlotDaoTest {
     @Autowired
     ActivityTimeSlotDao activityTimeSlotDao;
 
+    @Autowired
+    MethodsOfTesting methodsOfTesting;
+
     @Test
     public void simpleTest() {
+        methodsOfTesting.truncateAllTables();
+
         Calendar begin = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         List<ActivityTimeSlot> activityTimeSlotList1 = new ArrayList<>();

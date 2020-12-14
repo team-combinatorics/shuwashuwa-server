@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import team.combinatorics.shuwashuwa.MainApplication;
+import team.combinatorics.shuwashuwa.dao.MethodsOfTesting;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 
 import java.io.File;
@@ -31,6 +32,9 @@ public class ImageStorageServiceTest {
         this.imageStorageService = imageStorageService;
     }
 
+    @Autowired
+    MethodsOfTesting methodsOfTesting;
+
     @Value("${dir.pictures}")
     public void setSTORAGE_DIR(String STORAGE_DIR) {
         this.STORAGE_DIR = STORAGE_DIR;
@@ -39,8 +43,11 @@ public class ImageStorageServiceTest {
     private boolean exist(String fileName) {
         return new File(STORAGE_DIR+fileName).exists();
     }
+
     @Test
     public void simpleTest() throws IOException {
+        methodsOfTesting.truncateAllTables();
+
         File oriFile = new File("tmpImg.png");
         if(!oriFile.createNewFile())
             System.out.println("文件存在，不也挺好吗");

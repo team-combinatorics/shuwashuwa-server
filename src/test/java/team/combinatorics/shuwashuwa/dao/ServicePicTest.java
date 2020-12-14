@@ -15,8 +15,13 @@ public class ServicePicTest {
     @Autowired
     private ServicePicDao servicePicDao;
 
+    @Autowired
+    MethodsOfTesting methodsOfTesting;
+
     @Test
     public void simpleTest() {
+        methodsOfTesting.truncateAllTables();
+
         for (int i = 1; i <= 4; i++) {
             ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(i).build();
             System.out.println(servicePicPO.getId());

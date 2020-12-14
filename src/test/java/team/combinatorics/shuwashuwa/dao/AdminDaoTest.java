@@ -18,8 +18,12 @@ public class AdminDaoTest {
     @Autowired
     AdminDao adminDao;
 
+    @Autowired
+    MethodsOfTesting methodsOfTesting;
+
     @Test
     public void simpleTest() {
+        methodsOfTesting.truncateAllTables();
 
         AdminPO adminPO = AdminPO.builder()
                 .userid("3")

@@ -16,8 +16,13 @@ public class UserDaoTest {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    MethodsOfTesting methodsOfTesting;
+
     @Test
     public void weakTest() {
+        methodsOfTesting.truncateAllTables();
+
         // 插入单个用户的测试
         int num=6;
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 2"));

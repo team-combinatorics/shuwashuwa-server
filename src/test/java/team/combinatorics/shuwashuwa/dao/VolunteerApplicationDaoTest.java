@@ -20,9 +20,14 @@ public class VolunteerApplicationDaoTest {
     @Autowired
     VolunteerApplicationDao volunteerApplicationDao;
 
+    @Autowired
+    MethodsOfTesting methodsOfTesting;
+
     @Test
     // 这个测试方法中随便编openid就行，并不向tx服务器验证
     public void insertTest() {
+        methodsOfTesting.truncateAllTables();
+
         volunteerApplicationDao.insert(VolunteerApplicationPO.builder()
                 .userId(1)
                 .cardPicLocation("Location1")
