@@ -10,6 +10,7 @@ import java.util.List;
 //TODO 未测试
 @Repository
 public interface VolunteerDao {
+
     /**
      * 插入一个志愿者
      *
@@ -29,11 +30,12 @@ public interface VolunteerDao {
 
     /**
      * 更新order count
-     * @param id 志愿者id
+     *
+     * @param id    志愿者id
      * @param count 要更新的count
      * @return 默认
      */
-    int updateOrderCount(@Param("id")int id, @Param("count")int count);
+    int updateOrderCount(@Param("id") int id, @Param("count") int count);
 
     /**
      * 获取志愿者列表，返回所有
@@ -52,6 +54,7 @@ public interface VolunteerDao {
 
     /**
      * 根据用户id获取志愿者id
+     *
      * @param userID 用户id
      * @return 志愿者id
      */
@@ -59,10 +62,12 @@ public interface VolunteerDao {
 
     /**
      * 根据志愿者id获取该志愿者的order count
+     *
      * @param id 志愿者id
      * @return count
      */
-    int getOrderCount(@Param("id")int id);
+    int getOrderCount(@Param("id") int id);
+
     /**
      * 根据id删除志愿者
      *
