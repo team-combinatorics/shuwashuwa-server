@@ -9,6 +9,7 @@ feedback,varchar(100),DEFAULT NULL,用户反馈信息,,,,
 activity_id,int,DEFAULT NULL,预约活动id，审核通过后才确定,1,,,
 time_slot,int,DEFAULT NULL,预约时间段，审核通过后才确定,,,,
 problem_summary,varchar(100),DEFAULT NULL,问题概括,,,,
-status,tinyint,DEFAULT 0,状态,1,"","",""
-is_draft,boolean,DEFAULT 0,是否为草稿状态,1,"","",""
-is_closed,boolean,DEFAULT 0,是否为关闭状态,1,"","",""
+valid_form_id,int unsigned,DEFAULT NULL,一个可用的维修单id，用于提取摘要,"","","",""
+status,tinyint,DEFAULT 0,状态,1,,,
+is_draft,boolean,DEFAULT 0,是否为草稿状态,1,,,
+is_closed,boolean,DEFAULT 0,是否为关闭状态,1,,,

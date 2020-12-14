@@ -34,8 +34,8 @@ public interface ServiceEventDao {
     /**
      * 志愿者更新维修结果和状态，志愿者id应当不是必要的，因为志愿者需要首先接单才行
      *
-     * @param eventID     维修事件id
-     * @param result      志愿者的反馈结果
+     * @param eventID 维修事件id
+     * @param result  志愿者的反馈结果
      * @return 发生变动的数量，应当为1，为0表示操作失败
      */
     int updateByVolunteer(@Param("eventID") int eventID,
@@ -43,7 +43,8 @@ public interface ServiceEventDao {
 
     /**
      * 更新志愿者信息，志愿者接单时设置
-     * @param eventID 维修事件id
+     *
+     * @param eventID     维修事件id
      * @param volunteerID 志愿者id
      * @return 发生变动的数量，应当为1，为0表示操作失败
      */
@@ -85,6 +86,14 @@ public interface ServiceEventDao {
     int updateClosed(@Param("id") int id, @Param("closed") boolean closed);
 
     /**
+     * 更新可用的维修单id，用于提取摘要信息
+     * @param eventID 维修事件id
+     * @param formID 维修单id
+     * @return 发生变动的数量，应当为1，为0表示操作失败
+     */
+    int updateValidFormID(@Param("eventID") int eventID, @Param("formID") int formID);
+
+    /**
      * @param id 维修请求id
      * @return 一个完整的维修单结构
      */
@@ -120,5 +129,12 @@ public interface ServiceEventDao {
      * @return 计数值
      */
     int countServiceEventsByCondition(@Param("condition") SelectServiceEventCO selectServiceEventCO);
+
+    /**
+     * 测试用，获取一个完整的po
+     * @param id id
+     * @return 完整的po
+     */
+    ServiceEventPO getPOByID(@Param("id")int id);
 
 }
