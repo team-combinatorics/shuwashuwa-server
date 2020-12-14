@@ -35,7 +35,6 @@ public class ServiceEventDetailDTO {
     private Integer activityId;
     @ApiModelProperty("预约的时间段")
     private Integer timeSlot;
-    // TODO @leo_h 这里加了一个属性，判断下有没有问题
     @ApiModelProperty("问题摘要")
     private String problemSummary;
     @ApiModelProperty(value = "该次维修处于的状态,可能状态如下:\n" +

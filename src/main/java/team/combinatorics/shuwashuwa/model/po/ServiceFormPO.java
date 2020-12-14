@@ -26,7 +26,6 @@ public class ServiceFormPO {
     private Boolean underWarranty;
     private String problemDescription;
     private String problemType;
-    // TODO 这里之前误写成了replyUserID，请检查是否有影响
     private Integer replyAdminId;
     private String descriptionAdvice;
     private Integer activityId;

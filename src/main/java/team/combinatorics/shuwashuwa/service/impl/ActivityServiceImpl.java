@@ -97,7 +97,12 @@ public class ActivityServiceImpl implements ActivityService {
     public void removeActivity(int id) {
         if(activityInfoDao.deleteByID(id) == 1)
             System.out.println("删除了活动"+id);
-        //todo: 可能需要更新维修单
+        for(ServiceAbstractDTO service : serviceEventDao.listAbstractServiceEventsByCondition(
+                SelectServiceEventCO.builder().activityId(id).build()
+        )) {
+            serviceEventDao.updateClosed(service.getServiceEventId(),true);
+        }
+
         System.out.println("删除了活动时间段数据" +
                 timeSlotDao.deleteByActivityID(id) + "条");
     }
