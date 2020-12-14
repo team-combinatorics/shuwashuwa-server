@@ -27,6 +27,8 @@ public class PropertiesConstants {
      */
     public static String PIC_STORAGE_DIR;
 
+    public static String WX_ACTIVITY;
+
 
     @Value("${wx.appid:default}")
     public void setWxMiniProgramAppid(String appid) {
@@ -46,5 +48,10 @@ public class PropertiesConstants {
     @Value("${dir.pictures:default}")
     public void setPicStorageDir(String dir) {
         PropertiesConstants.PIC_STORAGE_DIR = dir;
+    }
+
+    @Value("${wx.activity:default}")
+    public void setWxActivity(String act) {
+        PropertiesConstants.WX_ACTIVITY = act;
     }
 }

@@ -8,6 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
+import team.combinatorics.shuwashuwa.model.vo.WechatNoticeVO;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @DependsOn("constants")
@@ -15,6 +19,7 @@ final public class WechatUtil {
 
     private static final String APPID = PropertiesConstants.WX_MINI_PROGRAM_APPID;
     private static final String SECRET = PropertiesConstants.WX_MINI_PROGRAM_SECRET;
+    private static final String ACTIVITYID = PropertiesConstants.WX_ACTIVITY;
     private static final RestTemplate restTemplate = new RestTemplate();
 
     public static JsonNode getWechatInfo(String code) throws Exception {
@@ -54,9 +59,15 @@ final public class WechatUtil {
             System.out.println(root.path("errcode") + " " + root.path("errmsg"));
             throw new KnownException(ErrorInfoEnum.ACCESS_TOKEN_FAILURE);
         }
-        String accessToken = root.path("access_token").asText();
-        return accessToken;
+        return root.path("access_token").asText();
     }
 
-
+    public static void sendActivityNotice(WechatNoticeVO wechatNoticeVO) throws Exception {
+        String accessToken = getWechatAccessToken();
+        String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
+                + "access_token=" + accessToken;
+        wechatNoticeVO.setTemplate_id(ACTIVITYID);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeVO, String.class);
+        System.out.println(response.getBody());
+    }
 }
