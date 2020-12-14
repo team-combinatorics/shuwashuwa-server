@@ -38,8 +38,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public ServiceEventDetailDTO createNewEvent(int userid) {
         ServiceEventPO eventPO = ServiceEventPO.builder().userId(userid).build();
-        //todo @kinami 创建维修事件只需要userid，传PO怕是太慢了
-        serviceEventDao.insert(eventPO);
+        assert serviceEventDao.insert(eventPO) == 1;
         return serviceEventDao.getServiceEventByID(eventPO.getId());
     }
 
@@ -52,13 +51,15 @@ public class EventServiceImpl implements EventService {
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
         //获取维修事件的创建者和状态
-        //todo @kinami 我只想要PO
+        //todo @kinami 我只想要userid,volunteerId,status
         ServiceEventDetailDTO eventDetail =
                 serviceEventDao.getServiceEventByID(serviceFormSubmitDTO.getServiceEventId());
 
         //检查权限
         if(eventDetail.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+
+        //签到后不允许修改
         if(eventDetail.getStatus() >=3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
 
@@ -71,24 +72,28 @@ public class EventServiceImpl implements EventService {
         if(eventDetail.getDraft()) {
             int draftId = serviceFormDao.getLastFormIDByEventID(eventId);
             newFormPO.setId(draftId);
-            //todo @kinami 维修单update
+            serviceFormDao.update(newFormPO);
         }
         else {
             serviceFormDao.insert(newFormPO);
         }
 
-        //若正式提交，设置图片关联
-        if(!isDraft)
-            for(String imagePath: serviceFormSubmitDTO.getImageList()) {
-                imageStorageService.bindWithService(imagePath,newFormPO.getId());
+        //若是草稿保存，设置草稿标记
+        if(isDraft)
+            serviceEventDao.updateDraft(eventId,true);
+        //若正式提交，设置图片关联，更新维修单状态
+        else {
+            for (String imagePath : serviceFormSubmitDTO.getImageList()) {
+                imageStorageService.bindWithService(imagePath, newFormPO.getId());
             }
-
-        //todo @kinami 更新维修事件状态（三个都要）
+            serviceEventDao.updateDraft(eventId, false);
+            serviceEventDao.updateStatus(eventId, 1);
+        }
     }
 
     @Override
     public void rejectForm(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
-
+//todo 草稿状态的实现，待讨论
     }
 
     @Override
@@ -98,37 +103,63 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void setActive(int userid, Integer activityId) {
-
+        for (ServiceAbstractDTO service : serviceEventDao.listAbstractServiceEventsByCondition(
+                SelectServiceEventCO.builder().userId(userid).activityId(activityId).closed(false).build()
+        ) ) {
+            if(service.getStatus()==2)
+                serviceEventDao.updateStatus(service.getServiceEventId(),3);
+        }
     }
 
     @Override
     public void takeOrder(int userid, Integer serviceEventId) {
-
+        ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
+        if(detailDTO.getStatus()!=3)
+            throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+        serviceEventDao.updateVolunteerInfo(serviceEventId,userid);
+        serviceEventDao.updateStatus(serviceEventId,4);
     }
 
     @Override
     public void giveUpOrder(int userid, Integer serviceEventId) {
-
+        ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
+        if(detailDTO.getVolunteerId()!=userid)
+            throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+        if(detailDTO.getStatus()!=4)
+            throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+        serviceEventDao.updateStatus(serviceEventId,3);
     }
 
     @Override
     public void completeOrder(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
-
+        ServiceEventDetailDTO detailDTO = getServiceDetail(stringUpdateDTO.getServiceEventId());
+        if(detailDTO.getVolunteerId()!=userid)
+            throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+        if(detailDTO.getStatus()!=4)
+            throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+        serviceEventDao.updateByVolunteer(stringUpdateDTO.getServiceEventId(),stringUpdateDTO.getMessage());
+        serviceEventDao.updateStatus(stringUpdateDTO.getServiceEventId(),5);
     }
 
     @Override
     public void updateFeedback(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
-
+        ServiceEventDetailDTO detailDTO = getServiceDetail(stringUpdateDTO.getServiceEventId());
+        if(detailDTO.getUserId()!=userid)
+            throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+        serviceEventDao.updateFeedback(stringUpdateDTO.getServiceEventId(),stringUpdateDTO.getMessage());
     }
 
     @Override
     public void shutdownService(int userid, Integer serviceEventId) {
-
+        ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
+        if(detailDTO.getUserId()!=userid)
+            throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+        serviceEventDao.updateClosed(serviceEventId,true);
     }
 
     @Override
     public List<ServiceAbstractDTO> listServiceEvents(SelectServiceEventCO co) {
-        return null;
+        return serviceEventDao.listAbstractServiceEventsByCondition(co);
     }
 
     @Override
