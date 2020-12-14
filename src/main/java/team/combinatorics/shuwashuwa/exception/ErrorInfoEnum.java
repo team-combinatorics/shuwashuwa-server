@@ -19,7 +19,7 @@ public enum ErrorInfoEnum {
     WRONG_SUPER_ADMINISTRATOR_INFO(40011, "超级管理员用户名/密码错误"),
     DUPLICATED_PROMOTION(40012,"用户已具有希望获得的身份"),
     STATUS_UNMATCHED(40013,"当前维修状态下不允许执行指定操作"),
-    ACCSEETOKEN_FAILURE(40014, "获取微信Accsee token 出错");
+    ACCESS_TOKEN_FAILURE(40014, "获取微信Access token 出错");
 
     private final Integer errCode;
     private final String errMsg;
