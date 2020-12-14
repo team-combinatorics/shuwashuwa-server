@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceCompleteDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 
 import java.util.List;
@@ -21,8 +20,6 @@ public interface ServiceEventDao {
      * @return 插入成功的数量，如果为0表示不成功
      */
     int insertByUserID(@Param("userID") int userID);
-
-    // TODO 上面的方法无法得到插入后的id，下面的方法可以，自行决定用哪个
 
     /**
      * 插入一个新的serviceEvent
