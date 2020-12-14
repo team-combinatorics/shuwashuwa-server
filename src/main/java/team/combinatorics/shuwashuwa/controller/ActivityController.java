@@ -27,23 +27,26 @@ public class ActivityController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleListRequest(
-            @RequestParam(value = "startLower",required = false) @ApiParam("开始时间下界") String startTimeLowerBound,
-            @RequestParam(value = "startUpper",required = false) @ApiParam("开始时间上界") String startTimeUpperBound,
-            @RequestParam(value = "endLower",required = false) @ApiParam("结束时间下界") String endTimeLowerBound,
-            @RequestParam(value = "endUpper",required = false) @ApiParam("结束时间上界") String endTimeUpperBound
-
+            @RequestParam(value = "startLower",required = false)
+            @ApiParam(value = "开始时间下界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+                    String startTimeLowerBound,
+            @RequestParam(value = "startUpper",required = false)
+            @ApiParam(value = "开始时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+                    String startTimeUpperBound,
+            @RequestParam(value = "endLower",required = false)
+            @ApiParam(value = "结束时间下界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+                    String endTimeLowerBound,
+            @RequestParam(value = "endUpper",required = false)
+            @ApiParam(value = "结束时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+                    String endTimeUpperBound
     ) {
         System.out.println("请求活动列表");
-        return new CommonResult<>(200, "请求成功",
-                activityService.listActivityByConditions(
-                        SelectActivityCO.builder()
-                                .startTimeLowerBound(Timestamp.valueOf(startTimeLowerBound))
-                                .startTimeUpperBound(Timestamp.valueOf(startTimeUpperBound))
-                                .endTimeLowerBound(Timestamp.valueOf(endTimeLowerBound))
-                                .endTimeUpperBound(Timestamp.valueOf(endTimeUpperBound))
-                                .build()
-                )
-        );
+        SelectActivityCO co=new SelectActivityCO();
+        if(startTimeLowerBound!=null) co.setStartTimeLowerBound(Timestamp.valueOf(startTimeLowerBound));
+        if(startTimeUpperBound!=null) co.setStartTimeUpperBound(Timestamp.valueOf(startTimeUpperBound));
+        if(endTimeLowerBound!=null) co.setEndTimeLowerBound(Timestamp.valueOf(endTimeLowerBound));
+        if(endTimeUpperBound!=null) co.setEndTimeUpperBound(Timestamp.valueOf(endTimeUpperBound));
+        return new CommonResult<>(200, "请求成功",activityService.listActivityByConditions(co));
     }
 
     @ApiOperation("用户活动现场签到")
