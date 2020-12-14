@@ -104,7 +104,6 @@ public class ServiceEventDaoTest {
     public void getServiceEventByIDTest() {
         ServiceEventDetailDTO serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
         Assert.assertEquals("name 2", serviceEventDetailDTO.getUserName());
-        Assert.assertNull(serviceEventDetailDTO.getVolunteerName());
         serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
         Assert.assertEquals("rinrin开花", serviceEventDetailDTO.getVolunteerName());
 
