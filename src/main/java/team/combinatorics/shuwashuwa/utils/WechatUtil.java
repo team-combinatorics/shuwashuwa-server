@@ -36,4 +36,27 @@ final public class WechatUtil {
         }
         return root;
     }
+
+    public static String getWechatAccessToken() throws Exception {
+        // 拼接url
+        String url = "https://api.weixin.qq.com/cgi-bin/token?"
+                + "grant_type=" + "client_credential"
+                + "&appid=" + APPID
+                + "&secret=" + SECRET;
+
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        if (!response.getStatusCode().equals(HttpStatus.OK))
+            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response.getBody());
+
+        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
+            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
+            throw new KnownException(ErrorInfoEnum.ACCESS_TOKEN_FAILURE);
+        }
+        String accessToken = root.path("access_token").asText();
+        return accessToken;
+    }
+
+
 }
