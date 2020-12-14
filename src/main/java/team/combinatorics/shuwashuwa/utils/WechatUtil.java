@@ -67,4 +67,12 @@ final public class WechatUtil {
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeVO, String.class);
         System.out.println(response.getBody());
     }
+
+    public static void sendOneNotice(WechatNoticeVO wechatNoticeVO) throws Exception {
+        String accessToken = getWechatAccessToken();
+        String templateURL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
+                + "access_token=" + accessToken;
+
+
+    }
 }
