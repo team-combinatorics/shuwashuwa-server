@@ -22,7 +22,6 @@ public class ServiceEventPO {
     private Integer activityId;
     private Integer timeSlot;
     private String problemSummary;
-    // TODO @leo_h 加了一个属性，该属性是非草稿的最后一个维修单的id，默认为null
     private Integer validFormId;
     private Integer status;
     private Boolean draft;

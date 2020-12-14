@@ -2,7 +2,6 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
 

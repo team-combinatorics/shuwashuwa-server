@@ -1,6 +1,5 @@
 package team.combinatorics.shuwashuwa.dao;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
-import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
 import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
 
 import java.sql.Date;

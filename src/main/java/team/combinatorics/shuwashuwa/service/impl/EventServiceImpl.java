@@ -50,17 +50,15 @@ public class EventServiceImpl implements EventService {
         if(serviceFormSubmitDTO.getServiceEventId() == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
-        //获取维修事件的创建者和状态
-        //todo @kinami 我只想要userid,volunteerId,status
-        ServiceEventDetailDTO eventDetail =
-                serviceEventDao.getServiceEventByID(serviceFormSubmitDTO.getServiceEventId());
+        //获取维修事件
+        final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceFormSubmitDTO.getServiceEventId());
 
         //检查权限
-        if(eventDetail.getUserId() != userid)
+        if(eventPO.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
 
         //签到后不允许修改
-        if(eventDetail.getStatus() >=3)
+        if(eventPO.getStatus() >=3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
 
         //提取维修单信息
@@ -69,7 +67,7 @@ public class EventServiceImpl implements EventService {
         int eventId = newFormPO.getServiceEventId();
 
         //保存维修单。存在草稿，则覆盖草稿
-        if(eventDetail.getDraft()) {
+        if(eventPO.getDraft()) {
             int draftId = serviceFormDao.getLastFormIDByEventID(eventId);
             newFormPO.setId(draftId);
             serviceFormDao.update(newFormPO);
@@ -81,19 +79,20 @@ public class EventServiceImpl implements EventService {
         //若是草稿保存，设置草稿标记
         if(isDraft)
             serviceEventDao.updateDraft(eventId,true);
-        //若正式提交，设置图片关联，更新维修单状态
+        //正式提交
         else {
             for (String imagePath : serviceFormSubmitDTO.getImageList()) {
                 imageStorageService.bindWithService(imagePath, newFormPO.getId());
             }
             serviceEventDao.updateDraft(eventId, false);
             serviceEventDao.updateStatus(eventId, 1);
+            serviceEventDao.updateValidFormID(eventId, newFormPO.getId());
+            serviceEventDao.updateActivityIDAndTimeSlot(eventId, newFormPO.getActivityId(),newFormPO.getTimeSlot());
         }
     }
 
     @Override
     public void rejectForm(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
-//todo 草稿状态的实现，待讨论
     }
 
     @Override
@@ -117,10 +116,10 @@ public class EventServiceImpl implements EventService {
     public void giveUpOrder(int userid, Integer serviceEventId) {
         if(serviceEventId==null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
-        if(detailDTO.getVolunteerId()!=userid)
+        final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceEventId);
+        if(eventPO.getVolunteerId()!=userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
-        if(detailDTO.getStatus()!=4)
+        if(eventPO.getStatus()!=4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
 
         serviceEventDao.updateStatus(serviceEventId,3);
@@ -130,10 +129,10 @@ public class EventServiceImpl implements EventService {
     public void completeOrder(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
         if(DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        ServiceEventDetailDTO detailDTO = getServiceDetail(stringUpdateDTO.getServiceEventId());
-        if(detailDTO.getVolunteerId()!=userid)
+        final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());
+        if(eventPO.getVolunteerId()!=userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
-        if(detailDTO.getStatus()!=4)
+        if(eventPO.getStatus()!=4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
 
         serviceEventDao.updateByVolunteer(stringUpdateDTO.getServiceEventId(),stringUpdateDTO.getMessage());
@@ -144,9 +143,11 @@ public class EventServiceImpl implements EventService {
     public void updateFeedback(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
         if(DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        ServiceEventDetailDTO detailDTO = getServiceDetail(stringUpdateDTO.getServiceEventId());
-        if(detailDTO.getUserId()!=userid)
+        final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());
+        if(eventPO.getUserId()!=userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+        if(eventPO.getStatus()!=5)
+            throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
 
         serviceEventDao.updateFeedback(stringUpdateDTO.getServiceEventId(),stringUpdateDTO.getMessage());
     }
