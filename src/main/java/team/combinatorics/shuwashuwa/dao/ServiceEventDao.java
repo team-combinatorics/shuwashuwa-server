@@ -87,8 +87,9 @@ public interface ServiceEventDao {
 
     /**
      * 更新可用的维修单id，用于提取摘要信息
+     *
      * @param eventID 维修事件id
-     * @param formID 维修单id
+     * @param formID  维修单id
      * @return 发生变动的数量，应当为1，为0表示操作失败
      */
     int updateValidFormID(@Param("eventID") int eventID, @Param("formID") int formID);
@@ -109,8 +110,6 @@ public interface ServiceEventDao {
     List<ServiceEventDetailDTO> listServiceEventsByCondition(
             @Param("condition") SelectServiceEventCO selectServiceEventCO);
 
-    // TODO 尬住了，之后再说
-
     /**
      * 条件检索，获取摘要列表
      *
@@ -119,8 +118,6 @@ public interface ServiceEventDao {
      */
     List<ServiceAbstractDTO> listAbstractServiceEventsByCondition(
             @Param("condition") SelectServiceEventCO selectServiceEventCO);
-
-    // TODO 这里应该写几个简单的查询语句，例如通过维修事件id查找对应的用户，通过维修事件id查找当前状态等
 
     /**
      * 根据条件计数，可以用于判断是否有符合条件的元素
@@ -132,9 +129,10 @@ public interface ServiceEventDao {
 
     /**
      * 测试用，获取一个完整的po
+     *
      * @param id id
      * @return 完整的po
      */
-    ServiceEventPO getPOByID(@Param("id")int id);
+    ServiceEventPO getPOByID(@Param("id") int id);
 
 }

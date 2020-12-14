@@ -6,7 +6,9 @@
     <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO" id="serviceEventResultMap">
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="u_name" jdbcType="VARCHAR" property="userName"/>
         <result column="volunteer_id" jdbcType="INTEGER" property="volunteerId"/>
+        <result column="v_name" jdbcType="VARCHAR" property="volunteerName"/>
         <result column="repairing_result" jdbcType="VARCHAR" property="repairingResult"/>
         <result column="feedback" jdbcType="VARCHAR" property="feedback"/>
         <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
@@ -145,9 +147,11 @@
     </select>
 
     <select id="getServiceEventByID" resultMap="serviceEventResultMap">
-        select id,
+        select s.id,
                user_id,
+               u.user_name u_name,
                volunteer_id,
+               v.user_name v_name,
                repairing_result,
                feedback,
                activity_id,
@@ -156,16 +160,22 @@
                status,
                is_draft,
                is_closed
-        from service_event
-        where id = #{id}
+        from service_event s
+                 left join user u
+                           on s.user_id = u.id
+                 left join volunteer v
+                           on s.volunteer_id = v.id
+        where s.id = #{id}
     </select>
 
     <select id="listServiceEventsByCondition" resultMap="serviceEventResultMap"
             parameterType="team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO">
         select
-        id,
+        s.id,
         user_id,
+        u.user_name u_name,
         volunteer_id,
+        v.user_name v_name,
         repairing_result,
         feedback,
         activity_id,
@@ -174,7 +184,12 @@
         status,
         is_draft,
         is_closed
-        from service_event
+        from service_event s
+        left join user u
+        on s.user_id = u.id
+        left join volunteer v
+        on s.volunteer_id = v.id
+
         <where>
             <if test="condition.beginTime != null">
                 create_time >= #{condition.beginTime}

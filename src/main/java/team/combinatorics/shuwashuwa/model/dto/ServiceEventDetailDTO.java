@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.model.dto;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,12 @@ public class ServiceEventDetailDTO {
     private Integer id;
     @ApiModelProperty("发起维修申请的用户id")
     private Integer userId;
+    @ApiModelProperty("发起维修申请的用户姓名")
+    private String userName;
     @ApiModelProperty("接单的志愿者的id")
     private Integer volunteerId;
+    @ApiModelProperty("接单的志愿者的姓名")
+    private String volunteerName;
     @ApiModelProperty("用户提交的历史维修单")
     private List<ServiceForm> serviceForms;
     @ApiModelProperty("由志愿者填写的维修结果")
@@ -43,7 +48,7 @@ public class ServiceEventDetailDTO {
             "2:审核通过（待签到）\n" +
             "3:等待志愿者接单\n" +
             "4:维修中\n" +
-            "5:维修完成\n",allowableValues = "0,1,2,3,4,5")
+            "5:维修完成\n", allowableValues = "0,1,2,3,4,5")
     private Integer status;
     @ApiModelProperty("是否存在维修单草稿，若为真，则serviceForms中的最后一项是用户保存的草稿")
     private Boolean draft;

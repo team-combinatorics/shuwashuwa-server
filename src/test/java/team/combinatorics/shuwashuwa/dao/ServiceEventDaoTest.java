@@ -11,12 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceCompleteDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 
 import java.sql.Date;
 import java.util.List;
@@ -35,6 +34,12 @@ public class ServiceEventDaoTest {
     private ServiceFormDao serviceFormDao;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private VolunteerDao volunteerDao;
+
+    @Autowired
     private MethodsOfTesting methodsOfTesting;
 
     /**
@@ -45,8 +50,12 @@ public class ServiceEventDaoTest {
     public void insertTest() {
         methodsOfTesting.truncateAllTables();
         int returnValue;
-        // 插入三个事件
+        // 插入三个事件以及用户信息
         for (int i = 2; i <= 4; i++) {
+            userDao.insertUserByOpenid("openid" + i);
+            userDao.updateUserInfo(i, UserInfoDTO.builder()
+                    .userName("name " + i)
+                    .build());
             returnValue = serviceEventDao.insertByUserID(i);
             Assert.assertEquals(1, returnValue);
         }
@@ -82,6 +91,21 @@ public class ServiceEventDaoTest {
                 .status(0)
                 .build();
         Assert.assertEquals(3, serviceEventDao.countServiceEventsByCondition(selectServiceEventCO));
+
+    }
+
+    @Test
+    public void getServiceEventByIDTest() {
+        ServiceEventDetailDTO serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
+        Assert.assertEquals("name 2", serviceEventDetailDTO.getUserName());
+        Assert.assertNull(serviceEventDetailDTO.getVolunteerName());
+        volunteerDao.insert(VolunteerPO.builder()
+                .userid(5)
+                .userName("rinrin开花")
+                .build());
+        serviceEventDao.updateVolunteerInfo(1, 1);
+        serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
+        Assert.assertEquals("rinrin开花", serviceEventDetailDTO.getVolunteerName());
 
     }
 
