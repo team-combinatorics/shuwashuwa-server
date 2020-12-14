@@ -6,6 +6,7 @@ import team.combinatorics.shuwashuwa.dao.ActivityInfoDao;
 import team.combinatorics.shuwashuwa.dao.ActivityTimeSlotDao;
 import team.combinatorics.shuwashuwa.dao.ServiceEventDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
+import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.*;
@@ -120,26 +121,19 @@ public class ActivityServiceImpl implements ActivityService {
         return converted;
     }
 
-    private List<ActivityResponseDTO> formattedActivityList(List<ActivityInfoPO> raw) {
-        List<ActivityResponseDTO> converted = new Vector<>();
-        for (ActivityInfoPO activity: raw) {
-            converted.add(ActivityResponseDTO.builder()
-                    .createTime(DTOUtil.stamp2str(activity.getCreateTime()))
-                    .updatedTime(DTOUtil.stamp2str(activity.getUpdatedTime()))
-                    .startTime(DTOUtil.stamp2str(activity.getStartTime()))
-                    .endTime(DTOUtil.stamp2str(activity.getEndTime()))
-                    .activityName(activity.getActivityName())
-                    .id(activity.getId())
-                    .location(activity.getLocation())
-                    .status(activity.getStatus())
-                    .build());
-        }
-        return converted;
-    }
-
     @Override
     public Boolean haveAttended(int userId, int activityId) {
-        //todo 假的
-        return true;
+        final SelectServiceEventCO co = SelectServiceEventCO.builder()
+                .userId(userId)
+                .activityId(activityId)
+                .status(3)
+        .build();
+        int count = 0;
+        count += serviceEventDao.countServiceEventsByCondition(co);
+        co.setStatus(4);
+        count += serviceEventDao.countServiceEventsByCondition(co);
+        co.setStatus(5);
+        count += serviceEventDao.countServiceEventsByCondition(co);
+        return count>0;
     }
 }

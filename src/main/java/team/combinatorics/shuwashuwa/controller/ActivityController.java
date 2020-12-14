@@ -1,7 +1,6 @@
 package team.combinatorics.shuwashuwa.controller;
 
 import io.swagger.annotations.*;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
@@ -39,6 +38,8 @@ public class ActivityController {
                         SelectActivityCO.builder()
                                 .startTimeLowerBound(Timestamp.valueOf(startTimeLowerBound))
                                 .startTimeUpperBound(Timestamp.valueOf(startTimeUpperBound))
+                                .endTimeLowerBound(Timestamp.valueOf(endTimeLowerBound))
+                                .endTimeUpperBound(Timestamp.valueOf(endTimeUpperBound))
                                 .build()
                 )
         );
@@ -53,7 +54,7 @@ public class ActivityController {
         return new CommonResult<>(200, "请求成功", activityService.listTimeSlots(activityId));
     }
 
-    @ApiOperation("查询某用户在某活动中是否进行有效签到")
+    @ApiOperation("查询当前用户在某活动中是否进行有效签到")
     @RequestMapping(value = "/attend", method = RequestMethod.GET)
     @AllAccess
     @UserParam("user")
