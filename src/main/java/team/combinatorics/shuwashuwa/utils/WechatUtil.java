@@ -10,9 +10,6 @@ import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.vo.WechatNoticeVO;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 @DependsOn("constants")
 final public class WechatUtil {
