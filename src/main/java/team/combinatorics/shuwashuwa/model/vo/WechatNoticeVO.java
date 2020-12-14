@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import team.combinatorics.shuwashuwa.model.pojo.NoticeMessage;
 
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public class WechatNoticeVO {
     private String touser;
     private String template_id;
     private String page;
-    private Map<String, String> data;
+    private Map<String, NoticeMessage> data;
     private String miniprogram_state;
     private String lang;
 }
