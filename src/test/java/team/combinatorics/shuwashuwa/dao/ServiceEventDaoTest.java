@@ -11,12 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceCompleteDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 
 import java.sql.Date;
 import java.util.List;
@@ -35,6 +34,12 @@ public class ServiceEventDaoTest {
     private ServiceFormDao serviceFormDao;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private VolunteerDao volunteerDao;
+
+    @Autowired
     private MethodsOfTesting methodsOfTesting;
 
     /**
@@ -45,8 +50,12 @@ public class ServiceEventDaoTest {
     public void insertTest() {
         methodsOfTesting.truncateAllTables();
         int returnValue;
-        // 插入三个事件
+        // 插入三个事件以及用户信息
         for (int i = 2; i <= 4; i++) {
+            userDao.insertUserByOpenid("openid" + i);
+            userDao.updateUserInfo(i, UserInfoDTO.builder()
+                    .userName("name " + i)
+                    .build());
             returnValue = serviceEventDao.insertByUserID(i);
             Assert.assertEquals(1, returnValue);
         }
@@ -67,6 +76,12 @@ public class ServiceEventDaoTest {
                 Assert.assertEquals(i * 3 + (j - 1), serviceFormPO.getId().intValue());
             }
         // TODO 这里可以考虑加上图片的初始信息
+        // 插入一个志愿者信息
+        volunteerDao.insert(VolunteerPO.builder()
+                .userid(5)
+                .userName("rinrin开花")
+                .build());
+        serviceEventDao.updateVolunteerInfo(1, 1);
     }
 
     @Test
@@ -82,6 +97,15 @@ public class ServiceEventDaoTest {
                 .status(0)
                 .build();
         Assert.assertEquals(3, serviceEventDao.countServiceEventsByCondition(selectServiceEventCO));
+
+    }
+
+    @Test
+    public void getServiceEventByIDTest() {
+        ServiceEventDetailDTO serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
+        Assert.assertEquals("name 2", serviceEventDetailDTO.getUserName());
+        serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
+        Assert.assertEquals("rinrin开花", serviceEventDetailDTO.getVolunteerName());
 
     }
 
@@ -141,6 +165,25 @@ public class ServiceEventDaoTest {
     }
 
     @Test
+    public void updateActivityIDAndTimeSlotTest() {
+        int returnValue;
+        Assert.assertNull(serviceEventDao.getPOByID(1).getActivityId());
+        Assert.assertNull(serviceEventDao.getPOByID(1).getTimeSlot());
+        returnValue = serviceEventDao.updateActivityIDAndTimeSlot(1, 1, 1);
+        Assert.assertEquals(1, returnValue);
+        Assert.assertEquals(1, serviceEventDao.getPOByID(1).getActivityId().intValue());
+        Assert.assertEquals(1, serviceEventDao.getPOByID(1).getTimeSlot().intValue());
+    }
+
+    @Test
+    public void updateProblemSummaryTest() {
+        int returnValue;
+        returnValue = serviceEventDao.updateProblemSummary(1, "没救了");
+        Assert.assertEquals(1, returnValue);
+        Assert.assertEquals("没救了",serviceEventDao.getPOByID(1).getProblemSummary());
+    }
+
+    @Test
     public void listAbstractServiceEventsByCondition() {
         serviceEventDao.updateValidFormID(1, 4);
         List<ServiceAbstractDTO> serviceAbstractDTOList = serviceEventDao.listAbstractServiceEventsByCondition(
@@ -151,7 +194,8 @@ public class ServiceEventDaoTest {
         Assert.assertEquals(1, serviceAbstractDTOList.size());
         ServiceAbstractDTO serviceAbstractDTO = serviceAbstractDTOList.get(0);
         Assert.assertEquals("米歇尔电脑", serviceAbstractDTO.getComputerModel());
-
+        Assert.assertEquals("name 2", serviceAbstractDTO.getUserName());
+        Assert.assertEquals("rinrin开花", serviceAbstractDTO.getVolunteerName());
 
     }
 

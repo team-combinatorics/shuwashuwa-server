@@ -16,12 +16,13 @@
         <result column="order_count" jdbcType="INTEGER" property="orderCount"/>
     </resultMap>
 
-    <insert id="insert" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerPO"
+    <insert id="insert"
+            parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerPO"
             useGeneratedKeys="true" keyColumn="id" keyProperty="volunteer.id">
         insert into volunteer(userid, user_name, phone_number, email, identity, department, student_id)
-        values (#{volunteer.userId}, #{volunteer.userName}, #{volunteer.phoneNumber}, #{volunteer.email},
+        values (#{volunteer.userid}, #{volunteer.userName}, #{volunteer.phoneNumber}, #{volunteer.email},
                 #{volunteer.identity},
-                #{volunteer.department}, #{volunteer.student_id})
+                #{volunteer.department}, #{volunteer.studentId})
     </insert>
 
     <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerPO">

@@ -13,6 +13,7 @@ import java.util.List;
 @Repository
 public interface ServiceEventDao {
 
+
     /**
      * 根据用户id建立一个新的维修事件，由于将活动id和时间段在维修单中放了一份，新建service event时已经用不到
      *
@@ -51,7 +52,6 @@ public interface ServiceEventDao {
     int updateVolunteerInfo(@Param("eventID") int eventID,
                             @Param("volunteerID") int volunteerID);
 
-
     /**
      * 用户更新反馈信息
      *
@@ -87,11 +87,31 @@ public interface ServiceEventDao {
 
     /**
      * 更新可用的维修单id，用于提取摘要信息
+     *
      * @param eventID 维修事件id
-     * @param formID 维修单id
+     * @param formID  维修单id
      * @return 发生变动的数量，应当为1，为0表示操作失败
      */
     int updateValidFormID(@Param("eventID") int eventID, @Param("formID") int formID);
+
+    /**
+     * 更新activityID 和 timeSlot
+     *
+     * @param id         事件id
+     * @param activityID 活动id
+     * @param timeSlot   时间段序号
+     * @return 发生变动的数量，应当为1，为0表示操作失败
+     */
+    int updateActivityIDAndTimeSlot(@Param("id") int id, @Param("activityID") int activityID, @Param("timeSlot") int timeSlot);
+
+    /**
+     * 更新问题概述
+     *
+     * @param id             事件id
+     * @param problemSummary 问题概述
+     * @return 发生变动的数量，应当为1，为0表示操作失败
+     */
+    int updateProblemSummary(@Param("id") int id, @Param("problemSummary") String problemSummary);
 
     /**
      * @param id 维修请求id
@@ -109,8 +129,6 @@ public interface ServiceEventDao {
     List<ServiceEventDetailDTO> listServiceEventsByCondition(
             @Param("condition") SelectServiceEventCO selectServiceEventCO);
 
-    // TODO 尬住了，之后再说
-
     /**
      * 条件检索，获取摘要列表
      *
@@ -119,8 +137,6 @@ public interface ServiceEventDao {
      */
     List<ServiceAbstractDTO> listAbstractServiceEventsByCondition(
             @Param("condition") SelectServiceEventCO selectServiceEventCO);
-
-    // TODO 这里应该写几个简单的查询语句，例如通过维修事件id查找对应的用户，通过维修事件id查找当前状态等
 
     /**
      * 根据条件计数，可以用于判断是否有符合条件的元素
@@ -132,9 +148,10 @@ public interface ServiceEventDao {
 
     /**
      * 测试用，获取一个完整的po
+     *
      * @param id id
      * @return 完整的po
      */
-    ServiceEventPO getPOByID(@Param("id")int id);
+    ServiceEventPO getPOByID(@Param("id") int id);
 
 }
