@@ -18,8 +18,13 @@ public class CachePicDaoTest {
     @Autowired
     CachePicDao cachePicDao;
 
+    @Autowired
+    MethodsOfTesting methodsOfTesting;
+
     @Test
     public void simpleTest() {
+        methodsOfTesting.truncateAllTables();
+
         int base = 0;
 
         assertEquals(0, cachePicDao.countCachePic());

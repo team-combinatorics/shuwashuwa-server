@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
+import team.combinatorics.shuwashuwa.dao.MethodsOfTesting;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
@@ -23,9 +24,14 @@ public class SuperAdministratorServiceTest {
     @Autowired
     UserDao userDao;
 
+    @Autowired
+    MethodsOfTesting methodsOfTesting;
+
 
     @Test
     public void simpleTest() {
+        methodsOfTesting.truncateAllTables();
+
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 2"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 3"));
         Assert.assertEquals(1, userDao.insertUserByOpenid("fake openid 4"));
