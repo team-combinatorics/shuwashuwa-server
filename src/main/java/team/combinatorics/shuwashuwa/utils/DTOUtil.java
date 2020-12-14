@@ -92,6 +92,8 @@ public class DTOUtil {
             return target;
         } catch (Exception e) {
             System.err.println("DTO convert failed");
+            System.out.println(source);
+            e.printStackTrace();
             return null;
         }
     }
