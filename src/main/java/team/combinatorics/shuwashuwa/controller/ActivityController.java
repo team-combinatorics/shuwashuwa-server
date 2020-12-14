@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.UserParam;
+import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
@@ -43,6 +44,18 @@ public class ActivityController {
                                 .build()
                 )
         );
+    }
+
+    @ApiOperation("用户活动现场签到")
+    @RequestMapping(value = "/attend", method = RequestMethod.PUT)
+    @VolunteerAccess
+    public CommonResult<String> handlePresence(
+            @RequestHeader("token") @ApiParam(hidden = true) String token,
+            @RequestBody @ApiParam(value = "活动Id，从二维码参数获取",required = true) Integer activityId
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        activityService.setActive(userid,activityId);
+        return new CommonResult<>(200,"请求成功","success");
     }
 
     @ApiOperation("查看一个活动的时间段列表")

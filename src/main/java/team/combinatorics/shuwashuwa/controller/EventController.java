@@ -16,7 +16,6 @@ import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -85,18 +84,6 @@ public class EventController {
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.rejectForm(userid,reasonDTO);
-        return new CommonResult<>(200,"请求成功","success");
-    }
-
-    @ApiOperation("用户活动现场签到")
-    @RequestMapping(value = "/queue", method = RequestMethod.PUT)
-    @VolunteerAccess
-    public CommonResult<String> handlePresence(
-            @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "活动Id，从二维码参数获取",required = true) Integer activityId
-    ) {
-        int userid = TokenUtil.extractUserid(token);
-        eventService.setActive(userid,activityId);
         return new CommonResult<>(200,"请求成功","success");
     }
 
