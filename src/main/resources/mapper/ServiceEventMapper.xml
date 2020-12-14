@@ -27,8 +27,13 @@
 
     <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO" id="serviceAbstractResultMap">
         <result column="id" jdbcType="INTEGER" property="serviceEventId"/>
-        <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="u_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="volunteer_id" jdbcType="INTEGER" property="volunteerId"/>
+        <result column="v_name" jdbcType="VARCHAR" property="volunteerName"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="is_draft" jdbcType="BOOLEAN" property="draft"/>
+        <result column="is_closed" jdbcType="BOOLEAN" property="closed"/>
         <result column="computer_model" jdbcType="VARCHAR" property="computerModel"/>
         <result column="problem_summary" jdbcType="VARCHAR" property="problemSummary"/>
     </resultMap>
@@ -222,10 +227,15 @@
     </select>
 
     <select id="listAbstractServiceEventsByCondition" resultMap="serviceAbstractResultMap">
-        select service_event.id, status, user_id, problem_summary, computer_model from service_event left join
-        service_form
-        on
-        (service_event.valid_form_id = service_form.id)
+        select e.id, status, is_closed, is_draft, user_id, u.user_name u_name ,volunteer_id, v.user_name v_name,
+        problem_summary, computer_model
+        from service_event e
+        left join service_form f
+        on (e.valid_form_id = f.id)
+        left join user u
+        on e.user_id = u.id
+        left join volunteer v
+        on e.volunteer_id = v.id
         <where>
             <if test="condition.beginTime != null">
                 create_time >= #{condition.beginTime}

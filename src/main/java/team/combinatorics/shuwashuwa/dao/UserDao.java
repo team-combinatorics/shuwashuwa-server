@@ -36,7 +36,7 @@ public interface UserDao {
     /**
      * 更新用户基本信息，updateUserInfoDTO中不为null的属性会被更新，但是要保证updateUserInfoDTO不能全空，否则会出错
      *
-     * @param id                userid
+     * @param id          userid
      * @param userInfoDTO 需要更新的信息
      */
     void updateUserInfo(@Param("id") int id, @Param("user") UserInfoDTO userInfoDTO);

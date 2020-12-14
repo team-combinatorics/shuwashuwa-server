@@ -76,6 +76,12 @@ public class ServiceEventDaoTest {
                 Assert.assertEquals(i * 3 + (j - 1), serviceFormPO.getId().intValue());
             }
         // TODO 这里可以考虑加上图片的初始信息
+        // 插入一个志愿者信息
+        volunteerDao.insert(VolunteerPO.builder()
+                .userid(5)
+                .userName("rinrin开花")
+                .build());
+        serviceEventDao.updateVolunteerInfo(1, 1);
     }
 
     @Test
@@ -99,11 +105,6 @@ public class ServiceEventDaoTest {
         ServiceEventDetailDTO serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
         Assert.assertEquals("name 2", serviceEventDetailDTO.getUserName());
         Assert.assertNull(serviceEventDetailDTO.getVolunteerName());
-        volunteerDao.insert(VolunteerPO.builder()
-                .userid(5)
-                .userName("rinrin开花")
-                .build());
-        serviceEventDao.updateVolunteerInfo(1, 1);
         serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
         Assert.assertEquals("rinrin开花", serviceEventDetailDTO.getVolunteerName());
 
@@ -175,7 +176,8 @@ public class ServiceEventDaoTest {
         Assert.assertEquals(1, serviceAbstractDTOList.size());
         ServiceAbstractDTO serviceAbstractDTO = serviceAbstractDTOList.get(0);
         Assert.assertEquals("米歇尔电脑", serviceAbstractDTO.getComputerModel());
-
+        Assert.assertEquals("name 2", serviceAbstractDTO.getUserName());
+        Assert.assertEquals("rinrin开花", serviceAbstractDTO.getVolunteerName());
 
     }
 
