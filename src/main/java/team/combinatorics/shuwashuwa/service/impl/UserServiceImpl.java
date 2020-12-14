@@ -41,8 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception {
-        JsonNode root = WechatUtil.getWechatInfo(logInInfoDto.getCode());
-        String openid = root.path("openid").asText();
+        String openid = WechatUtil.getOpenID(logInInfoDto.getCode());
         System.out.println("用户登录 @Service");
         System.out.println("openid: " + openid);
         LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
