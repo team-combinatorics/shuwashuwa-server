@@ -197,6 +197,13 @@ public class ServiceEventDaoTest {
         Assert.assertEquals("name 2", serviceAbstractDTO.getUserName());
         Assert.assertEquals("rinrin开花", serviceAbstractDTO.getVolunteerName());
 
+        serviceAbstractDTOList = serviceEventDao.listAbstractServiceEventsByCondition(
+                SelectServiceEventCO.builder()
+                        .userId(3)
+                        .build()
+        );
+        Assert.assertNull(serviceAbstractDTOList.get(0).getComputerModel());
+
     }
 
     /**
