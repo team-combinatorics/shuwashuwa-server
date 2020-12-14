@@ -103,57 +103,72 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void setActive(int userid, Integer activityId) {
-        for (ServiceAbstractDTO service : serviceEventDao.listAbstractServiceEventsByCondition(
-                SelectServiceEventCO.builder().userId(userid).activityId(activityId).closed(false).build()
-        ) ) {
-            if(service.getStatus()==2)
-                serviceEventDao.updateStatus(service.getServiceEventId(),3);
-        }
+        if(activityId==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+
+        serviceEventDao.listAbstractServiceEventsByCondition(
+                SelectServiceEventCO.builder().userId(userid).activityId(activityId).status(2).closed(false).build()
+        ).stream().map(x -> serviceEventDao.updateStatus(x.getServiceEventId(),3)).close();
     }
 
     @Override
     public void takeOrder(int userid, Integer serviceEventId) {
+        if(serviceEventId==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
         if(detailDTO.getStatus()!=3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+
         serviceEventDao.updateVolunteerInfo(serviceEventId,userid);
         serviceEventDao.updateStatus(serviceEventId,4);
     }
 
     @Override
     public void giveUpOrder(int userid, Integer serviceEventId) {
+        if(serviceEventId==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
         if(detailDTO.getVolunteerId()!=userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
         if(detailDTO.getStatus()!=4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+
         serviceEventDao.updateStatus(serviceEventId,3);
     }
 
     @Override
     public void completeOrder(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
+        if(DTOUtil.fieldExistNull(stringUpdateDTO))
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         ServiceEventDetailDTO detailDTO = getServiceDetail(stringUpdateDTO.getServiceEventId());
         if(detailDTO.getVolunteerId()!=userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
         if(detailDTO.getStatus()!=4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+
         serviceEventDao.updateByVolunteer(stringUpdateDTO.getServiceEventId(),stringUpdateDTO.getMessage());
         serviceEventDao.updateStatus(stringUpdateDTO.getServiceEventId(),5);
     }
 
     @Override
     public void updateFeedback(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
+        if(DTOUtil.fieldExistNull(stringUpdateDTO))
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         ServiceEventDetailDTO detailDTO = getServiceDetail(stringUpdateDTO.getServiceEventId());
         if(detailDTO.getUserId()!=userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+
         serviceEventDao.updateFeedback(stringUpdateDTO.getServiceEventId(),stringUpdateDTO.getMessage());
     }
 
     @Override
     public void shutdownService(int userid, Integer serviceEventId) {
+        if(serviceEventId==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
         if(detailDTO.getUserId()!=userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+
         serviceEventDao.updateClosed(serviceEventId,true);
     }
 

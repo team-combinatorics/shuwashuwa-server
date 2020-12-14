@@ -31,6 +31,23 @@
         <result column="problem_summary" jdbcType="VARCHAR" property="problemSummary"/>
     </resultMap>
 
+    <resultMap type="team.combinatorics.shuwashuwa.model.po.ServiceEventPO" id="serviceEventPOResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="volunteer_id" jdbcType="INTEGER" property="volunteerId"/>
+        <result column="repairing_result" jdbcType="VARCHAR" property="repairingResult"/>
+        <result column="feedback" jdbcType="VARCHAR" property="feedback"/>
+        <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
+        <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
+        <result column="problem_summary" jdbcType="VARCHAR" property="problemSummary"/>
+        <result column="valid_form_id" jdbcType="INTEGER" property="validFormId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="is_draft" jdbcType="BOOLEAN" property="draft"/>
+        <result column="is_closed" jdbcType="BOOLEAN" property="closed"/>
+    </resultMap>
+
     <insert id="insertByUserID" parameterType="int">
         insert into service_event(user_id)
         values (#{userID})
@@ -83,6 +100,12 @@
         update service_event
         set is_closed = #{closed}
         where id = #{id}
+    </update>
+
+    <update id="updateValidFormID">
+        update service_event
+        set valid_form_id = #{formID}
+        where id = #{eventID}
     </update>
 
 
@@ -183,4 +206,45 @@
         </where>
     </select>
 
+    <select id="listAbstractServiceEventsByCondition" resultMap="serviceAbstractResultMap">
+        select service_event.id, status, user_id, problem_summary, computer_model from service_event left join
+        service_form
+        on
+        (service_event.valid_form_id = service_form.id)
+        <where>
+            <if test="condition.beginTime != null">
+                create_time >= #{condition.beginTime}
+            </if>
+            <if test="condition.endTime != null">
+                and create_time &lt;= #{condition.endTime}
+            </if>
+            <if test="condition.userID != null">
+                and user_id = #{condition.userId}
+            </if>
+            <if test="condition.volunteerId != null">
+                and volunteer_id = #{condition.volunteerId}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test="condition.activityId != null">
+                and activity_id = #{condition.activityId}
+            </if>
+            <if test="condition.timeSlot != null">
+                and time_slot = #{condition.timeSlot}
+            </if>
+            <if test="condition.draft != null">
+                and is_draft = #{condition.draft}
+            </if>
+            <if test="condition.timeSlot != null">
+                and is_closed = #{condition.is_closed}
+            </if>
+        </where>
+    </select>
+
+    <select id="getPOByID" resultMap="serviceEventPOResultMap">
+        select *
+        from service_event
+        where id = #{id}
+    </select>
 </mapper>

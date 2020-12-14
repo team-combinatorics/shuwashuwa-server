@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceCompleteDTO;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormRejectionDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
@@ -18,6 +19,7 @@ import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
 
 import java.sql.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
@@ -58,6 +60,7 @@ public class ServiceEventDaoTest {
                 serviceFormPO = ServiceFormPO.builder()
                         .activityId(1)
                         .timeSlot(1)
+                        .computerModel("米歇尔电脑")
                         .serviceEventId(j - 1)
                         .build();
                 serviceFormDao.insert(serviceFormPO);
@@ -129,6 +132,28 @@ public class ServiceEventDaoTest {
         Assert.assertEquals(true, serviceEventDao.getServiceEventByID(3).getClosed());
     }
 
+    @Test
+    public void updateValidFormIDTest() {
+        Assert.assertNull(serviceEventDao.getPOByID(1).getValidFormId());
+        int returnValue = serviceEventDao.updateValidFormID(1, 4);
+        Assert.assertEquals(1, returnValue);
+        Assert.assertEquals(4, serviceEventDao.getPOByID(1).getValidFormId().intValue());
+    }
+
+    @Test
+    public void listAbstractServiceEventsByCondition() {
+        serviceEventDao.updateValidFormID(1, 4);
+        List<ServiceAbstractDTO> serviceAbstractDTOList = serviceEventDao.listAbstractServiceEventsByCondition(
+                SelectServiceEventCO.builder()
+                        .userId(2)
+                        .build()
+        );
+        Assert.assertEquals(1, serviceAbstractDTOList.size());
+        ServiceAbstractDTO serviceAbstractDTO = serviceAbstractDTOList.get(0);
+        Assert.assertEquals("米歇尔电脑", serviceAbstractDTO.getComputerModel());
+
+
+    }
 
     /**
      * 该方法暂时保留，用于查看输出结果
