@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
+import team.combinatorics.shuwashuwa.model.pojo.NoticeMessage;
 import team.combinatorics.shuwashuwa.model.vo.WechatNoticeVO;
 
 import java.util.HashMap;
@@ -16,14 +17,22 @@ public class WechatUtilTest {
 
     @Test
     public void testSendNotice() throws Exception {
-        String rescode = "061QdCFa123e9A0bdAGa1K7hZ70QdCFb";
+        String rescode = "081xGa000FwKOK1ak9200jEE8l4xGa0h";
         String openID = WechatUtil.getOpenID(rescode);
 
-        Map<String, String> data = new HashMap<>();
-        data.put("thing4", "45甲331");
-        data.put("date2", "114年514日8:10");
-        data.put("date8", "114年514日19:19");
-        data.put("thing11", "tsugu!");
+        Map<String, NoticeMessage> data = new HashMap<>();
+        data.put("thing4", NoticeMessage.builder()
+                .value("45甲331")
+                .build());
+        data.put("date2", NoticeMessage.builder()
+                .value("114年514日8:10")
+                .build());
+        data.put("date8", NoticeMessage.builder()
+                .value("114年514日19:19")
+                .build());
+        data.put("thing11", NoticeMessage.builder()
+                .value("Tsugu")
+                .build());
         WechatNoticeVO wechatNoticeVO = WechatNoticeVO.builder()
                 .touser(openID)
                 .data(data)

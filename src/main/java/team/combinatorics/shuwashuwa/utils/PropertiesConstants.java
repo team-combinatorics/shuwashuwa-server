@@ -27,6 +27,9 @@ public class PropertiesConstants {
      */
     public static String PIC_STORAGE_DIR;
 
+    /**
+     * 微信发送活动通知的模板id
+     */
     public static String WX_ACTIVITY;
 
 
