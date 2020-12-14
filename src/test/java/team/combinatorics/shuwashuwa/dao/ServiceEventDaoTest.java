@@ -165,6 +165,25 @@ public class ServiceEventDaoTest {
     }
 
     @Test
+    public void updateActivityIDAndTimeSlotTest() {
+        int returnValue;
+        Assert.assertNull(serviceEventDao.getPOByID(1).getActivityId());
+        Assert.assertNull(serviceEventDao.getPOByID(1).getTimeSlot());
+        returnValue = serviceEventDao.updateActivityIDAndTimeSlot(1, 1, 1);
+        Assert.assertEquals(1, returnValue);
+        Assert.assertEquals(1, serviceEventDao.getPOByID(1).getActivityId().intValue());
+        Assert.assertEquals(1, serviceEventDao.getPOByID(1).getTimeSlot().intValue());
+    }
+
+    @Test
+    public void updateProblemSummaryTest() {
+        int returnValue;
+        returnValue = serviceEventDao.updateProblemSummary(1, "没救了");
+        Assert.assertEquals(1, returnValue);
+        Assert.assertEquals("没救了",serviceEventDao.getPOByID(1).getProblemSummary());
+    }
+
+    @Test
     public void listAbstractServiceEventsByCondition() {
         serviceEventDao.updateValidFormID(1, 4);
         List<ServiceAbstractDTO> serviceAbstractDTOList = serviceEventDao.listAbstractServiceEventsByCondition(

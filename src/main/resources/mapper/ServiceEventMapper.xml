@@ -115,6 +115,19 @@
         where id = #{eventID}
     </update>
 
+    <update id="updateActivityIDAndTimeSlot">
+        update service_event
+        set activity_id = #{activityID},
+            time_slot   = #{timeSlot}
+        where id = #{id}
+    </update>
+
+    <update id="updateProblemSummary">
+        update service_event
+        set problem_summary = #{problemSummary}
+        where id = #{id}
+    </update>
+
 
     <select id="countServiceEventsByCondition"
             parameterType="team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO"
