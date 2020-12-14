@@ -16,7 +16,7 @@ public class VolunteerPO {
     private Integer id;
     private Timestamp createTime;
     private Timestamp updatedTime;
-    private String userid;
+    private Integer userid;
     private String userName;
     private String phoneNumber;
     private String email;
