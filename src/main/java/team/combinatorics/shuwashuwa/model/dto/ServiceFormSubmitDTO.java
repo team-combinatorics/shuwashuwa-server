@@ -43,11 +43,11 @@ public class ServiceFormSubmitDTO {
     @ApiModelProperty("笔记本类型")
     private String laptopType;
 
-    @ApiModelProperty("购买时间")
+    @ApiModelProperty(value = "购买日期，用yyyy-MM-dd表示",example = "1919-08-10")
     private Date boughtTime;
 
     @ApiModelProperty("是否在保修期内")
-    private boolean underWarranty;
+    private Boolean underWarranty;
 
     @ApiModelProperty("问题描述")
     private String problemDescription;

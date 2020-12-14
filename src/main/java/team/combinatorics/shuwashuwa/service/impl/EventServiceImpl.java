@@ -7,10 +7,7 @@ import team.combinatorics.shuwashuwa.dao.ServiceFormDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventUniversalDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.service.EventService;
@@ -38,8 +35,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public ServiceEventDetailDTO createNewEvent(int userid) {
         ServiceEventPO eventPO = ServiceEventPO.builder().userId(userid).build();
-        assert serviceEventDao.insert(eventPO) == 1;
-        return serviceEventDao.getServiceEventByID(eventPO.getId());
+        serviceEventDao.insert(eventPO);
+        int eventId = eventPO.getId();
+
+        //插入草稿
+        serviceFormDao.insert(ServiceFormPO.builder().serviceEventId(eventId).build());
+        serviceEventDao.updateDraft(eventId,true);
+
+        return serviceEventDao.getServiceEventByID(eventId);
     }
 
     @Override
@@ -92,12 +95,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void rejectForm(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
-    }
-
-    @Override
-    public void acceptForm(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
-
+    public void auditForm(int userid, ServiceEventAuditDTO auditDTO) {
+        if(DTOUtil.fieldExistNull(auditDTO))
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        int formId = auditDTO.getServiceFormId();
+        int eventId = auditDTO.getServiceEventId();
+        if(formId==serviceFormDao.getLastFormIDByEventID(eventId)) {
+            if(serviceEventDao.getPOByID(eventId).getStatus()!=1)
+                throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+            serviceEventDao.updateStatus(eventId,auditDTO.getResult()?2:0);
+        }
+        serviceFormDao.updateAdvice(formId, userid, auditDTO.getMessage());
+        serviceEventDao.updateProblemSummary(eventId, auditDTO.getProblemSummary());
     }
 
     @Override

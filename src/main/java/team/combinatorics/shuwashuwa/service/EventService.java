@@ -1,10 +1,7 @@
 package team.combinatorics.shuwashuwa.service;
 
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventUniversalDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 
 import java.util.List;
 
@@ -25,18 +22,11 @@ public interface EventService {
     void submitForm(int userid, ServiceFormSubmitDTO serviceFormSubmitDTO, boolean isDraft);
 
     /**
-     * 判定一个状态为审核中的维修单不合格
+     * 审核维修单
      * @param userid 管理员的用户ID
-     * @param stringUpdateDTO 内含拒绝理由，字符串不允许为空
+     * @param auditDTO 审核结果结构
      */
-    void rejectForm(int userid, ServiceEventUniversalDTO stringUpdateDTO);
-
-    /**
-     * 判定一个状态为审核中的维修单合格
-     * @param userid 管理员的用户ID
-     * @param stringUpdateDTO 内含活动开始前想对用户说的话，字符串可以为空
-     */
-    void acceptForm(int userid, ServiceEventUniversalDTO stringUpdateDTO);
+    void auditForm(int userid, ServiceEventAuditDTO auditDTO);
 
     /**
      * 志愿者接单

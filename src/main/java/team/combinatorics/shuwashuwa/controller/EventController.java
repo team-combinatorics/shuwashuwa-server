@@ -8,10 +8,7 @@ import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.UserParam;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventUniversalDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
@@ -27,7 +24,7 @@ public class EventController {
 
     private final EventService eventService;
 
-    @ApiOperation(value = "创建维修事件", notes = "返回一个空的维修事件")
+    @ApiOperation(value = "创建维修事件", notes = "返回仅包含一个空白草稿的维修事件")
     @RequestMapping(value = "", method = RequestMethod.POST)
     @AllAccess
     public CommonResult<ServiceEventDetailDTO> handleServiceEventCreation(
@@ -63,27 +60,15 @@ public class EventController {
         return new CommonResult<>(200,"请求成功","success");
     }
 
-    @ApiOperation(value = "[管理员]维修单审核通过")
+    @ApiOperation(value = "[管理员]审核维修单")
     @RequestMapping(value = "/audit", method = RequestMethod.DELETE)
     @AdminAccess
     public CommonResult<String> handleFormAcceptance(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id和留言（可不留言）",required = true) ServiceEventUniversalDTO messageDTO
-    ) {
+            @RequestBody @ApiParam(value = "审核结果结构",required = true) ServiceEventAuditDTO auditDTO
+            ) {
         int userid = TokenUtil.extractUserid(token);
-        eventService.acceptForm(userid,messageDTO);
-        return new CommonResult<>(200,"请求成功","success");
-    }
-
-    @ApiOperation("[管理员]维修单审核不通过")
-    @RequestMapping(value = "/audit", method = RequestMethod.PUT)
-    @AdminAccess
-    public CommonResult<String> handleFormRejection(
-            @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id和拒绝理由",required = true) ServiceEventUniversalDTO reasonDTO
-    ) {
-        int userid = TokenUtil.extractUserid(token);
-        eventService.rejectForm(userid,reasonDTO);
+        eventService.auditForm(userid,auditDTO);
         return new CommonResult<>(200,"请求成功","success");
     }
 
