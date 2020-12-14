@@ -38,8 +38,6 @@ public interface EventService {
      */
     void acceptForm(int userid, ServiceEventUniversalDTO stringUpdateDTO);
 
-    void setActive(int userid, Integer activityId);
-
     /**
      * 志愿者接单
      * @param userid 志愿者的用户id

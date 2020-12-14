@@ -102,16 +102,6 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void setActive(int userid, Integer activityId) {
-        if(activityId==null)
-            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-
-        serviceEventDao.listAbstractServiceEventsByCondition(
-                SelectServiceEventCO.builder().userId(userid).activityId(activityId).status(2).closed(false).build()
-        ).stream().map(x -> serviceEventDao.updateStatus(x.getServiceEventId(),3)).close();
-    }
-
-    @Override
     public void takeOrder(int userid, Integer serviceEventId) {
         if(serviceEventId==null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
