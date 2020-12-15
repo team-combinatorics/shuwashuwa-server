@@ -1,6 +1,5 @@
 package team.combinatorics.shuwashuwa.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.DependsOn;
@@ -19,7 +18,6 @@ final public class WechatUtil {
 
     private static final String APPID = PropertiesConstants.WX_MINI_PROGRAM_APPID;
     private static final String SECRET = PropertiesConstants.WX_MINI_PROGRAM_SECRET;
-    private static final String ACTIVITYID = PropertiesConstants.WX_ACTIVITY;
     private static final RestTemplate restTemplate = new RestTemplate();
 
     public static JsonNode handleGetRequest(String url) throws Exception {
@@ -57,25 +55,32 @@ final public class WechatUtil {
         return root.path("access_token").asText();
     }
 
-    public static void getTemplateList() throws Exception {
+    public static Iterator<JsonNode> getTemplateList() throws Exception {
         String accessToken = getWechatAccessToken();
         String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                 + "access_token=" + accessToken;
         JsonNode root = handleGetRequest(url);
 
         JsonNode data = root.path("data");
-        Iterator<JsonNode> templates = data.elements();
-        while (templates.hasNext()) {
-            JsonNode t = templates.next();
-            System.out.println(t.path("content"));
-        }
+        return data.elements();
     }
 
     public static void sendActivityNotice(WechatNoticeVO wechatNoticeVO) throws Exception {
+        Iterator<JsonNode> templates = getTemplateList();
+        while (templates.hasNext()) {
+            JsonNode t = templates.next();
+            String title = t.path("title").asText();
+            System.out.println(title);
+            if(title.equals("新活动发布提醒")) {
+                System.out.println(t.path("priTmplId").asText());
+                wechatNoticeVO.setTemplate_id(t.path("priTmplId").asText());
+            }
+        }
+
+        System.out.println(wechatNoticeVO.getTemplate_id());
         String accessToken = getWechatAccessToken();
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                 + "access_token=" + accessToken;
-        wechatNoticeVO.setTemplate_id(ACTIVITYID);
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeVO, String.class);
         System.out.println(response.getBody());
     }

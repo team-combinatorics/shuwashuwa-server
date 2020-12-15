@@ -27,12 +27,6 @@ public class PropertiesConstants {
      */
     public static String PIC_STORAGE_DIR;
 
-    /**
-     * 微信发送活动通知的模板id
-     */
-    public static String WX_ACTIVITY;
-
-
     @Value("${wx.appid:default}")
     public void setWxMiniProgramAppid(String appid) {
         PropertiesConstants.WX_MINI_PROGRAM_APPID = appid;
@@ -51,10 +45,5 @@ public class PropertiesConstants {
     @Value("${dir.pictures:default}")
     public void setPicStorageDir(String dir) {
         PropertiesConstants.PIC_STORAGE_DIR = dir;
-    }
-
-    @Value("${wx.activity:default}")
-    public void setWxActivity(String act) {
-        PropertiesConstants.WX_ACTIVITY = act;
     }
 }
