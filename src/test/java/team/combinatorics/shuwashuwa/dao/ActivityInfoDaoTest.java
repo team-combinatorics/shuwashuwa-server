@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.model.po.ActivityInfoPO;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -76,6 +77,7 @@ public class ActivityInfoDaoTest {
                 .endTimeUpperBound(new Timestamp(end.getTimeInMillis()))
                 .endTimeLowerBound(new Timestamp(begin.getTimeInMillis()))
                 .build();
+        Timestamp ct = activityInfoDao.listByCondition(selectActivityCO).get(0).getCreateTime();
         Assert.assertEquals(3, activityInfoDao.listByCondition(selectActivityCO).size());
     }
 }

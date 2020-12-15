@@ -27,10 +27,11 @@
         where id = #{id}
     </select>
 
-    <select id="listServicePicsByFormId" resultMap="simplePicResultMap">
-        select id, pic_location
+    <select id="listServicePicsByFormId" resultType="String">
+        select pic_location
         from service_pic
         where service_form_id = #{formID}
+        order by id
     </select>
 
     <delete id="deleteByPicId">

@@ -73,7 +73,46 @@ public class ServiceEventDaoTest {
                 serviceFormDao.insert(serviceFormPO);
                 Assert.assertEquals(i * 3 + (j - 1), serviceFormPO.getId().intValue());
             }
-        // TODO 这里可以考虑加上图片的初始信息
+        // 为维修单插入图片
+        ServicePicPO servicePicPO;
+        // 为维修单1插入图片
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("在你心里")
+                .serviceFormId(1)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(1, servicePicPO.getId().intValue());
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("在米歇尔心里")
+                .serviceFormId(1)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(2, servicePicPO.getId().intValue());
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("在粉红裸熊心里")
+                .serviceFormId(1)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(3, servicePicPO.getId().intValue());
+        // 为维修单4插入图片
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("不在你心里")
+                .serviceFormId(4)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(4, servicePicPO.getId().intValue());
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("不在米歇尔心里")
+                .serviceFormId(4)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(5, servicePicPO.getId().intValue());
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("不在粉红裸熊心里")
+                .serviceFormId(4)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(6, servicePicPO.getId().intValue());
         // 插入一个志愿者信息
         volunteerDao.insert(VolunteerPO.builder()
                 .userid(5)
@@ -178,7 +217,7 @@ public class ServiceEventDaoTest {
         int returnValue;
         returnValue = serviceEventDao.updateProblemSummary(1, "没救了");
         Assert.assertEquals(1, returnValue);
-        Assert.assertEquals("没救了",serviceEventDao.getPOByID(1).getProblemSummary());
+        Assert.assertEquals("没救了", serviceEventDao.getPOByID(1).getProblemSummary());
     }
 
     @Test
@@ -210,23 +249,18 @@ public class ServiceEventDaoTest {
      */
     @Ignore
     @Test
-    public void testFullStruct() {
-
-        // 给维修单2分配图片
-        for (int i = 1; i <= 2; i++) {
-            ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(2).build();
-            servicePicDao.insert(servicePicPO);
-        }
-
-
-        // 给维修单3分配图片
-        for (int i = 1; i <= 3; i++) {
-            ServicePicPO servicePicPO = ServicePicPO.builder().picLocation("location" + i).serviceFormId(3).build();
-            servicePicDao.insert(servicePicPO);
-        }
-
+    public void simpleTest() {
+        // 输出维修事件1的详细信息
         try {
             String json = new ObjectMapper().writeValueAsString(serviceEventDao.getServiceEventByID(1));
+            System.out.println(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 输出维修事件的摘要列表
+        try {
+            String json = new ObjectMapper()
+                    .writeValueAsString(serviceEventDao.listAbstractServiceEventsByCondition(new SelectServiceEventCO()));
             System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();
