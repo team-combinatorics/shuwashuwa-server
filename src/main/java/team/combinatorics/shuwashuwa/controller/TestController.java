@@ -79,11 +79,4 @@ public class TestController {
         userDao.insertUserByOpenid("fake openid 4");
         return "dokidoki";
     }
-
-    @ApiOperation("返回已存储的图片列表")
-    @GetMapping("/image")
-    @NoToken
-    public String[] listImages() {
-        return imageStorageService.listImages();
-    }
 }

@@ -16,6 +16,7 @@ import team.combinatorics.shuwashuwa.utils.PropertiesConstants;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -35,7 +36,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     @SuppressWarnings("")
     @Override
     public void delete(String path) {
-        new File(STORAGE_DIR + path).delete();
+        new File(fullPath(path)).delete();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         assert receivedFileName != null;
         String fileType = receivedFileName.substring(receivedFileName.lastIndexOf("."));
         String fileName = UUID.randomUUID().toString()+fileType;
-        String path = STORAGE_DIR + fileName;
+        String path = fullPath(fileName);
 
         //尝试存储
         try {
@@ -149,9 +150,8 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         return cachePicDao.countCachePic();
     }
 
-    @Override
-    public String[] listImages() {
-        return new File(STORAGE_DIR).list();
+    private String fullPath(String fileName) {
+        return Path.of(STORAGE_DIR,fileName).toString();
     }
 
 }

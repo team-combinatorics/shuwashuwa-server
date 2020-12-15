@@ -57,6 +57,4 @@ public interface ImageStorageService {
      */
     int countCacheImages();
 
-    public String[] listImages();
-
 }
