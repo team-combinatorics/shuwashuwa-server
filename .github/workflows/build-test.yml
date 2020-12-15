@@ -28,7 +28,6 @@ env:
   MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
   WX_APPID: ${{ secrets.APPID }}
   WX_SECRET: ${{ secrets.APPSECRET }}
-  WX_ACTIVITY: 1
   PIC_PATH: ./pic
   TOKEN_SECRET: HappyLuckSmileYeah~
   TZ: Asia/Shanghai

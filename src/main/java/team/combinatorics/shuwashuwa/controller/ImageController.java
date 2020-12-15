@@ -17,8 +17,9 @@ public class ImageController {
 
     private final ImageStorageService storageService;
 
-    @ApiOperation(value = "上传图片", notes = "上传图片到服务器并存储，暂时不与维修单关联，在data中返回图片地址，" +
-            "每个用户限制缓存6张图片，每张图片大小不超过1MB")
+    @ApiOperation(value = "上传图片", notes = "上传图片到服务器并存储，暂时不与维修单关联，在data中返回图片地址\n" +
+            "每个用户限制缓存6张图片，每张图片大小不超过1MB\n" +
+            "同时会生产一张缩略图，若返回的文件名为xxx.png，那么生成的缩略图为100_xxx.png")
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiResponses({
             @ApiResponse(code = 200, message = "上传成功"),

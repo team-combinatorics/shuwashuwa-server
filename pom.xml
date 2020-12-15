@@ -93,6 +93,14 @@
             <version>3.10.3</version>
         </dependency>
 
+        <!-- 缩略图 -->
+        <!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
+
         <!-- Swagger相关 -->
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
         <dependency>

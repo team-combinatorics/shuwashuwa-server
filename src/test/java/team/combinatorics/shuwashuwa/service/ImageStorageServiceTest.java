@@ -48,9 +48,8 @@ public class ImageStorageServiceTest {
     public void simpleTest() throws IOException {
         methodsOfTesting.truncateAllTables();
 
-        File oriFile = new File("tmpImg.png");
-        if(!oriFile.createNewFile())
-            System.out.println("文件存在，不也挺好吗");
+        File oriFile = new File(this.getClass().getResource("/testImage.gif").getFile());
+        assert oriFile.exists();
 
         MultipartFile multipartFile = new MockMultipartFile("file","tmp.png",null, FileCopyUtils.copyToByteArray(oriFile));
         List<String> ls = new Vector<>();
@@ -59,6 +58,7 @@ public class ImageStorageServiceTest {
         assert !exist(ls.get(0));
         assert !exist(ls.get(3));
         assert exist(ls.get(4));
+        assert exist("100_"+ls.get(7));
         assert exist(ls.get(8));
 
         imageStorageService.setUseful(ls.get(5));

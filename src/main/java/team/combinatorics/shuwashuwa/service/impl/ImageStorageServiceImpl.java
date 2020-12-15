@@ -1,6 +1,7 @@
 package team.combinatorics.shuwashuwa.service.impl;
 
 import lombok.AllArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +17,6 @@ import team.combinatorics.shuwashuwa.utils.PropertiesConstants;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -35,8 +35,9 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
     @SuppressWarnings("")
     @Override
-    public void delete(String path) {
-        new File(fullPath(path)).delete();
+    public void delete(String fileName) {
+        new File(fullPath(fileName)).delete();
+        new File(fullPath("100_"+fileName)).delete();
     }
 
     @Override
@@ -49,16 +50,18 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         String receivedFileName = file.getOriginalFilename();
         assert receivedFileName != null;
         String fileType = receivedFileName.substring(receivedFileName.lastIndexOf("."));
-        String fileName = UUID.randomUUID().toString()+fileType;
+        String fileName = UUID.randomUUID().toString()+ fileType;
         String path = fullPath(fileName);
 
         //尝试存储
         try {
             file.transferTo(new File(path));
+            Thumbnails.of(path).size(100,100).toFile(STORAGE_DIR+ "100_" + fileName);
         } catch (IOException ioe) {
-            System.out.println(path);
+            ioe.printStackTrace();
             throw new KnownException(ErrorInfoEnum.STORAGE_FAILURE);
         }
+
 
         //检查缓存图片队列
         List<CachePicPO> userCacheList = cachePicDao.listCachePicsByCondition(CachePicCO.builder().userId(userid).build());
@@ -151,7 +154,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     }
 
     private String fullPath(String fileName) {
-        return Path.of(STORAGE_DIR,fileName).toString();
+        return STORAGE_DIR+fileName;
     }
 
 }
