@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.DependsOn;
@@ -21,6 +22,20 @@ final public class WechatUtil {
     private static final String ACTIVITYID = PropertiesConstants.WX_ACTIVITY;
     private static final RestTemplate restTemplate = new RestTemplate();
 
+    public static JsonNode handleGetRequest(String url) throws Exception {
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        if (!response.getStatusCode().equals(HttpStatus.OK))
+            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response.getBody());
+        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
+            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
+            throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
+        }
+        return root;
+    }
+
     public static String getOpenID(String code) throws Exception {
         //拼接url
         String url = "https://api.weixin.qq.com/sns/jscode2session?"
@@ -28,53 +43,25 @@ final public class WechatUtil {
                 + "&secret=" + SECRET
                 + "&js_code=" + code
                 + "&grant_type=authorization_code";
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
-        if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
-        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
-            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
-            throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
-        }
+        JsonNode root = handleGetRequest(url);
         return root.path("openid").asText();
     }
 
     public static String getWechatAccessToken() throws Exception {
         // 拼接url
-        String tokenURL = "https://api.weixin.qq.com/cgi-bin/token?"
+        String url = "https://api.weixin.qq.com/cgi-bin/token?"
                 + "grant_type=" + "client_credential"
                 + "&appid=" + APPID
                 + "&secret=" + SECRET;
-
-        ResponseEntity<String> response = restTemplate.getForEntity(tokenURL, String.class);
-        if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
-
-        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
-            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
-            throw new KnownException(ErrorInfoEnum.ACCESS_TOKEN_FAILURE);
-        }
+        JsonNode root = handleGetRequest(url);
         return root.path("access_token").asText();
     }
 
     public static void getTemplateList() throws Exception {
         String accessToken = getWechatAccessToken();
-        String templateURL = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
+        String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                 + "access_token=" + accessToken;
-        ResponseEntity<String> response = restTemplate.getForEntity(templateURL, String.class);
-        if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
-
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
-        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
-            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
-            throw new KnownException(ErrorInfoEnum.ACCESS_TOKEN_FAILURE);
-        }
+        JsonNode root = handleGetRequest(url);
 
         JsonNode data = root.path("data");
         Iterator<JsonNode> templates = data.elements();
