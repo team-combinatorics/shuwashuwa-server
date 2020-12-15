@@ -23,21 +23,21 @@ import java.util.List;
 public class ActivityController {
     ActivityService activityService;
 
-    @ApiOperation("根据条件筛选活动列表")
+    @ApiOperation("根据条件筛选活动列表，不需要筛选的条件无需赋值")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleListRequest(
             @RequestParam(value = "startLower",required = false)
-            @ApiParam(value = "开始时间下界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+            @ApiParam(value = "开始时间下界，以yyyy-MM-dd HH:mm:ss表示")
                     String startTimeLowerBound,
             @RequestParam(value = "startUpper",required = false)
-            @ApiParam(value = "开始时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+            @ApiParam(value = "开始时间上界，以yyyy-MM-dd HH:mm:ss表示")
                     String startTimeUpperBound,
             @RequestParam(value = "endLower",required = false)
-            @ApiParam(value = "结束时间下界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+            @ApiParam(value = "结束时间下界，以yyyy-MM-dd HH:mm:ss表示")
                     String endTimeLowerBound,
             @RequestParam(value = "endUpper",required = false)
-            @ApiParam(value = "结束时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+            @ApiParam(value = "结束时间上界，以yyyy-MM-dd HH:mm:ss表示")
                     String endTimeUpperBound
     ) {
         System.out.println("请求活动列表");
