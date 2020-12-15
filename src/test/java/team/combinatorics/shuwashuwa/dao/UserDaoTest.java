@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
-import team.combinatorics.shuwashuwa.model.dto.UserInfoDTO;
+import team.combinatorics.shuwashuwa.model.dto.UserInfoUpdateDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
@@ -35,21 +35,21 @@ public class UserDaoTest {
         // 更改一个用户信息的测试，同时测试利用openid和userid来查找这个被修改的用户，并获取被修改的信息
         // 更改userName
         int userid2 = userDao.getUserByOpenid("fake openid 2").getId();
-        userDao.updateUserInfo(userid2, UserInfoDTO.builder()
+        userDao.updateUserInfo(userid2, UserInfoUpdateDTO.builder()
                 .userName("misaki")
                 .build());
         Assert.assertEquals("misaki", userDao.getUserByOpenid("fake openid 2").getUserName());
         Assert.assertEquals("misaki", userDao.getUserByUserid(userid2).getUserName());
 
         // 更改comment
-        userDao.updateUserInfo(userid2, UserInfoDTO.builder()
+        userDao.updateUserInfo(userid2, UserInfoUpdateDTO.builder()
                 .comment("Happy! Lucky! Smile! Yeah!")
                 .build());
         Assert.assertEquals("Happy! Lucky! Smile! Yeah!", userDao.getUserByUserid(userid2).getComment());
         Assert.assertEquals("Happy! Lucky! Smile! Yeah!", userDao.getUserByOpenid("fake openid 2").getComment());
 
         // 同时更改多个属性
-        userDao.updateUserInfo(userid2+1, UserInfoDTO.builder()
+        userDao.updateUserInfo(userid2+1, UserInfoUpdateDTO.builder()
                 .email("114514@1919.810")
                 .comment("24 years old, a student.")
                 .build());

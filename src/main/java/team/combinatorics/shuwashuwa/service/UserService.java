@@ -11,9 +11,9 @@ public interface UserService {
 
     void deleteAllUsers();
 
-    void updateUserInfo(int userid, UserInfoDTO userInfoDto) throws Exception;
+    void updateUserInfo(int userid, UserInfoUpdateDTO userInfoUpdateDto) throws Exception;
 
-    UserInfoDTO getUserInfo(int userid) throws Exception;
+    UserInfoResponseDTO getUserInfo(int userid) throws Exception;
 
     void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO);
 

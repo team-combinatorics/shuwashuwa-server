@@ -51,12 +51,12 @@ public class UserController {
     })
     @AllAccess
     public CommonResult<String> updateUserInfo(@RequestHeader("token") @ApiParam(hidden = true) String token,
-                                               @RequestBody @ApiParam(value = "用户信息",required = true) UserInfoDTO userInfoDto
+                                               @RequestBody @ApiParam(value = "用户信息",required = true) UserInfoUpdateDTO userInfoUpdateDto
     ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         System.out.println("更新" + userid + "的用户信息");
-        System.out.println(userInfoDto.toString());
-        userService.updateUserInfo(userid, userInfoDto);
+        System.out.println(userInfoUpdateDto.toString());
+        userService.updateUserInfo(userid, userInfoUpdateDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
     }
 
@@ -70,13 +70,13 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<UserInfoDTO> getUserInfo(
+    public CommonResult<UserInfoResponseDTO> getUserInfo(
             @RequestHeader("token") @ApiParam(hidden = true) String token
     ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
-        UserInfoDTO userPO = userService.getUserInfo(userid);
+        UserInfoResponseDTO responseDTO = userService.getUserInfo(userid);
         System.out.println(userid + "请求个人信息");
-        return new CommonResult<>(200, "请求成功", userPO);
+        return new CommonResult<>(200, "请求成功", responseDTO);
     }
 
     /**

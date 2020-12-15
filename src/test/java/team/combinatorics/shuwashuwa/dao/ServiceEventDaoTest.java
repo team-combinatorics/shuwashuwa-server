@@ -51,7 +51,7 @@ public class ServiceEventDaoTest {
         // 插入三个事件以及用户信息
         for (int i = 2; i <= 4; i++) {
             userDao.insertUserByOpenid("openid" + i);
-            userDao.updateUserInfo(i, UserInfoDTO.builder()
+            userDao.updateUserInfo(i, UserInfoUpdateDTO.builder()
                     .userName("name " + i)
                     .build());
             returnValue = serviceEventDao.insertByUserID(i);

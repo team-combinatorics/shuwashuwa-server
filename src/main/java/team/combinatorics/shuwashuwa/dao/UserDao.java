@@ -2,7 +2,7 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import team.combinatorics.shuwashuwa.model.dto.UserInfoDTO;
+import team.combinatorics.shuwashuwa.model.dto.UserInfoUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 
 @Repository
@@ -37,9 +37,9 @@ public interface UserDao {
      * 更新用户基本信息，updateUserInfoDTO中不为null的属性会被更新，但是要保证updateUserInfoDTO不能全空，否则会出错
      *
      * @param id          userid
-     * @param userInfoDTO 需要更新的信息
+     * @param userInfoUpdateDTO 需要更新的信息
      */
-    void updateUserInfo(@Param("id") int id, @Param("user") UserInfoDTO userInfoDTO);
+    void updateUserInfo(@Param("id") int id, @Param("user") UserInfoUpdateDTO userInfoUpdateDTO);
 
     /**
      * 更新用户的志愿者权限，只能由超级管理员或管理员使用

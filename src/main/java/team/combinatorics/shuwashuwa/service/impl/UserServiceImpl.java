@@ -57,16 +57,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(int userid, UserInfoDTO userInfoDto) {
-        if(DTOUtil.fieldAllNull(userInfoDto))
+    public void updateUserInfo(int userid, UserInfoUpdateDTO userInfoUpdateDto) {
+        if(DTOUtil.fieldAllNull(userInfoUpdateDto))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        userDao.updateUserInfo(userid, userInfoDto);
+        userDao.updateUserInfo(userid, userInfoUpdateDto);
     }
 
     @Override
-    public UserInfoDTO getUserInfo(int userid) {
+    public UserInfoResponseDTO getUserInfo(int userid) {
         UserPO userPO = userDao.getUserByUserid(userid);
-        return (UserInfoDTO) DTOUtil.convert(userPO,UserInfoDTO.class);
+        return (UserInfoResponseDTO) DTOUtil.convert(userPO, UserInfoResponseDTO.class);
     }
 
     @Override
