@@ -58,7 +58,6 @@ public class ImageStorageServiceImpl implements ImageStorageService {
             file.transferTo(new File(path));
             Thumbnails.of(path).size(100,100).toFile(STORAGE_DIR+ "100_" + fileName);
         } catch (IOException ioe) {
-            ioe.printStackTrace();
             throw new KnownException(ErrorInfoEnum.STORAGE_FAILURE);
         }
 

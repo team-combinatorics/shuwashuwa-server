@@ -20,12 +20,14 @@ import java.util.List;
 import java.util.Vector;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@PropertySource({"classpath:shuwashuwa.properties"})
 @SpringBootTest(classes = MainApplication.class)
-@PropertySource(value = {"classpath:shuwashuwa.properties"})
 public class ImageStorageServiceTest {
 
     ImageStorageService imageStorageService;
-    String STORAGE_DIR = "D:/images/";
+
+    @Value("${dir.pictures:default}")
+    String STORAGE_DIR;
 
     @Autowired
     public void setImageStorageService(ImageStorageService imageStorageService) {
@@ -35,11 +37,6 @@ public class ImageStorageServiceTest {
     @Autowired
     MethodsOfTesting methodsOfTesting;
 
-    @Value("${dir.pictures}")
-    public void setSTORAGE_DIR(String STORAGE_DIR) {
-        this.STORAGE_DIR = STORAGE_DIR;
-    }
-
     private boolean exist(String fileName) {
         return new File(STORAGE_DIR+fileName).exists();
     }
@@ -47,11 +44,13 @@ public class ImageStorageServiceTest {
     @Test
     public void simpleTest() throws IOException {
         methodsOfTesting.truncateAllTables();
+        if(!STORAGE_DIR.endsWith("/"))
+            STORAGE_DIR+="/";
 
-        File oriFile = new File(this.getClass().getResource("/testImage.gif").getFile());
+        File oriFile = new File(this.getClass().getClassLoader().getResource("testImage.gif").getFile());
         assert oriFile.exists();
 
-        MultipartFile multipartFile = new MockMultipartFile("file","tmp.png",null, FileCopyUtils.copyToByteArray(oriFile));
+        MultipartFile multipartFile = new MockMultipartFile("file","tmp.gif",null, FileCopyUtils.copyToByteArray(oriFile));
         List<String> ls = new Vector<>();
         for(int i=0;i<10;i++)
             ls.add(imageStorageService.store(1,multipartFile));
@@ -90,6 +89,5 @@ public class ImageStorageServiceTest {
         imageStorageService.clearCacheByTime(0);
         imageStorageService.delete(ls.get(20));
         assert new File(STORAGE_DIR).list().length==0;
-        assert oriFile.delete();
     }
 }
