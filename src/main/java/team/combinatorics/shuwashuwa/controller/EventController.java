@@ -61,7 +61,7 @@ public class EventController {
     }
 
     @ApiOperation(value = "[管理员]审核维修单")
-    @RequestMapping(value = "/audit", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/audit", method = RequestMethod.PUT)
     @AdminAccess
     public CommonResult<String> handleFormAcceptance(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
@@ -73,7 +73,7 @@ public class EventController {
     }
 
     @ApiOperation("[志愿者]接单")
-    @RequestMapping(value = "/work", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/work", method = RequestMethod.PUT)
     @VolunteerAccess
     public CommonResult<String> handleOrderTaking(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
@@ -85,7 +85,7 @@ public class EventController {
     }
 
     @ApiOperation("[志愿者]退回已接维修单")
-    @RequestMapping(value = "/work", method = RequestMethod.PUT)
+    @RequestMapping(value = "/work", method = RequestMethod.DELETE)
     @VolunteerAccess
     public CommonResult<String> handleOrderGiveUp(
           @RequestHeader("token") @ApiParam(hidden = true) String token,
@@ -120,7 +120,7 @@ public class EventController {
         return new CommonResult<>(200,"请求成功","success");
     }
 
-    @ApiOperation(value = "中止维修事件，取消预订", notes = "会将维修事件的closed位置1")
+    @ApiOperation(value = "中止维修事件，取消预订", notes = "会将维修事件的closed标记置为true")
     @RequestMapping(value = "", method = RequestMethod.DELETE)
     @AllAccess
     public CommonResult<String> handleShutdown(
