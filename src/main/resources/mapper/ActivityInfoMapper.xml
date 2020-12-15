@@ -62,10 +62,10 @@
                 and start_time  &lt;= #{condition.startTimeUpperBound}
             </if>
             <if test="condition.endTimeLowerBound != null">
-                start_time >= #{condition.endTimeLowerBound}
+                and end_time >= #{condition.endTimeLowerBound}
             </if>
             <if test="condition.endTimeUpperBound != null">
-                and start_time  &lt;= #{condition.endTimeUpperBound}
+                and end_time  &lt;= #{condition.endTimeUpperBound}
             </if>
             <if test="condition.status != null">
                 and status = #{condition.status}
