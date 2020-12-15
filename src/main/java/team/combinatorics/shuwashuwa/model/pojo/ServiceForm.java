@@ -54,7 +54,7 @@ public class ServiceForm {
     private String problemType;
 
     @ApiModelProperty("关联到此维修单的图片列表")
-    private List<ServicePic> pictures;
+    private List<String> imageList;
 
     @ApiModelProperty("审核维修单的管理员Id")
     private Integer replyAdminId;

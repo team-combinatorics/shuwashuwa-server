@@ -2,6 +2,7 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
+import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
 import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
 
 import java.sql.Date;
@@ -86,6 +88,26 @@ public class ServiceFormTest {
                 .build();
         serviceFormDao.insert(serviceFormPO);
         Assert.assertEquals(3, serviceFormPO.getId().intValue());
+        // 插入一些图片
+        ServicePicPO servicePicPO;
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("在你心里")
+                .serviceFormId(1)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(1, servicePicPO.getId().intValue());
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("在米歇尔心里")
+                .serviceFormId(1)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(2, servicePicPO.getId().intValue());
+        servicePicPO = ServicePicPO.builder()
+                .picLocation("在粉红裸熊心里")
+                .serviceFormId(1)
+                .build();
+        servicePicDao.insert(servicePicPO);
+        Assert.assertEquals(3, servicePicPO.getId().intValue());
     }
 
     @Test
@@ -124,6 +146,15 @@ public class ServiceFormTest {
         ServiceForm newForm = serviceFormDao.getServiceFormByFormID(1);
         Assert.assertEquals(2, newForm.getReplyAdminId().intValue());
         Assert.assertEquals("爬爬爬", newForm.getDescriptionAdvice());
+    }
+
+    /**
+     * 下面这个测试用于print出来进行观察，用的时候请去掉ignore
+     */
+    @Test
+    @Ignore
+    public void simpleTest() {
+        System.out.println(serviceFormDao.getServiceFormByFormID(1));
     }
 
 }

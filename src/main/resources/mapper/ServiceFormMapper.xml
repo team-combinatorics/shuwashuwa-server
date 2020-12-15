@@ -19,7 +19,8 @@
         <result column="description_advice" jdbcType="VARCHAR" property="descriptionAdvice"/>
         <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
-        <collection property="pictures" select="team.combinatorics.shuwashuwa.dao.ServicePicDao.listServicePicsByFormId"
+        <collection property="imageList"
+                    select="team.combinatorics.shuwashuwa.dao.ServicePicDao.listServicePicsByFormId"
                     ofType="team.combinatorics.shuwashuwa.model.pojo.ServicePic"
                     javaType="java.util.ArrayList"
                     column="id">
@@ -81,6 +82,7 @@
                description_advice
         from service_form
         where service_event_id = #{eventID}
+        order by id
     </select>
 
 

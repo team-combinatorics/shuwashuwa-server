@@ -30,7 +30,7 @@ public interface ServicePicDao {
      * @param serviceFormId 维修单的id
      * @return 维修单关联的图片列表
      */
-    List<ServicePic> listServicePicsByFormId(@Param("formID") int serviceFormId);
+    List<String> listServicePicsByFormId(@Param("formID") int serviceFormId);
 
     /**
      * 根据图片id删除
