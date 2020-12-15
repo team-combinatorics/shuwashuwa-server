@@ -10,6 +10,8 @@ import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.vo.WechatNoticeVO;
 
+import java.util.Iterator;
+
 
 @DependsOn("constants")
 final public class WechatUtil {
@@ -41,12 +43,12 @@ final public class WechatUtil {
 
     public static String getWechatAccessToken() throws Exception {
         // 拼接url
-        String url = "https://api.weixin.qq.com/cgi-bin/token?"
+        String tokenURL = "https://api.weixin.qq.com/cgi-bin/token?"
                 + "grant_type=" + "client_credential"
                 + "&appid=" + APPID
                 + "&secret=" + SECRET;
 
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(tokenURL, String.class);
         if (!response.getStatusCode().equals(HttpStatus.OK))
             throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
         ObjectMapper mapper = new ObjectMapper();
@@ -59,6 +61,29 @@ final public class WechatUtil {
         return root.path("access_token").asText();
     }
 
+    public static void getTemplateList() throws Exception {
+        String accessToken = getWechatAccessToken();
+        String templateURL = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
+                + "access_token=" + accessToken;
+        ResponseEntity<String> response = restTemplate.getForEntity(templateURL, String.class);
+        if (!response.getStatusCode().equals(HttpStatus.OK))
+            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response.getBody());
+        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
+            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
+            throw new KnownException(ErrorInfoEnum.ACCESS_TOKEN_FAILURE);
+        }
+
+        JsonNode data = root.path("data");
+        Iterator<JsonNode> templates = data.elements();
+        while (templates.hasNext()) {
+            JsonNode t = templates.next();
+            System.out.println(t.path("content"));
+        }
+    }
+
     public static void sendActivityNotice(WechatNoticeVO wechatNoticeVO) throws Exception {
         String accessToken = getWechatAccessToken();
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
@@ -66,13 +91,5 @@ final public class WechatUtil {
         wechatNoticeVO.setTemplate_id(ACTIVITYID);
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeVO, String.class);
         System.out.println(response.getBody());
-    }
-
-    public static void sendOneNotice(WechatNoticeVO wechatNoticeVO) throws Exception {
-        String accessToken = getWechatAccessToken();
-        String templateURL = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
-                + "access_token=" + accessToken;
-
-
     }
 }
