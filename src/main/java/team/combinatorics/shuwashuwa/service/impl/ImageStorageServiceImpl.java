@@ -149,4 +149,9 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         return cachePicDao.countCachePic();
     }
 
+    @Override
+    public String[] listImages() {
+        return new File(STORAGE_DIR).list();
+    }
+
 }

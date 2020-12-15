@@ -12,6 +12,7 @@ import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.UserDao;
+import team.combinatorics.shuwashuwa.service.ImageStorageService;
 
 @Api(value = "测试用接口",hidden = true)
 @RestController
@@ -28,6 +29,9 @@ public class TestController {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    ImageStorageService imageStorageService;
 
     @ApiOperation("获取当前数据库地址、用户名、密码，用于查看环境变量是否注入成功")
     @GetMapping("/env")
@@ -74,5 +78,12 @@ public class TestController {
         userDao.insertUserByOpenid("fake openid 3");
         userDao.insertUserByOpenid("fake openid 4");
         return "dokidoki";
+    }
+
+    @ApiOperation("返回已存储的图片列表")
+    @GetMapping("/image")
+    @NoToken
+    public String[] listImages() {
+        return imageStorageService.listImages();
     }
 }
