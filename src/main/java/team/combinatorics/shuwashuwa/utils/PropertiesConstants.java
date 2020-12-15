@@ -44,6 +44,8 @@ public class PropertiesConstants {
 
     @Value("${dir.pictures:default}")
     public void setPicStorageDir(String dir) {
+        if(!dir.endsWith("/"))
+            dir+="/";
         PropertiesConstants.PIC_STORAGE_DIR = dir;
     }
 }

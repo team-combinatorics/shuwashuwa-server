@@ -1,30 +1,25 @@
 package team.combinatorics.shuwashuwa.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import team.combinatorics.shuwashuwa.interceptor.AuthorizationInterceptor;
+import team.combinatorics.shuwashuwa.utils.PropertiesConstants;
 
 @Configuration
-@PropertySource(value = {"classpath:shuwashuwa.properties"})
-public class InterceptorConfig implements WebMvcConfigurer {
+@DependsOn("constants")
+public class ShuwashuwaWebMvcConfig implements WebMvcConfigurer {
 
     private AuthorizationInterceptor authorizationInterceptor;
 
-    private String IMAGE_STORAGE;
+    private final String IMAGE_STORAGE = PropertiesConstants.PIC_STORAGE_DIR;
 
     @Autowired
     public void setAuthorizationInterceptor(AuthorizationInterceptor authorizationInterceptor) {
         this.authorizationInterceptor = authorizationInterceptor;
-    }
-
-    @Value("${dir.pictures}")
-    public void setIMAGE_STORAGE(String IMAGE_STORAGE) {
-        this.IMAGE_STORAGE = IMAGE_STORAGE;
     }
 
     @Override
