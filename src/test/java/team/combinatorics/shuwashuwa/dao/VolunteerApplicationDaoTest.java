@@ -1,6 +1,7 @@
 package team.combinatorics.shuwashuwa.dao;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class VolunteerApplicationDaoTest {
     @Autowired
     MethodsOfTesting methodsOfTesting;
 
+    @Before
     @Test
     // 这个测试方法中随便编openid就行，并不向tx服务器验证
     public void insertTest() {
@@ -38,12 +40,12 @@ public class VolunteerApplicationDaoTest {
                 .cardPicLocation("Location1")
                 .reasonForApplication("我还要当志愿者")
                 .build());
-        volunteerApplicationDao.insert( VolunteerApplicationPO.builder()
+        volunteerApplicationDao.insert(VolunteerApplicationPO.builder()
                 .userId(1)
                 .cardPicLocation("Location1")
                 .reasonForApplication("我非要当志愿者")
                 .build());
-        volunteerApplicationDao.insert( VolunteerApplicationPO.builder()
+        volunteerApplicationDao.insert(VolunteerApplicationPO.builder()
                 .userId(233)
                 .cardPicLocation("Location1")
                 .reasonForApplication("就算是死我也要当志愿者")
@@ -56,19 +58,47 @@ public class VolunteerApplicationDaoTest {
         System.out.println(volunteerApplicationDao.listApplicationsByUserId(233));
         // 测试select多个申请单
         System.out.println(volunteerApplicationDao.listApplicationsByUserId(1));
+
+    }
+
+    @Test
+    public void updateApplicationByAdminTest() {
+
+        VolunteerApplicationPO volunteerApplicationPO;
+        int returnValue;
+        // 首先取出对应维修单
+        volunteerApplicationPO = volunteerApplicationDao.getApplicationByFormId(1);
+        // 得到第一个时间戳
+        long timestamp1 = volunteerApplicationPO.getUpdatedTime().getTime();
         // 测试管理员回复
-        volunteerApplicationDao.updateApplicationByAdmin(1,
+        returnValue = volunteerApplicationDao.updateApplicationByAdmin(1,
                 VolunteerApplicationUpdateDTO.builder()
                         .formID(1)
                         .replyByAdmin("不给过，爬")
                         .status(1)
-                        .build());
-        volunteerApplicationDao.updateApplicationByAdmin(2,
+                        .build(),
+                volunteerApplicationPO.getUpdatedTime());
+        Assert.assertEquals(1, returnValue);
+
+        // 再回复一次试试
+        returnValue = volunteerApplicationDao.updateApplicationByAdmin(1,
+                VolunteerApplicationUpdateDTO.builder()
+                        .formID(1)
+                        .replyByAdmin("不给过，爬 再放送")
+                        .status(1)
+                        .build(),
+                volunteerApplicationPO.getUpdatedTime());
+        // 这次应当测试失败
+        Assert.assertEquals(0, returnValue);
+        volunteerApplicationPO = volunteerApplicationDao.getApplicationByFormId(1);
+        returnValue = volunteerApplicationDao.updateApplicationByAdmin(2,
                 VolunteerApplicationUpdateDTO.builder()
                         .formID(1)
                         .replyByAdmin("不给过，爬")
                         .status(1)
-                        .build());
+                        .build(),
+                volunteerApplicationPO.getUpdatedTime());
+        Assert.assertEquals(1, returnValue);
         System.out.println(volunteerApplicationDao.getApplicationByFormId(1));
         // 测试条件查询
         System.out.println(volunteerApplicationDao.listApplicationsByCondition(
