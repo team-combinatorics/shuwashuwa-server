@@ -187,7 +187,7 @@ public class EventController {
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<ServiceEventDetailDTO> getServiceDetail(
-            @RequestBody @ApiParam(value = "要查询的维修事件",required = true) Integer eventId
+            @RequestParam("id") @ApiParam(value = "要查询的维修事件",required = true) Integer eventId
     ) {
         return new CommonResult<>(200,"请求成功",eventService.getServiceDetail(eventId));
     }
