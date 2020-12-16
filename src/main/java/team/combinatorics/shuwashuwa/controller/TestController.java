@@ -42,7 +42,7 @@ public class TestController {
 
     @GetMapping("/exception")
     public void unknownException() {
-        throw new RuntimeException();
+        throw new RuntimeException("这是一个刻意引发的exception");
     }
 
     @ApiOperation("hello,world")
