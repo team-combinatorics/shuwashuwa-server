@@ -53,7 +53,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         System.out.println(adminPO.getUserid());
         int cnt = adminDao.insert(adminPO);
         if(cnt == 1) {
-            userDao.updateUserAdminAuthority(Integer.parseInt(adminDTO.getUserid()), true);
+            userDao.updateUserAdminAuthority(adminDTO.getUserid(), true);
         }
         return cnt;
     }
@@ -87,7 +87,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
 
     @Override
     public int updateAdministratorInfo(AdminDTO adminDTO) {
-        int adminID = adminDao.getAdminIDByUserID(Integer.parseInt(adminDTO.getUserid()));
+        int adminID = adminDao.getAdminIDByUserID(adminDTO.getUserid());
         AdminPO adminPO = (AdminPO) DTOUtil.convert(adminDTO,AdminPO.class);
         adminPO.setId(adminID);
         return adminDao.update(adminPO);

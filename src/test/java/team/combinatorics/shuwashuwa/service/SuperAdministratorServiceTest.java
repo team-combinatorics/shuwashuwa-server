@@ -39,7 +39,7 @@ public class SuperAdministratorServiceTest {
         int userID = userDao.getUserByOpenid("fake openid 3").getId();
         // 测试超管添加管理员的服务
         AdminDTO adminDTO = AdminDTO.builder()
-                .userid(Integer.toString(userID))
+                .userid(userID)
                 .userName("leesou")
                 .phoneNumber("1145141919810")
                 .email("114514.1919810.inm")
@@ -72,7 +72,7 @@ public class SuperAdministratorServiceTest {
 
         // 测试超管修改管理员信息的服务
         AdminDTO updateInfo = AdminDTO.builder()
-                .userid(Integer.toString(userID))
+                .userid(userID)
                 .userName("kinami")
                 .identity("misaki")
                 .build();
@@ -97,7 +97,7 @@ public class SuperAdministratorServiceTest {
         // 测试新增管理员后对列表的更新
         int userID1 = userDao.getUserByOpenid("fake openid 4").getId();
         AdminDTO adminDTO1 = AdminDTO.builder()
-                .userid(Integer.toString(userID1))
+                .userid(userID1)
                 .userName("leesou")
                 .phoneNumber("1145141919810")
                 .email("114514.1919810.inm")
