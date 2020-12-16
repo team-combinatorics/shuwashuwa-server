@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 
+import java.util.Arrays;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = KnownException.class)
@@ -15,7 +17,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public CommonResult<String> defaultExceptionHandler(Exception e) {
         e.printStackTrace();
-        return new CommonResult<>(40000, "Unknown Error", e.getMessage());
+        // 开发阶段，直接返回这个好了
+        // return new CommonResult<>(40000, "Unknown Error", e.getMessage());
+        // 开发阶段，直接返回这个好了
+        return new CommonResult<>(40000, "Unknown Error", Arrays.toString(e.getStackTrace()));
     }
 
 
