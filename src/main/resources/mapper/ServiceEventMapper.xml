@@ -159,7 +159,7 @@
                 and is_draft = #{condition.draft}
             </if>
             <if test="condition.timeSlot != null">
-                and is_closed = #{condition.is_closed}
+                and is_closed = #{condition.closed}
             </if>
         </where>
     </select>
@@ -240,8 +240,8 @@
     </select>
 
     <select id="listAbstractServiceEventsByCondition" resultMap="serviceAbstractResultMap">
-        select e.id, status, is_closed, is_draft, user_id, u.user_name u_name ,volunteer_id, v.user_name v_name,
-        problem_summary, computer_model
+        select e.id, e.status, e.is_closed, e.is_draft, e.user_id, u.user_name u_name ,e.volunteer_id, v.user_name
+        v_name, e.problem_summary, f.computer_model
         from service_event e
         left join service_form f
         on (e.valid_form_id = f.id)
@@ -251,31 +251,31 @@
         on e.volunteer_id = v.id
         <where>
             <if test="condition.beginTime != null">
-                create_time >= #{condition.beginTime}
+                e.create_time >= #{condition.beginTime}
             </if>
             <if test="condition.endTime != null">
-                and create_time &lt;= #{condition.endTime}
+                and e.create_time &lt;= #{condition.endTime}
             </if>
             <if test="condition.userId != null">
-                and user_id = #{condition.userId}
+                and e.user_id = #{condition.userId}
             </if>
             <if test="condition.volunteerId != null">
-                and volunteer_id = #{condition.volunteerId}
+                and e.volunteer_id = #{condition.volunteerId}
             </if>
             <if test="condition.status != null">
-                and status = #{condition.status}
+                and e.status = #{condition.status}
             </if>
             <if test="condition.activityId != null">
-                and activity_id = #{condition.activityId}
+                and e.activity_id = #{condition.activityId}
             </if>
             <if test="condition.timeSlot != null">
-                and time_slot = #{condition.timeSlot}
+                and e.time_slot = #{condition.timeSlot}
             </if>
             <if test="condition.draft != null">
-                and is_draft = #{condition.draft}
+                and e.is_draft = #{condition.draft}
             </if>
             <if test="condition.timeSlot != null">
-                and is_closed = #{condition.is_closed}
+                and e.is_closed = #{condition.closed}
             </if>
         </where>
     </select>

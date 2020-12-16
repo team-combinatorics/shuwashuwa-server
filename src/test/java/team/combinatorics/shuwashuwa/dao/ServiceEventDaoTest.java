@@ -16,6 +16,8 @@ import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -121,8 +123,23 @@ public class ServiceEventDaoTest {
         serviceEventDao.updateVolunteerInfo(1, 1);
     }
 
+    /*
+        测试条件：
+        Timestamp beginTime;
+        Timestamp endTime;
+        private Integer userId;
+        private Integer volunteerId;
+        private Integer status;
+        private Integer activityId;
+        private Integer timeSlot;
+        private Boolean draft;
+        private Boolean closed;
+
+     */
     @Test
     public void countServiceEventsByConditionTest() {
+
+
         SelectServiceEventCO selectServiceEventCO;
         // 设置条件为用户id
         selectServiceEventCO = SelectServiceEventCO.builder()
@@ -134,7 +151,29 @@ public class ServiceEventDaoTest {
                 .status(0)
                 .build();
         Assert.assertEquals(3, serviceEventDao.countServiceEventsByCondition(selectServiceEventCO));
-
+        // 测试一个通用条件
+        // 只要没出错应该还好，就简单测试下
+        // 构造时间
+        Calendar begin = (Calendar.getInstance());
+        begin.setTimeInMillis(0);
+        Calendar end = Calendar.getInstance();
+        end.setTimeInMillis(0);
+        begin.set(2020, Calendar.DECEMBER, 21, 0, 0, 0);
+        end.set(2020, Calendar.DECEMBER, 25, 23, 59, 59);
+        // 构造条件
+        selectServiceEventCO = SelectServiceEventCO.builder()
+                .beginTime(new Timestamp(begin.getTimeInMillis()))
+                .endTime(new Timestamp(end.getTimeInMillis()))
+                .userId(2)
+                .volunteerId(2)
+                .status(1)
+                .activityId(1)
+                .timeSlot(1)
+                .draft(false)
+                .closed(true)
+                .status(0)
+                .build();
+        Assert.assertEquals(0, serviceEventDao.countServiceEventsByCondition(selectServiceEventCO));
     }
 
     @Test
@@ -241,6 +280,30 @@ public class ServiceEventDaoTest {
         );
         Assert.assertNull(serviceAbstractDTOList.get(0).getComputerModel());
 
+        SelectServiceEventCO selectServiceEventCO;
+        // 测试一个通用条件
+        // 只要没出错应该还好，就简单测试下
+        // 构造时间
+        Calendar begin = (Calendar.getInstance());
+        begin.setTimeInMillis(0);
+        Calendar end = Calendar.getInstance();
+        end.setTimeInMillis(0);
+        begin.set(2020, Calendar.DECEMBER, 21, 0, 0, 0);
+        end.set(2020, Calendar.DECEMBER, 25, 23, 59, 59);
+        // 构造条件
+        selectServiceEventCO = SelectServiceEventCO.builder()
+                .beginTime(new Timestamp(begin.getTimeInMillis()))
+                .endTime(new Timestamp(end.getTimeInMillis()))
+                .userId(2)
+                .volunteerId(2)
+                .status(1)
+                .activityId(1)
+                .timeSlot(1)
+                .draft(false)
+                .closed(true)
+                .status(0)
+                .build();
+        Assert.assertEquals(0, serviceEventDao.listAbstractServiceEventsByCondition(selectServiceEventCO).size());
     }
 
     /**
