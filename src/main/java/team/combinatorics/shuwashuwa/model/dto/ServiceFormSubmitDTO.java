@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("用户初次提交或保存维修单需要上传的数据")
+@ApiModel("维修事件的id，以及维修单的信息")
 public class ServiceFormSubmitDTO {
     @ApiModelProperty("要修改的维修事件序号")
     private Integer serviceEventId;
@@ -43,8 +43,8 @@ public class ServiceFormSubmitDTO {
     @ApiModelProperty("笔记本类型")
     private String laptopType;
 
-    @ApiModelProperty(value = "购买日期，用yyyy-MM-dd表示",example = "1919-08-10")
-    private Date boughtTime;
+    @ApiModelProperty(value = "购买日期，用yyyy-mm表示",example = "1919-08")
+    private String boughtTime;
 
     @ApiModelProperty("是否在保修期内")
     private Boolean underWarranty;
