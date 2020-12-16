@@ -51,7 +51,7 @@ public class ActivityController {
 
     @ApiOperation("用户活动现场签到")
     @RequestMapping(value = "/attend", method = RequestMethod.PUT)
-    @VolunteerAccess
+    @AllAccess
     public CommonResult<String> handlePresence(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
             @RequestParam(value = "activity") @ApiParam(value = "活动Id，从二维码参数获取",required = true) Integer activityId
