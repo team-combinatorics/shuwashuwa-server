@@ -14,48 +14,47 @@ public class DTOUtil {
     static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static boolean fieldAllNull(Object obj) {
-        for (Field field:obj.getClass().getDeclaredFields()){
-            if(field.getName().equals("this$0"))
+        for (Field field : obj.getClass().getDeclaredFields()) {
+            if (field.getName().equals("this$0"))
                 continue;
-            if(obj.getClass().toString().equals("class team.combinatorics.shuwashuwa.model.dto.AdminDTO")
+            if (obj.getClass().toString().equals("class team.combinatorics.shuwashuwa.model.dto.AdminDTO")
                     && field.getName().equals("userid")) {
                 try {
                     field.setAccessible(true);
-                    if(field.get(obj) == null)
+                    if (field.get(obj) == null)
                         return true;
                     continue;
-                }catch (IllegalAccessException e) {
-                    System.out.println(field.getName()+" is not accessible");
+                } catch (IllegalAccessException e) {
+                    System.out.println(field.getName() + " is not accessible");
                 }
             }
 
             try {
                 field.setAccessible(true);
-                if(field.get(obj) != null)
+                if (field.get(obj) != null)
                     return false;
-            }
-            catch (IllegalAccessException e){
-                System.out.println(field.getName()+" is not accessible");
+            } catch (IllegalAccessException e) {
+                System.out.println(field.getName() + " is not accessible");
             }
         }
         return true;
     }
 
     public static boolean fieldExistNull(Object obj) {
-        for (Field field:obj.getClass().getDeclaredFields()){
-            if(field.getName().equals("this$0"))
+        for (Field field : obj.getClass().getDeclaredFields()) {
+            if (field.getName().equals("this$0"))
                 continue;
             try {
                 field.setAccessible(true);
-                if(field.get(obj) == null)
+                if (field.get(obj) == null)
                     return true;
-            }
-            catch (IllegalAccessException e){
-                System.out.println(field.getName()+" is not accessible");
+            } catch (IllegalAccessException e) {
+                System.out.println(field.getName() + " is not accessible");
             }
         }
         return false;
     }
+
     public static String stamp2str(Timestamp timestamp) {
         return dateFormat.format(timestamp);
     }
@@ -65,7 +64,8 @@ public class DTOUtil {
         return Timestamp.valueOf(format);
     }
 
-    public static Object convert(Object source, Class<?> targetClass){
+
+    public static Object convert(Object source, Class<?> targetClass) {
         try {
             Object target = targetClass.getDeclaredConstructor().newInstance();
             Object[] sourceFields = Arrays.stream(source.getClass().getDeclaredFields())
@@ -91,10 +91,7 @@ public class DTOUtil {
             }
             return target;
         } catch (Exception e) {
-            System.err.println("DTO convert failed");
-            System.out.println(source);
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("DTO转换错误");
         }
     }
 }
