@@ -65,7 +65,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if(method.isAnnotationPresent(UserParam.class) && !currentUserPO.getAdmin() && !currentUserPO.getVolunteer()) {
             String paraName = method.getAnnotation(UserParam.class).value();
             String paraValue = httpServletRequest.getParameter(paraName);
-            if(paraValue == null || !Integer.valueOf(paraName).equals(userid))
+            if(paraValue == null || !Integer.valueOf(paraValue).equals(userid))
                 throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
         }
 
