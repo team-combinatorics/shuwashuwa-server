@@ -10,7 +10,6 @@
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="activity_name" jdbcType="VARCHAR" property="activityName"/>
         <result column="location" jdbcType="VARCHAR" property="location"/>
-        <result column="status" jdbcType="TINYINT" property="status"/>
     </resultMap>
 
     <insert id="insert" parameterType="team.combinatorics.shuwashuwa.model.po.ActivityInfoPO"
@@ -45,12 +44,6 @@
         where id = #{activityInfo.id}
     </update>
 
-    <update id="updateStatus">
-        update activity_info
-        set status=#{status}
-        where id = #{id}
-    </update>
-
     <select id="listByCondition" parameterType="team.combinatorics.shuwashuwa.dao.co.SelectActivityCO"
             resultMap="activityInfoResultMap">
         select * from activity_info
@@ -66,9 +59,6 @@
             </if>
             <if test="condition.endTimeUpperBound != null">
                 and end_time  &lt;= #{condition.endTimeUpperBound}
-            </if>
-            <if test="condition.status != null">
-                and status = #{condition.status}
             </if>
         </where>
     </select>

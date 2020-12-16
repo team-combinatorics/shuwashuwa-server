@@ -29,14 +29,6 @@ public interface ActivityInfoDao {
      */
     int update(@Param("activityInfo") ActivityInfoPO activityInfoPO);
 
-    /**
-     * 根据活动id更新状态
-     *
-     * @param id     活动id
-     * @param status 状态
-     * @return 更新影响的记录数量，应当为1
-     */
-    int updateStatus(@Param("id") int id, @Param("status") int status);
 
     /**
      * @param id 根据id查找一个活动
@@ -47,6 +39,7 @@ public interface ActivityInfoDao {
     /**
      * 根据条件查找活动，条件包括时间范围（这里指活动开始时间的范围，而不是活动创建时间的范围）以及活动状态
      * 条件可以全null，此时返回所有活动
+     *
      * @param selectActivityCO 条件
      * @return 符合条件的活动列表
      */
