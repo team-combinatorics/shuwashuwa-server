@@ -18,23 +18,19 @@ import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
-@Api(value = "测试用接口",hidden = true)
+@Api(value = "测试用接口", hidden = true)
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/test")
 public class TestController {
+    private final UserDao userDao;
+    private final SuperAdministratorService suService;
     @Value("${spring.datasource.dbcp2.url}")
     String mysqlUrl;
-
     @Value("${spring.datasource.dbcp2.username}")
     String mysqlUsername;
-
     @Value("${spring.datasource.dbcp2.password}")
     String mysqlPassword;
-
-    private final UserDao userDao;
-
-    private final SuperAdministratorService suService;
 
     @ApiOperation("获取当前数据库地址、用户名、密码，用于查看环境变量是否注入成功")
     @GetMapping("/env")
@@ -42,6 +38,11 @@ public class TestController {
         return "url = " + mysqlUrl + "\n"
                 + "username = " + mysqlUsername + "\n"
                 + "password = " + mysqlPassword + "\n";
+    }
+
+    @GetMapping("/exception")
+    public void unknownException() {
+        throw new RuntimeException();
     }
 
     @ApiOperation("hello,world")
@@ -83,10 +84,10 @@ public class TestController {
         userDao.insertUserByOpenid(openid);
         final UserPO user = userDao.getUserByOpenid(openid);
         int userid = user.getId();
-        if(volunteer) {
-            userDao.updateUserVolunteerAuthority(userid,true);
+        if (volunteer) {
+            userDao.updateUserVolunteerAuthority(userid, true);
         }
-        if(admin) {
+        if (admin) {
             suService.addAdministrator(
                     AdminDTO.builder()
                             .userid(userid)
@@ -96,7 +97,7 @@ public class TestController {
                             .identity("fake")
                             .studentId("0")
                             .department("nowhere")
-                    .build()
+                            .build()
             );
         }
 
