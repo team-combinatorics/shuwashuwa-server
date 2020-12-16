@@ -72,6 +72,11 @@ public class UserServiceImpl implements UserService {
         return (UserInfoResponseDTO) DTOUtil.convert(userPO, UserInfoResponseDTO.class);
     }
 
+    /**
+     * 处理志愿者申请
+     * @param userid 申请成为志愿者的用户的id
+     * @param additionDTO 包括申请理由和学生证照片位置
+     */
     @Override
     public void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO additionDTO) {
         //参数检查
@@ -85,7 +90,9 @@ public class UserServiceImpl implements UserService {
         //插入新的申请
         VolunteerApplicationPO volunteerApplicationPO =
                 (VolunteerApplicationPO) DTOUtil.convert(additionDTO, VolunteerApplicationPO.class);
-        volunteerApplicationPO.setId(userid);
+
+        volunteerApplicationPO.setUserId(userid);
+
         applicationDao.insert(volunteerApplicationPO);
 
         //存档图片
