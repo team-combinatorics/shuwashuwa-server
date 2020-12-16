@@ -126,7 +126,7 @@ if __name__ == "__main__":
         csv2javafile('csv/', file)
         csv2sql('csv/', file)
 
-    for file in os.listdir('relationship'):
-        csv2sql('relationship/', file)
+    # for file in os.listdir('relationship'):
+    #     csv2sql('relationship/', file)
     # print(underscore_to_camel("sdfsdf"))
     complite_sql_file()
