@@ -31,7 +31,7 @@ public class UserController {
     })
     @NoToken
     public CommonResult<LogInSuccessDTO> loginHandler(
-            @ApiParam(value = "微信登录信息",required = true) LogInInfoDTO logInInfoDto
+            @ApiParam(value = "微信登录信息", required = true) LogInInfoDTO logInInfoDto
     ) throws Exception {
         System.out.println("用户登录 @Controller");
         System.out.println("Code:" + logInInfoDto.getCode());
@@ -51,7 +51,7 @@ public class UserController {
     })
     @AllAccess
     public CommonResult<String> updateUserInfo(@RequestHeader("token") @ApiParam(hidden = true) String token,
-                                               @RequestBody @ApiParam(value = "用户信息",required = true) UserInfoUpdateDTO userInfoUpdateDto
+                                               @RequestBody @ApiParam(value = "用户信息", required = true) UserInfoUpdateDTO userInfoUpdateDto
     ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         System.out.println("更新" + userid + "的用户信息");
@@ -90,12 +90,12 @@ public class UserController {
     @AllAccess
     public CommonResult<String> receiveApplicationInfo(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "新增的申请表内容",required = true) VolunteerApplicationAdditionDTO application
+            @RequestBody @ApiParam(value = "新增的申请表内容", required = true) VolunteerApplicationAdditionDTO application
     ) {
         int userid = TokenUtil.extractUserid(token);
-        System.out.println(userid+"提交了志愿者申请");
-        userService.addVolunteerApplication(userid,application);
-        return new CommonResult<>(200,"申请完成","posted");
+        System.out.println(userid + "提交了志愿者申请");
+        userService.addVolunteerApplication(userid, application);
+        return new CommonResult<>(200, "申请完成", "posted");
     }
 
     /**
@@ -105,7 +105,7 @@ public class UserController {
     @RequestMapping(value = "/application", method = RequestMethod.GET)
     @AdminAccess
     public CommonResult<List<VolunteerApplicationResponseForAdminDTO>> getUnauditedApplicationList() {
-        return new CommonResult<>(200,"请求成功",userService.listUnauditedVolunteerApplication());
+        return new CommonResult<>(200, "请求成功", userService.listUnauditedVolunteerApplication());
     }
 
     /**
@@ -116,7 +116,7 @@ public class UserController {
     @AllAccess
     public CommonResult<List<VolunteerApplicationResultDTO>> getMyApplicationList(
             @RequestHeader("token") @ApiParam(hidden = true) String token) {
-        return new CommonResult<>(200,"请求成功",
+        return new CommonResult<>(200, "请求成功",
                 userService.listVolunteerApplicationOf(TokenUtil.extractUserid(token)));
     }
 
@@ -130,14 +130,14 @@ public class UserController {
     })
     @AdminAccess
     public CommonResult<String> receiveApplicationAudition(
-            @RequestHeader("token")  @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "审核结果",required = true) VolunteerApplicationUpdateDTO updateDTO
+            @RequestHeader("token") @ApiParam(hidden = true) String token,
+            @RequestBody @ApiParam(value = "审核结果", required = true) VolunteerApplicationUpdateDTO updateDTO
     ) {
-        int userid = TokenUtil.extractUserid(token);
-        System.out.println(userid+"审核了编号为"+updateDTO.getFormID()+"的申请");
-        userService.completeApplicationAudition(userid,updateDTO);
+        int adminUserid = TokenUtil.extractUserid(token);
+        System.out.println(adminUserid + "审核了编号为" + updateDTO.getFormID() + "的申请");
+        userService.completeApplicationAudition(adminUserid, updateDTO);
 
-        return new CommonResult<>(200,"请求成功","success");
+        return new CommonResult<>(200, "请求成功", "success");
     }
 
     /**

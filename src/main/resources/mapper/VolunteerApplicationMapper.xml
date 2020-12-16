@@ -27,6 +27,7 @@
             reply_by_admin = #{adminReply.replyByAdmin},
             status         = #{adminReply.status}
         where id = #{adminReply.formID}
+          and updated_time = #{preUpdateTime}
     </update>
 
     <select id="listApplicationsByUserId" resultMap="volunteerApplicationResultMap">

@@ -6,6 +6,7 @@ import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
@@ -24,9 +25,10 @@ public interface VolunteerApplicationDao {
      * @param adminID                       管理员id
      * @param volunteerApplicationUpdateDTO 管理员的回复结构，必须都不为空
      */
-    void updateApplicationByAdmin(
+    int updateApplicationByAdmin(
             @Param("adminID") int adminID,
-            @Param("adminReply") VolunteerApplicationUpdateDTO volunteerApplicationUpdateDTO);
+            @Param("adminReply") VolunteerApplicationUpdateDTO volunteerApplicationUpdateDTO,
+            @Param("preUpdateTime")Timestamp timestamp);
 
     /**
      * 通过用户id寻找申请表，可能有多个结果，因此返回一个列表

@@ -13,6 +13,8 @@ class_dic = {
 def sql_type_to_java_type(type_name: str) -> str:
     if type_name.lower().startswith('varchar'):
         return 'String'
+    if type_name.lower().startswith('datetime'):
+        return 'Date'
     return class_dic[type_name]
 
 
@@ -23,7 +25,7 @@ def get_sql_type(type_name: str) -> str:
                 return 'INTEGER'
             if key == 'text':
                 return 'LONGVARCHAR'
-            if key == 'datetime':
+            if key.startswith('datetime'):
                 return 'TIMESTAMP'
             return key.upper()
 
