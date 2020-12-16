@@ -6,7 +6,7 @@
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
-        <result column="userid" jdbcType="VARCHAR" property="userid"/>
+        <result column="userid" jdbcType="INTEGER" property="userid"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>

@@ -26,7 +26,7 @@ public class AdminDaoTest {
         methodsOfTesting.truncateAllTables();
 
         AdminPO adminPO = AdminPO.builder()
-                .userid("3")
+                .userid(3)
                 .userName("leesou")
                 .phoneNumber("1145141919810")
                 .email("114514.1919810.inm")
