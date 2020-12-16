@@ -2,6 +2,7 @@ package team.combinatorics.shuwashuwa.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.combinatorics.shuwashuwa.dao.AdminDao;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao;
@@ -74,7 +75,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 处理志愿者申请
-     * @param userid 申请成为志愿者的用户的id
+     *
+     * @param userid      申请成为志愿者的用户的id
      * @param additionDTO 包括申请理由和学生证照片位置
      */
     @Override
@@ -121,8 +123,8 @@ public class UserServiceImpl implements UserService {
     /**
      * 处理志愿者申请
      *
-     * @param adminUserid    管理员的userid 注意用这个换取管理员的admin id
-     * @param updateDTO 用于更新的dto
+     * @param adminUserid 管理员的userid 注意用这个换取管理员的admin id
+     * @param updateDTO   用于更新的dto
      */
     @Override
     public void completeApplicationAudition(int adminUserid, VolunteerApplicationUpdateDTO updateDTO) {
@@ -136,6 +138,7 @@ public class UserServiceImpl implements UserService {
         for (int i = 0; i < 3; i++) {
             // 首先取出当前的结构
             VolunteerApplicationPO volunteerApplicationPO = applicationDao.getApplicationByFormId(updateDTO.getFormID());
+
             // 如果状态已经被更新过，则不再更新
             if (volunteerApplicationPO.getStatus() != 0)
                 throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
@@ -143,8 +146,10 @@ public class UserServiceImpl implements UserService {
             int returnValue = applicationDao.updateApplicationByAdmin(adminID,
                     updateDTO,
                     volunteerApplicationPO.getUpdatedTime());
+
             // 返回值为1说明更新成功，然后进行之后的处理
             if (returnValue == 1) {
+                System.out.println("成功了？");
                 imageStorageService.delete(volunteerApplicationPO.getCardPicLocation());
                 if (updateDTO.getStatus() == 1) {
                     Integer promotedUserId = applicationDao.getApplicationByFormId(updateDTO.getFormID()).getUserId();
@@ -154,6 +159,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         // TODO 如果运行到这里（有一说一不太应该），或许应该定义个什么错误
-        System.out.println("尝试超时");
+        throw new KnownException(ErrorInfoEnum.SERVICE_TIMEOUT);
     }
 }
