@@ -27,7 +27,7 @@ public class ServiceAbstractDTO {
     private String problemSummary;
     @ApiModelProperty("维修事件状态")
     private Integer status;
-    @ApiModelProperty("是否为草稿")
+    @ApiModelProperty("是否有草稿状态的维修单")
     private Boolean draft;
     @ApiModelProperty("是否关闭")
     private Boolean closed;
