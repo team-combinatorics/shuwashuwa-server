@@ -42,7 +42,7 @@ public class ServiceForm {
     private String laptopType;
 
     @ApiModelProperty("购买时间")
-    private Date boughtTime;
+    private String boughtTime;
 
     @ApiModelProperty("是否在保修期内")
     private boolean underWarranty;

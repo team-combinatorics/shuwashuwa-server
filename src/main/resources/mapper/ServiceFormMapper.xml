@@ -11,7 +11,7 @@
         <result column="has_discrete_graphics" jdbcType="BOOLEAN" property="hasDiscreteGraphics"/>
         <result column="graphics_model" jdbcType="VARCHAR" property="graphicsModel"/>
         <result column="laptop_type" jdbcType="VARCHAR" property="laptopType"/>
-        <result column="bought_time" jdbcType="DATE" property="boughtTime"/>
+        <result column="bought_time" jdbcType="VARCHAR" property="boughtTime"/>
         <result column="is_under_warranty" jdbcType="BOOLEAN" property="underWarranty"/>
         <result column="problem_description" jdbcType="VARCHAR" property="problemDescription"/>
         <result column="problem_type" jdbcType="VARCHAR" property="problemType"/>

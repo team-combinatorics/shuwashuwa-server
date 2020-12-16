@@ -22,7 +22,7 @@ public class ServiceFormPO {
     private Boolean hasDiscreteGraphics;
     private String graphicsModel;
     private String laptopType;
-    private Date boughtTime;
+    private String boughtTime;
     private Boolean underWarranty;
     private String problemDescription;
     private String problemType;

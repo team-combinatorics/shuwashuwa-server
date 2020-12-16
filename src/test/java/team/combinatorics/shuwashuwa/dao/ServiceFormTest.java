@@ -42,7 +42,7 @@ public class ServiceFormTest {
                 .hasDiscreteGraphics(true)
                 .graphicsModel("MX250")
                 .laptopType("轻薄本")
-                .boughtTime(Date.valueOf("2019-12-1"))
+                .boughtTime("2019-12-1")
                 .underWarranty(false)
                 .problemDescription("没图像，啥都亮。")
                 .problemType("硬件问题")
@@ -60,7 +60,7 @@ public class ServiceFormTest {
                 .hasDiscreteGraphics(true)
                 .graphicsModel("MX250")
                 .laptopType("轻薄本")
-                .boughtTime(Date.valueOf("2019-12-1"))
+                .boughtTime("2019-12-1")
                 .underWarranty(false)
                 .problemDescription("快给我过，爬爬爬爬爬")
                 .problemType("硬件问题")
@@ -78,7 +78,7 @@ public class ServiceFormTest {
                 .hasDiscreteGraphics(true)
                 .graphicsModel("MX250")
                 .laptopType("轻薄本")
-                .boughtTime(Date.valueOf("2019-12-1"))
+                .boughtTime("2019-12-1")
                 .underWarranty(false)
                 .problemDescription("呜呜呜，你们欺负人")
                 .problemType("米歇尔问题")
@@ -128,7 +128,7 @@ public class ServiceFormTest {
                 .id(1)
                 .brand("联想")
                 .computerModel("小新pro13")
-                .boughtTime(Date.valueOf("2012-1-1"))
+                .boughtTime("2012-1-1")
                 .activityId(1)
                 .timeSlot(3)
                 .build();
@@ -137,7 +137,7 @@ public class ServiceFormTest {
         Assert.assertEquals(1, oldForm.getTimeSlot().intValue());
         Assert.assertEquals(3, newForm.getTimeSlot().intValue());
         Assert.assertEquals("联想", newForm.getBrand());
-        Assert.assertEquals(Date.valueOf("2012-1-1"), newForm.getBoughtTime());
+        Assert.assertEquals("2012-1-1", newForm.getBoughtTime());
     }
 
     @Test
