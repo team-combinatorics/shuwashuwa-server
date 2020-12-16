@@ -285,6 +285,13 @@ public class ServiceEventDaoTest {
     }
 
     @Test
+    public void getServiceEventForUpdateTest(){
+        ServiceEventPO serviceEventPO = serviceEventDao.getServiceEventForUpdate(1);
+        Assert.assertNull(serviceEventPO.getActivityId());
+        Assert.assertNull(serviceEventPO.getValidFormId());
+    }
+
+    @Test
     public void listAbstractServiceEventsByCondition() {
         serviceEventDao.updateValidFormID(1, 4);
         List<ServiceAbstractDTO> serviceAbstractDTOList = serviceEventDao.listAbstractServiceEventsByCondition(

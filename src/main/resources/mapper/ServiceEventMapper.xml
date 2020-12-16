@@ -322,4 +322,18 @@
         from service_event
         where id = #{id}
     </select>
+
+    <select id="getServiceEventForUpdate" resultMap="serviceEventPOResultMap">
+        select id,
+               create_time,
+               updated_time,
+               user_id,
+               volunteer_id,
+               status,
+               is_draft,
+               is_closed,
+               valid_form_id
+        from service_event
+        where id = #{id}
+    </select>
 </mapper>

@@ -159,4 +159,13 @@ public interface ServiceEventDao {
      */
     ServiceEventPO getPOByID(@Param("id") int id);
 
+    /**
+     * 一个加了排他锁的get方法，在对事务使用悲观锁时应该调这个
+     * 只会返回需要的部分信息，并不会返回全部信息，以提升查找性能
+     *
+     * @param id id
+     * @return 完整的po
+     */
+    ServiceEventPO getServiceEventForUpdate(@Param("id") int id);
+
 }
