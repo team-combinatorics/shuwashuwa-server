@@ -77,7 +77,7 @@ public class EventController {
     @VolunteerAccess
     public CommonResult<String> handleOrderTaking(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
+            @RequestParam("eventID") @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.takeOrder(userid, serviceEventId);
@@ -89,7 +89,7 @@ public class EventController {
     @VolunteerAccess
     public CommonResult<String> handleOrderGiveUp(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
+            @RequestParam("eventID") @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.giveUpOrder(userid, serviceEventId);
@@ -125,7 +125,7 @@ public class EventController {
     @AllAccess
     public CommonResult<String> handleShutdown(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
+            @RequestParam("eventID") @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.shutdownService(userid, serviceEventId);

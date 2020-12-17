@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.UserParam;
-import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;

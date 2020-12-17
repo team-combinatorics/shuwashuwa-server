@@ -43,8 +43,12 @@ public class ImageController {
     })
     @AllAccess
     public CommonResult<String> handleCancelUse(
-            @RequestBody @ApiParam(value = "上传时返回的文件路径",example = "114-514.png",required = true) String path,
-            @RequestHeader("token") @ApiParam(hidden = true) String token
+            @RequestParam("fileName")
+            @ApiParam(value = "上传时返回的文件名",example = "114-514.png",required = true)
+                    String path,
+            @RequestHeader("token")
+            @ApiParam(hidden = true)
+                    String token
     ) {
         int userid = TokenUtil.extractUserid(token);
         storageService.setUseless(userid, path);
