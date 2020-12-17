@@ -14,6 +14,29 @@
         <result column="card_pic_location" jdbcType="VARCHAR" property="cardPicLocation"/>
     </resultMap>
 
+    <resultMap type="team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO"
+               id="volunteerApplicationDetail">
+        <result column="va_id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="reason_for_application" jdbcType="VARCHAR" property="reasonForApplication"/>
+        <result column="reply_by_admin" jdbcType="VARCHAR" property="replyByAdmin"/>
+        <result column="admin_id" jdbcType="INTEGER" property="adminId"/>
+        <result column="a_name" jdbcType="VARCHAR" property="adminName"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="card_pic_location" jdbcType="VARCHAR" property="cardPicLocation"/>
+
+        <result column="u_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="department" jdbcType="VARCHAR" property="department"/>
+        <result column="grade" jdbcType="VARCHAR" property="grade"/>
+        <result column="identity" jdbcType="VARCHAR" property="identity"/>
+        <result column="student_id" jdbcType="VARCHAR" property="studentId"/>
+
+    </resultMap>
+
     <insert id="insert" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO"
             useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
@@ -34,6 +57,30 @@
         select *
         from volunteer_application
         where user_id = #{id}
+    </select>
+
+    <select id="getApplicationDetailByFormId" resultMap="volunteerApplicationDetail">
+        select va.id       va_id,
+               va.updated_time,
+               va.create_time,
+               va.user_id,
+               va.reason_for_application,
+               va.reply_by_admin,
+               va.admin_id,
+               a.user_name a_name,
+               va.status,
+               va.card_pic_location,
+               u.user_name u_name,
+               u.phone_number,
+               u.email,
+               u.department,
+               u.grade,
+               u.identity,
+               u.student_id
+        from volunteer_application va
+                 left join admin a on va.admin_id = a.id
+                 left join user u on a.userid = u.id
+        where va.id = #{id}
     </select>
 
     <select id="getApplicationByFormId" resultMap="volunteerApplicationResultMap">

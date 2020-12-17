@@ -3,6 +3,7 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
@@ -28,7 +29,7 @@ public interface VolunteerApplicationDao {
     int updateApplicationByAdmin(
             @Param("adminID") int adminID,
             @Param("adminReply") VolunteerApplicationUpdateDTO volunteerApplicationUpdateDTO,
-            @Param("preUpdateTime")Timestamp timestamp);
+            @Param("preUpdateTime") Timestamp timestamp);
 
     /**
      * 通过用户id寻找申请表，可能有多个结果，因此返回一个列表
@@ -45,6 +46,14 @@ public interface VolunteerApplicationDao {
      * @return 申请表对象
      */
     VolunteerApplicationPO getApplicationByFormId(@Param("id") int id);
+
+    /**
+     * 通过申请表id寻找申请表详细信息
+     *
+     * @param id 申请表id
+     * @return 申请表对象
+     */
+    VolunteerApplicationDetailDTO getApplicationDetailByFormId(@Param("id") int id);
 
     /**
      * 条件查询，返回一个或多个结果，条件可以都为null，此时返回所有申请表。条件中不提供formID，因为formID可以唯一确定一个申请表。
