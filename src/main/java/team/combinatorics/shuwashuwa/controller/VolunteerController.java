@@ -38,7 +38,7 @@ public class VolunteerController {
     /**
      * 接收志愿者申请
      */
-    @ApiOperation(value = "当前用户上传一个志愿者申请", notes = "已经是管理员的用户不能提交申请")
+    @ApiOperation(value = "当前用户上传一个志愿者申请", notes = "已经是志愿者的用户不能提交申请")
     @RequestMapping(value = "/application", method = RequestMethod.POST)
     @ApiResponses({
             @ApiResponse(code = 200, message = "申请完成")
