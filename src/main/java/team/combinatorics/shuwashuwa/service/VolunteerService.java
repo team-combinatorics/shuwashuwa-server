@@ -36,8 +36,9 @@ public interface VolunteerService {
      *
      * @param adminUserId 管理员的用户id
      * @param updateDTO   管理员回复的结构
+     * @return 如果审核通过成为志愿者，返回志愿者的id（先写上又没什么问题）
      */
-    void completeApplicationByAdmin(int adminUserId, VolunteerApplicationUpdateDTO updateDTO);
+    int completeApplicationByAdmin(int adminUserId, VolunteerApplicationUpdateDTO updateDTO);
 
     /**
      * 根据申请表id获取申请表的详细信息

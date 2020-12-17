@@ -14,6 +14,7 @@ import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.VolunteerService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
@@ -92,12 +93,20 @@ public class VolunteerServiceImpl implements VolunteerService {
      * @param updateDTO   管理员回复的结构
      */
     @Override
-    public void completeApplicationByAdmin(int adminUserId, VolunteerApplicationUpdateDTO updateDTO) {
+    public int completeApplicationByAdmin(int adminUserId, VolunteerApplicationUpdateDTO updateDTO) {
         // 获取管理员id
         int adminID = adminDao.getAdminIDByUserID(adminUserId);
         // 判断更新数据是否完整
         if (updateDTO.getFormID() == null || updateDTO.getStatus() == null || updateDTO.getReplyByAdmin() == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        // 如果申请状态为成功，则用户的信息都不能缺少
+        if (updateDTO.getStatus() == 1)
+            if (updateDTO.getUserid() == null || updateDTO.getUserName() == null ||
+                    updateDTO.getPhoneNumber() == null || updateDTO.getEmail() == null ||
+                    updateDTO.getIdentity() == null || updateDTO.getDepartment() == null ||
+                    updateDTO.getStudentId() == null)
+                throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+
         // TODO 这里的细节问题之后再实现
         // 随便设置个尝试上限
         for (int i = 0; i < 3; i++) {
@@ -107,6 +116,11 @@ public class VolunteerServiceImpl implements VolunteerService {
             // 如果状态已经被更新过，则不再更新
             if (volunteerApplicationPO.getStatus() != 0)
                 throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+            // 在审核通过时，如果填写的user ID和表单里的不一致，应当错误
+            if (updateDTO.getStatus() == 1 && !volunteerApplicationPO.getUserId().equals(updateDTO.getUserid()))
+                // TODO 这里是否应该定义一个新错误
+                throw new RuntimeException("数据不一致错误！");
+
             // 更新状态，附带上次更新时间信息
             int returnValue = volunteerApplicationDao.updateApplicationByAdmin(adminID,
                     updateDTO,
@@ -117,10 +131,22 @@ public class VolunteerServiceImpl implements VolunteerService {
                 System.out.println("成功了？");
                 imageStorageService.delete(volunteerApplicationPO.getCardPicLocation());
                 if (updateDTO.getStatus() == 1) {
-                    Integer promotedUserId = volunteerApplicationDao.getApplicationByFormId(updateDTO.getFormID()).getUserId();
-                    userDao.updateUserVolunteerAuthority(promotedUserId, true);
+                    // 将用户插入志愿者表中
+                    VolunteerPO volunteerPO = VolunteerPO.builder()
+                            .userid(updateDTO.getUserid())
+                            .userName(updateDTO.getUserName())
+                            .department(updateDTO.getDepartment())
+                            .email(updateDTO.getEmail())
+                            .identity(updateDTO.getIdentity())
+                            .phoneNumber(updateDTO.getPhoneNumber())
+                            .studentId(updateDTO.getStudentId())
+                            .build();
+                    volunteerDao.insert(volunteerPO);
+                    // 更新用户的志愿者权限
+                    userDao.updateUserVolunteerAuthority(updateDTO.getUserid(), true);
+                    return volunteerPO.getId();
                 }
-                return;
+                return 0;
             }
         }
         // TODO 如果运行到这里（有一说一不太应该），或许应该定义个什么错误

@@ -3,15 +3,15 @@ package team.combinatorics.shuwashuwa.controller;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
-import team.combinatorics.shuwashuwa.model.dto.*;
+import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
+import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
+import team.combinatorics.shuwashuwa.model.dto.UserInfoResponseDTO;
+import team.combinatorics.shuwashuwa.model.dto.UserInfoUpdateDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
-
-import java.util.List;
 
 @Api(value = "User相关接口说明")
 @RestController
@@ -78,11 +78,6 @@ public class UserController {
         System.out.println(userid + "请求个人信息");
         return new CommonResult<>(200, "请求成功", responseDTO);
     }
-
-
-
-
-
 
 
     /**
