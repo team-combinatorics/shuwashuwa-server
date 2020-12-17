@@ -37,6 +37,18 @@
 
     </resultMap>
 
+    <resultMap type="team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO"
+               id="volunteerApplicationAbstract">
+        <result column="va_id" jdbcType="INTEGER" property="id"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="u_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="department" jdbcType="VARCHAR" property="department"/>
+        <result column="grade" jdbcType="VARCHAR" property="grade"/>
+
+    </resultMap>
+
     <insert id="insert" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO"
             useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
@@ -79,7 +91,7 @@
                u.student_id
         from volunteer_application va
                  left join admin a on va.admin_id = a.id
-                 left join user u on a.userid = u.id
+                 left join user u on va.user_id = u.id
         where va.id = #{id}
     </select>
 
@@ -89,25 +101,33 @@
         where id = #{id}
     </select>
 
-    <select id="listApplicationsByCondition" resultMap="volunteerApplicationResultMap"
+
+    <select id="listApplicationAbstractByCondition" resultMap="volunteerApplicationAbstract"
             parameterType="team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO">
-        select *
-        from volunteer_application
+        select va.id va_id,
+        va.create_time,
+        va.user_id,
+        va.status,
+        u.user_name u_name,
+        u.department,
+        u.grade
+        from volunteer_application va
+        left join user u on va.user_id = u.id
         <where>
             <if test="condition.beginTime != null">
-                create_time >= #{condition.beginTime}
+                va.create_time >= #{condition.beginTime}
             </if>
             <if test="condition.endTime != null">
-                and create_time &lt;= #{condition.endTime}
+                and va.create_time &lt;= #{condition.endTime}
             </if>
-            <if test="condition.userID != null">
-                and user_id = #{condition.userID}
+            <if test="condition.userId != null">
+                and va.user_id = #{condition.userId}
             </if>
             <if test="condition.status != null">
-                and status = #{condition.status}
+                and va.status = #{condition.status}
             </if>
-            <if test="condition.adminID != null">
-                and admin_id = #{condition.adminID}
+            <if test="condition.adminId != null">
+                and va.admin_id = #{condition.adminId}
             </if>
         </where>
 

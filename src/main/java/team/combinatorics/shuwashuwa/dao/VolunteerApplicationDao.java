@@ -3,6 +3,7 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
@@ -61,7 +62,9 @@ public interface VolunteerApplicationDao {
      * @param selectApplicationCO 用于选取的条件，各种属性见注释，各个属性可以都为空，此时会返回所有列表
      * @return 申请表列表
      */
-    List<VolunteerApplicationPO> listApplicationsByCondition(@Param("condition") SelectApplicationCO selectApplicationCO);
+    List<VolunteerApplicationAbstractDTO> listApplicationAbstractByCondition(
+            @Param("condition") SelectApplicationCO selectApplicationCO);
+    // List<VolunteerApplicationPO> listApplicationsByCondition(@Param("condition") SelectApplicationCO selectApplicationCO);
 
 
 }

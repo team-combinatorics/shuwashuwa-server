@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
@@ -16,6 +17,7 @@ import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
@@ -96,6 +98,26 @@ public class VolunteerApplicationDaoTest {
     }
 
     @Test
+    public void listApplicationAbstractByConditionTest() {
+        List<VolunteerApplicationAbstractDTO> volunteerApplicationAbstractDTOList;
+        SelectApplicationCO selectApplicationCO;
+        selectApplicationCO = SelectApplicationCO.builder()
+                .userId(1)
+                .build();
+        volunteerApplicationAbstractDTOList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        Assert.assertEquals(3, volunteerApplicationAbstractDTOList.size());
+        // 构造一个条件
+        selectApplicationCO = SelectApplicationCO.builder()
+                .adminId(1)
+                .userId(1)
+                .status(0)
+                .build();
+        volunteerApplicationAbstractDTOList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        Assert.assertEquals(0, volunteerApplicationAbstractDTOList.size());
+        // System.out.println(volunteerApplicationAbstractDTOList);
+    }
+
+    @Test
     public void updateApplicationByAdminTest() {
 
         VolunteerApplicationPO volunteerApplicationPO;
@@ -134,23 +156,24 @@ public class VolunteerApplicationDaoTest {
                 volunteerApplicationPO.getUpdatedTime());
         Assert.assertEquals(1, returnValue);
         System.out.println(volunteerApplicationDao.getApplicationByFormId(1));
-        // 测试条件查询
-        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
-                SelectApplicationCO.builder()
-                        .userID(1)
-                        .build()
-        ));
-        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
-                SelectApplicationCO.builder()
-                        .userID(1)
-                        .adminID(1)
-                        .build()
-        ));
-        System.out.println(new Timestamp(new Date().getTime()));
-        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
-                SelectApplicationCO.builder()
-                        .endTime(new Timestamp(new Date().getTime()))
-                        .build()
-        ));
+
+//        // 测试条件查询
+//        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
+//                SelectApplicationCO.builder()
+//                        .userID(1)
+//                        .build()
+//        ));
+//        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
+//                SelectApplicationCO.builder()
+//                        .userID(1)
+//                        .adminID(1)
+//                        .build()
+//        ));
+//        System.out.println(new Timestamp(new Date().getTime()));
+//        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
+//                SelectApplicationCO.builder()
+//                        .endTime(new Timestamp(new Date().getTime()))
+//                        .build()
+//        ));
     }
 }
