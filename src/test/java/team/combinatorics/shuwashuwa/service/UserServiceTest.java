@@ -1,6 +1,5 @@
 package team.combinatorics.shuwashuwa.service;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +10,6 @@ import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.AdminDao;
 import team.combinatorics.shuwashuwa.dao.MethodsOfTesting;
 import team.combinatorics.shuwashuwa.dao.VolunteerApplicationDao;
-import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
@@ -58,20 +55,6 @@ public class UserServiceTest {
                 .userName("1")
                 .build());
 
-        userService.completeApplicationAudition(4, VolunteerApplicationUpdateDTO.builder()
-                .formID(1)
-                .replyByAdmin("爬")
-                .status(2)
-                .build());
-        try {
-            userService.completeApplicationAudition(4, VolunteerApplicationUpdateDTO.builder()
-                    .formID(1)
-                    .replyByAdmin("爬")
-                    .status(2)
-                    .build());
-        } catch (KnownException ke) {
-            Assert.assertEquals(40013, ke.getErrCode().intValue());
-        }
 
     }
 

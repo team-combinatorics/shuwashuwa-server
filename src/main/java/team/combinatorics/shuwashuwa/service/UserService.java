@@ -15,12 +15,4 @@ public interface UserService {
 
     UserInfoResponseDTO getUserInfo(int userid) throws Exception;
 
-    void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO);
-
-    List<VolunteerApplicationResponseForAdminDTO> listUnauditedVolunteerApplication();
-
-    List<VolunteerApplicationResultDTO> listVolunteerApplicationOf(int userid);
-
-    void completeApplicationAudition(int userid, VolunteerApplicationUpdateDTO updateDTO);
-
 }

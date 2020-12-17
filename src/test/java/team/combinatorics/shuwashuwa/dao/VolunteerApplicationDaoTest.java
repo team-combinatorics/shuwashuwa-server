@@ -9,11 +9,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
+import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
@@ -23,6 +27,9 @@ public class VolunteerApplicationDaoTest {
 
     @Autowired
     MethodsOfTesting methodsOfTesting;
+
+    @Autowired
+    AdminDao adminDao;
 
     @Before
     @Test
@@ -54,11 +61,60 @@ public class VolunteerApplicationDaoTest {
         // 测试获取申请单
         Assert.assertEquals(Integer.valueOf(1), volunteerApplicationDao.getApplicationByFormId(1).getId());
 
+        // 插入管理员信息
+        adminDao.insert(AdminPO.builder()
+                .userid(2)
+                .userName("hkr")
+                .studentId("122")
+                .phoneNumber("233")
+                .identity("?")
+                .email("1@1")
+                .department("maimai")
+                .build());
 
-        System.out.println(volunteerApplicationDao.listApplicationsByUserId(233));
-        // 测试select多个申请单
-        System.out.println(volunteerApplicationDao.listApplicationsByUserId(1));
+//        System.out.println(volunteerApplicationDao.listApplicationsByUserId(233));
+//        // 测试select多个申请单
+//        System.out.println(volunteerApplicationDao.listApplicationsByUserId(1));
 
+    }
+
+    @Test
+    public void getApplicationDetailByFormIdTest() {
+        VolunteerApplicationDetailDTO volunteerApplicationDetailDTO;
+        volunteerApplicationDetailDTO = volunteerApplicationDao.getApplicationDetailByFormId(1);
+        Assert.assertEquals(1, volunteerApplicationDetailDTO.getUserId().intValue());
+        Assert.assertNull(volunteerApplicationDetailDTO.getAdminId());
+        Assert.assertNull(volunteerApplicationDetailDTO.getAdminName());
+        Assert.assertEquals(0, volunteerApplicationDetailDTO.getStatus().intValue());
+        // 管理员添加审核
+        int returnValue = volunteerApplicationDao.updateApplicationByAdmin(1, VolunteerApplicationUpdateDTO.builder()
+                .status(1)
+                .replyByAdmin("123")
+                .formID(1)
+                .build(), volunteerApplicationDetailDTO.getUpdatedTime());
+        Assert.assertEquals(1, returnValue);
+        volunteerApplicationDetailDTO = volunteerApplicationDao.getApplicationDetailByFormId(1);
+        Assert.assertEquals(1, volunteerApplicationDetailDTO.getAdminId().intValue());
+    }
+
+    @Test
+    public void listApplicationAbstractByConditionTest() {
+        List<VolunteerApplicationAbstractDTO> volunteerApplicationAbstractDTOList;
+        SelectApplicationCO selectApplicationCO;
+        selectApplicationCO = SelectApplicationCO.builder()
+                .userId(1)
+                .build();
+        volunteerApplicationAbstractDTOList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        Assert.assertEquals(3, volunteerApplicationAbstractDTOList.size());
+        // 构造一个条件
+        selectApplicationCO = SelectApplicationCO.builder()
+                .adminId(1)
+                .userId(1)
+                .status(0)
+                .build();
+        volunteerApplicationAbstractDTOList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        Assert.assertEquals(0, volunteerApplicationAbstractDTOList.size());
+        // System.out.println(volunteerApplicationAbstractDTOList);
     }
 
     @Test
@@ -100,23 +156,24 @@ public class VolunteerApplicationDaoTest {
                 volunteerApplicationPO.getUpdatedTime());
         Assert.assertEquals(1, returnValue);
         System.out.println(volunteerApplicationDao.getApplicationByFormId(1));
-        // 测试条件查询
-        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
-                SelectApplicationCO.builder()
-                        .userID(1)
-                        .build()
-        ));
-        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
-                SelectApplicationCO.builder()
-                        .userID(1)
-                        .adminID(1)
-                        .build()
-        ));
-        System.out.println(new Timestamp(new Date().getTime()));
-        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
-                SelectApplicationCO.builder()
-                        .endTime(new Timestamp(new Date().getTime()))
-                        .build()
-        ));
+
+//        // 测试条件查询
+//        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
+//                SelectApplicationCO.builder()
+//                        .userID(1)
+//                        .build()
+//        ));
+//        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
+//                SelectApplicationCO.builder()
+//                        .userID(1)
+//                        .adminID(1)
+//                        .build()
+//        ));
+//        System.out.println(new Timestamp(new Date().getTime()));
+//        System.out.println(volunteerApplicationDao.listApplicationsByCondition(
+//                SelectApplicationCO.builder()
+//                        .endTime(new Timestamp(new Date().getTime()))
+//                        .build()
+//        ));
     }
 }

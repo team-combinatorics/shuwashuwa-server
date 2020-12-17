@@ -23,7 +23,7 @@ public class SelectApplicationCO {
     /**
      * UserID
      */
-    Integer userID;
+    Integer userId;
     /**
      * 申请表状态
      */
@@ -31,6 +31,6 @@ public class SelectApplicationCO {
     /**
      * 管理员id
      */
-    Integer adminID;
+    Integer adminId;
 
 }
