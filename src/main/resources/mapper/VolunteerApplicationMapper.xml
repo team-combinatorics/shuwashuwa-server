@@ -16,7 +16,7 @@
 
     <resultMap type="team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO"
                id="volunteerApplicationDetailBO">
-        <result column="va_id" jdbcType="INTEGER" property="id"/>
+        <result column="va_id" jdbcType="INTEGER" property="formId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
@@ -39,7 +39,7 @@
 
     <resultMap type="team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO"
                id="volunteerApplicationAbstract">
-        <result column="va_id" jdbcType="INTEGER" property="id"/>
+        <result column="va_id" jdbcType="INTEGER" property="formId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="status" jdbcType="TINYINT" property="status"/>

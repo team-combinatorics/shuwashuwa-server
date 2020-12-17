@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VolunteerApplicationAbstractBO {
-    private Integer id;
+    private Integer formId;
     private Timestamp createTime;
     private Integer userId;
     private String userName;

@@ -17,7 +17,7 @@ public class VolunteerApplicationAbstractDTO {
      * 前端应当能拿到申请表的id
      */
     @ApiModelProperty("申请表id")
-    private Integer id;
+    private Integer formId;
     @ApiModelProperty(value = "申请表提交时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String createTime;
     @ApiModelProperty("发起申请的用户的用户id")

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @ApiModel("志愿者申请表的详细信息结构")
 public class VolunteerApplicationDetailDTO {
     @ApiModelProperty("申请表id")
-    private Integer id;
+    private Integer formId;
     @ApiModelProperty(value = "申请表提交时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String createTime;
     /**
