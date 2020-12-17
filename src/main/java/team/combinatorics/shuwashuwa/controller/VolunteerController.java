@@ -99,7 +99,7 @@ public class VolunteerController {
         //日期转化
         List<VolunteerApplicationAbstractDTO> dtoList = boList.stream()
                         .map(x -> (VolunteerApplicationAbstractDTO)
-                                DTOUtil.convert(x,VolunteerApplicationDetailDTO.class))
+                                DTOUtil.convert(x,VolunteerApplicationAbstractDTO.class))
                         .collect(Collectors.toList());
         return new CommonResult<>(200, "请求成功", dtoList);
     }
