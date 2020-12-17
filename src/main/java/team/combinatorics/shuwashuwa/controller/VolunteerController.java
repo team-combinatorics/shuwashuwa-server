@@ -15,9 +15,14 @@ import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import java.util.List;
 
-@Api(value = "志愿者申请相关接口说明")
+@Api(value = "志愿者相关操作接口说明")
 @RestController
 @AllArgsConstructor
+/*
+ * 这里用/volunteer作为根目录是考虑到以后可能有志愿者独享的一些操作
+ * 例如fxs老师说的志愿者自己申请一个什么志愿服务证明……
+ * 总之先预留上
+ */
 @RequestMapping("/api/volunteer")
 public class VolunteerController {
 
@@ -26,7 +31,7 @@ public class VolunteerController {
     /**
      * 接收志愿者申请
      */
-    @ApiOperation(value = "接收当前用户的申请", notes = "已经是管理员的用户不能提交申请")
+    @ApiOperation(value = "当前用户上传一个志愿者申请", notes = "已经是管理员的用户不能提交申请")
     @RequestMapping(value = "/application", method = RequestMethod.POST)
     @ApiResponses({
             @ApiResponse(code = 200, message = "申请完成")
@@ -62,9 +67,12 @@ public class VolunteerController {
     @AllAccess
     public CommonResult<List<VolunteerApplicationAbstractDTO>> listVolunteerApplicationByCondition(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestParam("userId") @ApiParam(value = "目标申请表中的用户id") Integer targetUserID,
-            @RequestParam("adminId") @ApiParam(value = "目标申请表中的管理员id") Integer adminID,
-            @RequestParam("status") @ApiParam(value = "目标申请的状态") Integer status
+            @RequestParam(value = "userId", required = false) @ApiParam(value = "目标申请表中的申请者用户id")
+                    Integer targetUserID,
+            @RequestParam(value = "adminId", required = false) @ApiParam(value = "目标申请表中的管理员id")
+                    Integer adminID,
+            @RequestParam(value = "status", required = false) @ApiParam(value = "目标申请表的状态")
+                    Integer status
     ) {
         // 提取当前用户的id
         int currentUserId = TokenUtil.extractUserid(token);

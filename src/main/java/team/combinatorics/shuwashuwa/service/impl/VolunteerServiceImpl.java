@@ -61,6 +61,7 @@ public class VolunteerServiceImpl implements VolunteerService {
     /**
      * 根据条件获取摘要信息列表
      *
+     * @param userid              发起该操作的用户的userid
      * @param selectApplicationCO 由controller构造的条件结构
      * @return 申请表摘要信息列表
      */
