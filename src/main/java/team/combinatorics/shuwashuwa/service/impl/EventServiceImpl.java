@@ -3,8 +3,10 @@ package team.combinatorics.shuwashuwa.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team.combinatorics.shuwashuwa.dao.AdminDao;
 import team.combinatorics.shuwashuwa.dao.ServiceEventDao;
 import team.combinatorics.shuwashuwa.dao.ServiceFormDao;
+import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
@@ -22,6 +24,9 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
     private final ServiceEventDao serviceEventDao;
     private final ServiceFormDao serviceFormDao;
+    private final AdminDao adminDao;
+    private final VolunteerDao volunteerDao;
+
     private final ImageStorageService imageStorageService;
 
     /*维修事件Status属性说明
@@ -111,7 +116,7 @@ public class EventServiceImpl implements EventService {
                 throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
             serviceEventDao.updateStatus(eventId, auditDTO.getResult() ? 2 : 0);
         }
-        serviceFormDao.updateAdvice(formId, userid, auditDTO.getMessage());
+        serviceFormDao.updateAdvice(formId, adminDao.getAdminIDByUserID(userid), auditDTO.getMessage());
         serviceEventDao.updateProblemSummary(eventId, auditDTO.getProblemSummary());
     }
 
@@ -123,7 +128,7 @@ public class EventServiceImpl implements EventService {
         if (detailDTO.getStatus() != 3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
 
-        serviceEventDao.updateVolunteerInfo(serviceEventId, userid);
+        serviceEventDao.updateVolunteerInfo(serviceEventId, volunteerDao.getVolunteerIDByUserID(userid));
         serviceEventDao.updateStatus(serviceEventId, 4);
     }
 
@@ -132,7 +137,7 @@ public class EventServiceImpl implements EventService {
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceEventId);
-        if (eventPO.getVolunteerId() != userid)
+        if (eventPO.getVolunteerId() != volunteerDao.getVolunteerIDByUserID(userid))
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
         if (eventPO.getStatus() != 4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
@@ -145,7 +150,7 @@ public class EventServiceImpl implements EventService {
         if (DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());
-        if (eventPO.getVolunteerId() != userid)
+        if (eventPO.getVolunteerId() != volunteerDao.getVolunteerIDByUserID(userid))
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
         if (eventPO.getStatus() != 4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
@@ -181,6 +186,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<ServiceAbstractDTO> listServiceEvents(SelectServiceEventCO co) {
         return serviceEventDao.listAbstractServiceEventsByCondition(co);
+    }
+
+    @Override
+    public Integer countServiceEvents(SelectServiceEventCO co) {
+        return serviceEventDao.countServiceEventsByCondition(co);
     }
 
     @Override

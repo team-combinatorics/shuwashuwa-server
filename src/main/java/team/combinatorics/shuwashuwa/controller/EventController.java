@@ -183,6 +183,56 @@ public class EventController {
         return new CommonResult<>(200, "请求成功", eventService.listServiceEvents(serviceEventCO));
     }
 
+    @ApiOperation("统计满足指定筛选条件的维修事件数量，不需要筛选的条件无需赋值")
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    @AllAccess
+    public CommonResult<Integer> getServiceEventNumber(
+            @RequestParam(value = "client", required = false)
+            @ApiParam("创建维修事件的用户id")
+                    Integer clientId,
+            @RequestParam(value = "volunteer", required = false)
+            @ApiParam("接单的志愿者id")
+                    Integer volunteerId,
+            @RequestParam(value = "activity", required = false)
+            @ApiParam("报名的活动id")
+                    Integer activityId,
+            @RequestParam(value = "status", required = false)
+            @ApiParam(value = "该次维修处于的状态,可能状态如下:\n" +
+                    "0:等待用户编辑\n" +
+                    "1:等待管理员审核\n" +
+                    "2:审核通过（待签到）\n" +
+                    "3:等待志愿者接单\n" +
+                    "4:维修中\n" +
+                    "5:维修完成\n",
+                    allowableValues = "0,1,2,3,4,5")
+                    Integer status,
+            @RequestParam(value = "draft", required = false)
+            @ApiParam("是否有云端保存的草稿")
+                    Boolean draftSaved,
+            @RequestParam(value = "closed", required = false)
+            @ApiParam("维修事件是否关闭")
+                    Boolean closed,
+            @RequestParam(value = "createLower", required = false)
+            @ApiParam(value = "创建时间下界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+                    String createTimeLowerBound,
+            @RequestParam(value = "createUpper", required = false)
+            @ApiParam(value = "创建时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+                    String createTimeUpperBound
+    ) {
+        SelectServiceEventCO serviceEventCO = SelectServiceEventCO
+                .builder()
+                .userId(clientId)
+                .volunteerId(volunteerId)
+                .activityId(activityId)
+                .closed(closed)
+                .draft(draftSaved)
+                .status(status)
+                .build();
+        if (createTimeLowerBound != null) serviceEventCO.setBeginTime(Timestamp.valueOf(createTimeLowerBound));
+        if (createTimeUpperBound != null) serviceEventCO.setEndTime(Timestamp.valueOf(createTimeUpperBound));
+        return new CommonResult<>(200, "请求成功", eventService.countServiceEvents(serviceEventCO));
+    }
+
     @ApiOperation("获取一次维修事件的详情")
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     @AllAccess

@@ -64,5 +64,12 @@ public interface EventService {
      */
     List<ServiceAbstractDTO> listServiceEvents(SelectServiceEventCO co);
 
+    /**
+     * 按条件对象筛选维修事件并返回数量
+     * @param co 用于筛选的条件对象
+     * @return 指定条件的维修事件的数量
+     */
+    Integer countServiceEvents(SelectServiceEventCO co);
+
     ServiceEventDetailDTO getServiceDetail(Integer eventId);
 }
