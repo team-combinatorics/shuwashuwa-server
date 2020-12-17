@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
-import team.combinatorics.shuwashuwa.model.so.ActivityTimeSlot;
+import team.combinatorics.shuwashuwa.model.bo.ActivityTimeSlotBO;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -31,8 +31,8 @@ public class ActivityTimeSlotDaoTest {
 
         Calendar begin = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
-        List<ActivityTimeSlot> activityTimeSlotList1 = new ArrayList<>();
-        List<ActivityTimeSlot> activityTimeSlotList2 = new ArrayList<>();
+        List<ActivityTimeSlotBO> activityTimeSlotBOList1 = new ArrayList<>();
+        List<ActivityTimeSlotBO> activityTimeSlotBOList2 = new ArrayList<>();
         for (int i = 1; i <= 5; i++) {
             begin.setTimeInMillis(0);
             begin.set(2020, Calendar.DECEMBER, 25, 14 + i, 0, 0);
@@ -46,12 +46,12 @@ public class ActivityTimeSlotDaoTest {
                     .build();
             activityTimeSlotDao.insert(activityTimeSlotPO);
             Assert.assertEquals(i, activityTimeSlotPO.getId().intValue());
-            ActivityTimeSlot activityTimeSlot = ActivityTimeSlot.builder()
+            ActivityTimeSlotBO activityTimeSlotBO = ActivityTimeSlotBO.builder()
                     .startTime(new Timestamp(begin.getTimeInMillis()))
                     .endTime(new Timestamp(end.getTimeInMillis()))
                     .timeSlot(i)
                     .build();
-            activityTimeSlotList1.add(activityTimeSlot);
+            activityTimeSlotBOList1.add(activityTimeSlotBO);
         }
         for (int i = 1; i <= 4; i++) {
             begin.setTimeInMillis(0);
@@ -66,24 +66,24 @@ public class ActivityTimeSlotDaoTest {
                     .build();
             activityTimeSlotDao.insert(activityTimeSlotPO);
             Assert.assertEquals(i + 5, activityTimeSlotPO.getId().intValue());
-            ActivityTimeSlot activityTimeSlot = ActivityTimeSlot.builder()
+            ActivityTimeSlotBO activityTimeSlotBO = ActivityTimeSlotBO.builder()
                     .startTime(new Timestamp(begin.getTimeInMillis()))
                     .endTime(new Timestamp(end.getTimeInMillis()))
                     .timeSlot(i)
                     .build();
-            activityTimeSlotList2.add(activityTimeSlot);
+            activityTimeSlotBOList2.add(activityTimeSlotBO);
         }
-        Assert.assertArrayEquals(activityTimeSlotList1.toArray()
+        Assert.assertArrayEquals(activityTimeSlotBOList1.toArray()
                 , activityTimeSlotDao.listTimeSlotsByActivityID(1).toArray());
-        Assert.assertArrayEquals(activityTimeSlotList2.toArray()
+        Assert.assertArrayEquals(activityTimeSlotBOList2.toArray()
                 , activityTimeSlotDao.listTimeSlotsByActivityID(2).toArray());
-        Assert.assertEquals(activityTimeSlotList1.get(0), activityTimeSlotDao.getTimeSlot(1, 1));
+        Assert.assertEquals(activityTimeSlotBOList1.get(0), activityTimeSlotDao.getTimeSlot(1, 1));
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(0);
         calendar.set(2020, Calendar.DECEMBER, 30, 14, 0, 0);
         // 测试更新
-        Assert.assertEquals(1, activityTimeSlotDao.update(1, ActivityTimeSlot.builder()
+        Assert.assertEquals(1, activityTimeSlotDao.update(1, ActivityTimeSlotBO.builder()
                 .timeSlot(2)
                 .startTime(new Timestamp(calendar.getTimeInMillis()))
                 .endTime(new Timestamp(calendar.getTimeInMillis()))

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import team.combinatorics.shuwashuwa.model.so.ServiceForm;
 
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class ServiceEventDetailDTO {
     @ApiModelProperty("接单的志愿者的姓名")
     private String volunteerName;
     @ApiModelProperty("用户提交的历史维修单")
-    private List<ServiceForm> serviceForms;
+    private List<ServiceFormDTO> serviceForms;
     @ApiModelProperty("由志愿者填写的维修结果")
     private String repairingResult;
     @ApiModelProperty("用户反馈")

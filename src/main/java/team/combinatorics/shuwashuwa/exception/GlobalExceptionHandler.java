@@ -2,7 +2,7 @@ package team.combinatorics.shuwashuwa.exception;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
+import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 
 import java.util.*;
 

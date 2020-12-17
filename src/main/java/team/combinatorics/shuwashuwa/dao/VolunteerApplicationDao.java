@@ -3,9 +3,9 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
-import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationAbstract;
-import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationDetail;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
+import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
 import java.sql.Timestamp;
@@ -25,11 +25,11 @@ public interface VolunteerApplicationDao {
      * 管理员更新维修单状态
      *
      * @param adminID                       管理员id
-     * @param volunteerApplicationUpdateDTO 管理员的回复结构，必须都不为空
+     * @param volunteerApplicationAuditDTO 管理员的回复结构，必须都不为空
      */
     int updateApplicationByAdmin(
             @Param("adminID") int adminID,
-            @Param("adminReply") VolunteerApplicationUpdateDTO volunteerApplicationUpdateDTO,
+            @Param("adminReply") VolunteerApplicationAuditDTO volunteerApplicationAuditDTO,
             @Param("preUpdateTime") Timestamp timestamp);
 
     /**
@@ -54,7 +54,7 @@ public interface VolunteerApplicationDao {
      * @param id 申请表id
      * @return 申请表对象
      */
-    VolunteerApplicationDetail getApplicationDetailByFormId(@Param("id") int id);
+    VolunteerApplicationDetailBO getApplicationDetailByFormId(@Param("id") int id);
 
     /**
      * 条件查询，返回一个或多个结果，条件可以都为null，此时返回所有申请表。条件中不提供formID，因为formID可以唯一确定一个申请表。
@@ -62,7 +62,7 @@ public interface VolunteerApplicationDao {
      * @param selectApplicationCO 用于选取的条件，各种属性见注释，各个属性可以都为空，此时会返回所有列表
      * @return 申请表列表
      */
-    List<VolunteerApplicationAbstract> listApplicationAbstractByCondition(
+    List<VolunteerApplicationAbstractBO> listApplicationAbstractByCondition(
             @Param("condition") SelectApplicationCO selectApplicationCO);
     // List<VolunteerApplicationPO> listApplicationsByCondition(@Param("condition") SelectApplicationCO selectApplicationCO);
 

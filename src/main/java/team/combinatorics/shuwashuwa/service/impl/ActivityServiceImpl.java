@@ -12,7 +12,7 @@ import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ActivityInfoPO;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
-import team.combinatorics.shuwashuwa.model.so.ActivityTimeSlot;
+import team.combinatorics.shuwashuwa.model.bo.ActivityTimeSlotBO;
 import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
 
@@ -116,9 +116,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<ActivityTimeSlotDTO> listTimeSlots(Integer activityId) {
-        List<ActivityTimeSlot> raw = timeSlotDao.listTimeSlotsByActivityID(activityId);
+        List<ActivityTimeSlotBO> raw = timeSlotDao.listTimeSlotsByActivityID(activityId);
         List<ActivityTimeSlotDTO> converted = new Vector<>();
-        for(ActivityTimeSlot timeSlot: raw) {
+        for(ActivityTimeSlotBO timeSlot: raw) {
             converted.add(new ActivityTimeSlotDTO(timeSlot.getTimeSlot(),
                     DTOUtil.stamp2str(timeSlot.getStartTime()),
                     DTOUtil.stamp2str(timeSlot.getEndTime())));

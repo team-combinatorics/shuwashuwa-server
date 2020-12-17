@@ -6,14 +6,19 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
-import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationAbstract;
+import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
-import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
+import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 import team.combinatorics.shuwashuwa.service.VolunteerService;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api(value = "志愿者相关操作接口说明")
 @RestController
@@ -51,7 +56,6 @@ public class VolunteerController {
 
     /**
      * 条件查询志愿者申请列表
-     * TODO 这里暂时没支持时间搜索，不知道是否用得到，反正之后加也好加
      *
      * @param token        申请操作的用户的token
      * @param targetUserID 目标申请表中的用户id
@@ -59,13 +63,10 @@ public class VolunteerController {
      * @param status       目标申请表的当前状态
      * @return 符合条件的维修单列表
      */
-    @ApiOperation(value = "条件查询申请表的摘要列表", notes = "用户身份下，targetUserID会被强行设置为用户自己的userid")
+    @ApiOperation(value = "条件查询志愿者申请的摘要列表", notes = "用户身份下，targetUserID会被强行设置为用户自己的userid")
     @RequestMapping(value = "/application", method = RequestMethod.GET)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "申请完成")
-    })
     @AllAccess
-    public CommonResult<List<VolunteerApplicationAbstract>> listVolunteerApplicationByCondition(
+    public CommonResult<List<VolunteerApplicationAbstractDTO>> listVolunteerApplicationByCondition(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
             @RequestParam(value = "userId", required = false) @ApiParam(value = "目标申请表中的申请者用户id")
                     Integer targetUserID,
@@ -83,31 +84,49 @@ public class VolunteerController {
                 .adminId(adminID)
                 .build();
         // 查询目标列表
-        List<VolunteerApplicationAbstract> volunteerApplicationAbstractList =
-                volunteerService.listVolunteerApplicationByCondition(currentUserId, selectApplicationCO);
-        return new CommonResult<>(200, "请求成功", volunteerApplicationAbstractList);
+        List<VolunteerApplicationAbstractBO> boList =
+                volunteerService.listVolunteerApplicationByCondition(selectApplicationCO);
+        //日期转化
+        List<VolunteerApplicationAbstractDTO> dtoList = boList.stream()
+                        .map(x -> (VolunteerApplicationAbstractDTO)
+                                DTOUtil.convert(x,VolunteerApplicationDetailDTO.class))
+                        .collect(Collectors.toList());
+        return new CommonResult<>(200, "请求成功", dtoList);
+    }
+
+
+    @ApiOperation(value = "获取志愿者申请的详细信息")
+    @RequestMapping(value = "/application/detail", method = RequestMethod.GET)
+    @AllAccess
+    public CommonResult<VolunteerApplicationDetailDTO> getVolunteerApplicationDetail(
+            @RequestParam("id") @ApiParam(value = "要查看的申请表id",required = true) Integer formId
+    ) {
+        VolunteerApplicationDetailBO bo = volunteerService.getApplicationDetailByFormId(formId);
+        VolunteerApplicationDetailDTO dto =
+                (VolunteerApplicationDetailDTO) DTOUtil.convert(bo,VolunteerApplicationDetailDTO.class);
+        return new CommonResult<>(200,"请求成功",dto);
     }
 
 
     /**
      * 处理志愿者申请的审核
      */
-    @ApiOperation(value = "[管理员]审核志愿者申请")
+    @ApiOperation(value = "[管理员]审核志愿者申请，返回新志愿者的ID")
     @RequestMapping(value = "/application", method = RequestMethod.PUT)
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AdminAccess
-    public CommonResult<String> receiveApplicationAudition(
+    public CommonResult<Integer> receiveApplicationAudition(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "审核结果", required = true) VolunteerApplicationUpdateDTO updateDTO
+            @RequestBody @ApiParam(value = "审核结果", required = true) VolunteerApplicationAuditDTO updateDTO
     ) {
         // 得到当前管理员的用户id
         int adminUserid = TokenUtil.extractUserid(token);
         System.out.println(adminUserid + "审核了编号为" + updateDTO.getFormID() + "的申请");
-        volunteerService.completeApplicationByAdmin(adminUserid, updateDTO);
+        int volunteerId = volunteerService.completeApplicationByAdmin(adminUserid, updateDTO);
 
-        return new CommonResult<>(200, "请求成功", "success");
+        return new CommonResult<>(200, "请求成功", volunteerId);
     }
 
 }

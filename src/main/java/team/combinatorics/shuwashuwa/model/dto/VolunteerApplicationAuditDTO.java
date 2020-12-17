@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(description = "管理员审核志愿者申请时传输的数据，审核通过时应该一并传输申请成为志愿者的用户的用户信息")
-public class VolunteerApplicationUpdateDTO {
+public class VolunteerApplicationAuditDTO {
     @ApiModelProperty("志愿者申请表id")
     private Integer formID;
     @ApiModelProperty("管理员的回复")
@@ -22,8 +22,6 @@ public class VolunteerApplicationUpdateDTO {
     /*
      * 以下为审核成功时需要填写的用户信息
      */
-    @ApiModelProperty("成为志愿者的用户的id（审核通过时该信息才有效）")
-    private Integer userid;
     @ApiModelProperty("成为志愿者的用户的真实姓名（审核通过时该信息才有效）")
     private String userName;
     @ApiModelProperty("成为志愿者的用户的手机号（审核通过时该信息才有效）")

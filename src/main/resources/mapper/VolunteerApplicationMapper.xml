@@ -14,8 +14,8 @@
         <result column="card_pic_location" jdbcType="VARCHAR" property="cardPicLocation"/>
     </resultMap>
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.so.VolunteerApplicationDetail"
-               id="volunteerApplicationDetail">
+    <resultMap type="team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO"
+               id="volunteerApplicationDetailBO">
         <result column="va_id" jdbcType="INTEGER" property="id"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
@@ -37,7 +37,7 @@
 
     </resultMap>
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.so.VolunteerApplicationAbstract"
+    <resultMap type="team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO"
                id="volunteerApplicationAbstract">
         <result column="va_id" jdbcType="INTEGER" property="id"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -71,7 +71,7 @@
         where user_id = #{id}
     </select>
 
-    <select id="getApplicationDetailByFormId" resultMap="volunteerApplicationDetail">
+    <select id="getApplicationDetailByFormId" resultMap="volunteerApplicationDetailBO">
         select va.id       va_id,
                va.updated_time,
                va.create_time,

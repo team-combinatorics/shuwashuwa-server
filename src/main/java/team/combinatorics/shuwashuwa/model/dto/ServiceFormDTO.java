@@ -1,4 +1,4 @@
-package team.combinatorics.shuwashuwa.model.so;
+package team.combinatorics.shuwashuwa.model.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("返回给前端的维修单信息")
-public class ServiceForm {
+public class ServiceFormDTO {
     @ApiModelProperty(value = "维修单ID")
     private Integer formID;
 

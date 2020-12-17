@@ -15,7 +15,7 @@ import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
-import team.combinatorics.shuwashuwa.model.so.ServiceForm;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormDTO;
 
 import java.util.List;
 
@@ -58,7 +58,7 @@ public class EventServiceTest {
     @Test
     public void submitFormTest() {
         ServiceEventPO serviceEventPO;
-        ServiceForm serviceForm;
+        ServiceFormDTO serviceFormDTO;
 
         // 首先测试输入为草稿的情况
 
@@ -103,9 +103,9 @@ public class EventServiceTest {
         // 检查草稿id
         Assert.assertEquals(1, serviceFormDao.getLastFormIDByEventID(1).intValue());
         // 获取草稿form
-        serviceForm = serviceFormDao.getServiceFormByFormID(1);
+        serviceFormDTO = serviceFormDao.getServiceFormByFormID(1);
         // 检查其他数据
-        Assert.assertEquals(2, serviceForm.getActivityId().intValue());
+        Assert.assertEquals(2, serviceFormDTO.getActivityId().intValue());
         // 测试第二次添加草稿
         eventService.submitForm(2, ServiceFormSubmitDTO.builder()
                 .serviceEventId(1)
@@ -118,9 +118,9 @@ public class EventServiceTest {
         // 检查草稿id
         Assert.assertEquals(1, serviceFormDao.getLastFormIDByEventID(1).intValue());
         // 获取草稿form
-        serviceForm = serviceFormDao.getServiceFormByFormID(1);
+        serviceFormDTO = serviceFormDao.getServiceFormByFormID(1);
         // 检查其他数据
-        Assert.assertEquals(3, serviceForm.getActivityId().intValue());
+        Assert.assertEquals(3, serviceFormDTO.getActivityId().intValue());
 
         // 下来测试输入为非草稿的情况
         // 测试数据未填完时的情况
@@ -171,9 +171,9 @@ public class EventServiceTest {
         // 检查草稿id
         Assert.assertEquals(2, serviceFormDao.getLastFormIDByEventID(1).intValue());
         // 获取草稿form
-        serviceForm = serviceFormDao.getServiceFormByFormID(2);
+        serviceFormDTO = serviceFormDao.getServiceFormByFormID(2);
         // 检查其他数据
-        Assert.assertEquals(2, serviceForm.getActivityId().intValue());
+        Assert.assertEquals(2, serviceFormDTO.getActivityId().intValue());
 
     }
 

@@ -2,8 +2,8 @@ package team.combinatorics.shuwashuwa.dao;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
-import team.combinatorics.shuwashuwa.model.so.ServiceForm;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public interface ServiceFormDao {
      * @param id form id
      * @return 一个ServiceForm结构
      */
-    ServiceForm getServiceFormByFormID(@Param("id") int id);
+    ServiceFormDTO getServiceFormByFormID(@Param("id") int id);
 
     /**
      * 根据event id寻找form
@@ -48,7 +48,7 @@ public interface ServiceFormDao {
      * @param eventID event id
      * @return 一个ServiceForm结构
      */
-    List<ServiceForm> listServiceFormsByServiceEventID(@Param("eventID") int eventID);
+    List<ServiceFormDTO> listServiceFormsByServiceEventID(@Param("eventID") int eventID);
 
     /**
      * 根据维修事件id获取最后一个维修单的id

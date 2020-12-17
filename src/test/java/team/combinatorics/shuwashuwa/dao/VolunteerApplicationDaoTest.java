@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
-import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationAbstract;
-import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationDetail;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
+import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
@@ -78,40 +78,40 @@ public class VolunteerApplicationDaoTest {
 
     @Test
     public void getApplicationDetailByFormIdTest() {
-        VolunteerApplicationDetail volunteerApplicationDetail;
-        volunteerApplicationDetail = volunteerApplicationDao.getApplicationDetailByFormId(1);
-        Assert.assertEquals(1, volunteerApplicationDetail.getUserId().intValue());
-        Assert.assertNull(volunteerApplicationDetail.getAdminId());
-        Assert.assertNull(volunteerApplicationDetail.getAdminName());
-        Assert.assertEquals(0, volunteerApplicationDetail.getStatus().intValue());
+        VolunteerApplicationDetailBO volunteerApplicationDetailBO;
+        volunteerApplicationDetailBO = volunteerApplicationDao.getApplicationDetailByFormId(1);
+        Assert.assertEquals(1, volunteerApplicationDetailBO.getUserId().intValue());
+        Assert.assertNull(volunteerApplicationDetailBO.getAdminId());
+        Assert.assertNull(volunteerApplicationDetailBO.getAdminName());
+        Assert.assertEquals(0, volunteerApplicationDetailBO.getStatus().intValue());
         // 管理员添加审核
-        int returnValue = volunteerApplicationDao.updateApplicationByAdmin(1, VolunteerApplicationUpdateDTO.builder()
+        int returnValue = volunteerApplicationDao.updateApplicationByAdmin(1, VolunteerApplicationAuditDTO.builder()
                 .status(1)
                 .replyByAdmin("123")
                 .formID(1)
-                .build(), volunteerApplicationDetail.getUpdatedTime());
+                .build(), volunteerApplicationDetailBO.getUpdatedTime());
         Assert.assertEquals(1, returnValue);
-        volunteerApplicationDetail = volunteerApplicationDao.getApplicationDetailByFormId(1);
-        Assert.assertEquals(1, volunteerApplicationDetail.getAdminId().intValue());
+        volunteerApplicationDetailBO = volunteerApplicationDao.getApplicationDetailByFormId(1);
+        Assert.assertEquals(1, volunteerApplicationDetailBO.getAdminId().intValue());
     }
 
     @Test
     public void listApplicationAbstractByConditionTest() {
-        List<VolunteerApplicationAbstract> volunteerApplicationAbstractList;
+        List<VolunteerApplicationAbstractBO> volunteerApplicationAbstractBOList;
         SelectApplicationCO selectApplicationCO;
         selectApplicationCO = SelectApplicationCO.builder()
                 .userId(1)
                 .build();
-        volunteerApplicationAbstractList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
-        Assert.assertEquals(3, volunteerApplicationAbstractList.size());
+        volunteerApplicationAbstractBOList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        Assert.assertEquals(3, volunteerApplicationAbstractBOList.size());
         // 构造一个条件
         selectApplicationCO = SelectApplicationCO.builder()
                 .adminId(1)
                 .userId(1)
                 .status(0)
                 .build();
-        volunteerApplicationAbstractList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
-        Assert.assertEquals(0, volunteerApplicationAbstractList.size());
+        volunteerApplicationAbstractBOList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        Assert.assertEquals(0, volunteerApplicationAbstractBOList.size());
         // System.out.println(volunteerApplicationAbstractDTOList);
     }
 
@@ -126,7 +126,7 @@ public class VolunteerApplicationDaoTest {
         long timestamp1 = volunteerApplicationPO.getUpdatedTime().getTime();
         // 测试管理员回复
         returnValue = volunteerApplicationDao.updateApplicationByAdmin(1,
-                VolunteerApplicationUpdateDTO.builder()
+                VolunteerApplicationAuditDTO.builder()
                         .formID(1)
                         .replyByAdmin("不给过，爬")
                         .status(1)
@@ -136,7 +136,7 @@ public class VolunteerApplicationDaoTest {
 
         // 再回复一次试试
         returnValue = volunteerApplicationDao.updateApplicationByAdmin(1,
-                VolunteerApplicationUpdateDTO.builder()
+                VolunteerApplicationAuditDTO.builder()
                         .formID(1)
                         .replyByAdmin("不给过，爬 再放送")
                         .status(1)
@@ -146,7 +146,7 @@ public class VolunteerApplicationDaoTest {
         Assert.assertEquals(0, returnValue);
         volunteerApplicationPO = volunteerApplicationDao.getApplicationByFormId(1);
         returnValue = volunteerApplicationDao.updateApplicationByAdmin(2,
-                VolunteerApplicationUpdateDTO.builder()
+                VolunteerApplicationAuditDTO.builder()
                         .formID(1)
                         .replyByAdmin("不给过，爬")
                         .status(1)

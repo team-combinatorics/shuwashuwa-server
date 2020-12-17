@@ -9,7 +9,7 @@ import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
 import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
 import team.combinatorics.shuwashuwa.model.dto.UserInfoResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.UserInfoUpdateDTO;
-import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
+import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 

@@ -5,8 +5,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
-import team.combinatorics.shuwashuwa.model.pojo.NoticeMessage;
-import team.combinatorics.shuwashuwa.model.vo.WechatNoticeVO;
+import team.combinatorics.shuwashuwa.model.dto.NoticeMessage;
+import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,12 +35,12 @@ public class WechatUtilTest {
             data.put("thing11", NoticeMessage.builder()
                     .value("Tsugu")
                     .build());
-            WechatNoticeVO wechatNoticeVO = WechatNoticeVO.builder()
+            WechatNoticeDTO wechatNoticeDTO = WechatNoticeDTO.builder()
                     .touser(openID)
                     .data(data)
                     .build();
 
-            WechatUtil.sendActivityNotice(wechatNoticeVO);
+            WechatUtil.sendActivityNotice(wechatNoticeDTO);
         }
     }
 

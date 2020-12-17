@@ -3,7 +3,7 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
-import team.combinatorics.shuwashuwa.model.so.ActivityTimeSlot;
+import team.combinatorics.shuwashuwa.model.bo.ActivityTimeSlotBO;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface ActivityTimeSlotDao {
      * @param activityID 活动id
      * @return 时间段列表
      */
-    List<ActivityTimeSlot> listTimeSlotsByActivityID(@Param("activityID") int activityID);
+    List<ActivityTimeSlotBO> listTimeSlotsByActivityID(@Param("activityID") int activityID);
 
     /**
      * 由活动id和时间段id获取一个具体的时间段
@@ -35,7 +35,7 @@ public interface ActivityTimeSlotDao {
      * @param timeSlotID 时间段id
      * @return 时间段
      */
-    ActivityTimeSlot getTimeSlot(@Param("activityID") int activityID, @Param("timeSlotID") int timeSlotID);
+    ActivityTimeSlotBO getTimeSlot(@Param("activityID") int activityID, @Param("timeSlotID") int timeSlotID);
 
     /**
      * 更新一个time slot
@@ -43,10 +43,10 @@ public interface ActivityTimeSlotDao {
      * 需要先判断这个activity id以及timeslot是否存在
      *
      * @param activityID       活动id
-     * @param activityTimeSlot 更新的信息
+     * @param activityTimeSlotBO 更新的信息
      * @return 影响的行数：应当为1，为0说明更新失败
      */
-    int update(@Param("activityID") int activityID, @Param("timeSlot") ActivityTimeSlot activityTimeSlot);
+    int update(@Param("activityID") int activityID, @Param("timeSlot") ActivityTimeSlotBO activityTimeSlotBO);
 
     /**
      * 删除一个活动的某个时间段

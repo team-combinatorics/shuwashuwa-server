@@ -3,7 +3,7 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ActivityTimeSlotDao">
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.so.ActivityTimeSlot" id="simpleActivityTimeSlotResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.bo.ActivityTimeSlotBO" id="simpleActivityTimeSlotResultMap">
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
         <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
@@ -28,7 +28,7 @@
           and time_slot = #{timeSlotID}
     </select>
 
-    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.so.ActivityTimeSlot">
+    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.bo.ActivityTimeSlotBO">
         update activity_time_slot
         set start_time=#{timeSlot.startTime},
             end_time=#{timeSlot.endTime}

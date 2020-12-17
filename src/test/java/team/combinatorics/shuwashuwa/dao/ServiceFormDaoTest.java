@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
-import team.combinatorics.shuwashuwa.model.so.ServiceForm;
 
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
-public class ServiceFormTest {
+public class ServiceFormDaoTest {
 
     @Autowired
     ServiceFormDao serviceFormDao;
@@ -111,18 +111,18 @@ public class ServiceFormTest {
 
     @Test
     public void selectTest() {
-        ServiceForm serviceForm = serviceFormDao.getServiceFormByFormID(1);
-        Assert.assertEquals(1, serviceForm.getTimeSlot().intValue());
-        serviceForm = serviceFormDao.getServiceFormByFormID(3);
-        Assert.assertEquals(3, serviceForm.getTimeSlot().intValue());
-        List<ServiceForm> serviceFormList = serviceFormDao.listServiceFormsByServiceEventID(1);
-        Assert.assertEquals(3, serviceFormList.size());
+        ServiceFormDTO serviceFormDTO = serviceFormDao.getServiceFormByFormID(1);
+        Assert.assertEquals(1, serviceFormDTO.getTimeSlot().intValue());
+        serviceFormDTO = serviceFormDao.getServiceFormByFormID(3);
+        Assert.assertEquals(3, serviceFormDTO.getTimeSlot().intValue());
+        List<ServiceFormDTO> serviceFormDTOList = serviceFormDao.listServiceFormsByServiceEventID(1);
+        Assert.assertEquals(3, serviceFormDTOList.size());
         Assert.assertEquals(3, serviceFormDao.getLastFormIDByEventID(1).intValue());
     }
 
     @Test
     public void updateTest() {
-        ServiceForm oldForm = serviceFormDao.getServiceFormByFormID(1);
+        ServiceFormDTO oldForm = serviceFormDao.getServiceFormByFormID(1);
         ServiceFormPO serviceFormPO = ServiceFormPO.builder()
                 .id(1)
                 .brand("联想")
@@ -132,7 +132,7 @@ public class ServiceFormTest {
                 .timeSlot(3)
                 .build();
         serviceFormDao.update(serviceFormPO);
-        ServiceForm newForm = serviceFormDao.getServiceFormByFormID(1);
+        ServiceFormDTO newForm = serviceFormDao.getServiceFormByFormID(1);
         Assert.assertEquals(1, oldForm.getTimeSlot().intValue());
         Assert.assertEquals(3, newForm.getTimeSlot().intValue());
         Assert.assertEquals("联想", newForm.getBrand());
@@ -142,7 +142,7 @@ public class ServiceFormTest {
     @Test
     public void updateAdviceTest() {
         serviceFormDao.updateAdvice(1, 2, "爬爬爬");
-        ServiceForm newForm = serviceFormDao.getServiceFormByFormID(1);
+        ServiceFormDTO newForm = serviceFormDao.getServiceFormByFormID(1);
         Assert.assertEquals(2, newForm.getReplyAdminId().intValue());
         Assert.assertEquals("爬爬爬", newForm.getDescriptionAdvice());
     }

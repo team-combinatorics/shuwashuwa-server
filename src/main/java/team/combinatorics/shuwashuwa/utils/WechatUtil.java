@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.vo.WechatNoticeVO;
+import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
 import java.util.Iterator;
 
@@ -65,7 +65,7 @@ final public class WechatUtil {
         return data.elements();
     }
 
-    public static void sendActivityNotice(WechatNoticeVO wechatNoticeVO) throws Exception {
+    public static void sendActivityNotice(WechatNoticeDTO wechatNoticeDTO) throws Exception {
         Iterator<JsonNode> templates = getTemplateList();
         while (templates.hasNext()) {
             JsonNode t = templates.next();
@@ -73,15 +73,15 @@ final public class WechatUtil {
             System.out.println(title);
             if(title.equals("新活动发布提醒")) {
                 System.out.println(t.path("priTmplId").asText());
-                wechatNoticeVO.setTemplate_id(t.path("priTmplId").asText());
+                wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
             }
         }
 
-        System.out.println(wechatNoticeVO.getTemplate_id());
+        System.out.println(wechatNoticeDTO.getTemplate_id());
         String accessToken = getWechatAccessToken();
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                 + "access_token=" + accessToken;
-        ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeVO, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
         System.out.println(response.getBody());
     }
 }

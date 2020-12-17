@@ -1,4 +1,4 @@
-package team.combinatorics.shuwashuwa.model.so;
+package team.combinatorics.shuwashuwa.model.bo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VolunteerApplicationDetail {
+public class VolunteerApplicationDetailBO {
     private Integer id;
     private Timestamp createTime;
     private Timestamp updatedTime;

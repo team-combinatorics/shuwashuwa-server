@@ -1,7 +1,5 @@
-package team.combinatorics.shuwashuwa.model.so;
+package team.combinatorics.shuwashuwa.model.bo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +11,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VolunteerApplicationAbstract {
+public class VolunteerApplicationAbstractBO {
     private Integer id;
     private Timestamp createTime;
     private Integer userId;

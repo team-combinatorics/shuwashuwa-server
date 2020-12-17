@@ -1,4 +1,4 @@
-package team.combinatorics.shuwashuwa.model.vo;
+package team.combinatorics.shuwashuwa.model.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import team.combinatorics.shuwashuwa.model.pojo.NoticeMessage;
+import team.combinatorics.shuwashuwa.model.dto.NoticeMessage;
 
 import java.util.Map;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 @ApiModel("用于向微信发送活动通知请求所传输的VO对象")
-public class WechatNoticeVO {
+public class WechatNoticeDTO {
 
     @ApiModelProperty("用户的openid")
     private String touser;

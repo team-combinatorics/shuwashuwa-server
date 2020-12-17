@@ -3,7 +3,7 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ServiceFormDao">
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.so.ServiceForm" id="serviceFormResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceFormDTO" id="serviceFormResultMap">
         <result column="id" jdbcType="INTEGER" property="formID"/>
         <result column="brand" jdbcType="VARCHAR" property="brand"/>
         <result column="computer_model" jdbcType="VARCHAR" property="computerModel"/>
@@ -21,7 +21,7 @@
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
         <collection property="imageList"
                     select="team.combinatorics.shuwashuwa.dao.ServicePicDao.listServicePicsByFormId"
-                    ofType="team.combinatorics.shuwashuwa.model.so.ServicePic"
+                    ofType="team.combinatorics.shuwashuwa.model.bo.ServicePic"
                     javaType="java.util.ArrayList"
                     column="id">
         </collection>
@@ -95,44 +95,44 @@
     <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.ServiceFormPO">
         update service_form
         <trim prefix="SET" suffixOverrides=",">
-            <if test="serviceForm.brand != null">
-                brand = #{serviceForm.brand},
+            <if test="serviceFormDTO.brand != null">
+                brand = #{serviceFormDTO.brand},
             </if>
-            <if test="serviceForm.computerModel != null">
-                computer_model = #{serviceForm.computerModel},
+            <if test="serviceFormDTO.computerModel != null">
+                computer_model = #{serviceFormDTO.computerModel},
             </if>
-            <if test="serviceForm.cpuModel != null">
-                cpu_model = #{serviceForm.cpuModel},
+            <if test="serviceFormDTO.cpuModel != null">
+                cpu_model = #{serviceFormDTO.cpuModel},
             </if>
-            <if test="serviceForm.hasDiscreteGraphics != null">
-                has_discrete_graphics = #{serviceForm.hasDiscreteGraphics},
+            <if test="serviceFormDTO.hasDiscreteGraphics != null">
+                has_discrete_graphics = #{serviceFormDTO.hasDiscreteGraphics},
             </if>
-            <if test="serviceForm.graphicsModel != null">
-                graphics_model = #{serviceForm.graphicsModel},
+            <if test="serviceFormDTO.graphicsModel != null">
+                graphics_model = #{serviceFormDTO.graphicsModel},
             </if>
-            <if test="serviceForm.laptopType != null">
-                laptop_type = #{serviceForm.laptopType},
+            <if test="serviceFormDTO.laptopType != null">
+                laptop_type = #{serviceFormDTO.laptopType},
             </if>
-            <if test="serviceForm.boughtTime != null">
-                bought_time = #{serviceForm.boughtTime},
+            <if test="serviceFormDTO.boughtTime != null">
+                bought_time = #{serviceFormDTO.boughtTime},
             </if>
-            <if test="serviceForm.underWarranty != null">
-                is_under_warranty = #{serviceForm.underWarranty},
+            <if test="serviceFormDTO.underWarranty != null">
+                is_under_warranty = #{serviceFormDTO.underWarranty},
             </if>
-            <if test="serviceForm.problemDescription != null">
-                problem_description = #{serviceForm.problemDescription},
+            <if test="serviceFormDTO.problemDescription != null">
+                problem_description = #{serviceFormDTO.problemDescription},
             </if>
-            <if test="serviceForm.problemType != null">
-                problem_type = #{serviceForm.problemType},
+            <if test="serviceFormDTO.problemType != null">
+                problem_type = #{serviceFormDTO.problemType},
             </if>
-            <if test="serviceForm.activityId != null">
-                activity_id = #{serviceForm.activityId},
+            <if test="serviceFormDTO.activityId != null">
+                activity_id = #{serviceFormDTO.activityId},
             </if>
-            <if test="serviceForm.timeSlot != null">
-                time_slot = #{serviceForm.timeSlot},
+            <if test="serviceFormDTO.timeSlot != null">
+                time_slot = #{serviceFormDTO.timeSlot},
             </if>
         </trim>
-        where id = #{serviceForm.id}
+        where id = #{serviceFormDTO.id}
     </update>
 
 </mapper>
