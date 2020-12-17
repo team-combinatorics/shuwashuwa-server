@@ -37,13 +37,31 @@ public class SwaggerConfig {
                 // 这个参数包含了第二部分的所有信息比如标题、描述、版本之类的，开发中一般都会自定义这些信息
                 .apiInfo(apiInfo())
                 // 组名
-                .groupName("Combinatorics")
+                .groupName("Released")
                 .enable(true)
                 .select()
                 // 过滤条件
                 .apis(RequestHandlerSelectors.any())
                 // 控制哪些路径的api会被显示出来
                 .paths(PathSelectors.ant("/api/**"))
+                .build();
+    }
+
+    @Bean
+    public Docket createTestApi() {
+        // 构造函数传入初始化规范，这是swagger2规范
+        return new Docket(DocumentationType.SWAGGER_2)
+                // apiInfo： 添加api详情信息，参数为ApiInfo类型的参数
+                // 这个参数包含了第二部分的所有信息比如标题、描述、版本之类的，开发中一般都会自定义这些信息
+                .apiInfo(apiInfo())
+                // 组名
+                .groupName("Test")
+                .enable(true)
+                .select()
+                // 过滤条件
+                .apis(RequestHandlerSelectors.any())
+                // 控制哪些路径的api会被显示出来
+                .paths(PathSelectors.ant("/test/**"))
                 .build();
     }
 
@@ -55,7 +73,8 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Shuwashuwa-server API Doc")
-                .description("没有加[]的表示有token就能用")
+                .description("除了[无需token]，所有接口都需要在header中包含token\n" +
+                        "如无权限说明，super-admin-controller中的接口需要token具有超管权限，其余接口不做权限限制")
                 .version("1.0")
                 .license("GPL-3.0 License")
                 .build();
