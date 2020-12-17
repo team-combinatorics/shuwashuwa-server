@@ -79,66 +79,11 @@ public class UserController {
         return new CommonResult<>(200, "请求成功", responseDTO);
     }
 
-    /**
-     * 接收志愿者申请
-     */
-    @ApiOperation(value = "接收当前用户的申请", notes = "已经是管理员的用户不能提交申请")
-    @RequestMapping(value = "/application", method = RequestMethod.POST)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "申请完成")
-    })
-    @AllAccess
-    public CommonResult<String> receiveApplicationInfo(
-            @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "新增的申请表内容", required = true) VolunteerApplicationAdditionDTO application
-    ) {
-        int userid = TokenUtil.extractUserid(token);
-        System.out.println(userid + "提交了志愿者申请");
-        userService.addVolunteerApplication(userid, application);
-        return new CommonResult<>(200, "申请完成", "posted");
-    }
 
-    /**
-     * 获取待审核志愿者申请
-     */
-    @ApiOperation(value = "[管理员]获取待审核志愿者申请")
-    @RequestMapping(value = "/application", method = RequestMethod.GET)
-    @AdminAccess
-    public CommonResult<List<VolunteerApplicationResponseForAdminDTO>> getUnauditedApplicationList() {
-        return new CommonResult<>(200, "请求成功", userService.listUnauditedVolunteerApplication());
-    }
 
-    /**
-     * 获取用户自己的志愿者申请记录
-     */
-    @ApiOperation(value = "获取当前用户志愿者申请记录")
-    @RequestMapping(value = "/application/mine", method = RequestMethod.GET)
-    @AllAccess
-    public CommonResult<List<VolunteerApplicationResultDTO>> getMyApplicationList(
-            @RequestHeader("token") @ApiParam(hidden = true) String token) {
-        return new CommonResult<>(200, "请求成功",
-                userService.listVolunteerApplicationOf(TokenUtil.extractUserid(token)));
-    }
 
-    /**
-     * 处理志愿者申请的审核
-     */
-    @ApiOperation(value = "[管理员]审核志愿者申请")
-    @RequestMapping(value = "/application", method = RequestMethod.PUT)
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "请求成功")
-    })
-    @AdminAccess
-    public CommonResult<String> receiveApplicationAudition(
-            @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "审核结果", required = true) VolunteerApplicationUpdateDTO updateDTO
-    ) {
-        int adminUserid = TokenUtil.extractUserid(token);
-        System.out.println(adminUserid + "审核了编号为" + updateDTO.getFormID() + "的申请");
-        userService.completeApplicationAudition(adminUserid, updateDTO);
 
-        return new CommonResult<>(200, "请求成功", "success");
-    }
+
 
     /**
      * 删除单个用户，测试用
