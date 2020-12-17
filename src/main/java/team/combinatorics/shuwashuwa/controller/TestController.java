@@ -13,8 +13,10 @@ import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.UserDao;
+import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
@@ -25,6 +27,7 @@ import team.combinatorics.shuwashuwa.utils.TokenUtil;
 public class TestController {
     private final UserDao userDao;
     private final SuperAdministratorService suService;
+    private final VolunteerDao volunteerDao;
     @Value("${spring.datasource.dbcp2.url}")
     String mysqlUrl;
     @Value("${spring.datasource.dbcp2.username}")
@@ -86,6 +89,15 @@ public class TestController {
         int userid = user.getId();
         if (volunteer) {
             userDao.updateUserVolunteerAuthority(userid, true);
+            volunteerDao.insert(VolunteerPO.builder()
+                    .userid(userid)
+                    .userName("FAKE")
+                    .phoneNumber("1111-1111")
+                    .email("fake@shuwa.shuwa")
+                    .identity("fake")
+                    .studentId("0")
+                    .department("nowhere")
+            .build());
         }
         if (admin) {
             suService.addAdministrator(
