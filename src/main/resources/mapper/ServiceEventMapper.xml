@@ -66,6 +66,43 @@
         values (#{serviceEvent.userId}, #{serviceEvent.activityId}, #{serviceEvent.timeSlot})
     </insert>
 
+    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.ServiceEventPO">
+        update service_event
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serviceEvent.volunteerId != null">
+                volunteer_id = #{serviceEvent.volunteerId},
+            </if>
+            <if test="serviceEvent.repairingResult != null">
+                repairing_result = #{serviceEvent.repairingResult},
+            </if>
+            <if test="serviceEvent.feedback != null">
+                feedback = #{serviceEvent.feedback},
+            </if>
+            <if test="serviceEvent.activityId != null">
+                activity_id = #{serviceEvent.activityId},
+            </if>
+            <if test="serviceEvent.timeSlot != null">
+                time_slot = #{serviceEvent.timeSlot},
+            </if>
+            <if test="serviceEvent.problemSummary != null">
+                problem_summary = #{serviceEvent.problemSummary},
+            </if>
+            <if test="serviceEvent.validFormId != null">
+                valid_form_id = #{serviceEvent.validFormId},
+            </if>
+            <if test="serviceEvent.status != null">
+                status = #{serviceEvent.status},
+            </if>
+            <if test="serviceEvent.draft != null">
+                is_draft = #{serviceEvent.draft},
+            </if>
+            <if test="serviceEvent.closed != null">
+                is_closed = #{serviceEvent.closed},
+            </if>
+        </trim>
+        where id = #{serviceEvent.id}
+    </update>
+
     <update id="updateByVolunteer">
         update service_event
         set repairing_result=#{result}
@@ -286,6 +323,20 @@
 
     <select id="getPOByID" resultMap="serviceEventPOResultMap">
         select *
+        from service_event
+        where id = #{id}
+    </select>
+
+    <select id="getServiceEventForUpdate" resultMap="serviceEventPOResultMap">
+        select id,
+               create_time,
+               updated_time,
+               user_id,
+               volunteer_id,
+               status,
+               is_draft,
+               is_closed,
+               valid_form_id
         from service_event
         where id = #{id}
     </select>

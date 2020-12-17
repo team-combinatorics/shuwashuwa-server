@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.*;
+import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
@@ -186,6 +187,30 @@ public class ServiceEventDaoTest {
     }
 
     @Test
+    public void updateTest() {
+        ServiceEventPO serviceEventPO = ServiceEventPO.builder()
+                .id(1)
+                .volunteerId(233)
+                .repairingResult("result")
+                .feedback("233")
+                .activityId(1)
+                .timeSlot(3)
+                .problemSummary("3")
+                .validFormId(3)
+                .status(6)
+                .draft(true)
+                .closed(true)
+                .build();
+        int returnValue = serviceEventDao.update(serviceEventPO);
+        Assert.assertEquals(1, returnValue);
+        ServiceEventPO modifiedPO = serviceEventDao.getPOByID(1);
+        serviceEventPO.setCreateTime(modifiedPO.getCreateTime());
+        serviceEventPO.setUpdatedTime(modifiedPO.getUpdatedTime());
+        serviceEventPO.setUserId(modifiedPO.getUserId());
+        Assert.assertEquals(serviceEventPO, modifiedPO);
+    }
+
+    @Test
     public void updateFeedbackTest() {
         serviceEventDao.updateFeedback(1, "志愿者太菜了");
         serviceEventDao.updateFeedback(3, "哈哈哈");
@@ -257,6 +282,13 @@ public class ServiceEventDaoTest {
         returnValue = serviceEventDao.updateProblemSummary(1, "没救了");
         Assert.assertEquals(1, returnValue);
         Assert.assertEquals("没救了", serviceEventDao.getPOByID(1).getProblemSummary());
+    }
+
+    @Test
+    public void getServiceEventForUpdateTest(){
+        ServiceEventPO serviceEventPO = serviceEventDao.getServiceEventForUpdate(1);
+        Assert.assertNull(serviceEventPO.getActivityId());
+        Assert.assertNull(serviceEventPO.getValidFormId());
     }
 
     @Test
