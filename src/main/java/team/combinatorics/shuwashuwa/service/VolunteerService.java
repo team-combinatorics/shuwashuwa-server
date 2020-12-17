@@ -3,6 +3,7 @@ package team.combinatorics.shuwashuwa.service;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 
 import java.util.List;
@@ -23,10 +24,11 @@ public interface VolunteerService {
     /**
      * 根据条件获取摘要信息列表
      *
+     * @param userid              当前操作的用户的id
      * @param selectApplicationCO 由controller构造的条件结构
      * @return 申请表摘要信息列表
      */
-    List<VolunteerApplicationAbstractDTO> listVolunteerApplicationByCondition(SelectApplicationCO selectApplicationCO);
+    List<VolunteerApplicationAbstractDTO> listVolunteerApplicationByCondition(int userid, SelectApplicationCO selectApplicationCO);
 
     /**
      * TODO 这里要完善这个update结构
@@ -42,7 +44,7 @@ public interface VolunteerService {
      *
      * @param formId 申请表的id
      */
-    void getApplicationDetailByFormId(int formId);
+    VolunteerApplicationDetailDTO getApplicationDetailByFormId(int formId);
 
 
 }
