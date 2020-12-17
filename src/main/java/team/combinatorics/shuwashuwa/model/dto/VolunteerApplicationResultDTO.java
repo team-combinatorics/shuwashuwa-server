@@ -23,7 +23,7 @@ public class VolunteerApplicationResultDTO {
     private String updatedTime;
     @ApiModelProperty("管理员回复")
     private String replyByAdmin;
-    @ApiModelProperty("回复的管理员")
+    @ApiModelProperty("回复的管理员的管理员id")
     private Integer adminId;
     @ApiModelProperty("申请状态")
     private Integer status;

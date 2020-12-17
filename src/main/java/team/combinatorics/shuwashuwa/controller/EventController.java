@@ -101,7 +101,7 @@ public class EventController {
     @VolunteerAccess
     public CommonResult<String> handleServiceCompletion(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id和维修结果", required = true) ServiceEventUniversalDTO resultDTO
+            @RequestBody @ApiParam(value = "维修事件Id和维修结果", required = true) ServiceSimpleUpdateDTO resultDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.completeOrder(userid, resultDTO);
@@ -113,7 +113,7 @@ public class EventController {
     @AllAccess
     public CommonResult<String> handleFeedback(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id和反馈内容", required = true) ServiceEventUniversalDTO feedbackDTO
+            @RequestBody @ApiParam(value = "维修事件Id和反馈内容", required = true) ServiceSimpleUpdateDTO feedbackDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.updateFeedback(userid, feedbackDTO);

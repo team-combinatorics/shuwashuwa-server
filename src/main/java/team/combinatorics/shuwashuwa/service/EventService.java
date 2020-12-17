@@ -47,14 +47,14 @@ public interface EventService {
      * @param userid 志愿者的id
      * @param stringUpdateDTO 内含志愿者对维修结果的描述
      */
-    void completeOrder(int userid, ServiceEventUniversalDTO stringUpdateDTO);
+    void completeOrder(int userid, ServiceSimpleUpdateDTO stringUpdateDTO);
 
     /**
      * 用户更新反馈
      * @param userid 用户id
      * @param stringUpdateDTO 内含用户的反馈
      */
-    void updateFeedback(int userid, ServiceEventUniversalDTO stringUpdateDTO);
+    void updateFeedback(int userid, ServiceSimpleUpdateDTO stringUpdateDTO);
 
     void shutdownService(int userid, Integer serviceEventId);
 

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @ApiModel("添加或修改管理员信息时要上传的数据")
 public class AdminDTO {
-    @ApiModelProperty("用户id，用于标识用户")
+    @ApiModelProperty("新增管理员的用户id")
     private Integer userid;
 
     @ApiModelProperty("管理员（真实）姓名")

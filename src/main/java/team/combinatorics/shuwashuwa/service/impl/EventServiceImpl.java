@@ -141,7 +141,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void completeOrder(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
+    public void completeOrder(int userid, ServiceSimpleUpdateDTO stringUpdateDTO) {
         if (DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());
@@ -155,7 +155,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void updateFeedback(int userid, ServiceEventUniversalDTO stringUpdateDTO) {
+    public void updateFeedback(int userid, ServiceSimpleUpdateDTO stringUpdateDTO) {
         if (DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());

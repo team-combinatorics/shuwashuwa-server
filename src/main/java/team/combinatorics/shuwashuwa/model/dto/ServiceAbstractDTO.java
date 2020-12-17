@@ -19,7 +19,7 @@ public class ServiceAbstractDTO {
     private Integer userId;
     @ApiModelProperty("发起维修申请的用户姓名")
     private String userName;
-    @ApiModelProperty("接单的志愿者id")
+    @ApiModelProperty("接单的志愿者的志愿者id")
     private Integer volunteerId;
     @ApiModelProperty("接单的志愿者姓名")
     private String volunteerName;

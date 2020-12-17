@@ -25,7 +25,7 @@ public class ServiceEventDetailDTO {
     private Integer userId;
     @ApiModelProperty("发起维修申请的用户姓名")
     private String userName;
-    @ApiModelProperty("接单的志愿者的id")
+    @ApiModelProperty("接单的志愿者的志愿者id")
     private Integer volunteerId;
     @ApiModelProperty("接单的志愿者的姓名")
     private String volunteerName;
