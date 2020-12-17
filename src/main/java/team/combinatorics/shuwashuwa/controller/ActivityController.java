@@ -4,7 +4,6 @@ import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
-import team.combinatorics.shuwashuwa.annotation.UserParam;
 import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityResponseDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityTimeSlotDTO;
@@ -72,7 +71,6 @@ public class ActivityController {
     @ApiOperation("查询当前用户在某活动中是否进行有效签到")
     @RequestMapping(value = "/attend", method = RequestMethod.GET)
     @AllAccess
-    @UserParam("user")
     public CommonResult<Boolean> attendingActivity(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
             @RequestParam("activity") @ApiParam(value = "活动id", required = true) Integer activityId

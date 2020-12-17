@@ -61,14 +61,6 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 !(method.isAnnotationPresent(SUAccess.class) && currentUserPO.getSu()) )
         throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
 
-        //检查参数
-        if(method.isAnnotationPresent(UserParam.class) && !currentUserPO.getAdmin() && !currentUserPO.getVolunteer()) {
-            String paraName = method.getAnnotation(UserParam.class).value();
-            String paraValue = httpServletRequest.getParameter(paraName);
-            if(paraValue == null || !Integer.valueOf(paraValue).equals(userid))
-                throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
-        }
-
         return true;
     }
 }

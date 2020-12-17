@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
-import team.combinatorics.shuwashuwa.annotation.UserParam;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.*;
@@ -135,7 +134,6 @@ public class EventController {
     @ApiOperation(value = "列出满足指定筛选条件的维修事件，不需要筛选的条件无需赋值。普通用户只能查看自己发起的")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
-    @UserParam("client")
     public CommonResult<List<ServiceAbstractDTO>> getServiceEventList(
             @RequestParam(value = "client", required = false)
             @ApiParam("创建维修事件的用户id")
