@@ -108,22 +108,13 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<ActivityResponseDTO> listActivityByConditions(SelectActivityCO co) {
-        return activityInfoDao.listByCondition(co).stream()
-                .map(x -> (ActivityResponseDTO)DTOUtil.convert(x,ActivityResponseDTO.class))
-                .collect(Collectors.toList());
+    public List<ActivityInfoPO> listActivityByConditions(SelectActivityCO co) {
+        return activityInfoDao.listByCondition(co);
     }
 
     @Override
-    public List<ActivityTimeSlotDTO> listTimeSlots(Integer activityId) {
-        List<ActivityTimeSlotBO> raw = timeSlotDao.listTimeSlotsByActivityID(activityId);
-        List<ActivityTimeSlotDTO> converted = new Vector<>();
-        for(ActivityTimeSlotBO timeSlot: raw) {
-            converted.add(new ActivityTimeSlotDTO(timeSlot.getTimeSlot(),
-                    DTOUtil.stamp2str(timeSlot.getStartTime()),
-                    DTOUtil.stamp2str(timeSlot.getEndTime())));
-        }
-        return converted;
+    public List<ActivityTimeSlotBO> listTimeSlots(Integer activityId) {
+        return timeSlotDao.listTimeSlotsByActivityID(activityId);
     }
 
     @Override
