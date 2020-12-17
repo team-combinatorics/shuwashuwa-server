@@ -79,7 +79,7 @@ public class VolunteerController {
             @ApiParam(value = "目标申请表中的管理员id")
                     Integer adminID,
             @RequestParam(value = "status", required = false)
-            @ApiParam(value = "目标申请表的状态")
+            @ApiParam(value = "目标申请表的状态，0为待审核，1为通过，2为不通过",allowableValues = "0,1,2")
                     Integer status
     ) {
         // 对普通用户的查询做强制限制

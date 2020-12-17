@@ -13,7 +13,6 @@ import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO;
 import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
-import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;

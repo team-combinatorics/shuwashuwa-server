@@ -54,7 +54,7 @@ public class EventController {
     @AllAccess
     public CommonResult<String> handleFormSaving(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件的id，以及维修单的信息", required = true)
+            @RequestBody @ApiParam(value = "维修事件的id，以及保存的维修单信息", required = true)
                     ServiceFormSubmitDTO serviceFormSubmitDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
@@ -103,7 +103,7 @@ public class EventController {
     @VolunteerAccess
     public CommonResult<String> handleServiceCompletion(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id和维修结果", required = true) ServiceSimpleUpdateDTO resultDTO
+            @RequestBody @ApiParam(value = "更新维修结果的结构", required = true) ServiceSimpleUpdateDTO resultDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.completeOrder(userid, resultDTO);
@@ -115,7 +115,7 @@ public class EventController {
     @AllAccess
     public CommonResult<String> handleFeedback(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "维修事件Id和反馈内容", required = true) ServiceSimpleUpdateDTO feedbackDTO
+            @RequestBody @ApiParam(value = "更新反馈内容的结构", required = true) ServiceSimpleUpdateDTO feedbackDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
         eventService.updateFeedback(userid, feedbackDTO);
