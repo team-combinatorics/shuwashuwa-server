@@ -233,8 +233,12 @@
             <if test="condition.draft != null">
                 and is_draft = #{condition.draft}
             </if>
-            <if test="condition.closed != null">
-                and is_closed = #{condition.closed}
+                and is_closed = 1
+            <if test="condition.closed != null and condition.closed == true">
+                and is_closed = 1
+            </if>
+            <if test="condition.closed != null and condition.closed == false">
+                and is_closed = 0
             </if>
         </where>
     </select>
@@ -274,7 +278,7 @@
             <if test="condition.draft != null">
                 and e.is_draft = #{condition.draft}
             </if>
-            <if test="condition.timeSlot != null">
+            <if test="condition.closed != null">
                 and e.is_closed = #{condition.closed}
             </if>
         </where>

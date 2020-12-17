@@ -310,7 +310,7 @@ public class ServiceEventDaoTest {
      * 该方法暂时保留，用于查看输出结果
      * 想查看输出结果时请先注释掉@Ignore后再运行
      */
-    @Ignore
+    //@Ignore
     @Test
     public void simpleTest() {
         // 输出维修事件1的详细信息
@@ -329,10 +329,12 @@ public class ServiceEventDaoTest {
             e.printStackTrace();
         }
 
+        serviceEventDao.updateClosed(1, true);
+        // 输出条件筛选摘要列表
         try {
-            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listServiceEventsByCondition(
+            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listAbstractServiceEventsByCondition(
                     SelectServiceEventCO.builder()
-                            .activityId(2)
+                            .closed(true)
                             .build()
             ));
             System.out.println(json);
@@ -340,15 +342,18 @@ public class ServiceEventDaoTest {
             e.printStackTrace();
         }
 
-        try {
-            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listServiceEventsByCondition(
-                    SelectServiceEventCO.builder()
-                            .volunteerId(1)
-                            .build()
-            ));
-            System.out.println(json);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+//        try {
+//            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listServiceEventsByCondition(
+//                    SelectServiceEventCO.builder()
+//                            .volunteerId(1)
+//                            .build()
+//            ));
+//            System.out.println(json);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
+
+
 }
