@@ -35,3 +35,5 @@ public class WechatNoticeVO {
     @ApiModelProperty("进入小程序查看的语言类型")
     private String lang;
 }
+
+//todo: @leesou 检查这个是否应该是dto

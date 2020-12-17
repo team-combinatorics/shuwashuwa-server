@@ -3,7 +3,7 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
-import team.combinatorics.shuwashuwa.model.pojo.ActivityTimeSlot;
+import team.combinatorics.shuwashuwa.model.so.ActivityTimeSlot;
 
 import java.util.List;
 

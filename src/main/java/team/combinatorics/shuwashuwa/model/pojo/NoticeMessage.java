@@ -16,4 +16,5 @@ public class NoticeMessage {
 
     @ApiModelProperty("详细内容")
     private String value;
+    //todo: @leesou 检查这个是否应该是dto
 }

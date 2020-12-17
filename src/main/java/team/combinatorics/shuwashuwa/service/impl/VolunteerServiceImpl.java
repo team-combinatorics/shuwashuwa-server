@@ -9,9 +9,9 @@ import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
+import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationAbstract;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
+import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationDetail;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
@@ -66,7 +66,7 @@ public class VolunteerServiceImpl implements VolunteerService {
      * @return 申请表摘要信息列表
      */
     @Override
-    public List<VolunteerApplicationAbstractDTO>
+    public List<VolunteerApplicationAbstract>
     listVolunteerApplicationByCondition(int userid, SelectApplicationCO selectApplicationCO) {
         // TODO 以下是一些待完成的权限检查
         // TODO 当前用户是一般通过用户时，只能查自己的维修单，强行把CO里的user id设为用户自己的userid即可，不管传来是什么
@@ -81,7 +81,7 @@ public class VolunteerServiceImpl implements VolunteerService {
      * @param formId 申请表的id
      */
     @Override
-    public VolunteerApplicationDetailDTO getApplicationDetailByFormId(int formId) {
+    public VolunteerApplicationDetail getApplicationDetailByFormId(int formId) {
         // 这里要检查一些什么呢？
         return volunteerApplicationDao.getApplicationDetailByFormId(formId);
     }

@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -20,8 +18,8 @@ public class VolunteerApplicationAbstractDTO {
      */
     @ApiModelProperty("申请表id")
     private Integer id;
-    @ApiModelProperty("申请表提交时间")
-    private Timestamp createTime;
+    @ApiModelProperty(value = "申请表提交时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    private String createTime;
     @ApiModelProperty("发起申请的用户的用户id")
     private Integer userId;
     @ApiModelProperty("发起申请的用户的姓名（用户自己填写的）")

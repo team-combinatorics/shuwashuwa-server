@@ -3,7 +3,7 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
-import team.combinatorics.shuwashuwa.model.pojo.ServicePic;
+import team.combinatorics.shuwashuwa.model.so.ServicePic;
 
 import java.util.List;
 

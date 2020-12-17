@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
-import team.combinatorics.shuwashuwa.model.pojo.ActivityTimeSlot;
+import team.combinatorics.shuwashuwa.model.so.ActivityTimeSlot;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

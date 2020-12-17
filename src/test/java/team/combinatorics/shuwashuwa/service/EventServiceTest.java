@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.MethodsOfTesting;
@@ -16,8 +15,7 @@ import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
-import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
-import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
+import team.combinatorics.shuwashuwa.model.so.ServiceForm;
 
 import java.util.List;
 

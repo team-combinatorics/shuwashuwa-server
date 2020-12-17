@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -17,15 +15,15 @@ import java.sql.Timestamp;
 public class VolunteerApplicationDetailDTO {
     @ApiModelProperty("申请表id")
     private Integer id;
-    @ApiModelProperty("申请表提交时间")
-    private Timestamp createTime;
+    @ApiModelProperty(value = "申请表提交时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    private String createTime;
     /**
      * 申请表应该只会被管理员修改一次，所以这个应该没问题
      * 这个时间等于提交时间的时候说明还没有审核
      * 总之先写了这个属性，用不用之后再说
      */
-    @ApiModelProperty("申请表审核时间")
-    private Timestamp updatedTime;
+    @ApiModelProperty(value = "申请表审核时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    private String updatedTime;
     @ApiModelProperty("发起申请的用户的用户id")
     private Integer userId;
     @ApiModelProperty("用户填写的申请理由")

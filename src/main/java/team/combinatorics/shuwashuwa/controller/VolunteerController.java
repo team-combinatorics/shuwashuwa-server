@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
+import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationAbstract;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.pojo.CommonResult;
@@ -65,7 +65,7 @@ public class VolunteerController {
             @ApiResponse(code = 200, message = "申请完成")
     })
     @AllAccess
-    public CommonResult<List<VolunteerApplicationAbstractDTO>> listVolunteerApplicationByCondition(
+    public CommonResult<List<VolunteerApplicationAbstract>> listVolunteerApplicationByCondition(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
             @RequestParam(value = "userId", required = false) @ApiParam(value = "目标申请表中的申请者用户id")
                     Integer targetUserID,
@@ -83,9 +83,9 @@ public class VolunteerController {
                 .adminId(adminID)
                 .build();
         // 查询目标列表
-        List<VolunteerApplicationAbstractDTO> volunteerApplicationAbstractDTOList =
+        List<VolunteerApplicationAbstract> volunteerApplicationAbstractList =
                 volunteerService.listVolunteerApplicationByCondition(currentUserId, selectApplicationCO);
-        return new CommonResult<>(200, "请求成功", volunteerApplicationAbstractDTOList);
+        return new CommonResult<>(200, "请求成功", volunteerApplicationAbstractList);
     }
 
 

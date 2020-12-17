@@ -9,14 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
+import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationAbstract;
+import team.combinatorics.shuwashuwa.model.so.VolunteerApplicationDetail;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -80,40 +78,40 @@ public class VolunteerApplicationDaoTest {
 
     @Test
     public void getApplicationDetailByFormIdTest() {
-        VolunteerApplicationDetailDTO volunteerApplicationDetailDTO;
-        volunteerApplicationDetailDTO = volunteerApplicationDao.getApplicationDetailByFormId(1);
-        Assert.assertEquals(1, volunteerApplicationDetailDTO.getUserId().intValue());
-        Assert.assertNull(volunteerApplicationDetailDTO.getAdminId());
-        Assert.assertNull(volunteerApplicationDetailDTO.getAdminName());
-        Assert.assertEquals(0, volunteerApplicationDetailDTO.getStatus().intValue());
+        VolunteerApplicationDetail volunteerApplicationDetail;
+        volunteerApplicationDetail = volunteerApplicationDao.getApplicationDetailByFormId(1);
+        Assert.assertEquals(1, volunteerApplicationDetail.getUserId().intValue());
+        Assert.assertNull(volunteerApplicationDetail.getAdminId());
+        Assert.assertNull(volunteerApplicationDetail.getAdminName());
+        Assert.assertEquals(0, volunteerApplicationDetail.getStatus().intValue());
         // 管理员添加审核
         int returnValue = volunteerApplicationDao.updateApplicationByAdmin(1, VolunteerApplicationUpdateDTO.builder()
                 .status(1)
                 .replyByAdmin("123")
                 .formID(1)
-                .build(), volunteerApplicationDetailDTO.getUpdatedTime());
+                .build(), volunteerApplicationDetail.getUpdatedTime());
         Assert.assertEquals(1, returnValue);
-        volunteerApplicationDetailDTO = volunteerApplicationDao.getApplicationDetailByFormId(1);
-        Assert.assertEquals(1, volunteerApplicationDetailDTO.getAdminId().intValue());
+        volunteerApplicationDetail = volunteerApplicationDao.getApplicationDetailByFormId(1);
+        Assert.assertEquals(1, volunteerApplicationDetail.getAdminId().intValue());
     }
 
     @Test
     public void listApplicationAbstractByConditionTest() {
-        List<VolunteerApplicationAbstractDTO> volunteerApplicationAbstractDTOList;
+        List<VolunteerApplicationAbstract> volunteerApplicationAbstractList;
         SelectApplicationCO selectApplicationCO;
         selectApplicationCO = SelectApplicationCO.builder()
                 .userId(1)
                 .build();
-        volunteerApplicationAbstractDTOList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
-        Assert.assertEquals(3, volunteerApplicationAbstractDTOList.size());
+        volunteerApplicationAbstractList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        Assert.assertEquals(3, volunteerApplicationAbstractList.size());
         // 构造一个条件
         selectApplicationCO = SelectApplicationCO.builder()
                 .adminId(1)
                 .userId(1)
                 .status(0)
                 .build();
-        volunteerApplicationAbstractDTOList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
-        Assert.assertEquals(0, volunteerApplicationAbstractDTOList.size());
+        volunteerApplicationAbstractList = volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        Assert.assertEquals(0, volunteerApplicationAbstractList.size());
         // System.out.println(volunteerApplicationAbstractDTOList);
     }
 

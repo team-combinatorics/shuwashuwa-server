@@ -3,7 +3,7 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ServiceFormDao">
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.ServiceForm" id="serviceFormResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.so.ServiceForm" id="serviceFormResultMap">
         <result column="id" jdbcType="INTEGER" property="formID"/>
         <result column="brand" jdbcType="VARCHAR" property="brand"/>
         <result column="computer_model" jdbcType="VARCHAR" property="computerModel"/>
@@ -21,7 +21,7 @@
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
         <collection property="imageList"
                     select="team.combinatorics.shuwashuwa.dao.ServicePicDao.listServicePicsByFormId"
-                    ofType="team.combinatorics.shuwashuwa.model.pojo.ServicePic"
+                    ofType="team.combinatorics.shuwashuwa.model.so.ServicePic"
                     javaType="java.util.ArrayList"
                     column="id">
         </collection>

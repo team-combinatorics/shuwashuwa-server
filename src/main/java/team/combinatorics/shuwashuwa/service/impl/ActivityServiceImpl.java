@@ -12,7 +12,7 @@ import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ActivityInfoPO;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
-import team.combinatorics.shuwashuwa.model.pojo.ActivityTimeSlot;
+import team.combinatorics.shuwashuwa.model.so.ActivityTimeSlot;
 import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
 

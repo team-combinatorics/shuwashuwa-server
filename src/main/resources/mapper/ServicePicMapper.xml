@@ -10,7 +10,7 @@
         <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
     </resultMap>
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.pojo.ServicePic" id="simplePicResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.so.ServicePic" id="simplePicResultMap">
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
     </resultMap>

@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import team.combinatorics.shuwashuwa.model.pojo.ServiceForm;
+import team.combinatorics.shuwashuwa.model.so.ServiceForm;
 
 import java.util.List;
 

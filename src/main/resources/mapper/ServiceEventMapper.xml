@@ -19,7 +19,7 @@
         <result column="is_closed" jdbcType="BOOLEAN" property="closed"/>
         <collection property="serviceForms"
                     select="team.combinatorics.shuwashuwa.dao.ServiceFormDao.listServiceFormsByServiceEventID"
-                    ofType="team.combinatorics.shuwashuwa.model.pojo.ServiceForm"
+                    ofType="team.combinatorics.shuwashuwa.model.so.ServiceForm"
                     javaType="java.util.ArrayList"
                     column="id">
         </collection>

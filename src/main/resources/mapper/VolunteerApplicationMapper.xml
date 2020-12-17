@@ -14,7 +14,7 @@
         <result column="card_pic_location" jdbcType="VARCHAR" property="cardPicLocation"/>
     </resultMap>
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO"
+    <resultMap type="team.combinatorics.shuwashuwa.model.so.VolunteerApplicationDetail"
                id="volunteerApplicationDetail">
         <result column="va_id" jdbcType="INTEGER" property="id"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -37,7 +37,7 @@
 
     </resultMap>
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO"
+    <resultMap type="team.combinatorics.shuwashuwa.model.so.VolunteerApplicationAbstract"
                id="volunteerApplicationAbstract">
         <result column="va_id" jdbcType="INTEGER" property="id"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
