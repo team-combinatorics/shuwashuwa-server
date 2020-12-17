@@ -13,6 +13,7 @@ import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
 import team.combinatorics.shuwashuwa.model.dto.CommonResult;
+import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.service.VolunteerService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 public class VolunteerController {
 
     VolunteerService volunteerService;
+    UserService userService;
 
     /**
      * 接收志愿者申请
@@ -67,16 +69,24 @@ public class VolunteerController {
     @RequestMapping(value = "/application", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<VolunteerApplicationAbstractDTO>> listVolunteerApplicationByCondition(
-            @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestParam(value = "userId", required = false) @ApiParam(value = "目标申请表中的申请者用户id")
+            @RequestHeader("token")
+            @ApiParam(hidden = true)
+                    String token,
+            @RequestParam(value = "userId", required = false)
+            @ApiParam(value = "目标申请表中的申请者用户id，若发起请求的用户无特殊权限，该项被强制赋值为本人id")
                     Integer targetUserID,
-            @RequestParam(value = "adminId", required = false) @ApiParam(value = "目标申请表中的管理员id")
+            @RequestParam(value = "adminId", required = false)
+            @ApiParam(value = "目标申请表中的管理员id")
                     Integer adminID,
-            @RequestParam(value = "status", required = false) @ApiParam(value = "目标申请表的状态")
+            @RequestParam(value = "status", required = false)
+            @ApiParam(value = "目标申请表的状态")
                     Integer status
     ) {
-        // 提取当前用户的id
+        // 对普通用户的查询做强制限制
         int currentUserId = TokenUtil.extractUserid(token);
+        if(userService.isPlainUser(currentUserId))
+            targetUserID = currentUserId;
+
         // 构造查询条件
         SelectApplicationCO selectApplicationCO = SelectApplicationCO.builder()
                 .status(status)

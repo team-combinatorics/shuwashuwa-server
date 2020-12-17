@@ -10,6 +10,7 @@ import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 import team.combinatorics.shuwashuwa.service.EventService;
+import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import java.sql.Timestamp;
@@ -22,6 +23,8 @@ import java.util.List;
 public class EventController {
 
     private final EventService eventService;
+
+    private final UserService userService;
 
     @ApiOperation(value = "创建维修事件", notes = "返回仅包含一个空白草稿的维修事件")
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -131,12 +134,15 @@ public class EventController {
         return new CommonResult<>(200, "请求成功", "success");
     }
 
-    @ApiOperation(value = "列出满足指定筛选条件的维修事件，不需要筛选的条件无需赋值。普通用户只能查看自己发起的")
+    @ApiOperation(value = "列出满足指定筛选条件的维修事件，不需要筛选的条件无需赋值")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ServiceAbstractDTO>> getServiceEventList(
+            @RequestHeader(value = "token")
+            @ApiParam(hidden = true)
+                    String token,
             @RequestParam(value = "client", required = false)
-            @ApiParam("创建维修事件的用户id")
+            @ApiParam("创建维修事件的用户id，若发起请求的用户无特殊权限，该项被强制赋值为本人id")
                     Integer clientId,
             @RequestParam(value = "volunteer", required = false)
             @ApiParam("接单的志愿者id")
@@ -167,6 +173,11 @@ public class EventController {
             @ApiParam(value = "创建时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
                     String createTimeUpperBound
     ) {
+        //对普通用户的查询做强制限制
+        int currentUserId = TokenUtil.extractUserid(token);
+        if(userService.isPlainUser(currentUserId))
+            clientId = currentUserId;
+
         SelectServiceEventCO serviceEventCO = SelectServiceEventCO
                 .builder()
                 .userId(clientId)
@@ -181,7 +192,7 @@ public class EventController {
         return new CommonResult<>(200, "请求成功", eventService.listServiceEvents(serviceEventCO));
     }
 
-    @ApiOperation("统计满足指定筛选条件的维修事件数量，不需要筛选的条件无需赋值")
+    @ApiOperation("统计满足指定筛选条件的维修事件数量，不需要筛选的条件无需赋值(暂时没有限制调用权限)")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<Integer> getServiceEventNumber(
