@@ -15,4 +15,6 @@ public interface UserService {
 
     UserInfoResponseDTO getUserInfo(int userid) throws Exception;
 
+    boolean isPlainUser(int userid);
+
 }

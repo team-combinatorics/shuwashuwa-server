@@ -64,5 +64,9 @@ public class UserServiceImpl implements UserService {
         return (UserInfoResponseDTO) DTOUtil.convert(userPO, UserInfoResponseDTO.class);
     }
 
-
+    @Override
+    public boolean isPlainUser(int userid) {
+        UserPO userPO = userDao.getUserByUserid(userid);
+        return !userPO.getVolunteer() && !userPO.getAdmin() && !userPO.getSu();
+    }
 }
