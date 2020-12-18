@@ -1,6 +1,8 @@
 package team.combinatorics.shuwashuwa.service;
 
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.*;
 
 import java.util.List;
@@ -11,7 +13,7 @@ public interface EventService {
      * 创建一个空的维修事件，仅包含一个草稿
      * @param userid 预约维修的用户的ID
      */
-    ServiceEventDetailDTO createNewEvent(int userid);
+    ServiceEventDetailBO createNewEvent(int userid);
 
     /**
      * 用户上传维修单
@@ -62,7 +64,7 @@ public interface EventService {
      * 按条件对象筛选维修事件
      * @param co 用于筛选的条件对象
      */
-    List<ServiceAbstractDTO> listServiceEvents(SelectServiceEventCO co);
+    List<ServiceAbstractBO> listServiceEvents(SelectServiceEventCO co);
 
     /**
      * 按条件对象筛选维修事件并返回数量
@@ -71,5 +73,5 @@ public interface EventService {
      */
     Integer countServiceEvents(SelectServiceEventCO co);
 
-    ServiceEventDetailDTO getServiceDetail(Integer eventId);
+    ServiceEventDetailBO getServiceDetail(Integer eventId);
 }

@@ -10,6 +10,8 @@ import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
+import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
@@ -39,7 +41,7 @@ public class EventServiceImpl implements EventService {
      * */
 
     @Override
-    public ServiceEventDetailDTO createNewEvent(int userid) {
+    public ServiceEventDetailBO createNewEvent(int userid) {
         ServiceEventPO eventPO = ServiceEventPO.builder().userId(userid).build();
         serviceEventDao.insert(eventPO);
         int eventId = eventPO.getId();
@@ -124,7 +126,7 @@ public class EventServiceImpl implements EventService {
     public void takeOrder(int userid, Integer serviceEventId) {
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
+        ServiceEventDetailBO detailDTO = getServiceDetail(serviceEventId);
         if (detailDTO.getStatus() != 3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
 
@@ -176,7 +178,7 @@ public class EventServiceImpl implements EventService {
     public void shutdownService(int userid, Integer serviceEventId) {
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
+        ServiceEventDetailBO detailDTO = getServiceDetail(serviceEventId);
         if (detailDTO.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
 
@@ -184,8 +186,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ServiceAbstractDTO> listServiceEvents(SelectServiceEventCO co) {
-        return serviceEventDao.listAbstractServiceEventsByCondition(co);
+    public List<ServiceAbstractBO> listServiceEvents(SelectServiceEventCO co) {
+        return serviceEventDao.listServiceAbstractsByCondition(co);
     }
 
     @Override
@@ -194,7 +196,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ServiceEventDetailDTO getServiceDetail(Integer eventId) {
+    public ServiceEventDetailBO getServiceDetail(Integer eventId) {
         return serviceEventDao.getServiceEventByID(eventId);
     }
 }
