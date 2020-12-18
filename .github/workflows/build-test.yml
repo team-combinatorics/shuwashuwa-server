@@ -11,8 +11,7 @@ name: Build and Test
 
 on:
   push:
-    branches: 
-      - RELEASE
+    branches:
       - 12f23eddde
       - Leo_h
   pull_request:
