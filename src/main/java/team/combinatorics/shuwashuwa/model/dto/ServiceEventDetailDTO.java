@@ -39,7 +39,7 @@ public class ServiceEventDetailDTO {
     @ApiModelProperty("参加的活动的id")
     private Integer activityId;
     @ApiModelProperty("参加的活动的名称")
-    private Integer activityName;
+    private String activityName;
     @ApiModelProperty("预约的时间段")
     private Integer timeSlot;
     @ApiModelProperty(value = "预约时间段的开始时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")

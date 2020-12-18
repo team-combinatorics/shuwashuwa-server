@@ -27,7 +27,7 @@ public class ServiceEventDetailBO {
     private String repairingResult;
     private String feedback;
     private Integer activityId;
-    private Integer activityName;
+    private String activityName;
     private Integer timeSlot;
     private Timestamp startTime;
     private Timestamp endTime;
