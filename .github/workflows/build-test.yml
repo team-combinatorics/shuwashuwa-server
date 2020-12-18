@@ -12,8 +12,8 @@ name: Build and Test
 on:
   push:
     branches:
+      - RELEASE
       - 12f23eddde
-      - Leo_h
   pull_request:
     branches:
       - main
@@ -35,7 +35,7 @@ env:
 jobs:
   build-test:
     runs-on: ubuntu-20.04
-    
+
     services:
       # DO NOT mount your repo, it's not ready
       mysql:
@@ -51,29 +51,28 @@ jobs:
           --name mysql
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 11
-      uses: actions/setup-java@v1
-      with:
-        java-version: 11
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
 
-    # Can't mount volumes to a running container
-    # Docker executes entrypoint.sh on restart
-    # Credit: https://github.community/t/services-and-volumes/16313/2
-    - name: Restart MySQL container
-      run: |
-        docker cp ${{ github.workspace }}/src/main/resources/sql mysql:/docker-entrypoint-initdb.d
-        docker restart mysql
+      # Can't mount volumes to a running container
+      # Docker executes entrypoint.sh on restart
+      # Credit: https://github.community/t/services-and-volumes/16313/2
+      - name: Restart MySQL container
+        run: |
+          docker cp ${{ github.workspace }}/src/main/resources/sql/* mysql:/docker-entrypoint-initdb.d/
+          docker restart mysql
 
-    - name: Cache the Maven packages to speed up build
-      uses: actions/cache@v1
-      with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2  
-    
-    - name: Build and test project with Maven
-      run: |
-        mkdir $PIC_PATH
-        mysql -u${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} < ./src/main/resources/sql/init.sql
-        mvn -B package --file pom.xml
+      - name: Cache the Maven packages to speed up build
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build and test project with Maven
+        run: |
+          mkdir $PIC_PATH
+          mvn -B package --file pom.xml
