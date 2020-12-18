@@ -3,23 +3,14 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 
 import java.util.List;
 
 @Repository
 public interface ServiceEventDao {
-
-
-    /**
-     * 根据用户id建立一个新的维修事件，由于将活动id和时间段在维修单中放了一份，新建service event时已经用不到
-     *
-     * @param userID 用户id
-     * @return 插入成功的数量，如果为0表示不成功
-     */
-    int insertByUserID(@Param("userID") int userID);
 
     /**
      * 插入一个新的serviceEvent
@@ -122,17 +113,7 @@ public interface ServiceEventDao {
      * @param id 维修请求id
      * @return 一个完整的维修单结构
      */
-    ServiceEventDetailDTO getServiceEventByID(@Param("id") int id);
-
-    /**
-     * 条件检索
-     *
-     * @param selectServiceEventCO 根据条件来检索维修单，条件说名见类说明
-     * @return 一个维修单列表
-     */
-
-    List<ServiceEventDetailDTO> listServiceEventsByCondition(
-            @Param("condition") SelectServiceEventCO selectServiceEventCO);
+    ServiceEventDetailBO getServiceEventByID(@Param("id") int id);
 
     /**
      * 条件检索，获取摘要列表
@@ -140,7 +121,7 @@ public interface ServiceEventDao {
      * @param selectServiceEventCO 条件
      * @return 摘要列表
      */
-    List<ServiceAbstractDTO> listAbstractServiceEventsByCondition(
+    List<ServiceAbstractBO> listServiceAbstractsByCondition(
             @Param("condition") SelectServiceEventCO selectServiceEventCO);
 
     /**

@@ -3,7 +3,7 @@
 
 <mapper namespace="team.combinatorics.shuwashuwa.dao.ServiceEventDao">
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceEventDetailDTO" id="serviceEventResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO" id="serviceEventDetailResultMap">
         <result column="id" jdbcType="INTEGER" property="id"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="u_name" jdbcType="VARCHAR" property="userName"/>
@@ -12,7 +12,10 @@
         <result column="repairing_result" jdbcType="VARCHAR" property="repairingResult"/>
         <result column="feedback" jdbcType="VARCHAR" property="feedback"/>
         <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
+        <result column="activity_name" jdbcType="VARCHAR" property="activityName"/>
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
         <result column="problem_summary" jdbcType="VARCHAR" property="problemSummary"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="is_draft" jdbcType="BOOLEAN" property="draft"/>
@@ -25,17 +28,19 @@
         </collection>
     </resultMap>
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.dto.ServiceAbstractDTO" id="serviceAbstractResultMap">
+    <resultMap type="team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO" id="serviceAbstractResultMap">
         <result column="id" jdbcType="INTEGER" property="serviceEventId"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="u_name" jdbcType="VARCHAR" property="userName"/>
-        <result column="volunteer_id" jdbcType="INTEGER" property="volunteerId"/>
         <result column="v_name" jdbcType="VARCHAR" property="volunteerName"/>
+        <result column="activity_name" jdbcType="VARCHAR" property="activityName"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="problem_summary" jdbcType="VARCHAR" property="problemSummary"/>
+        <result column="computer_model" jdbcType="VARCHAR" property="computerModel"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="is_draft" jdbcType="BOOLEAN" property="draft"/>
         <result column="is_closed" jdbcType="BOOLEAN" property="closed"/>
-        <result column="computer_model" jdbcType="VARCHAR" property="computerModel"/>
-        <result column="problem_summary" jdbcType="VARCHAR" property="problemSummary"/>
     </resultMap>
 
     <resultMap type="team.combinatorics.shuwashuwa.model.po.ServiceEventPO" id="serviceEventPOResultMap">
@@ -54,11 +59,6 @@
         <result column="is_draft" jdbcType="BOOLEAN" property="draft"/>
         <result column="is_closed" jdbcType="BOOLEAN" property="closed"/>
     </resultMap>
-
-    <insert id="insertByUserID" parameterType="int">
-        insert into service_event(user_id)
-        values (#{userID})
-    </insert>
 
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="serviceEvent.id"
             parameterType="team.combinatorics.shuwashuwa.model.po.ServiceEventPO">
@@ -201,16 +201,20 @@
         </where>
     </select>
 
-    <select id="getServiceEventByID" resultMap="serviceEventResultMap">
+    <select id="getServiceEventByID" resultMap="serviceEventDetailResultMap">
         select s.id,
-               user_id,
+               s.create_time,
+               s.user_id,
                u.user_name u_name,
                volunteer_id,
                v.user_name v_name,
                repairing_result,
                feedback,
-               activity_id,
-               time_slot,
+               s.activity_id,
+               activity_name,
+               s.time_slot,
+               ats.start_time,
+               ats.end_time,
                problem_summary,
                status,
                is_draft,
@@ -220,76 +224,37 @@
                            on s.user_id = u.id
                  left join volunteer v
                            on s.volunteer_id = v.id
+                 left join activity_info ai
+                           on s.activity_id = ai.id
+                 left join activity_time_slot ats
+                           on ats.activity_id = s.activity_id and ats.time_slot = s.time_slot
         where s.id = #{id}
     </select>
 
-    <select id="listServiceEventsByCondition" resultMap="serviceEventResultMap"
-            parameterType="team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO">
-        select
-        s.id,
-        user_id,
-        u.user_name u_name,
-        volunteer_id,
-        v.user_name v_name,
-        repairing_result,
-        feedback,
-        activity_id,
-        time_slot,
-        problem_summary,
-        status,
-        is_draft,
-        is_closed
-        from service_event s
-        left join user u
-        on s.user_id = u.id
-        left join volunteer v
-        on s.volunteer_id = v.id
-
-        <where>
-            <if test="condition.beginTime != null">
-                create_time >= #{condition.beginTime}
-            </if>
-            <if test="condition.endTime != null">
-                and create_time &lt;= #{condition.endTime}
-            </if>
-            <if test="condition.userId != null">
-                and user_id = #{condition.userId}
-            </if>
-            <if test="condition.volunteerId != null">
-                and volunteer_id = #{condition.volunteerId}
-            </if>
-            <if test="condition.status != null">
-                and status = #{condition.status}
-            </if>
-            <if test="condition.activityId != null">
-                and activity_id = #{condition.activityId}
-            </if>
-            <if test="condition.timeSlot != null">
-                and time_slot = #{condition.timeSlot}
-            </if>
-            <if test="condition.draft != null">
-                and is_draft = #{condition.draft}
-            </if>
-                and is_closed = 1
-            <if test="condition.closed != null and condition.closed == true">
-                and is_closed = 1
-            </if>
-            <if test="condition.closed != null and condition.closed == false">
-                and is_closed = 0
-            </if>
-        </where>
-    </select>
-
-    <select id="listAbstractServiceEventsByCondition" resultMap="serviceAbstractResultMap">
-        select e.id, e.status, e.is_closed, e.is_draft, e.user_id, u.user_name u_name ,e.volunteer_id, v.user_name
-        v_name, e.problem_summary, f.computer_model
+    <select id="listServiceAbstractsByCondition" resultMap="serviceAbstractResultMap">
+        select e.id,
+               e.create_time,
+               u.user_name u_name,
+               v.user_name v_name,
+               activity_name,
+               ats.start_time,
+               ats.end_time,
+               problem_summary,
+               computer_model,
+               status,
+               is_draft,
+               is_closed
         from service_event e
-        left join service_form f
-        on (e.valid_form_id = f.id)
-        left join user u
-        on e.user_id = u.id
-        left join volunteer v
-        on e.volunteer_id = v.id
+            left join service_form f
+                on (e.valid_form_id = f.id)
+            left join user u
+                on e.user_id = u.id
+            left join volunteer v
+                on e.volunteer_id = v.id
+            left join activity_info ai
+                on e.activity_id = ai.id
+            left join activity_time_slot ats
+                on ats.time_slot = e.time_slot and ats.activity_id = e.activity_id
         <where>
             <if test="condition.beginTime != null">
                 e.create_time >= #{condition.beginTime}

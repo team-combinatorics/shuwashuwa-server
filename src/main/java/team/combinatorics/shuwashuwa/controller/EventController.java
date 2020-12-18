@@ -7,14 +7,18 @@ import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.service.UserService;
+import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Api("维修事件接口说明")
 @RestController
@@ -29,7 +33,7 @@ public class EventController {
     @ApiOperation(value = "创建维修事件", notes = "返回仅包含一个空白草稿的维修事件")
     @RequestMapping(value = "", method = RequestMethod.POST)
     @AllAccess
-    public CommonResult<ServiceEventDetailDTO> handleServiceEventCreation(
+    public CommonResult<ServiceEventDetailBO> handleServiceEventCreation(
             @RequestHeader("token") @ApiParam(hidden = true) String token
     ) {
         int userid = TokenUtil.extractUserid(token);
@@ -189,7 +193,11 @@ public class EventController {
                 .build();
         if (createTimeLowerBound != null) serviceEventCO.setBeginTime(Timestamp.valueOf(createTimeLowerBound));
         if (createTimeUpperBound != null) serviceEventCO.setEndTime(Timestamp.valueOf(createTimeUpperBound));
-        return new CommonResult<>(200, "请求成功", eventService.listServiceEvents(serviceEventCO));
+        final List<ServiceAbstractBO> boList = eventService.listServiceEvents(serviceEventCO);
+        final List<ServiceAbstractDTO> dtoList = boList.stream()
+                .map(x -> (ServiceAbstractDTO) DTOUtil.convert(x, ServiceAbstractDTO.class))
+                .collect(Collectors.toList());
+        return new CommonResult<>(200, "请求成功", dtoList);
     }
 
     @ApiOperation("统计满足指定筛选条件的维修事件数量，不需要筛选的条件无需赋值(暂时没有限制调用权限)")
@@ -248,7 +256,9 @@ public class EventController {
     public CommonResult<ServiceEventDetailDTO> getServiceDetail(
             @RequestParam("id") @ApiParam(value = "要查询的维修事件", required = true) Integer eventId
     ) {
-        return new CommonResult<>(200, "请求成功", eventService.getServiceDetail(eventId));
+        ServiceEventDetailBO bo = eventService.getServiceDetail(eventId);
+        ServiceEventDetailDTO dto = (ServiceEventDetailDTO) DTOUtil.convert(bo, ServiceEventDetailDTO.class);
+        return new CommonResult<>(200, "请求成功", dto);
     }
 
 }
