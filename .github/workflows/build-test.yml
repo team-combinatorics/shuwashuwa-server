@@ -75,4 +75,5 @@ jobs:
     - name: Build and test project with Maven
       run: |
         mkdir $PIC_PATH
+        mysql -u${{ secrets.MYSQL_USER }} -p${{ secrets.MYSQL_PASSWORD }} < ./src/main/resources/sql/init.sql
         mvn -B package --file pom.xml
