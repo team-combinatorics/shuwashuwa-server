@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class ActivityController {
     ActivityService activityService;
 
-    @ApiOperation("根据条件筛选活动列表，不需要筛选的条件无需赋值")
+    @ApiOperation(value = "根据条件筛选活动列表",notes = "不需要筛选的条件无需赋值")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleListRequest(

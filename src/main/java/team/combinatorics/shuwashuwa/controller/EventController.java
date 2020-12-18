@@ -138,7 +138,7 @@ public class EventController {
         return new CommonResult<>(200, "请求成功", "success");
     }
 
-    @ApiOperation(value = "列出满足指定筛选条件的维修事件，不需要筛选的条件无需赋值")
+    @ApiOperation(value = "列出满足指定筛选条件的维修事件", notes = "不需要筛选的条件无需赋值")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ServiceAbstractDTO>> getServiceEventList(
@@ -200,7 +200,7 @@ public class EventController {
         return new CommonResult<>(200, "请求成功", dtoList);
     }
 
-    @ApiOperation("统计满足指定筛选条件的维修事件数量，不需要筛选的条件无需赋值(暂时没有限制调用权限)")
+    @ApiOperation(value = "统计满足条件的维修事件数量",notes = "不需要筛选的条件无需赋值(暂时没有限制调用权限)")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<Integer> getServiceEventNumber(
