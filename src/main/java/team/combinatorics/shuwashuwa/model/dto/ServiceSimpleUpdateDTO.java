@@ -15,9 +15,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @ApiModel(description = "通用结构，用于更新维修事件中的单个字符串属性")
 public class ServiceSimpleUpdateDTO {
-    @ApiModelProperty(value = "维修事件id")
+    @ApiModelProperty(value = "维修事件id",required = true)
     @NotNull(message = "必须指定维修事件的ID")
     private Integer serviceEventId;
-    @ApiModelProperty("要将指定条目更新到的值")
+    @ApiModelProperty(value = "要将指定条目更新到的值",required = true)
     private String message;
 }

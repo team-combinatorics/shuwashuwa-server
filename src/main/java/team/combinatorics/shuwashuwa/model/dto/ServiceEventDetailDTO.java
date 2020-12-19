@@ -20,7 +20,7 @@ import java.util.List;
 public class ServiceEventDetailDTO {
     @ApiModelProperty("维修事件id")
     private Integer id;
-    @ApiModelProperty("维修事件创建时间")
+    @ApiModelProperty(value = "维修事件创建时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
     private String createTime;
     @ApiModelProperty("发起维修申请的用户id")
     private Integer userId;

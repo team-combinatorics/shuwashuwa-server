@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @ApiModel(description = "用户提交申请单的传输结构")
 public class VolunteerApplicationAdditionDTO {
-    @ApiModelProperty("申请理由")
+    @ApiModelProperty(value = "申请理由",required = true)
     private String reasonForApplication;
-    @ApiModelProperty("学生证照片的位置")
+    @ApiModelProperty(value = "学生证照片的位置",required = true)
     private String cardPicLocation;
 }

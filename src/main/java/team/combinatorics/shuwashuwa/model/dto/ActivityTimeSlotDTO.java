@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @ApiModel("活动的一个可选子时间段")
 public class ActivityTimeSlotDTO {
-    @ApiModelProperty("时间段序号")
+    @ApiModelProperty(value = "时间段序号",required = true)
     private Integer timeSlot;
-    @ApiModelProperty(value = "开始时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    @ApiModelProperty(value = "开始时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14",required = true)
     private String startTime;
-    @ApiModelProperty(value = "结束时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    @ApiModelProperty(value = "结束时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14",required = true)
     private String endTime;
 }

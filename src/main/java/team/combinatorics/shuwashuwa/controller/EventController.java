@@ -40,7 +40,7 @@ public class EventController {
         return new CommonResult<>(200, "请求成功", eventService.createNewEvent(userid));
     }
 
-    @ApiOperation(value = "处理维修单提交", notes = "需要预先创建维修事件")
+    @ApiOperation(value = "提交维修单", notes = "需要预先创建维修事件")
     @RequestMapping(value = "/commit", method = RequestMethod.POST)
     @AllAccess
     public CommonResult<String> handleFormCommit(
@@ -53,7 +53,7 @@ public class EventController {
         return new CommonResult<>(200, "请求成功", "success");
     }
 
-    @ApiOperation(value = "处理维修单草稿保存", notes = "需要预先创建维修事件")
+    @ApiOperation(value = "保存维修单草稿", notes = "需要预先创建维修事件")
     @RequestMapping(value = "/draft", method = RequestMethod.PUT)
     @AllAccess
     public CommonResult<String> handleFormSaving(
