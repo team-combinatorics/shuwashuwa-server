@@ -44,6 +44,11 @@ public class ActivityServiceImpl implements ActivityService {
                 .build();
         activityInfoDao.insert(activityInfoPO);
 
+        if(activityInfoPO.getActivityName()==null) {
+            activityInfoPO.setActivityName("第"+activityInfoPO.getId()+"次活动");
+            activityInfoDao.update(activityInfoPO);
+        }
+
         //关联活动时间段
         addTimeSlots(activityInfoPO.getId(), activityLaunchDTO.getTimeSlots());
     }

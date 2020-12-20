@@ -23,6 +23,6 @@ public class ActivityLaunchDTO {
     private String location;
     @ApiModelProperty(value = "活动分段信息",required = true)
     private List<ActivityTimeSlotDTO> timeSlots;
-    @ApiModelProperty("活动名称")
+    @ApiModelProperty("活动名称，不填默认\"第%d次活动\"")
     private String activityName;
 }
