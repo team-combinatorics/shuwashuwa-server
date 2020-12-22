@@ -25,6 +25,7 @@ import java.util.List;
 @Validated
 @RequestMapping("/api/super")
 @AllArgsConstructor
+@CrossOrigin(origins = {"*"})
 public class SuperAdministratorController {
     private final SuperAdministratorService superAdministratorService;
     private final ImageStorageService storageService;
