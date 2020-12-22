@@ -30,6 +30,10 @@ public class ServiceEventDetailDTO {
     private Integer volunteerId;
     @ApiModelProperty("接单的志愿者的姓名")
     private String volunteerName;
+    @ApiModelProperty("接单的志愿者的电话号码")
+    private String volunteerPhoneNumber;
+    @ApiModelProperty("接单的志愿者的邮件地址")
+    private String volunteerEmail;
     @ApiModelProperty("用户提交的历史维修单")
     private List<ServiceFormDTO> serviceForms;
     @ApiModelProperty("由志愿者填写的维修结果")

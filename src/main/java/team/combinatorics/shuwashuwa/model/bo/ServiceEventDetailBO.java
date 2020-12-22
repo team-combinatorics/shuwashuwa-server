@@ -23,6 +23,8 @@ public class ServiceEventDetailBO {
     private String userName;
     private Integer volunteerId;
     private String volunteerName;
+    private String volunteerPhoneNumber;
+    private String volunteerEmail;
     private List<ServiceFormDTO> serviceForms;
     private String repairingResult;
     private String feedback;
