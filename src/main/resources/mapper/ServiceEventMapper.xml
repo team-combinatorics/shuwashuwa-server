@@ -9,6 +9,8 @@
         <result column="u_name" jdbcType="VARCHAR" property="userName"/>
         <result column="volunteer_id" jdbcType="INTEGER" property="volunteerId"/>
         <result column="v_name" jdbcType="VARCHAR" property="volunteerName"/>
+        <result column="v_phone" jdbcType="VARCHAR" property="volunteerPhoneNumber"/>
+        <result column="v_email" jdbcType="VARCHAR" property="volunteerEmail"/>
         <result column="repairing_result" jdbcType="VARCHAR" property="repairingResult"/>
         <result column="feedback" jdbcType="VARCHAR" property="feedback"/>
         <result column="activity_id" jdbcType="INTEGER" property="activityId"/>
@@ -208,6 +210,8 @@
                u.user_name u_name,
                volunteer_id,
                v.user_name v_name,
+               v.phone_number v_phone,
+               v.email v_email,
                repairing_result,
                feedback,
                s.activity_id,
