@@ -98,7 +98,7 @@ public class TestController {
                     .identity("fake")
                     .studentId("0")
                     .department("nowhere")
-            .build());
+                    .build());
         }
         if (admin) {
             suService.addAdministrator(
@@ -112,6 +112,53 @@ public class TestController {
                             .department("nowhere")
                             .build()
             );
+        }
+
+        return TokenUtil.createToken(userid);
+    }
+
+    @ApiOperation("改变当前用户权限")
+    @PutMapping("/auth")
+    @NoToken
+    public String changeAuthority(
+            @RequestHeader("token") String token,
+            @RequestParam("volunteer") Boolean volunteer,
+            @RequestParam("admin") Boolean admin
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        final UserPO userPO = userDao.getUserByUserid(userid);
+        if (volunteer && !userPO.getVolunteer()) {
+            userDao.updateUserVolunteerAuthority(userid, true);
+            volunteerDao.insert(VolunteerPO.builder()
+                    .userid(userid)
+                    .userName("FAKE")
+                    .phoneNumber("1111-1111")
+                    .email("fake@shuwa.shuwa")
+                    .identity("fake")
+                    .studentId("0")
+                    .department("nowhere")
+                    .build());
+        }
+        if (!volunteer && userPO.getVolunteer()) {
+            userDao.updateUserVolunteerAuthority(userid,false);
+            volunteerDao.deleteByID(volunteerDao.getVolunteerIDByUserID(userid));
+        }
+        if (admin && !userPO.getAdmin()) {
+            userDao.updateUserAdminAuthority(userid,true);
+            suService.addAdministrator(
+                    AdminDTO.builder()
+                            .userid(userid)
+                            .userName("FAKE")
+                            .phoneNumber("1111-1111")
+                            .email("fake@shuwa.shuwa")
+                            .identity("fake")
+                            .studentId("0")
+                            .department("nowhere")
+                            .build()
+            );
+        }
+        if(!admin && userPO.getAdmin()) {
+            suService.deleteAdministrator(userid);
         }
 
         return TokenUtil.createToken(userid);
