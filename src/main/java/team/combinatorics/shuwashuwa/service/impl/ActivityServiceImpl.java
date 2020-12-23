@@ -128,7 +128,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         serviceEventDao.listServiceAbstractsByCondition(
                 SelectServiceEventCO.builder().userId(userid).activityId(activityId).status(2).closed(false).build()
-        ).stream().map(x -> serviceEventDao.updateStatus(x.getServiceEventId(),3)).close();
+        ).forEach(x -> serviceEventDao.updateStatus(x.getServiceEventId(),3));
     }
 
     @Override
