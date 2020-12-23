@@ -3,26 +3,24 @@ package team.combinatorics.shuwashuwa.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team.combinatorics.shuwashuwa.dao.AdminDao;
-import team.combinatorics.shuwashuwa.dao.ServiceEventDao;
-import team.combinatorics.shuwashuwa.dao.ServiceFormDao;
-import team.combinatorics.shuwashuwa.dao.VolunteerDao;
+import team.combinatorics.shuwashuwa.dao.*;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
 import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceEventAuditDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
-import team.combinatorics.shuwashuwa.model.dto.ServiceSimpleUpdateDTO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
+import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -31,6 +29,7 @@ public class EventServiceImpl implements EventService {
     private final ServiceFormDao serviceFormDao;
     private final AdminDao adminDao;
     private final VolunteerDao volunteerDao;
+    private final UserDao userDao;
 
     private final ImageStorageService imageStorageService;
 
@@ -118,7 +117,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public void auditForm(int userid, ServiceEventAuditDTO auditDTO) {
+    public void auditForm(int userid, ServiceEventAuditDTO auditDTO) throws Exception {
         //参数检查和提取
         if (DTOUtil.fieldExistNull(auditDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
@@ -134,6 +133,24 @@ public class EventServiceImpl implements EventService {
         //更新其他
         serviceFormDao.updateAdvice(formId, adminDao.getAdminIDByUserID(userid), auditDTO.getMessage());
         serviceEventDao.updateProblemSummary(eventId, auditDTO.getProblemSummary());
+
+        // 向用户发送结果通知
+        String result = auditDTO.getResult() ? "审核通过" : "审核不通过";
+        Map<String, NoticeMessage> data = new HashMap<>();
+        data.put("phrase5", NoticeMessage.builder()
+                .value(result)
+                .build());
+        data.put("thing8", NoticeMessage.builder()
+                .value(auditDTO.getMessage())
+                .build());
+        data.put("thing13", NoticeMessage.builder()
+                .value(auditDTO.getProblemSummary())
+                .build());
+        WechatNoticeDTO wechatNoticeDTO = WechatNoticeDTO.builder()
+                .touser(userDao.getUserByUserid(userid).getOpenid())
+                .data(data)
+                .build();
+        WechatUtil.sendAuditResult(wechatNoticeDTO);
     }
 
     @Transactional

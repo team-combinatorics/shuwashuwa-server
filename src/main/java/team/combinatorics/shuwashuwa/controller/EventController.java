@@ -72,7 +72,7 @@ public class EventController {
     public CommonResult<String> handleFormAcceptance(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
             @RequestBody @ApiParam(value = "审核结果结构", required = true) ServiceEventAuditDTO auditDTO
-    ) {
+    ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         eventService.auditForm(userid, auditDTO);
         return new CommonResult<>(200, "请求成功", "success");

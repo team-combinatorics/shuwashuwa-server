@@ -28,7 +28,7 @@ public interface EventService {
      * @param userid 管理员的用户ID
      * @param auditDTO 审核结果结构
      */
-    void auditForm(int userid, ServiceEventAuditDTO auditDTO);
+    void auditForm(int userid, ServiceEventAuditDTO auditDTO) throws Exception;
 
     /**
      * 志愿者接单
