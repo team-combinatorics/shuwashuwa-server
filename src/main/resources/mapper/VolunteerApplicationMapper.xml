@@ -61,7 +61,7 @@
         set admin_id       = #{adminID},
             reply_by_admin = #{adminReply.replyByAdmin},
             status         = #{adminReply.status}
-        where id = #{adminReply.formID}
+        where id = #{adminReply.formId}
           and updated_time = #{preUpdateTime}
     </update>
 
