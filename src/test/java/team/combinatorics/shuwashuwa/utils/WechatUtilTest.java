@@ -16,7 +16,7 @@ import java.util.Map;
 public class WechatUtilTest {
 
     @Test
-    public void testSendNotice() throws Exception {
+    public void testSendActivityNotice() throws Exception {
         String rescode = "";
 
         if(!rescode.equals("")) {
@@ -41,6 +41,32 @@ public class WechatUtilTest {
                     .build();
 
             WechatUtil.sendActivityNotice(wechatNoticeDTO);
+        }
+    }
+
+    @Test
+    public void testSendAuditionNotice() throws Exception {
+        String rescode = "";
+
+        if(!rescode.equals("")) {
+            String openID = WechatUtil.getOpenID(rescode);
+
+            Map<String, NoticeMessage> data = new HashMap<>();
+            data.put("phrase5", NoticeMessage.builder()
+                    .value("猜猜看啊")
+                    .build());
+            data.put("thing8", NoticeMessage.builder()
+                    .value("我也不知道你通没通过")
+                    .build());
+            data.put("thing13", NoticeMessage.builder()
+                    .value("电脑坏了")
+                    .build());
+            WechatNoticeDTO wechatNoticeDTO = WechatNoticeDTO.builder()
+                    .touser(openID)
+                    .data(data)
+                    .build();
+
+            WechatUtil.sendAuditResult(wechatNoticeDTO);
         }
     }
 
