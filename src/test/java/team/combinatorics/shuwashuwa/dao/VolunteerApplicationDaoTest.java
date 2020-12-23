@@ -88,7 +88,7 @@ public class VolunteerApplicationDaoTest {
         int returnValue = volunteerApplicationDao.updateApplicationByAdmin(1, VolunteerApplicationAuditDTO.builder()
                 .status(1)
                 .replyByAdmin("123")
-                .formID(1)
+                .formId(1)
                 .build(), volunteerApplicationDetailBO.getUpdatedTime());
         Assert.assertEquals(1, returnValue);
         volunteerApplicationDetailBO = volunteerApplicationDao.getApplicationDetailByFormId(1);
@@ -127,7 +127,7 @@ public class VolunteerApplicationDaoTest {
         // 测试管理员回复
         returnValue = volunteerApplicationDao.updateApplicationByAdmin(1,
                 VolunteerApplicationAuditDTO.builder()
-                        .formID(1)
+                        .formId(1)
                         .replyByAdmin("不给过，爬")
                         .status(1)
                         .build(),
@@ -137,7 +137,7 @@ public class VolunteerApplicationDaoTest {
         // 再回复一次试试
         returnValue = volunteerApplicationDao.updateApplicationByAdmin(1,
                 VolunteerApplicationAuditDTO.builder()
-                        .formID(1)
+                        .formId(1)
                         .replyByAdmin("不给过，爬 再放送")
                         .status(1)
                         .build(),
@@ -147,7 +147,7 @@ public class VolunteerApplicationDaoTest {
         volunteerApplicationPO = volunteerApplicationDao.getApplicationByFormId(1);
         returnValue = volunteerApplicationDao.updateApplicationByAdmin(2,
                 VolunteerApplicationAuditDTO.builder()
-                        .formID(1)
+                        .formId(1)
                         .replyByAdmin("不给过，爬")
                         .status(1)
                         .build(),
