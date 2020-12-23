@@ -12,7 +12,9 @@ import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
 import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
-import team.combinatorics.shuwashuwa.model.dto.*;
+import team.combinatorics.shuwashuwa.model.dto.ServiceEventAuditDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceFormSubmitDTO;
+import team.combinatorics.shuwashuwa.model.dto.ServiceSimpleUpdateDTO;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
@@ -114,6 +116,7 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    @Transactional
     @Override
     public void auditForm(int userid, ServiceEventAuditDTO auditDTO) {
         //参数检查和提取
@@ -121,8 +124,8 @@ public class EventServiceImpl implements EventService {
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         int formId = auditDTO.getServiceFormId();
         int eventId = auditDTO.getServiceEventId();
-        //查询数据库
-        final ServiceEventPO eventPO = serviceEventDao.getPOByID(eventId);
+        // 查询数据库，并且加上悲观锁
+        ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(eventId);
         //根据查询结果判断能否更新
         if (formId != eventPO.getValidFormId() || eventPO.getStatus() != 1)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
@@ -133,13 +136,14 @@ public class EventServiceImpl implements EventService {
         serviceEventDao.updateProblemSummary(eventId, auditDTO.getProblemSummary());
     }
 
+    @Transactional
     @Override
     public void takeOrder(int userid, Integer serviceEventId) {
         //参数检查和提取
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        //查询数据库
-        final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceEventId);
+        // 查询数据库，并且加上悲观锁
+        ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(serviceEventId);
         //根据查询结果判断能否更新
         if (eventPO.getStatus() != 3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
@@ -149,13 +153,14 @@ public class EventServiceImpl implements EventService {
         serviceEventDao.updateVolunteerInfo(serviceEventId, volunteerDao.getVolunteerIDByUserID(userid));
     }
 
+    @Transactional
     @Override
     public void giveUpOrder(int userid, Integer serviceEventId) {
         //参数检查和提取
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        //查询数据库
-        final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceEventId);
+        // 查询数据库，并且加上悲观锁
+        ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(serviceEventId);
         //根据查询结果判断能否更新
         if (eventPO.getVolunteerId() != volunteerDao.getVolunteerIDByUserID(userid))
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
@@ -165,13 +170,14 @@ public class EventServiceImpl implements EventService {
         serviceEventDao.updateStatus(serviceEventId, 3);
     }
 
+    @Transactional
     @Override
     public void completeOrder(int userid, ServiceSimpleUpdateDTO stringUpdateDTO) {
         //参数检查和提取
         if (DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        //查询数据库
-        final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());
+        // 查询数据库，并且加上悲观锁
+        ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(stringUpdateDTO.getServiceEventId());
         //根据查询结果判断能否更新
         if (eventPO.getVolunteerId() != volunteerDao.getVolunteerIDByUserID(userid))
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
@@ -185,17 +191,18 @@ public class EventServiceImpl implements EventService {
         //查询数据库
         VolunteerPO volunteerPO = volunteerDao.getByID(userid);
         //更新计数器
-        volunteerDao.updateOrderCount(userid,volunteerPO.getOrderCount()+1);
+        volunteerDao.updateOrderCount(userid, volunteerPO.getOrderCount() + 1);
     }
 
     //该方法不需要同步保护
+    @Transactional
     @Override
     public void updateFeedback(int userid, ServiceSimpleUpdateDTO stringUpdateDTO) {
         //参数检查和提取
         if (DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        //查询数据库
-        final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());
+        // 查询数据库，并且加上悲观锁
+        ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(stringUpdateDTO.getServiceEventId());
         //根据查询结果判断能否更新
         if (eventPO.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
@@ -206,13 +213,14 @@ public class EventServiceImpl implements EventService {
     }
 
     //该方法不需要同步保护
+    @Transactional
     @Override
     public void shutdownService(int userid, Integer serviceEventId) {
         //参数检查和提取
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         //查询数据库
-        final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceEventId);
+        ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(serviceEventId);
         //根据查询结果判断能否更新
         if (eventPO.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
