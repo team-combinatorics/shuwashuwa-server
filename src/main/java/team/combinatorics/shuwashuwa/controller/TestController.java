@@ -1,23 +1,22 @@
 package team.combinatorics.shuwashuwa.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
+import team.combinatorics.shuwashuwa.dao.MethodsOfTesting;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
+import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
+import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
 @Api(value = "测试用接口", hidden = true)
@@ -28,6 +27,8 @@ public class TestController {
     private final UserDao userDao;
     private final SuperAdministratorService suService;
     private final VolunteerDao volunteerDao;
+    private final UserService userService;
+    private final MethodsOfTesting methodsOfTesting;
     @Value("${spring.datasource.dbcp2.url}")
     String mysqlUrl;
     @Value("${spring.datasource.dbcp2.username}")
@@ -49,27 +50,27 @@ public class TestController {
     }
 
     @ApiOperation("hello,world")
-    @GetMapping("/auth")
+    @GetMapping("")
     @NoToken
     public String ordinaryHelloworld() {
         return "Hello, world";
     }
 
-    @ApiOperation("测试身份：所有用户")
+    @ApiOperation(value = "测试token合法性",notes = "token合法才能访问")
     @GetMapping("/auth/default")
     @AllAccess
     public String clientHelloworld() {
         return "Welcome, client!";
     }
 
-    @ApiOperation("测试身份：志愿者")
+    @ApiOperation(value = "测试是否有志愿者权限", notes = "权限正确才能访问")
     @GetMapping("/auth/volunteer")
     @VolunteerAccess
     public String volunteerHelloworld() {
         return "Welcome, volunteer!";
     }
 
-    @ApiOperation("测试身份：管理员")
+    @ApiOperation(value = "测试是否有管理员权限", notes = "权限正确才能访问")
     @GetMapping("/auth/admin")
     @AdminAccess
     public String adminHelloworld() {
@@ -115,4 +116,30 @@ public class TestController {
 
         return TokenUtil.createToken(userid);
     }
+
+    /**
+     * 删除单个用户，测试用
+     */
+    @ApiOperation(value = "销号", notes = "并不会删除相关的维修单等数据")
+    @RequestMapping(value = "/myself", method = RequestMethod.DELETE)
+    @NoToken
+    public CommonResult<String> deleteOneUser(
+            @RequestHeader("token") @ApiParam(hidden = true) String token
+    ) throws Exception {
+        int cnt = userService.deleteOneUser(TokenUtil.extractUserid(token));
+        if (cnt > 0) {
+            return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
+        }
+        return new CommonResult<>(40001, "不存在的用户ID", "You have deleted a ghost user!");
+    }
+
+    @ApiOperation(value = "清空数据库")
+    @NoToken
+    @RequestMapping(value = "/database", method = RequestMethod.DELETE)
+    public CommonResult<String> deleteAllUser() {
+        System.out.println("即将清空数据库");
+        methodsOfTesting.truncateAllTables();
+        return new CommonResult<>(200, "删除成功", "Database has been reset.");
+    }
+
 }
