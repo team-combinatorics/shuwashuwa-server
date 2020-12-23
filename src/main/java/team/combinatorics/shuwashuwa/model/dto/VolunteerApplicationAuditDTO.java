@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @ApiModel(description = "管理员审核志愿者申请时传输的数据，审核通过时应该一并传输申请成为志愿者的用户的用户信息")
 public class VolunteerApplicationAuditDTO {
     @ApiModelProperty(value = "志愿者申请表id",required = true)
-    private Integer formID;
+    private Integer formId;
     @ApiModelProperty(value = "管理员的回复",required = true)
     private String replyByAdmin;
     @ApiModelProperty(value = "管理员给出的状态,1表示通过,2表示拒绝", allowableValues = "1,2",required = true)

@@ -129,12 +129,12 @@ public class VolunteerController {
     @AdminAccess
     public CommonResult<Integer> receiveApplicationAudition(
             @RequestHeader("token") @ApiParam(hidden = true) String token,
-            @RequestBody @ApiParam(value = "审核结果", required = true) VolunteerApplicationAuditDTO updateDTO
+            @RequestBody @ApiParam(value = "审核结果", required = true) VolunteerApplicationAuditDTO auditDTO
     ) {
         // 得到当前管理员的用户id
         int adminUserid = TokenUtil.extractUserid(token);
-        System.out.println(adminUserid + "审核了编号为" + updateDTO.getFormID() + "的申请");
-        int volunteerId = volunteerService.completeApplicationByAdmin(adminUserid, updateDTO);
+        System.out.println(adminUserid + "审核了编号为" + auditDTO.getFormId() + "的申请");
+        int volunteerId = volunteerService.completeApplicationByAdmin(adminUserid, auditDTO);
 
         return new CommonResult<>(200, "请求成功", volunteerId);
     }
