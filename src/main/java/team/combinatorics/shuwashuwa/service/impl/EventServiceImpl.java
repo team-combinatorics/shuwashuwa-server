@@ -124,7 +124,7 @@ public class EventServiceImpl implements EventService {
         //查询数据库
         final ServiceEventPO eventPO = serviceEventDao.getPOByID(eventId);
         //根据查询结果判断能否更新
-        if (formId == eventPO.getValidFormId() || eventPO.getStatus() != 1)
+        if (formId != eventPO.getValidFormId() || eventPO.getStatus() != 1)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
         //更新状态
         serviceEventDao.updateStatus(eventId, auditDTO.getResult() ? 2 : 0);
