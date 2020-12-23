@@ -84,4 +84,24 @@ final public class WechatUtil {
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
         System.out.println(response.getBody());
     }
+
+    public static void sendAuditResult(WechatNoticeDTO wechatNoticeDTO) throws Exception {
+        Iterator<JsonNode> templates = getTemplateList();
+        while (templates.hasNext()) {
+            JsonNode t = templates.next();
+            String title = t.path("title").asText();
+            System.out.println(title);
+            if(title.equals("审核结果提醒")) {
+                System.out.println(t.path("priTmplId").asText());
+                wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
+            }
+        }
+
+        System.out.println(wechatNoticeDTO.getTemplate_id());
+        String accessToken = getWechatAccessToken();
+        String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
+                + "access_token=" + accessToken;
+        ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
+        System.out.println(response.getBody());
+    }
 }
