@@ -33,14 +33,6 @@ public interface VolunteerApplicationDao {
             @Param("preUpdateTime") Timestamp timestamp);
 
     /**
-     * 通过用户id寻找申请表，可能有多个结果，因此返回一个列表
-     *
-     * @param id 用户id
-     * @return 申请表列表
-     */
-    List<VolunteerApplicationPO> listApplicationsByUserId(@Param("id") int id);
-
-    /**
      * 通过申请表id寻找申请表，只有一个结果
      *
      * @param id 申请表id
@@ -62,7 +54,18 @@ public interface VolunteerApplicationDao {
      * @param selectApplicationCO 用于选取的条件，各种属性见注释，各个属性可以都为空，此时会返回所有列表
      * @return 申请表列表
      */
+    @Deprecated
     List<VolunteerApplicationAbstractBO> listApplicationAbstractByCondition(
+            @Param("condition") SelectApplicationCO selectApplicationCO);
+
+
+    /**
+     * 条件查询，返回一个或多个结果，条件可以都为null，此时返回所有申请表。条件中不提供formID，因为formID可以唯一确定一个申请表。
+     *
+     * @param selectApplicationCO 用于选取的条件，各种属性见注释，各个属性可以都为空，此时会返回所有列表
+     * @return 申请表列表
+     */
+    List<VolunteerApplicationDetailBO> listApplicationDetailByCondition(
             @Param("condition") SelectApplicationCO selectApplicationCO);
     // List<VolunteerApplicationPO> listApplicationsByCondition(@Param("condition") SelectApplicationCO selectApplicationCO);
 

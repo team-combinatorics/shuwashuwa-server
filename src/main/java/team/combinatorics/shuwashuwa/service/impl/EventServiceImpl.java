@@ -10,9 +10,12 @@ import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
+import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
+import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
@@ -39,7 +42,7 @@ public class EventServiceImpl implements EventService {
      * */
 
     @Override
-    public ServiceEventDetailDTO createNewEvent(int userid) {
+    public ServiceEventDetailBO createNewEvent(int userid) {
         ServiceEventPO eventPO = ServiceEventPO.builder().userId(userid).build();
         serviceEventDao.insert(eventPO);
         int eventId = eventPO.getId();
@@ -67,6 +70,9 @@ public class EventServiceImpl implements EventService {
         // 如果是草稿，活动id必填
         if (serviceFormSubmitDTO.getServiceEventId() == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        //提取维修单信息
+        ServiceFormPO newFormPO = (ServiceFormPO) DTOUtil.convert(serviceFormSubmitDTO, ServiceFormPO.class);
+        int eventId = newFormPO.getServiceEventId();
         //获取维修事件，这里开始了一个事务，会加悲观锁，其他人无法再进行任何操作，包括读
         ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(serviceFormSubmitDTO.getServiceEventId());
         //检查权限
@@ -75,10 +81,13 @@ public class EventServiceImpl implements EventService {
         //签到后不允许修改
         if (eventPO.getStatus() >= 3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
-        //提取维修单信息
-        ServiceFormPO newFormPO = (ServiceFormPO) DTOUtil.convert(serviceFormSubmitDTO, ServiceFormPO.class);
-        int eventId = newFormPO.getServiceEventId();
         //保存维修单。存在草稿，则覆盖草稿
+        /*
+            todo:
+             这里的同步问题过于复杂，悲观锁是好的
+             但不知道这对于service_form表有没有保护
+             后备办法：这里直球方法加synchronized也不是不行
+         */
         if (eventPO.getDraft()) {
             int draftId = serviceFormDao.getLastFormIDByEventID(eventId);
             newFormPO.setId(draftId);
@@ -107,85 +116,113 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public void auditForm(int userid, ServiceEventAuditDTO auditDTO) {
+        //参数检查和提取
         if (DTOUtil.fieldExistNull(auditDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         int formId = auditDTO.getServiceFormId();
         int eventId = auditDTO.getServiceEventId();
-        if (formId == serviceFormDao.getLastFormIDByEventID(eventId)) {
-            if (serviceEventDao.getPOByID(eventId).getStatus() != 1)
-                throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
-            serviceEventDao.updateStatus(eventId, auditDTO.getResult() ? 2 : 0);
-        }
+        //查询数据库
+        final ServiceEventPO eventPO = serviceEventDao.getPOByID(eventId);
+        //根据查询结果判断能否更新
+        if (formId != eventPO.getValidFormId() || eventPO.getStatus() != 1)
+            throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+        //更新状态
+        serviceEventDao.updateStatus(eventId, auditDTO.getResult() ? 2 : 0);
+        //更新其他
         serviceFormDao.updateAdvice(formId, adminDao.getAdminIDByUserID(userid), auditDTO.getMessage());
         serviceEventDao.updateProblemSummary(eventId, auditDTO.getProblemSummary());
     }
 
     @Override
     public void takeOrder(int userid, Integer serviceEventId) {
+        //参数检查和提取
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
-        if (detailDTO.getStatus() != 3)
+        //查询数据库
+        final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceEventId);
+        //根据查询结果判断能否更新
+        if (eventPO.getStatus() != 3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
-
-        serviceEventDao.updateVolunteerInfo(serviceEventId, volunteerDao.getVolunteerIDByUserID(userid));
+        //更新状态
         serviceEventDao.updateStatus(serviceEventId, 4);
+        //更新其他
+        serviceEventDao.updateVolunteerInfo(serviceEventId, volunteerDao.getVolunteerIDByUserID(userid));
     }
 
     @Override
     public void giveUpOrder(int userid, Integer serviceEventId) {
+        //参数检查和提取
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        //查询数据库
         final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceEventId);
+        //根据查询结果判断能否更新
         if (eventPO.getVolunteerId() != volunteerDao.getVolunteerIDByUserID(userid))
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
         if (eventPO.getStatus() != 4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
-
+        //更新状态
         serviceEventDao.updateStatus(serviceEventId, 3);
     }
 
     @Override
     public void completeOrder(int userid, ServiceSimpleUpdateDTO stringUpdateDTO) {
+        //参数检查和提取
         if (DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        //查询数据库
         final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());
+        //根据查询结果判断能否更新
         if (eventPO.getVolunteerId() != volunteerDao.getVolunteerIDByUserID(userid))
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
         if (eventPO.getStatus() != 4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
-
-        serviceEventDao.updateByVolunteer(stringUpdateDTO.getServiceEventId(), stringUpdateDTO.getMessage());
+        //更新状态
         serviceEventDao.updateStatus(stringUpdateDTO.getServiceEventId(), 5);
+        //更新其他
+        serviceEventDao.updateByVolunteer(stringUpdateDTO.getServiceEventId(), stringUpdateDTO.getMessage());
+
+        //查询数据库
+        VolunteerPO volunteerPO = volunteerDao.getByID(userid);
+        //更新计数器
+        volunteerDao.updateOrderCount(userid,volunteerPO.getOrderCount()+1);
     }
 
+    //该方法不需要同步保护
     @Override
     public void updateFeedback(int userid, ServiceSimpleUpdateDTO stringUpdateDTO) {
+        //参数检查和提取
         if (DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        //查询数据库
         final ServiceEventPO eventPO = serviceEventDao.getPOByID(stringUpdateDTO.getServiceEventId());
+        //根据查询结果判断能否更新
         if (eventPO.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
         if (eventPO.getStatus() != 5)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
-
+        //更新
         serviceEventDao.updateFeedback(stringUpdateDTO.getServiceEventId(), stringUpdateDTO.getMessage());
     }
 
+    //该方法不需要同步保护
     @Override
     public void shutdownService(int userid, Integer serviceEventId) {
+        //参数检查和提取
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        ServiceEventDetailDTO detailDTO = getServiceDetail(serviceEventId);
-        if (detailDTO.getUserId() != userid)
+        //查询数据库
+        final ServiceEventPO eventPO = serviceEventDao.getPOByID(serviceEventId);
+        //根据查询结果判断能否更新
+        if (eventPO.getUserId() != userid)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
-
+        //更新
         serviceEventDao.updateClosed(serviceEventId, true);
     }
 
     @Override
-    public List<ServiceAbstractDTO> listServiceEvents(SelectServiceEventCO co) {
-        return serviceEventDao.listAbstractServiceEventsByCondition(co);
+    public List<ServiceAbstractBO> listServiceEvents(SelectServiceEventCO co) {
+        return serviceEventDao.listServiceAbstractsByCondition(co);
     }
 
     @Override
@@ -194,7 +231,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ServiceEventDetailDTO getServiceDetail(Integer eventId) {
+    public ServiceEventDetailBO getServiceDetail(Integer eventId) {
         return serviceEventDao.getServiceEventByID(eventId);
     }
 }

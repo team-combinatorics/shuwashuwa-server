@@ -9,6 +9,7 @@ import team.combinatorics.shuwashuwa.dao.co.SelectActivityCO;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
+import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ActivityInfoPO;
 import team.combinatorics.shuwashuwa.model.po.ActivityTimeSlotPO;
@@ -18,8 +19,6 @@ import team.combinatorics.shuwashuwa.utils.DTOUtil;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Vector;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -44,6 +43,11 @@ public class ActivityServiceImpl implements ActivityService {
                 .location(activityLaunchDTO.getLocation())
                 .build();
         activityInfoDao.insert(activityInfoPO);
+
+        if(activityInfoPO.getActivityName()==null) {
+            activityInfoPO.setActivityName("第"+activityInfoPO.getId()+"次活动");
+            activityInfoDao.update(activityInfoPO);
+        }
 
         //关联活动时间段
         addTimeSlots(activityInfoPO.getId(), activityLaunchDTO.getTimeSlots());
@@ -97,7 +101,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void removeActivity(int id) {
         if(activityInfoDao.deleteByID(id) == 1)
             System.out.println("删除了活动"+id);
-        for(ServiceAbstractDTO service : serviceEventDao.listAbstractServiceEventsByCondition(
+        for(ServiceAbstractBO service : serviceEventDao.listServiceAbstractsByCondition(
                 SelectServiceEventCO.builder().activityId(id).build()
         )) {
             serviceEventDao.updateClosed(service.getServiceEventId(),true);
@@ -122,7 +126,7 @@ public class ActivityServiceImpl implements ActivityService {
         if(activityId==null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
-        serviceEventDao.listAbstractServiceEventsByCondition(
+        serviceEventDao.listServiceAbstractsByCondition(
                 SelectServiceEventCO.builder().userId(userid).activityId(activityId).status(2).closed(false).build()
         ).stream().map(x -> serviceEventDao.updateStatus(x.getServiceEventId(),3)).close();
     }

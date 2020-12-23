@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class ActivityController {
     ActivityService activityService;
 
-    @ApiOperation("根据条件筛选活动列表，不需要筛选的条件无需赋值")
+    @ApiOperation(value = "根据条件筛选活动列表",notes = "不需要筛选的条件无需赋值")
     @RequestMapping(value = "", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<List<ActivityResponseDTO>> handleListRequest(
@@ -75,7 +75,7 @@ public class ActivityController {
         System.out.println("请求活动" + activityId + "时间段");
         final List<ActivityTimeSlotBO> boList = activityService.listTimeSlots(activityId);
         List<ActivityTimeSlotDTO> dtoList = boList.stream()
-                .map(x -> (ActivityTimeSlotDTO) DTOUtil.convert(x,ActivityResponseDTO.class))
+                .map(x -> (ActivityTimeSlotDTO) DTOUtil.convert(x,ActivityTimeSlotDTO.class))
                 .collect(Collectors.toList());
         return new CommonResult<>(200, "请求成功", dtoList);
     }

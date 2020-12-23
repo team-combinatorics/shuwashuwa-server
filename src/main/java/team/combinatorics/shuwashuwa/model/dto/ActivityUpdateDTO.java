@@ -25,6 +25,6 @@ public class ActivityUpdateDTO {
     private String location;
     @ApiModelProperty("活动分段信息")
     private List<ActivityTimeSlotDTO> timeSlots;
-    @ApiModelProperty("活动名称(optional)")
+    @ApiModelProperty("活动名称")
     private String activityName;
 }

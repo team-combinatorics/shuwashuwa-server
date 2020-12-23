@@ -7,4 +7,4 @@ reason_for_application,varchar(100),NOT NULL,申请理由,,,,
 reply_by_admin,varchar(100),DEFAULT NULL,管理员回复,,,,
 admin_id,int unsigned,DEFAULT NULL,回复的管理员的id,1,,,
 status,tinyint,DEFAULT 0,申请状态,1,,,
-card_pic_location,varchar(100),NOT NULL,申请者的身份证明的图片location,,"","",""
+card_pic_location,varchar(50),NOT NULL,申请者的身份证明的图片location,,"","",""

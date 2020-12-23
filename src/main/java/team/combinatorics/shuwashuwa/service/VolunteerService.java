@@ -27,7 +27,7 @@ public interface VolunteerService {
      * @param selectApplicationCO 由controller构造的条件结构
      * @return 申请表摘要信息列表
      */
-    List<VolunteerApplicationAbstractBO> listVolunteerApplicationByCondition(SelectApplicationCO selectApplicationCO);
+    List<VolunteerApplicationDetailBO> listVolunteerApplicationByCondition(SelectApplicationCO selectApplicationCO);
 
     /**
      * 管理员完成维修单的填写

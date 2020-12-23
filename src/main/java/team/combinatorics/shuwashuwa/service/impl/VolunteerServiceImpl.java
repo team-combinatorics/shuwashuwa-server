@@ -9,7 +9,6 @@ import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO;
 import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
@@ -65,9 +64,9 @@ public class VolunteerServiceImpl implements VolunteerService {
      * @return 申请表摘要信息列表
      */
     @Override
-    public List<VolunteerApplicationAbstractBO>
+    public List<VolunteerApplicationDetailBO>
     listVolunteerApplicationByCondition(SelectApplicationCO selectApplicationCO) {
-        return volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        return volunteerApplicationDao.listApplicationDetailByCondition(selectApplicationCO);
     }
 
     /**
@@ -85,24 +84,24 @@ public class VolunteerServiceImpl implements VolunteerService {
      * 管理员完成维修单的填写
      *
      * @param adminUserId 管理员的用户id
-     * @param updateDTO   管理员回复的结构
+     * @param auditDTO   管理员回复的结构
      * @return 新增志愿者的志愿者id
      */
     @Override
-    public int completeApplicationByAdmin(int adminUserId, VolunteerApplicationAuditDTO updateDTO) {
+    public int completeApplicationByAdmin(int adminUserId, VolunteerApplicationAuditDTO auditDTO) {
         // 获取管理员id
         int adminID = adminDao.getAdminIDByUserID(adminUserId);
         // 判断申请表更新数据是否完整
-        if (updateDTO.getFormID() == null || updateDTO.getStatus() == null || updateDTO.getReplyByAdmin() == null)
+        if (auditDTO.getFormId() == null || auditDTO.getStatus() == null || auditDTO.getReplyByAdmin() == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         // 如果申请状态为成功，则用户的信息都不能缺少
-        if (updateDTO.getStatus() == 1 && DTOUtil.fieldExistNull(updateDTO))
+        if (auditDTO.getStatus() == 1 && DTOUtil.fieldExistNull(auditDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
         // 随便设置个尝试上限
         for (int i = 0; i < 3; i++) {
             // 首先取出当前的申请表结构
-            VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationDao.getApplicationByFormId(updateDTO.getFormID());
+            VolunteerApplicationPO volunteerApplicationPO = volunteerApplicationDao.getApplicationByFormId(auditDTO.getFormId());
 
             // 状态不是待审核，更新失败
             if (volunteerApplicationPO.getStatus() != 0)
@@ -110,15 +109,15 @@ public class VolunteerServiceImpl implements VolunteerService {
 
             // 更新申请表状态，附带上次更新时间信息用于判断版本
             int returnValue = volunteerApplicationDao.updateApplicationByAdmin(adminID,
-                    updateDTO,
+                    auditDTO,
                     volunteerApplicationPO.getUpdatedTime());
 
             // 返回值为1说明更新成功，然后进行之后的处理
             if (returnValue == 1) {
                 imageStorageService.delete(volunteerApplicationPO.getCardPicLocation());
-                if (updateDTO.getStatus() == 1) {
+                if (auditDTO.getStatus() == 1) {
                     // 将用户插入志愿者表中
-                    VolunteerPO volunteerPO = (VolunteerPO) DTOUtil.convert(updateDTO, VolunteerPO.class);
+                    VolunteerPO volunteerPO = (VolunteerPO) DTOUtil.convert(auditDTO, VolunteerPO.class);
                     volunteerPO.setUserid(volunteerApplicationPO.getUserId());
                     volunteerDao.insert(volunteerPO);
                     // 更新用户的志愿者权限

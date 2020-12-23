@@ -3,7 +3,6 @@ package team.combinatorics.shuwashuwa.dao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
+import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.model.po.ServiceEventPO;
 import team.combinatorics.shuwashuwa.model.po.ServiceFormPO;
@@ -57,7 +58,7 @@ public class ServiceEventDaoTest {
             userDao.updateUserInfo(i, UserInfoUpdateDTO.builder()
                     .userName("name " + i)
                     .build());
-            returnValue = serviceEventDao.insertByUserID(i);
+            returnValue = serviceEventDao.insert(ServiceEventPO.builder().userId(i).build());
             Assert.assertEquals(1, returnValue);
         }
         ServiceFormPO serviceFormPO;
@@ -179,10 +180,10 @@ public class ServiceEventDaoTest {
 
     @Test
     public void getServiceEventByIDTest() {
-        ServiceEventDetailDTO serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
-        Assert.assertEquals("name 2", serviceEventDetailDTO.getUserName());
-        serviceEventDetailDTO = serviceEventDao.getServiceEventByID(1);
-        Assert.assertEquals("rinrin开花", serviceEventDetailDTO.getVolunteerName());
+        ServiceEventDetailBO serviceEventDetailBO = serviceEventDao.getServiceEventByID(1);
+        Assert.assertEquals("name 2", serviceEventDetailBO.getUserName());
+        serviceEventDetailBO = serviceEventDao.getServiceEventByID(1);
+        Assert.assertEquals("rinrin开花", serviceEventDetailBO.getVolunteerName());
 
     }
 
@@ -294,23 +295,23 @@ public class ServiceEventDaoTest {
     @Test
     public void listAbstractServiceEventsByCondition() {
         serviceEventDao.updateValidFormID(1, 4);
-        List<ServiceAbstractDTO> serviceAbstractDTOList = serviceEventDao.listAbstractServiceEventsByCondition(
+        List<ServiceAbstractBO> serviceAbstractBOList = serviceEventDao.listServiceAbstractsByCondition(
                 SelectServiceEventCO.builder()
                         .userId(2)
                         .build()
         );
-        Assert.assertEquals(1, serviceAbstractDTOList.size());
-        ServiceAbstractDTO serviceAbstractDTO = serviceAbstractDTOList.get(0);
-        Assert.assertEquals("米歇尔电脑", serviceAbstractDTO.getComputerModel());
-        Assert.assertEquals("name 2", serviceAbstractDTO.getUserName());
-        Assert.assertEquals("rinrin开花", serviceAbstractDTO.getVolunteerName());
+        Assert.assertEquals(1, serviceAbstractBOList.size());
+        ServiceAbstractBO serviceAbstractBO = serviceAbstractBOList.get(0);
+        Assert.assertEquals("米歇尔电脑", serviceAbstractBO.getComputerModel());
+        Assert.assertEquals("name 2", serviceAbstractBO.getUserName());
+        Assert.assertEquals("rinrin开花", serviceAbstractBO.getVolunteerName());
 
-        serviceAbstractDTOList = serviceEventDao.listAbstractServiceEventsByCondition(
+        serviceAbstractBOList = serviceEventDao.listServiceAbstractsByCondition(
                 SelectServiceEventCO.builder()
                         .userId(3)
                         .build()
         );
-        Assert.assertNull(serviceAbstractDTOList.get(0).getComputerModel());
+        Assert.assertNull(serviceAbstractBOList.get(0).getComputerModel());
 
         SelectServiceEventCO selectServiceEventCO;
         // 测试一个通用条件
@@ -335,7 +336,7 @@ public class ServiceEventDaoTest {
                 .closed(true)
                 .status(0)
                 .build();
-        Assert.assertEquals(0, serviceEventDao.listAbstractServiceEventsByCondition(selectServiceEventCO).size());
+        Assert.assertEquals(0, serviceEventDao.listServiceAbstractsByCondition(selectServiceEventCO).size());
     }
 
     /**
@@ -355,7 +356,7 @@ public class ServiceEventDaoTest {
         // 输出维修事件的摘要列表
         try {
             String json = new ObjectMapper()
-                    .writeValueAsString(serviceEventDao.listAbstractServiceEventsByCondition(new SelectServiceEventCO()));
+                    .writeValueAsString(serviceEventDao.listServiceAbstractsByCondition(new SelectServiceEventCO()));
             System.out.println(json);
         } catch (Exception e) {
             e.printStackTrace();
@@ -364,7 +365,7 @@ public class ServiceEventDaoTest {
         serviceEventDao.updateClosed(1, true);
         // 输出条件筛选摘要列表
         try {
-            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listAbstractServiceEventsByCondition(
+            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listServiceAbstractsByCondition(
                     SelectServiceEventCO.builder()
                             .closed(true)
                             .build()
@@ -374,17 +375,6 @@ public class ServiceEventDaoTest {
             e.printStackTrace();
         }
 
-
-//        try {
-//            String json = new ObjectMapper().writeValueAsString(serviceEventDao.listServiceEventsByCondition(
-//                    SelectServiceEventCO.builder()
-//                            .volunteerId(1)
-//                            .build()
-//            ));
-//            System.out.println(json);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
 

@@ -6,6 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
+import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
+import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
 import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
@@ -23,6 +25,7 @@ import java.util.List;
 @Validated
 @RequestMapping("/api/super")
 @AllArgsConstructor
+@CrossOrigin(origins = {"*"})
 public class SuperAdministratorController {
     private final SuperAdministratorService superAdministratorService;
     private final ImageStorageService storageService;
@@ -74,7 +77,7 @@ public class SuperAdministratorController {
     /**
      * 超管获取缓存图片数量
      */
-    @ApiOperation(value = "获取缓存图片数量")
+    @ApiOperation(value = "获取已上传到服务器，但没有使用过图片数量")
     @RequestMapping(value = "/cache", method = RequestMethod.GET)
     @SUAccess
     public CommonResult<Integer> getImageCacheNumber() {
@@ -84,13 +87,19 @@ public class SuperAdministratorController {
     /**
      * 超管删除所有缓存图片
      */
-    @ApiOperation(value = "删除指定日期前的所有缓存图片")
+    @ApiOperation(value = "删除指定天数前的所有缓存图片")
     @RequestMapping(value = "/cache", method = RequestMethod.DELETE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "删除成功")
     })
     @SUAccess
-    public CommonResult<String> handleImageCacheClear(@RequestParam("days") @ApiParam("指定的天数") int days) {
+    public CommonResult<String> handleImageCacheClear(
+            @RequestParam("days")
+            @ApiParam(value = "指定的天数",example = "15",required = true)
+                    Integer days
+    ) {
+        if(days==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         storageService.clearCacheByTime(days);
         return new CommonResult<>(200,"删除成功","deleted");
     }
@@ -200,7 +209,7 @@ public class SuperAdministratorController {
     @RequestMapping(value = "/activity", method = RequestMethod.POST)
     @SUAccess
     public CommonResult<String> handleActivityLaunch(
-            @RequestBody @ApiParam("活动发起传输对象") ActivityLaunchDTO activityLaunchDTO
+            @RequestBody @ApiParam(value = "活动发起传输对象",required = true) ActivityLaunchDTO activityLaunchDTO
     ) {
         System.out.println("发起活动");
         activityService.insertActivity(activityLaunchDTO);
@@ -210,11 +219,13 @@ public class SuperAdministratorController {
     /**
      * 超管更新活动信息
      */
-    @ApiOperation(value = "更新活动信息")
+    @ApiOperation(value = "更新活动信息",notes = "至少更新一项")
     @RequestMapping(value = "/activity", method = RequestMethod.PATCH)
     @SUAccess
     public CommonResult<String> handleActivityUpdate(
-            @RequestBody @ApiParam("活动更新传输对象") ActivityUpdateDTO activityUpdateDTO
+            @RequestBody
+            @ApiParam(value = "活动更新传输对象",required = true)
+                    ActivityUpdateDTO activityUpdateDTO
     ) {
         System.out.println("更新活动"+ activityUpdateDTO.getActivityId());
         activityService.updateActivity(activityUpdateDTO);
@@ -227,7 +238,10 @@ public class SuperAdministratorController {
     @ApiOperation(value = "移除活动")
     @RequestMapping(value = "/activity", method = RequestMethod.DELETE)
     @SUAccess
-    public CommonResult<String> handleActivityDelete(@RequestBody @ApiParam("要删除的活动编号") Integer activityId) {
+    public CommonResult<String> handleActivityDelete(
+            @RequestBody @ApiParam(value = "要删除的活动编号",required = true)
+                    Integer activityId
+    ) {
         System.out.println("移除活动"+activityId);
         activityService.removeActivity(activityId);
         return new CommonResult<>(200, "请求成功", "success");

@@ -82,15 +82,16 @@ public class DTOUtil {
                     Method setter = targetClass.getMethod("set" + fieldNameCap, targetClass.
                             getDeclaredField(fieldName.toString()).getType());
                     Object value = getter.invoke(source);
-                    if (getter.getReturnType() == Timestamp.class)
+                    if (value != null && getter.getReturnType() == Timestamp.class)
                         value = stamp2str((Timestamp) value);
-                    if (setter.getParameterTypes()[0] == Timestamp.class)
+                    if (value != null && setter.getParameterTypes()[0] == Timestamp.class)
                         value = Timestamp.valueOf((String) value);
                     setter.invoke(target, value);
                 }
             }
             return target;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("DTO转换错误");
         }
     }

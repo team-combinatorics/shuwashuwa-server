@@ -78,43 +78,4 @@ public class UserController {
         System.out.println(userid + "请求个人信息");
         return new CommonResult<>(200, "请求成功", responseDTO);
     }
-
-
-    /**
-     * 删除单个用户，测试用
-     * todo 真的还用吗
-     */
-    @ApiOperation(value = "[测试用]删除单个用户")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "删除成功"),
-            @ApiResponse(code = 40001, message = "不存在的用户ID")
-    })
-    @RequestMapping(value = "/deleteOne", method = RequestMethod.DELETE)
-    @NoToken
-    public CommonResult<String> deleteOneUser(
-            @RequestHeader("token") @ApiParam(hidden = true) String token
-    ) throws Exception {
-        int cnt = userService.deleteOneUser(TokenUtil.extractUserid(token));
-        if (cnt > 0) {
-            return new CommonResult<>(200, "删除成功", "If success, you can receive this message.");
-        }
-        return new CommonResult<>(40001, "不存在的用户ID", "You have deleted a ghost user!");
-    }
-
-    /**
-     * 删除所有用户，测试用
-     * todo 真的还用吗
-     */
-    @ApiOperation(value = "[测试用]删除所有用户")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "删除成功"),
-    })
-    @NoToken
-    @RequestMapping(value = "/deleteAll", method = RequestMethod.DELETE)
-    public CommonResult<String> deleteAllUser() {
-        System.out.println("即将删除所有用户信息");
-        userService.deleteAllUsers();
-        return new CommonResult<>(200, "删除成功", "All users have been deleted.");
-    }
-
 }

@@ -16,10 +16,12 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel("返回给前端的维修单信息结构")
+@ApiModel("返回给前端的维修事件信息结构")
 public class ServiceEventDetailDTO {
-    @ApiModelProperty("维修请求id")
+    @ApiModelProperty("维修事件id")
     private Integer id;
+    @ApiModelProperty(value = "维修事件创建时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    private String createTime;
     @ApiModelProperty("发起维修申请的用户id")
     private Integer userId;
     @ApiModelProperty("发起维修申请的用户姓名")
@@ -28,6 +30,10 @@ public class ServiceEventDetailDTO {
     private Integer volunteerId;
     @ApiModelProperty("接单的志愿者的姓名")
     private String volunteerName;
+    @ApiModelProperty("接单的志愿者的电话号码")
+    private String volunteerPhoneNumber;
+    @ApiModelProperty("接单的志愿者的邮件地址")
+    private String volunteerEmail;
     @ApiModelProperty("用户提交的历史维修单")
     private List<ServiceFormDTO> serviceForms;
     @ApiModelProperty("由志愿者填写的维修结果")
@@ -36,8 +42,14 @@ public class ServiceEventDetailDTO {
     private String feedback;
     @ApiModelProperty("参加的活动的id")
     private Integer activityId;
+    @ApiModelProperty("参加的活动的名称")
+    private String activityName;
     @ApiModelProperty("预约的时间段")
     private Integer timeSlot;
+    @ApiModelProperty(value = "预约时间段的开始时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    private String startTime;
+    @ApiModelProperty(value = "预约时间段的结束时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    private String endTime;
     @ApiModelProperty("问题摘要")
     private String problemSummary;
     @ApiModelProperty(value = "该次维修处于的状态,可能状态如下:\n" +

@@ -15,14 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 @ApiModel("创建活动时上传的数据")
 public class ActivityLaunchDTO {
-    @ApiModelProperty(value = "开始时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    @ApiModelProperty(value = "开始时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14",required = true)
     private String startTime;
-    @ApiModelProperty(value = "结束时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
+    @ApiModelProperty(value = "结束时间，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14",required = true)
     private String endTime;
-    @ApiModelProperty("活动地点")
+    @ApiModelProperty(value = "活动地点",required = true)
     private String location;
-    @ApiModelProperty("活动分段信息")
+    @ApiModelProperty(value = "活动分段信息",required = true)
     private List<ActivityTimeSlotDTO> timeSlots;
-    @ApiModelProperty("活动名称(optional)")
+    @ApiModelProperty("活动名称，不填默认\"第%d次活动\"")
     private String activityName;
 }
