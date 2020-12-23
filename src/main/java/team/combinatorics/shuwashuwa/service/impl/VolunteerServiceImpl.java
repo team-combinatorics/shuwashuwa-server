@@ -9,7 +9,6 @@ import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO;
 import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
@@ -65,9 +64,9 @@ public class VolunteerServiceImpl implements VolunteerService {
      * @return 申请表摘要信息列表
      */
     @Override
-    public List<VolunteerApplicationAbstractBO>
+    public List<VolunteerApplicationDetailBO>
     listVolunteerApplicationByCondition(SelectApplicationCO selectApplicationCO) {
-        return volunteerApplicationDao.listApplicationAbstractByCondition(selectApplicationCO);
+        return volunteerApplicationDao.listApplicationDetailByCondition(selectApplicationCO);
     }
 
     /**

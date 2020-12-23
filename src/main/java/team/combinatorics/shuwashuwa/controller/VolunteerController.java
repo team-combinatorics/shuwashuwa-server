@@ -68,7 +68,7 @@ public class VolunteerController {
     @ApiOperation(value = "条件查询志愿者申请的摘要列表", notes = "用户身份下，targetUserID会被强行设置为用户自己的userid")
     @RequestMapping(value = "/application", method = RequestMethod.GET)
     @AllAccess
-    public CommonResult<List<VolunteerApplicationAbstractDTO>> listVolunteerApplicationByCondition(
+    public CommonResult<List<VolunteerApplicationDetailDTO>> listVolunteerApplicationByCondition(
             @RequestHeader("token")
             @ApiParam(hidden = true)
                     String token,
@@ -94,20 +94,20 @@ public class VolunteerController {
                 .adminId(adminID)
                 .build();
         // 查询目标列表
-        List<VolunteerApplicationAbstractBO> boList =
+        List<VolunteerApplicationDetailBO> boList =
                 volunteerService.listVolunteerApplicationByCondition(selectApplicationCO);
         //日期转化
-        List<VolunteerApplicationAbstractDTO> dtoList = boList.stream()
-                        .map(x -> (VolunteerApplicationAbstractDTO)
-                                DTOUtil.convert(x,VolunteerApplicationAbstractDTO.class))
+        List<VolunteerApplicationDetailDTO> dtoList = boList.stream()
+                        .map(x -> (VolunteerApplicationDetailDTO)
+                                DTOUtil.convert(x,VolunteerApplicationDetailDTO.class))
                         .collect(Collectors.toList());
         return new CommonResult<>(200, "请求成功", dtoList);
     }
 
 
-    @ApiOperation(value = "获取志愿者申请的详细信息")
-    @RequestMapping(value = "/application/detail", method = RequestMethod.GET)
-    @AllAccess
+//    @ApiOperation(value = "获取志愿者申请的详细信息")
+//    @RequestMapping(value = "/application/detail", method = RequestMethod.GET)
+//    @AllAccess
     public CommonResult<VolunteerApplicationDetailDTO> getVolunteerApplicationDetail(
             @RequestParam("id") @ApiParam(value = "要查看的申请表id",required = true) Integer formId
     ) {

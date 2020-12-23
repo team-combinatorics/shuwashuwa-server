@@ -65,12 +65,6 @@
           and updated_time = #{preUpdateTime}
     </update>
 
-    <select id="listApplicationsByUserId" resultMap="volunteerApplicationResultMap">
-        select *
-        from volunteer_application
-        where user_id = #{id}
-    </select>
-
     <select id="getApplicationDetailByFormId" resultMap="volunteerApplicationDetailBO">
         select va.id       va_id,
                va.updated_time,
@@ -130,8 +124,47 @@
                 and va.admin_id = #{condition.adminId}
             </if>
         </where>
+    </select>
 
-
+    <select id="listApplicationDetailByCondition" resultMap="volunteerApplicationDetailBO"
+            parameterType="team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO">
+        select va.id       va_id,
+               va.updated_time,
+               va.create_time,
+               va.user_id,
+               va.reason_for_application,
+               va.reply_by_admin,
+               va.admin_id,
+               a.user_name a_name,
+               va.status,
+               va.card_pic_location,
+               u.user_name u_name,
+               u.phone_number,
+               u.email,
+               u.department,
+               u.grade,
+               u.identity,
+               u.student_id
+        from volunteer_application va
+                 left join admin a on va.admin_id = a.id
+                 left join user u on va.user_id = u.id
+        <where>
+            <if test="condition.beginTime != null">
+                va.create_time >= #{condition.beginTime}
+            </if>
+            <if test="condition.endTime != null">
+                and va.create_time &lt;= #{condition.endTime}
+            </if>
+            <if test="condition.userId != null">
+                and va.user_id = #{condition.userId}
+            </if>
+            <if test="condition.status != null">
+                and va.status = #{condition.status}
+            </if>
+            <if test="condition.adminId != null">
+                and va.admin_id = #{condition.adminId}
+            </if>
+        </where>
     </select>
 
     <!--    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO">-->
