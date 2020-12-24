@@ -15,8 +15,6 @@ import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
-@Ignore
-//todo: @leesou 会出问题我就先注释掉了
 public class WechatUtilTest {
 
     @Test
@@ -75,6 +73,7 @@ public class WechatUtilTest {
     }
 
     @Test
+    @Ignore
     public  void testGetTemplateId() throws Exception {
         List<String> IDs = WechatUtil.getTemplateID();
         for(String ID:IDs) {
@@ -83,7 +82,8 @@ public class WechatUtilTest {
     }
 
     @Test
+    @Ignore
     public void testGetTemplate() throws Exception {
-            WechatUtil.getTemplateList();
+        WechatUtil.getTemplateList();
     }
 }
