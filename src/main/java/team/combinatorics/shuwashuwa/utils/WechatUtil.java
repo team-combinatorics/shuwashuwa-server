@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.DependsOn;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
+import team.combinatorics.shuwashuwa.model.dto.WechatAppCodeDTO;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
 import java.util.ArrayList;
@@ -115,8 +117,12 @@ final public class WechatUtil {
         JsonNode root = handleGetRequest(url);
 
         /* TODO: 或许需要细化errcode原因 */
-        if(root.has("errcode") && root.path("errcode").asInt() != 0)
+        if(root.has("errcode") && root.path("errcode").asInt() != 0) {
             getWechatAccessTokenActively();
+            root = handleGetRequest(url);
+        }
+        if(root.has("errcode") && root.path("errcode").asInt() != 0)
+            throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
 
         JsonNode data = root.path("data");
         return data.elements();
