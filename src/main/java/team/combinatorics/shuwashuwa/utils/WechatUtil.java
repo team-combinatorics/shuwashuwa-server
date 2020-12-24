@@ -2,6 +2,8 @@ package team.combinatorics.shuwashuwa.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ final public class WechatUtil {
     private static final String APPID = PropertiesConstants.WX_MINI_PROGRAM_APPID;
     private static final String SECRET = PropertiesConstants.WX_MINI_PROGRAM_SECRET;
     private static final RestTemplate restTemplate = new RestTemplate();
+
+    String accessToken;
 
     public static JsonNode handleGetRequest(String url) throws Exception {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -58,6 +62,7 @@ final public class WechatUtil {
     }
 
     public static Iterator<JsonNode> getTemplateList() throws Exception {
+
         String accessToken = getWechatAccessToken();
         String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                 + "access_token=" + accessToken;
@@ -67,15 +72,17 @@ final public class WechatUtil {
         return data.elements();
     }
 
-    public static List<String> getTemplateID () throws Exception {
+    public static List<String> getTemplateID () {
         List<String> result = new ArrayList<>();
-        Iterator<JsonNode> templates = getTemplateList();
-        while (templates.hasNext()) {
-            JsonNode t = templates.next();
-            String TmplId = t.path("priTmplId").asText();
-            System.out.println(TmplId);
-            result.add(TmplId);
-        }
+//        Iterator<JsonNode> templates = getTemplateList();
+//        while (templates.hasNext()) {
+//            JsonNode t = templates.next();
+//            String TmplId = t.path("priTmplId").asText();
+//            System.out.println(TmplId);
+//            result.add(TmplId);
+//        }
+        result.add("Ua2MAP-UdHLHx9i_cnWf33nXwON2RgRt0XEOhzK3DNI");
+        result.add("DzU2gPVQgkKsknQ1dAXRjGoByDjphw252gBvltWir1Q");
         return result;
     }
 
