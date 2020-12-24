@@ -206,9 +206,10 @@ public class EventServiceImpl implements EventService {
         serviceEventDao.updateByVolunteer(stringUpdateDTO.getServiceEventId(), stringUpdateDTO.getMessage());
 
         //查询数据库
-        VolunteerPO volunteerPO = volunteerDao.getByID(userid);
+        int volunteerId = volunteerDao.getVolunteerIDByUserID(userid);
+        VolunteerPO volunteerPO = volunteerDao.getByID(volunteerId);
         //更新计数器
-        volunteerDao.updateOrderCount(userid, volunteerPO.getOrderCount() + 1);
+        volunteerDao.updateOrderCount(volunteerId, volunteerPO.getOrderCount() + 1);
     }
 
     //该方法不需要同步保护
