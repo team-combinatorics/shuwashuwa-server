@@ -20,7 +20,8 @@ public enum ErrorInfoEnum {
     DUPLICATED_PROMOTION(40012, "用户已具有希望获得的身份"),
     STATUS_UNMATCHED(40013, "当前状态下不允许执行指定操作"),
     ACCESS_TOKEN_FAILURE(40014, "获取微信Access token 出错"),
-    SERVICE_TIMEOUT(40015, "服务超时，请重试");
+    SERVICE_TIMEOUT(40015, "服务超时，请重试"),
+    FARMING(40016,"禁止刷单");
 
     private final Integer errCode;
     private final String errMsg;
