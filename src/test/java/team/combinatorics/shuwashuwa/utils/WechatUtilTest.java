@@ -1,5 +1,6 @@
 package team.combinatorics.shuwashuwa.utils;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,6 +10,7 @@ import team.combinatorics.shuwashuwa.model.dto.NoticeMessage;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -71,7 +73,17 @@ public class WechatUtilTest {
     }
 
     @Test
+    @Ignore
+    public  void testGetTemplateId() throws Exception {
+        List<String> IDs = WechatUtil.getTemplateID();
+        for(String ID:IDs) {
+            System.out.println(ID);
+        }
+    }
+
+    @Test
+    @Ignore
     public void testGetTemplate() throws Exception {
-            WechatUtil.getTemplateList();
+        WechatUtil.getTemplateList();
     }
 }

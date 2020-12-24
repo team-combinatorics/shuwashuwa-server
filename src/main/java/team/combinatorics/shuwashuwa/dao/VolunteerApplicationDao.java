@@ -69,5 +69,7 @@ public interface VolunteerApplicationDao {
             @Param("condition") SelectApplicationCO selectApplicationCO);
     // List<VolunteerApplicationPO> listApplicationsByCondition(@Param("condition") SelectApplicationCO selectApplicationCO);
 
+    int deleteApplicationByCondition(
+            @Param("condition") SelectApplicationCO selectApplicationCO);
 
 }

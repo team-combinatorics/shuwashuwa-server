@@ -83,12 +83,6 @@ public class EventServiceImpl implements EventService {
         if (eventPO.getStatus() >= 3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
         //保存维修单。存在草稿，则覆盖草稿
-        /*
-            todo:
-             这里的同步问题过于复杂，悲观锁是好的
-             但不知道这对于service_form表有没有保护
-             后备办法：这里直球方法加synchronized也不是不行
-         */
         if (eventPO.getDraft()) {
             int draftId = serviceFormDao.getLastFormIDByEventID(eventId);
             newFormPO.setId(draftId);
@@ -159,15 +153,18 @@ public class EventServiceImpl implements EventService {
         //参数检查和提取
         if (serviceEventId == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        int myVolunteerId = volunteerDao.getVolunteerIDByUserID(userid);
         // 查询数据库，并且加上悲观锁
         ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(serviceEventId);
         //根据查询结果判断能否更新
         if (eventPO.getStatus() != 3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
+        if (eventPO.getUserId() == userid)
+            throw new KnownException(ErrorInfoEnum.FARMING);
         //更新状态
         serviceEventDao.updateStatus(serviceEventId, 4);
         //更新其他
-        serviceEventDao.updateVolunteerInfo(serviceEventId, volunteerDao.getVolunteerIDByUserID(userid));
+        serviceEventDao.updateVolunteerInfo(serviceEventId, myVolunteerId);
     }
 
     @Transactional
@@ -193,10 +190,11 @@ public class EventServiceImpl implements EventService {
         //参数检查和提取
         if (DTOUtil.fieldExistNull(stringUpdateDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        int myVolunteerId = volunteerDao.getVolunteerIDByUserID(userid);
         // 查询数据库，并且加上悲观锁
         ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(stringUpdateDTO.getServiceEventId());
         //根据查询结果判断能否更新
-        if (eventPO.getVolunteerId() != volunteerDao.getVolunteerIDByUserID(userid))
+        if (eventPO.getVolunteerId() != myVolunteerId)
             throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
         if (eventPO.getStatus() != 4)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
@@ -206,9 +204,9 @@ public class EventServiceImpl implements EventService {
         serviceEventDao.updateByVolunteer(stringUpdateDTO.getServiceEventId(), stringUpdateDTO.getMessage());
 
         //查询数据库
-        VolunteerPO volunteerPO = volunteerDao.getByID(userid);
+        VolunteerPO volunteerPO = volunteerDao.getByID(myVolunteerId);
         //更新计数器
-        volunteerDao.updateOrderCount(userid, volunteerPO.getOrderCount() + 1);
+        volunteerDao.updateOrderCount(myVolunteerId, volunteerPO.getOrderCount() + 1);
     }
 
     //该方法不需要同步保护

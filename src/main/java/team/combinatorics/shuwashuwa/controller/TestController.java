@@ -144,7 +144,6 @@ public class TestController {
             volunteerDao.deleteByID(volunteerDao.getVolunteerIDByUserID(userid));
         }
         if (admin && !userPO.getAdmin()) {
-            userDao.updateUserAdminAuthority(userid,true);
             suService.addAdministrator(
                     AdminDTO.builder()
                             .userid(userid)

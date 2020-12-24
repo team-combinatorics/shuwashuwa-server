@@ -12,6 +12,9 @@ import team.combinatorics.shuwashuwa.model.dto.UserInfoUpdateDTO;
 import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
+import team.combinatorics.shuwashuwa.utils.WechatUtil;
+
+import java.util.List;
 
 @Api(value = "User相关接口说明")
 @RestController
@@ -77,5 +80,19 @@ public class UserController {
         UserInfoResponseDTO responseDTO = userService.getUserInfo(userid);
         System.out.println(userid + "请求个人信息");
         return new CommonResult<>(200, "请求成功", responseDTO);
+    }
+
+    
+    /**
+     * 获取通知模板id列表
+     */
+    @ApiOperation(value = "获取所有的通知模板ID", notes = "获取所有的通知模板ID")
+    @RequestMapping(value = "/notice", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功")
+    })
+    @AllAccess
+    public CommonResult<List<String>> getNoticeFormID() throws Exception {
+        return new CommonResult<>(200, "获取成功", WechatUtil.getTemplateID());
     }
 }

@@ -167,6 +167,28 @@
         </where>
     </select>
 
+    <delete id="deleteApplicationByCondition" parameterType="team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO">
+        delete
+        from volunteer_application va
+        <where>
+            <if test="condition.beginTime != null">
+                va.create_time >= #{condition.beginTime}
+            </if>
+            <if test="condition.endTime != null">
+                and va.create_time &lt;= #{condition.endTime}
+            </if>
+            <if test="condition.userId != null">
+                and va.user_id = #{condition.userId}
+            </if>
+            <if test="condition.status != null">
+                and va.status = #{condition.status}
+            </if>
+            <if test="condition.adminId != null">
+                and va.admin_id = #{condition.adminId}
+            </if>
+        </where>
+    </delete>
+
     <!--    <update id="update" parameterType="team.combinatorics.shuwashuwa.model.po.VolunteerApplicationPO">-->
     <!--        update volunteer_application-->
     <!--        <trim prefix="SET" suffixOverrides=",">-->

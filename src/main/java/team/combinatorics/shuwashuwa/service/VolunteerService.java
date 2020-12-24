@@ -45,5 +45,11 @@ public interface VolunteerService {
      */
     VolunteerApplicationDetailBO getApplicationDetailByFormId(int formId);
 
+    /**
+     * 根据用户id查询志愿者id
+     * @param userid 用户id，请保证这是志愿者
+     * @return 志愿者id
+     */
+    Integer getVolunteerIdByUserid(Integer userid);
 
 }

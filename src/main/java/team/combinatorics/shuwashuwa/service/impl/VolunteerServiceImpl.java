@@ -41,8 +41,14 @@ public class VolunteerServiceImpl implements VolunteerService {
         if (DTOUtil.fieldExistNull(volunteerApplicationAdditionDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
-        //重复申请检查
-        if (userDao.getUserByUserid(userid).getVolunteer())
+        //筛选已有为审核申请
+        SelectApplicationCO duplicateCO = SelectApplicationCO.builder()
+                .userId(userid)
+                .status(0)
+                .build();
+        int countOldApplication = volunteerApplicationDao.listApplicationDetailByCondition(duplicateCO).size();
+        //如果已经是志愿者，或提交过申请但没被审核，不允许申请
+        if (userDao.getUserByUserid(userid).getVolunteer() || countOldApplication > 0)
             throw new KnownException(ErrorInfoEnum.DUPLICATED_PROMOTION);
 
         //插入新的申请
@@ -84,7 +90,7 @@ public class VolunteerServiceImpl implements VolunteerService {
      * 管理员完成维修单的填写
      *
      * @param adminUserId 管理员的用户id
-     * @param auditDTO   管理员回复的结构
+     * @param auditDTO    管理员回复的结构
      * @return 新增志愿者的志愿者id
      */
     @Override
@@ -129,6 +135,11 @@ public class VolunteerServiceImpl implements VolunteerService {
         }
         // 理论上不可能运行到这里
         throw new KnownException(ErrorInfoEnum.SERVICE_TIMEOUT);
+    }
+
+    @Override
+    public Integer getVolunteerIdByUserid(Integer userid) {
+        return volunteerDao.getVolunteerIDByUserID(userid);
     }
 }
 
