@@ -59,16 +59,13 @@ final public class WechatUtil {
                 + "&appid=" + APPID
                 + "&secret=" + SECRET;
         JsonNode root = handleGetRequest(url);
-        AccessToken.WX_ACCESS_TOKEN = root.path("access_token").asText();
+        PropertiesConstants.WX_ACCESS_TOKEN = root.path("access_token").asText();
         System.out.println("更新Access Token，更新时间为：" + new Date());
-        System.out.println(root.path("access_token").asText());
-        System.out.println(AccessToken.WX_ACCESS_TOKEN);
         System.out.println("当前Access Token有效期限为：" + root.path("expires_in").asText() + "秒");
     }
 
     public static Iterator<JsonNode> getTemplateList() throws Exception {
-        String accessToken = AccessToken.WX_ACCESS_TOKEN;
-        System.out.println(AccessToken.WX_ACCESS_TOKEN);
+        String accessToken = PropertiesConstants.WX_ACCESS_TOKEN;
         String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                 + "access_token=" + accessToken;
         JsonNode root = handleGetRequest(url);
@@ -113,7 +110,7 @@ final public class WechatUtil {
         }
 
         System.out.println(wechatNoticeDTO.getTemplate_id());
-        String accessToken = AccessToken.WX_ACCESS_TOKEN;
+        String accessToken = PropertiesConstants.WX_ACCESS_TOKEN;
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                 + "access_token=" + accessToken;
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
@@ -133,7 +130,7 @@ final public class WechatUtil {
         }
 
         System.out.println(wechatNoticeDTO.getTemplate_id());
-        String accessToken = AccessToken.WX_ACCESS_TOKEN;
+        String accessToken = PropertiesConstants.WX_ACCESS_TOKEN;
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                 + "access_token=" + accessToken;
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
