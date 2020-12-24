@@ -41,18 +41,15 @@ public class VolunteerServiceImpl implements VolunteerService {
         if (DTOUtil.fieldExistNull(volunteerApplicationAdditionDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
-        //如果已经是志愿者，不允许申请
-        if (userDao.getUserByUserid(userid).getVolunteer())
-            throw new KnownException(ErrorInfoEnum.DUPLICATED_PROMOTION);
-
-        //如果申请过，删除旧的申请
-        SelectApplicationCO deleteCO = SelectApplicationCO.builder()
+        //筛选已有为审核申请
+        SelectApplicationCO duplicateCO = SelectApplicationCO.builder()
                 .userId(userid)
                 .status(0)
                 .build();
-        listVolunteerApplicationByCondition(deleteCO)
-                .forEach(x -> imageStorageService.delete(x.getCardPicLocation()));
-        volunteerApplicationDao.deleteApplicationByCondition(deleteCO);
+        int countOldApplication = volunteerApplicationDao.listApplicationDetailByCondition(duplicateCO).size();
+        //如果已经是志愿者，或提交过申请但没被审核，不允许申请
+        if (userDao.getUserByUserid(userid).getVolunteer() || countOldApplication > 0)
+            throw new KnownException(ErrorInfoEnum.DUPLICATED_PROMOTION);
 
         //插入新的申请
         VolunteerApplicationPO volunteerApplicationPO =
@@ -93,7 +90,7 @@ public class VolunteerServiceImpl implements VolunteerService {
      * 管理员完成维修单的填写
      *
      * @param adminUserId 管理员的用户id
-     * @param auditDTO   管理员回复的结构
+     * @param auditDTO    管理员回复的结构
      * @return 新增志愿者的志愿者id
      */
     @Override
