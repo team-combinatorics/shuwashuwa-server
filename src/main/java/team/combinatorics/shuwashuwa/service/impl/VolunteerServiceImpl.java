@@ -41,9 +41,17 @@ public class VolunteerServiceImpl implements VolunteerService {
         if (DTOUtil.fieldExistNull(volunteerApplicationAdditionDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
-        //重复申请检查
+        //如果已经是志愿者，不允许申请
         if (userDao.getUserByUserid(userid).getVolunteer())
             throw new KnownException(ErrorInfoEnum.DUPLICATED_PROMOTION);
+
+        //如果申请过，删除旧的申请
+        volunteerApplicationDao.deleteApplicationByCondition(
+                SelectApplicationCO.builder()
+                        .userId(userid)
+                        .status(0)
+                        .build()
+        );
 
         //插入新的申请
         VolunteerApplicationPO volunteerApplicationPO =
