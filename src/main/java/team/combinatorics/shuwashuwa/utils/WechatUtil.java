@@ -7,24 +7,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 
+@Component
 @DependsOn("constants")
 final public class WechatUtil {
 
     private static final String APPID = PropertiesConstants.WX_MINI_PROGRAM_APPID;
     private static final String SECRET = PropertiesConstants.WX_MINI_PROGRAM_SECRET;
     private static final RestTemplate restTemplate = new RestTemplate();
-
-    String accessToken;
 
     public static JsonNode handleGetRequest(String url) throws Exception {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -51,19 +53,24 @@ final public class WechatUtil {
         return root.path("openid").asText();
     }
 
-    public static String getWechatAccessToken() throws Exception {
+    @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
+    public void getWechatAccessToken() throws Exception {
         // 拼接url
         String url = "https://api.weixin.qq.com/cgi-bin/token?"
                 + "grant_type=" + "client_credential"
                 + "&appid=" + APPID
                 + "&secret=" + SECRET;
         JsonNode root = handleGetRequest(url);
-        return root.path("access_token").asText();
+        AccessToken.WX_ACCESS_TOKEN = root.path("access_token").asText();
+        System.out.println("更新Access Token，更新时间为：" + new Date());
+        System.out.println(root.path("access_token").asText());
+        System.out.println(AccessToken.WX_ACCESS_TOKEN);
+        System.out.println("当前Access Token有效期限为：" + root.path("expires_in").asText() + "秒");
     }
 
     public static Iterator<JsonNode> getTemplateList() throws Exception {
-
-        String accessToken = getWechatAccessToken();
+        String accessToken = AccessToken.WX_ACCESS_TOKEN;
+        System.out.println(AccessToken.WX_ACCESS_TOKEN);
         String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                 + "access_token=" + accessToken;
         JsonNode root = handleGetRequest(url);
@@ -72,19 +79,28 @@ final public class WechatUtil {
         return data.elements();
     }
 
-    public static List<String> getTemplateID () {
+    public static List<String> getTemplateID () throws Exception {
         List<String> result = new ArrayList<>();
-//        Iterator<JsonNode> templates = getTemplateList();
-//        while (templates.hasNext()) {
-//            JsonNode t = templates.next();
-//            String TmplId = t.path("priTmplId").asText();
-//            System.out.println(TmplId);
-//            result.add(TmplId);
-//        }
-        result.add("Ua2MAP-UdHLHx9i_cnWf33nXwON2RgRt0XEOhzK3DNI");
-        result.add("DzU2gPVQgkKsknQ1dAXRjGoByDjphw252gBvltWir1Q");
+        Iterator<JsonNode> templates = getTemplateList();
+        while (templates.hasNext()) {
+            JsonNode t = templates.next();
+            String TmplId = t.path("priTmplId").asText();
+            System.out.println(TmplId);
+            result.add(TmplId);
+        }
+        // result.add("Ua2MAP-UdHLHx9i_cnWf33nXwON2RgRt0XEOhzK3DNI");
+        // result.add("DzU2gPVQgkKsknQ1dAXRjGoByDjphw252gBvltWir1Q");
         return result;
     }
+
+
+
+
+
+
+
+
+
 
     public static void sendActivityNotice(WechatNoticeDTO wechatNoticeDTO) throws Exception {
         Iterator<JsonNode> templates = getTemplateList();
@@ -99,7 +115,7 @@ final public class WechatUtil {
         }
 
         System.out.println(wechatNoticeDTO.getTemplate_id());
-        String accessToken = getWechatAccessToken();
+        String accessToken = AccessToken.WX_ACCESS_TOKEN;
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                 + "access_token=" + accessToken;
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
@@ -119,7 +135,7 @@ final public class WechatUtil {
         }
 
         System.out.println(wechatNoticeDTO.getTemplate_id());
-        String accessToken = getWechatAccessToken();
+        String accessToken = AccessToken.WX_ACCESS_TOKEN;
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                 + "access_token=" + accessToken;
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
