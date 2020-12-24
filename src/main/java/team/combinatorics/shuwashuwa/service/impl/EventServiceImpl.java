@@ -160,7 +160,7 @@ public class EventServiceImpl implements EventService {
         //根据查询结果判断能否更新
         if (eventPO.getStatus() != 3)
             throw new KnownException(ErrorInfoEnum.STATUS_UNMATCHED);
-        if (eventPO.getVolunteerId() == myVolunteerId)
+        if (eventPO.getUserId() == userid)
             throw new KnownException(ErrorInfoEnum.FARMING);
         //更新状态
         serviceEventDao.updateStatus(serviceEventId, 4);
