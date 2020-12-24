@@ -201,7 +201,7 @@ CREATE TABLE `volunteer_application`
     `reply_by_admin`         VARCHAR(100)                         DEFAULT NULL COMMENT '管理员回复',
     `admin_id`               INT UNSIGNED                         DEFAULT NULL COMMENT '回复的管理员的id',
     `status`                 TINYINT                              DEFAULT 0 COMMENT '申请状态',
-    `card_pic_location`      VARCHAR(30)                 NOT NULL COMMENT '申请者的身份证明的图片location',
+    `card_pic_location`      VARCHAR(60)                 NOT NULL COMMENT '申请者的身份证明的图片location',
     INDEX idx_user_id (user_id),
     INDEX idx_admin_id (admin_id),
     INDEX idx_status (status),
