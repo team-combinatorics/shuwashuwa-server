@@ -104,4 +104,8 @@ final public class WechatUtil {
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
         System.out.println(response.getBody());
     }
+
+    public static void sendTakeOrderNotice(WechatNoticeDTO wechatNoticeDTO) {
+
+    }
 }
