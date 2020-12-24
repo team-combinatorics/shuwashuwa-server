@@ -27,6 +27,12 @@ public class PropertiesConstants {
      */
     public static String PIC_STORAGE_DIR;
 
+    /**
+     *
+     * 微信小程序后端的 access token
+     */
+    public static String WX_ACCESS_TOKEN;
+
     @Value("${wx.appid:default}")
     public void setWxMiniProgramAppid(String appid) {
         PropertiesConstants.WX_MINI_PROGRAM_APPID = appid;
