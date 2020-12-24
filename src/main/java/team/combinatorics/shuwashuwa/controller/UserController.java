@@ -82,6 +82,7 @@ public class UserController {
         return new CommonResult<>(200, "请求成功", responseDTO);
     }
 
+    
     /**
      * 获取通知模板id列表
      */
