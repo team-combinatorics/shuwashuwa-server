@@ -46,12 +46,13 @@ public class VolunteerServiceImpl implements VolunteerService {
             throw new KnownException(ErrorInfoEnum.DUPLICATED_PROMOTION);
 
         //如果申请过，删除旧的申请
-        volunteerApplicationDao.deleteApplicationByCondition(
-                SelectApplicationCO.builder()
-                        .userId(userid)
-                        .status(0)
-                        .build()
-        );
+        SelectApplicationCO deleteCO = SelectApplicationCO.builder()
+                .userId(userid)
+                .status(0)
+                .build();
+        listVolunteerApplicationByCondition(deleteCO)
+                .forEach(x -> imageStorageService.delete(x.getCardPicLocation()));
+        volunteerApplicationDao.deleteApplicationByCondition(deleteCO);
 
         //插入新的申请
         VolunteerApplicationPO volunteerApplicationPO =
