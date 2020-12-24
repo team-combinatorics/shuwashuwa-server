@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
+import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
-import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO;
 import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAbstractDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
@@ -139,4 +138,13 @@ public class VolunteerController {
         return new CommonResult<>(200, "请求成功", volunteerId);
     }
 
+    @ApiOperation("[志愿者]查询自己的志愿者ID")
+    @RequestMapping(value = "/id",method = RequestMethod.GET)
+    @VolunteerAccess
+    public CommonResult<Integer> getMyVolunteerId(
+            @RequestHeader("token") @ApiParam(hidden = true) String token
+    ) {
+        int userid = TokenUtil.extractUserid(token);
+        return new CommonResult<>(200,"请求成功",volunteerService.getVolunteerIdByUserid(userid));
+    }
 }

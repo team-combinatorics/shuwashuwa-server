@@ -130,6 +130,11 @@ public class VolunteerServiceImpl implements VolunteerService {
         // 理论上不可能运行到这里
         throw new KnownException(ErrorInfoEnum.SERVICE_TIMEOUT);
     }
+
+    @Override
+    public Integer getVolunteerIdByUserid(Integer userid) {
+        return volunteerDao.getVolunteerIDByUserID(userid);
+    }
 }
 
 
