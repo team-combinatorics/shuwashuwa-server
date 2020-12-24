@@ -111,7 +111,7 @@ CREATE TABLE `service_form`
     `laptop_type`           VARCHAR(30)                          DEFAULT NULL COMMENT '笔记本类型',
     `bought_time`           VARCHAR(30)                          DEFAULT NULL COMMENT '购买时间',
     `is_under_warranty`     BOOLEAN                              DEFAULT NULL COMMENT '是否在保',
-    `problem_description`   VARCHAR(100)                         DEFAULT NULL COMMENT '问题描述',
+    `problem_description`   VARCHAR(250)                         DEFAULT NULL COMMENT '问题描述',
     `problem_type`          VARCHAR(10)                          DEFAULT NULL COMMENT '问题类型（硬件/软件）',
     `reply_admin_id`        INT UNSIGNED                         DEFAULT NULL COMMENT '提供建议的人的id',
     `description_advice`    VARCHAR(100)                         DEFAULT NULL COMMENT '描述修改建议',
