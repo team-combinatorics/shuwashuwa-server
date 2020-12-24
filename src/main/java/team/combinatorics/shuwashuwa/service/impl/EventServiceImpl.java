@@ -111,7 +111,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public void auditForm(int userid, ServiceEventAuditDTO auditDTO) {
+    public void auditForm(int userid, ServiceEventAuditDTO auditDTO) throws Exception {
         //参数检查和提取
         if (DTOUtil.fieldExistNull(auditDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
@@ -144,8 +144,7 @@ public class EventServiceImpl implements EventService {
                 .touser(userDao.getUserByUserid(userid).getOpenid())
                 .data(data)
                 .build();
-        //todo: 这里因为次数限制会导致接口无法使用
-//        WechatUtil.sendAuditResult(wechatNoticeDTO);
+        WechatUtil.sendAuditResult(wechatNoticeDTO);
     }
 
     @Transactional
