@@ -10,7 +10,9 @@ import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 @DependsOn("constants")
@@ -63,6 +65,18 @@ final public class WechatUtil {
 
         JsonNode data = root.path("data");
         return data.elements();
+    }
+
+    public static List<String> getTemplateID () throws Exception {
+        List<String> result = new ArrayList<>();
+        Iterator<JsonNode> templates = getTemplateList();
+        while (templates.hasNext()) {
+            JsonNode t = templates.next();
+            String TmplId = t.path("priTmplId").asText();
+            System.out.println(TmplId);
+            result.add(TmplId);
+        }
+        return result;
     }
 
     public static void sendActivityNotice(WechatNoticeDTO wechatNoticeDTO) throws Exception {

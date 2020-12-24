@@ -9,6 +9,7 @@ import team.combinatorics.shuwashuwa.model.dto.NoticeMessage;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -67,6 +68,14 @@ public class WechatUtilTest {
                     .build();
 
             WechatUtil.sendAuditResult(wechatNoticeDTO);
+        }
+    }
+
+    @Test
+    public  void testGetTemplateId() throws Exception {
+        List<String> IDs = WechatUtil.getTemplateID();
+        for(String ID:IDs) {
+            System.out.println(ID);
         }
     }
 
