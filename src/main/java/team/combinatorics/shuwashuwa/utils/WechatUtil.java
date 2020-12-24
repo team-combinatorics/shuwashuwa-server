@@ -35,7 +35,9 @@ final public class WechatUtil {
         JsonNode root = mapper.readTree(response.getBody());
         if (root.has("errcode") && root.path("errcode").asInt() != 0) {
             System.out.println(root.path("errcode") + " " + root.path("errmsg"));
-            throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
+            /* TODO: 感觉改成errmsg的匹配会好一些 */
+            if(root.path("errcode").asInt()!=40001)
+                throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
         }
         return root;
     }
@@ -64,11 +66,26 @@ final public class WechatUtil {
         System.out.println("当前Access Token有效期限为：" + root.path("expires_in").asText() + "秒");
     }
 
+    public static void getWechatAccessTokenActively() throws Exception {
+        // 拼接url
+        System.out.println("Access Token已失效");
+        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential"
+                + "&appid=" + APPID
+                + "&secret=" + SECRET;
+        JsonNode root = handleGetRequest(url);
+        PropertiesConstants.WX_ACCESS_TOKEN = root.path("access_token").asText();
+        System.out.println("更新Access Token，更新时间为：" + new Date());
+        System.out.println("当前Access Token有效期限为：" + root.path("expires_in").asText() + "秒");
+    }
+
     public static Iterator<JsonNode> getTemplateList() throws Exception {
         String accessToken = PropertiesConstants.WX_ACCESS_TOKEN;
         String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                 + "access_token=" + accessToken;
         JsonNode root = handleGetRequest(url);
+
+        if(root.has("errcode") && root.path("errcode").asInt() != 0)
+            getWechatAccessTokenActively();
 
         JsonNode data = root.path("data");
         return data.elements();
@@ -92,18 +109,13 @@ final public class WechatUtil {
 
 
 
-
-
-
-
-
-    public static void sendActivityNotice(WechatNoticeDTO wechatNoticeDTO) throws Exception {
+    public static void sendAuditResult(WechatNoticeDTO wechatNoticeDTO) throws Exception {
         Iterator<JsonNode> templates = getTemplateList();
         while (templates.hasNext()) {
             JsonNode t = templates.next();
             String title = t.path("title").asText();
             System.out.println(title);
-            if(title.equals("新活动发布提醒")) {
+            if(title.equals("审核结果提醒")) {
                 System.out.println(t.path("priTmplId").asText());
                 wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
             }
@@ -117,13 +129,13 @@ final public class WechatUtil {
         System.out.println(response.getBody());
     }
 
-    public static void sendAuditResult(WechatNoticeDTO wechatNoticeDTO) throws Exception {
+    public static void sendActivityNotice(WechatNoticeDTO wechatNoticeDTO) throws Exception {
         Iterator<JsonNode> templates = getTemplateList();
         while (templates.hasNext()) {
             JsonNode t = templates.next();
             String title = t.path("title").asText();
             System.out.println(title);
-            if(title.equals("审核结果提醒")) {
+            if(title.equals("新活动发布提醒")) {
                 System.out.println(t.path("priTmplId").asText());
                 wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
             }
