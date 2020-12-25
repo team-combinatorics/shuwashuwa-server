@@ -41,15 +41,15 @@ final public class WechatUtil {
             throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
-        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
-            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
-            /* TODO: 感觉改成errmsg的匹配会好一些 */
-            if(root.path("errcode").asInt()!=40001)
-                throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
-        }
-        return root;
+        return mapper.readTree(response.getBody());
     }
+
+
+
+
+
+
+
 
     /**
      * 获取用户的openid
@@ -65,44 +65,26 @@ final public class WechatUtil {
                 + "&js_code=" + code
                 + "&grant_type=authorization_code";
         JsonNode root = handleGetRequest(url);
+        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
+            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
+            throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
+        }
         return root.path("openid").asText();
     }
 
-    /**
-     * 获取Access Token，用于调用微信后端接口
-     * 由于微信对Access Token的获取有每日次数限制，因此设置为定时触发
-     * @throws Exception handleGetRequest可能抛出的异常
-     */
-    @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
-    public void getWechatAccessToken() throws Exception {
+    public static int getWechatAccessToken() throws Exception {
         // 拼接url
         String url = "https://api.weixin.qq.com/cgi-bin/token?"
                 + "grant_type=" + "client_credential"
                 + "&appid=" + APPID
                 + "&secret=" + SECRET;
         JsonNode root = handleGetRequest(url);
+        if (root.has("errcode") && root.path("errcode").asInt() != 0) {
+            System.out.println(root.path("errcode") + " " + root.path("errmsg"));
+            throw new KnownException(ErrorInfoEnum.WECHAT_ACCESS_TOKEN_ERROR);
+        }
         PropertiesConstants.WX_ACCESS_TOKEN = root.path("access_token").asText();
-        System.out.println("[自动]更新Access Token，更新时间为：" + new Date());
-        System.out.println("当前Access Token有效期限为：" + root.path("expires_in").asText() + "秒");
-    }
-
-    /**
-     * >>>主动<<<获取Access Token，用于调用微信后端接口
-     * 在因为外部原因导致Access Token失效时调用
-     * 由需要Access Token的方法在请求后进行判断来决定是否调用
-     * @throws Exception handleGetRequest可能抛出的异常
-     */
-    public static void getWechatAccessTokenActively() throws Exception {
-        // 拼接url
-        System.out.println("Access Token已失效");
-        String url = "https://api.weixin.qq.com/cgi-bin/token?" +
-                "grant_type=client_credential"
-                + "&appid=" + APPID
-                + "&secret=" + SECRET;
-        JsonNode root = handleGetRequest(url);
-        PropertiesConstants.WX_ACCESS_TOKEN = root.path("access_token").asText();
-        System.out.println("[主动]更新Access Token，更新时间为：" + new Date());
-        System.out.println("当前Access Token有效期限为：" + root.path("expires_in").asText() + "秒");
+        return root.path("expire_time").asInt();
     }
 
     /**
@@ -111,22 +93,29 @@ final public class WechatUtil {
      * @throws Exception handleGetRequest可能抛出的异常
      */
     public static Iterator<JsonNode> getTemplateList() throws Exception {
-        String accessToken = PropertiesConstants.WX_ACCESS_TOKEN;
         String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
-                + "access_token=" + accessToken;
+                + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
         JsonNode root = handleGetRequest(url);
 
-        /* TODO: 写的不对。。。 */
+        // give second chance, so that we can solve the problem of access token out-of-date
         if(root.has("errcode") && root.path("errcode").asInt() != 0) {
             getWechatAccessTokenActively();
+            url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
+                    + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
             root = handleGetRequest(url);
+            if(root.has("errcode") && root.path("errcode").asInt() != 0)
+                throw new KnownException(ErrorInfoEnum.WECHAT_TEMPLATE_ERROR);
         }
-        if(root.has("errcode") && root.path("errcode").asInt() != 0)
-            throw new KnownException(ErrorInfoEnum.CODE2SESSION_FAILURE);
 
         JsonNode data = root.path("data");
         return data.elements();
     }
+
+
+
+
+
+
 
     /**
      * 发送审核结果通知
@@ -149,11 +138,15 @@ final public class WechatUtil {
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                 + "access_token=" + accessToken;
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
+        if (!response.getStatusCode().equals(HttpStatus.OK))
+            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response.getBody());
 
         /* TODO: 完善access token过期的处理 */
         System.out.println(response.getBody());
     }
-
 
     public static void generateAppCode(int activityId) throws Exception {
         // PropertiesConstants.WX_ACCESS_TOKEN = "40_vOSKPoBSs-OXSqKHqRwmXJghbfuxQhAmT4gBLQu4WkAjowabCR3f0Xd-ZaZYWUFmt1YaXrsKHUzsrFxIWcKscSXlgQZFSZkcJZxPUmcNsKjlfxFugIxDB3Mh4B9Jhi1dC6dZ0bd-6_3GSP09WIPhACASEL";
@@ -194,10 +187,36 @@ final public class WechatUtil {
 
 
 
+
+
+
+    /**
+     * >>>自动<<<获取Access Token，用于调用微信后端接口
+     * 由于微信对Access Token的获取有每日次数限制，因此设置为定时触发
+     * @throws Exception handleGetRequest可能抛出的异常
+     */
+    @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
+    public void getWechatAccessTokenAutomatically() throws Exception {
+        int expireTime = getWechatAccessToken();
+        System.out.println("[自动]更新Access Token，更新时间为：" + new Date());
+        System.out.println("当前Access Token有效期限为：" + expireTime + "秒");
+    }
+
+    /**
+     * >>>主动<<<获取Access Token，用于调用微信后端接口
+     * 在因为外部原因导致Access Token失效时调用
+     * 由需要Access Token的方法在请求后进行判断来决定是否调用
+     * @throws Exception handleGetRequest可能抛出的异常
+     */
+    public static void getWechatAccessTokenActively() throws Exception {
+        int expireTime = getWechatAccessToken();
+        System.out.println("[主动]更新Access Token，更新时间为：" + new Date());
+        System.out.println("当前Access Token有效期限为：" + expireTime + "秒");
+    }
+
     /**
      * 获取通知模板id
      * @return 包含所有通知模板的List
-     * @throws Exception handleGetRequest可能抛出的异常
      */
     public static List<String> getTemplateID () {
 
