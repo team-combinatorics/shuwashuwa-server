@@ -116,8 +116,10 @@ final public class WechatUtil {
             url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                     + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
             root = handleGetRequest(url);
-            if(root.has("errcode") && root.path("errcode").asInt() != 0)
+            if(root.has("errcode") && root.path("errcode").asInt() != 0) {
+                System.out.println(root.path("errcode") + " " + root.path("errmsg"));
                 throw new KnownException(ErrorInfoEnum.WECHAT_TEMPLATE_ERROR);
+            }
         }
 
         JsonNode data = root.path("data");
@@ -145,6 +147,7 @@ final public class WechatUtil {
             if(title.equals("审核结果提醒")) {
                 System.out.println(t.path("priTmplId").asText());
                 wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
+                break;
             }
         }
 
@@ -159,8 +162,10 @@ final public class WechatUtil {
             url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                     + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
             root = handlePostRequest(url, wechatNoticeDTO);
-            if(root.has("errcode") && root.path("errcode").asInt() != 0)
+            if(root.has("errcode") && root.path("errcode").asInt() != 0) {
+                System.out.println(root.path("errcode") + " " + root.path("errmsg"));
                 throw new KnownException(ErrorInfoEnum.WECHAT_NOTICE_FAILURE);
+            }
         }
     }
 
