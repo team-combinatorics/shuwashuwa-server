@@ -86,4 +86,10 @@ public class WechatUtilTest {
     public void testGetTemplate() throws Exception {
         WechatUtil.getTemplateList();
     }
+
+    @Test
+    @Ignore
+    public void testGetQRCode() throws Exception {
+        WechatUtil.generateAppCode(2);
+    }
 }
