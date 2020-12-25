@@ -43,7 +43,7 @@ public class WechatUtilTest {
                 .data(data)
                 .build();
 
-        WechatUtil.sendActivityNotice(wechatNoticeDTO);
+        WechatUtil.sendNotice(wechatNoticeDTO, 3);
     }
 
     @Test
