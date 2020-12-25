@@ -57,8 +57,6 @@ final public class WechatUtil {
 
 
 
-
-
     /**
      * 获取用户的openid
      * @param code 前端传来的res.code
@@ -92,7 +90,7 @@ final public class WechatUtil {
             throw new KnownException(ErrorInfoEnum.WECHAT_ACCESS_TOKEN_ERROR);
         }
         PropertiesConstants.WX_ACCESS_TOKEN = root.path("access_token").asText();
-        return root.path("expire_time").asInt();
+        return root.path("expires_in").asInt();
     }
 
     /**
@@ -120,13 +118,17 @@ final public class WechatUtil {
         return data.elements();
     }
 
+
+
+
+
     /**
      * 发送审核结果通知
      * @param wechatNoticeDTO 通知模板结构
      * @throws Exception handleGetRequest可能抛出的异常
      */
     public static void sendAuditResult(WechatNoticeDTO wechatNoticeDTO) throws Exception {
-        // 获取模板id
+        // 获取模板列表
         Iterator<JsonNode> templates = getTemplateList();
         while (templates.hasNext()) {
             JsonNode t = templates.next();
@@ -201,7 +203,7 @@ final public class WechatUtil {
      * 由于微信对Access Token的获取有每日次数限制，因此设置为定时触发
      * @throws Exception handleGetRequest可能抛出的异常
      */
-    // @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
+    @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
     public void getWechatAccessTokenAutomatically() throws Exception {
         int expireTime = getWechatAccessToken();
         System.out.println("[自动]更新Access Token，更新时间为：" + new Date());
@@ -227,15 +229,15 @@ final public class WechatUtil {
     public static List<String> getTemplateID () throws Exception {
 
         List<String> result = new ArrayList<>();
-        /*Iterator<JsonNode> templates = getTemplateList();
+        Iterator<JsonNode> templates = getTemplateList();
         while (templates.hasNext()) {
             JsonNode t = templates.next();
             String TmplId = t.path("priTmplId").asText();
-            System.out.println(TmplId);
+            // System.out.println(TmplId);
             result.add(TmplId);
-        }*/
-        result.add("Ua2MAP-UdHLHx9i_cnWf33nXwON2RgRt0XEOhzK3DNI");
-        result.add("DzU2gPVQgkKsknQ1dAXRjGoByDjphw252gBvltWir1Q");
+        }
+        //result.add("Ua2MAP-UdHLHx9i_cnWf33nXwON2RgRt0XEOhzK3DNI");
+        //result.add("DzU2gPVQgkKsknQ1dAXRjGoByDjphw252gBvltWir1Q");
         return result;
     }
 
