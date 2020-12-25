@@ -201,7 +201,7 @@ final public class WechatUtil {
      * 由于微信对Access Token的获取有每日次数限制，因此设置为定时触发
      * @throws Exception handleGetRequest可能抛出的异常
      */
-    @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
+    // @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
     public void getWechatAccessTokenAutomatically() throws Exception {
         int expireTime = getWechatAccessToken();
         System.out.println("[自动]更新Access Token，更新时间为：" + new Date());
