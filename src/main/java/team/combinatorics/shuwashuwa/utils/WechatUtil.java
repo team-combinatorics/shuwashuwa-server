@@ -13,7 +13,6 @@ import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.WechatAppCodeDTO;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
-import javax.swing.text.html.HTMLDocument;
 import java.io.*;
 import java.util.*;
 
@@ -170,15 +169,6 @@ final public class WechatUtil {
         for (Map.Entry<String, String> entry : PropertiesConstants.WX_TEMPLATE_IDs.entrySet()) {
             result.add(entry.getValue());
         }
-        /*
-        Iterator<JsonNode> templates = getTemplateList();
-        while (templates.hasNext()) {
-            JsonNode t = templates.next();
-            String TmplId = t.path("priTmplId").asText();
-            System.out.println(TmplId);
-            result.add(TmplId);
-        }
-        */
         return result;
     }
 
@@ -198,19 +188,6 @@ final public class WechatUtil {
      */
     public static void sendNotice(WechatNoticeDTO wechatNoticeDTO, int type) throws Exception {
         // 获取模板列表
-        /*
-        Iterator<JsonNode> templates = getTemplateList();
-        while (templates.hasNext()) {
-            JsonNode t = templates.next();
-            String title = t.path("title").asText();
-            System.out.println(title);
-            if(title.equals("审核结果提醒") && type==0) {
-                System.out.println(t.path("priTmplId").asText());
-                wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
-                break;
-            }
-        }
-         */
         for(Map.Entry<String, String> entry:PropertiesConstants.WX_TEMPLATE_IDs.entrySet()) {
             if(type==0 && entry.getKey().equals("审核结果提醒")) {
                 System.out.println(entry.getValue());
