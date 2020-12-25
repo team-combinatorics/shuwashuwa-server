@@ -14,6 +14,7 @@ import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.WechatAppCodeDTO;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -49,7 +50,6 @@ final public class WechatUtil {
         }
         return root;
     }
-
 
     /**
      * 获取用户的openid
@@ -116,7 +116,7 @@ final public class WechatUtil {
                 + "access_token=" + accessToken;
         JsonNode root = handleGetRequest(url);
 
-        /* TODO: 或许需要细化errcode原因 */
+        /* TODO: 写的不对。。。 */
         if(root.has("errcode") && root.path("errcode").asInt() != 0) {
             getWechatAccessTokenActively();
             root = handleGetRequest(url);
@@ -126,25 +126,6 @@ final public class WechatUtil {
 
         JsonNode data = root.path("data");
         return data.elements();
-    }
-
-    /**
-     * 获取通知模板id
-     * @return 包含所有通知模板的List
-     * @throws Exception handleGetRequest可能抛出的异常
-     */
-    public static List<String> getTemplateID () throws Exception {
-        List<String> result = new ArrayList<>();
-        Iterator<JsonNode> templates = getTemplateList();
-        while (templates.hasNext()) {
-            JsonNode t = templates.next();
-            String TmplId = t.path("priTmplId").asText();
-            System.out.println(TmplId);
-            result.add(TmplId);
-        }
-        // result.add("Ua2MAP-UdHLHx9i_cnWf33nXwON2RgRt0XEOhzK3DNI");
-        // result.add("DzU2gPVQgkKsknQ1dAXRjGoByDjphw252gBvltWir1Q");
-        return result;
     }
 
     /**
@@ -164,13 +145,87 @@ final public class WechatUtil {
             }
         }
 
-        System.out.println(wechatNoticeDTO.getTemplate_id());
         String accessToken = PropertiesConstants.WX_ACCESS_TOKEN;
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
                 + "access_token=" + accessToken;
         ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
+
+        /* TODO: 完善access token过期的处理 */
         System.out.println(response.getBody());
     }
+
+
+    public static void generateAppCode(int activityId) throws Exception {
+        // PropertiesConstants.WX_ACCESS_TOKEN = "40_vOSKPoBSs-OXSqKHqRwmXJghbfuxQhAmT4gBLQu4WkAjowabCR3f0Xd-ZaZYWUFmt1YaXrsKHUzsrFxIWcKscSXlgQZFSZkcJZxPUmcNsKjlfxFugIxDB3Mh4B9Jhi1dC6dZ0bd-6_3GSP09WIPhACASEL";
+
+        String url = "https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?"
+                + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
+        WechatAppCodeDTO wechatAppCodeDTO = WechatAppCodeDTO.builder()
+                .path("/page/index/index?acticyty="+activityId)
+                .build();
+        ResponseEntity<String> response = restTemplate.postForEntity(url, wechatAppCodeDTO, String.class);
+
+        if(!response.getStatusCode().equals(HttpStatus.OK))
+            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response.getBody());
+        System.out.println(root.path("contentType").asText());
+
+        byte[] result = root.path("buffer").binaryValue();
+        InputStream inputStream = new ByteArrayInputStream(result);
+        File file = new File("src/test/resources/QRcode.png");
+        if(!file.exists())
+            file.createNewFile();
+
+        OutputStream outputStream = new FileOutputStream(file);
+        int content = 0;
+        byte[] buffer = new byte[1024*8];
+        while((content = inputStream.read(buffer, 0, 1024)) != -1)
+            outputStream.write(buffer, 0, content);
+        outputStream.flush();
+
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * 获取通知模板id
+     * @return 包含所有通知模板的List
+     * @throws Exception handleGetRequest可能抛出的异常
+     */
+    public static List<String> getTemplateID () {
+
+        List<String> result = new ArrayList<>();
+        /*Iterator<JsonNode> templates = getTemplateList();
+        while (templates.hasNext()) {
+            JsonNode t = templates.next();
+            String TmplId = t.path("priTmplId").asText();
+            System.out.println(TmplId);
+            result.add(TmplId);
+        }*/
+        result.add("Ua2MAP-UdHLHx9i_cnWf33nXwON2RgRt0XEOhzK3DNI");
+        result.add("DzU2gPVQgkKsknQ1dAXRjGoByDjphw252gBvltWir1Q");
+        return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 发送活动开始通知
