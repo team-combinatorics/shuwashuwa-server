@@ -21,7 +21,10 @@ public enum ErrorInfoEnum {
     STATUS_UNMATCHED(40013, "当前状态下不允许执行指定操作"),
     ACCESS_TOKEN_FAILURE(40014, "获取微信Access token 出错"),
     SERVICE_TIMEOUT(40015, "服务超时，请重试"),
-    FARMING(40016,"禁止刷单");
+    FARMING(40016,"禁止刷单"),
+    WECHAT_ACCESS_TOKEN_ERROR(40017, "获取微信access token时出错"),
+    WECHAT_TEMPLATE_ERROR(4018, "获取通知模板列表时出错"),
+    WECHAT_NOTICE_FAILURE(40019, "发送微信通知时出错");
 
     private final Integer errCode;
     private final String errMsg;
