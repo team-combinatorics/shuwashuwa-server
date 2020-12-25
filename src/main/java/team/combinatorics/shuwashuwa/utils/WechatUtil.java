@@ -14,6 +14,7 @@ import team.combinatorics.shuwashuwa.model.dto.WechatAppCodeDTO;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
 import java.io.*;
+import java.nio.file.FileSystemException;
 import java.util.*;
 
 
@@ -222,6 +223,30 @@ final public class WechatUtil {
         }
     }
 
+
+    /**
+     * 处理获取二维码的请求
+     * 这里由于微信在成功时只返回图片的字节流，所以要单独写一个响应方法
+     * 出错时，返回的是字符串类型的json，不能用mapper解析，故在catch时返回字节数组
+     * @param url 请求路径
+     * @param obj 参数结构
+     * @return 如果出错，返回null；否则返回字节数组
+     */
+    public static byte[] handleQRCodeResponse(String url, Object obj) {
+        ResponseEntity<byte[]> response = restTemplate.postForEntity(url, obj, byte[].class);
+        if (!response.getStatusCode().equals(HttpStatus.OK))
+            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.readTree(response.getBody());
+            return null;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return response.getBody();
+        }
+    }
+
     /**
      * 生成用于签到的小程序二维码
      * @param activityId 活动id，作为页面跳转的参数
@@ -236,32 +261,31 @@ final public class WechatUtil {
                 .build();
 
         // 发送请求，并给予第二次机会
-        JsonNode root = handlePostRequest(url, wechatAppCodeDTO);
-        if(root.has("errcode")  && root.path("errcode").asInt() != 0) {
+        byte[] QRCode = handleQRCodeResponse(url, wechatAppCodeDTO);
+        if(QRCode == null) {
             getWechatAccessTokenActively();
-            url = url = "https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?"
+            url = "https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?"
                     + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
-            root = handlePostRequest(url, wechatAppCodeDTO);
-            if(root.has("errcode") && root.path("errcode").asInt() != 0) {
-                System.out.println(root.path("errcode") + " " + root.path("errmsg"));
+            QRCode = handleQRCodeResponse(url, wechatAppCodeDTO);
+            if(QRCode == null)
                 throw new KnownException(ErrorInfoEnum.WECHAT_QRCODE_FAILURE);
-            }
         }
 
-        System.out.println(root.path("contentType").asText());
-
-        byte[] result = root.path("buffer").binaryValue();
-        InputStream inputStream = new ByteArrayInputStream(result);
+        // 处理文件，当前是本地生成，后面要改成返回字节数组
+        InputStream inputStream = new ByteArrayInputStream(QRCode);
+        boolean tf;
         File file = new File("src/test/resources/QRcode.png");
-        if(!file.exists())
-            file.createNewFile();
+        if(!file.exists()){
+            tf = file.createNewFile();
+            if(!tf)
+                throw new Exception();
+        }
 
         OutputStream outputStream = new FileOutputStream(file);
-        int content = 0;
+        int content;
         byte[] buffer = new byte[1024*8];
         while((content = inputStream.read(buffer, 0, 1024)) != -1)
             outputStream.write(buffer, 0, content);
         outputStream.flush();
-
     }
 }

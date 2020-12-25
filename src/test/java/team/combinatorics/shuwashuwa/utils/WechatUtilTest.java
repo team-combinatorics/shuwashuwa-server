@@ -16,7 +16,7 @@ import java.util.Map;
 // 为了节省微信接口的调用次数，这个测试应该被忽略掉，只在本地按需测试
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
-@Ignore
+
 public class WechatUtilTest {
 
     @Test
