@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// 为了节省微信接口的调用次数，这个测试应该被忽略掉
+// 为了节省微信接口的调用次数，这个测试应该被忽略掉，只在本地按需测试
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
 @Ignore
@@ -71,16 +71,11 @@ public class WechatUtilTest {
     }
 
     @Test
-    public  void testGetTemplateId() throws Exception {
+    public  void testGetTemplateId() {
         List<String> IDs = WechatUtil.getTemplateID();
         for(String ID:IDs) {
             System.out.println(ID);
         }
-    }
-
-    @Test
-    public void testGetTemplate() throws Exception {
-        WechatUtil.getTemplateList();
     }
 
     @Test
