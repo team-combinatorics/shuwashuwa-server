@@ -176,7 +176,7 @@ final public class WechatUtil {
     }
 
     /*
-     * 后续考虑把这个方法封装为一个统一的方法
+     * 把发送微信通知封装为一个统一的方法
      * 审核结果通知：0
      * 接单成功通知：1
      * 志愿者审核通知：2
@@ -222,26 +222,24 @@ final public class WechatUtil {
         }
     }
 
-
-
-
-
-
-
+    /**
+     * 生成用于签到的小程序二维码
+     * @param activityId 活动id，作为页面跳转的参数
+     * @throws Exception 文件处理
+     */
     public static void generateAppCode(int activityId) throws Exception {
-        // PropertiesConstants.WX_ACCESS_TOKEN = "40_vOSKPoBSs-OXSqKHqRwmXJghbfuxQhAmT4gBLQu4WkAjowabCR3f0Xd-ZaZYWUFmt1YaXrsKHUzsrFxIWcKscSXlgQZFSZkcJZxPUmcNsKjlfxFugIxDB3Mh4B9Jhi1dC6dZ0bd-6_3GSP09WIPhACASEL";
-
+        // 设置请求需要的url和body
         String url = "https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?"
                 + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
         WechatAppCodeDTO wechatAppCodeDTO = WechatAppCodeDTO.builder()
                 .path("/page/index/index?acticyty="+activityId)
                 .build();
-        ResponseEntity<String> response = restTemplate.postForEntity(url, wechatAppCodeDTO, String.class);
 
-        if(!response.getStatusCode().equals(HttpStatus.OK))
-            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
+        // 发送请求，并给予第二次机会
+        JsonNode root = handlePostRequest(url, wechatAppCodeDTO);
+
+
+
         System.out.println(root.path("contentType").asText());
 
         byte[] result = root.path("buffer").binaryValue();
@@ -256,49 +254,6 @@ final public class WechatUtil {
         while((content = inputStream.read(buffer, 0, 1024)) != -1)
             outputStream.write(buffer, 0, content);
         outputStream.flush();
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * 发送活动开始通知
-     * @param wechatNoticeDTO 通知模板结构
-     * @throws Exception handleGetRequest可能抛出的异常
-     */
-    public static void sendActivityNotice(WechatNoticeDTO wechatNoticeDTO) throws Exception {
-        for(Map.Entry<String, String> entry:PropertiesConstants.WX_TEMPLATE_IDs.entrySet()) {
-            if(entry.getKey().equals("新活动发布提醒")) {
-                System.out.println(entry.getValue());
-                wechatNoticeDTO.setTemplate_id(entry.getValue());
-                break;
-            }
-        }
-
-        System.out.println(wechatNoticeDTO.getTemplate_id());
-        String accessToken = PropertiesConstants.WX_ACCESS_TOKEN;
-        String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
-                + "access_token=" + accessToken;
-        ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
-        System.out.println(response.getBody());
-    }
-
-    /**
-     * 发送接单通知
-     * @param wechatNoticeDTO 通知模板结构
-     */
-    public static void sendTakeOrderNotice(WechatNoticeDTO wechatNoticeDTO) {
 
     }
 }
