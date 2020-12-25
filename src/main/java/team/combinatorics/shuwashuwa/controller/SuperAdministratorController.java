@@ -16,6 +16,7 @@ import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
+import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -245,6 +246,24 @@ public class SuperAdministratorController {
         System.out.println("移除活动"+activityId);
         activityService.removeActivity(activityId);
         return new CommonResult<>(200, "请求成功", "success");
+    }
+
+    /**
+     * 超管获取签到用二维码
+     * @param activityId 活动id
+     * @return 包含图片字节数组的通用返回结构
+     * @throws Exception WECHAT_QRCODE_FAILURE
+     */
+    @ApiOperation(value = "获取签到用二维码")
+    @RequestMapping(value = "/QRCode", method = RequestMethod.GET)
+    @SUAccess
+    public CommonResult<byte[]> getQRCode(
+            @NotNull @RequestParam
+            @ApiParam(value = "当前正在进行的（要签到的）活动编号", required = true)
+            Integer activityId
+    ) throws Exception {
+        byte[] pic = WechatUtil.generateAppCode(activityId);
+        return new CommonResult<>(200, "获取成功", pic);
     }
 
 }

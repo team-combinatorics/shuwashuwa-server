@@ -13,8 +13,6 @@ import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.WechatAppCodeDTO;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
-import java.io.*;
-import java.nio.file.FileSystemException;
 import java.util.*;
 
 
@@ -252,12 +250,12 @@ final public class WechatUtil {
      * @param activityId 活动id，作为页面跳转的参数
      * @throws Exception 文件处理
      */
-    public static void generateAppCode(int activityId) throws Exception {
+    public static byte[] generateAppCode(int activityId) throws Exception {
         // 设置请求需要的url和body
         String url = "https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?"
                 + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
         WechatAppCodeDTO wechatAppCodeDTO = WechatAppCodeDTO.builder()
-                .path("/page/index/index?acticyty="+activityId)
+                .path("/page/index/index?activity="+activityId)
                 .build();
 
         // 发送请求，并给予第二次机会
@@ -272,6 +270,7 @@ final public class WechatUtil {
         }
 
         // 处理文件，当前是本地生成，后面要改成返回字节数组
+        /*
         InputStream inputStream = new ByteArrayInputStream(QRCode);
         boolean tf;
         File file = new File("src/test/resources/QRcode.png");
@@ -287,5 +286,9 @@ final public class WechatUtil {
         while((content = inputStream.read(buffer, 0, 1024)) != -1)
             outputStream.write(buffer, 0, content);
         outputStream.flush();
+
+         */
+
+        return QRCode;
     }
 }
