@@ -67,7 +67,7 @@ public class WechatUtilTest {
                 .data(data)
                 .build();
 
-        WechatUtil.sendAuditResult(wechatNoticeDTO);
+        WechatUtil.sendNotice(wechatNoticeDTO, 0);
     }
 
     @Test
