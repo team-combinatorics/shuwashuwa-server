@@ -80,6 +80,6 @@ public class WechatUtilTest {
 
     @Test
     public void testGetQRCode() throws Exception {
-        WechatUtil.generateAppCode(2);
+        WechatUtil.generateAppCode(1);
     }
 }

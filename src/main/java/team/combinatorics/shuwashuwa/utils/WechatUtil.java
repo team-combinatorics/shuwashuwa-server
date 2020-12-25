@@ -237,8 +237,16 @@ final public class WechatUtil {
 
         // 发送请求，并给予第二次机会
         JsonNode root = handlePostRequest(url, wechatAppCodeDTO);
-
-
+        if(root.has("errcode")  && root.path("errcode").asInt() != 0) {
+            getWechatAccessTokenActively();
+            url = url = "https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?"
+                    + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
+            root = handlePostRequest(url, wechatAppCodeDTO);
+            if(root.has("errcode") && root.path("errcode").asInt() != 0) {
+                System.out.println(root.path("errcode") + " " + root.path("errmsg"));
+                throw new KnownException(ErrorInfoEnum.WECHAT_QRCODE_FAILURE);
+            }
+        }
 
         System.out.println(root.path("contentType").asText());
 
