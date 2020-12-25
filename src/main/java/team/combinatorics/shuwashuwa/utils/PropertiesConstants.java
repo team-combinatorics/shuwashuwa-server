@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+
 @Component(value = "constants")
 @PropertySource(value = {"classpath:shuwashuwa.properties"})
 public class PropertiesConstants {
@@ -31,6 +33,11 @@ public class PropertiesConstants {
      * 微信小程序后端的 access token
      */
     public static String WX_ACCESS_TOKEN;
+
+    /**
+     * 微信小程序的通知模板标题-template id组成的pairs
+     */
+    public static HashMap<String, String> WX_TEMPLATE_IDs;
 
     @Value("${wx.appid:default}")
     public void setWxMiniProgramAppid(String appid) {
