@@ -143,6 +143,7 @@ final public class WechatUtil {
             }
         }
 
+        // 缓存模板信息
         PropertiesConstants.WX_TEMPLATE_IDs = new HashMap<>();
         JsonNode data = root.path("data");
         Iterator<JsonNode> templates = data.elements();
@@ -151,6 +152,8 @@ final public class WechatUtil {
             PropertiesConstants.WX_TEMPLATE_IDs.put(template.path("title").asText(),
                     template.path("priTmplId").asText());
         }
+
+        // 输出模板信息
         System.out.println("[每日]刷新模板信息，今日刷新时间为：" + new Date());
         System.out.println("模板信息为：");
         for(Map.Entry<String, String> entry:PropertiesConstants.WX_TEMPLATE_IDs.entrySet()) {
@@ -194,6 +197,11 @@ final public class WechatUtil {
                 wechatNoticeDTO.setTemplate_id(entry.getValue());
                 break;
             }
+            else if(type==3 && entry.getKey().equals("新活动发布提醒")) {
+                System.out.println(entry.getValue());
+                wechatNoticeDTO.setTemplate_id(entry.getValue());
+                break;
+            }
         }
 
         // 提交发送通知的请求
@@ -213,6 +221,12 @@ final public class WechatUtil {
             }
         }
     }
+
+
+
+
+
+
 
     public static void generateAppCode(int activityId) throws Exception {
         // PropertiesConstants.WX_ACCESS_TOKEN = "40_vOSKPoBSs-OXSqKHqRwmXJghbfuxQhAmT4gBLQu4WkAjowabCR3f0Xd-ZaZYWUFmt1YaXrsKHUzsrFxIWcKscSXlgQZFSZkcJZxPUmcNsKjlfxFugIxDB3Mh4B9Jhi1dC6dZ0bd-6_3GSP09WIPhACASEL";
