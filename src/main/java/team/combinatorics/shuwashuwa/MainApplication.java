@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
-// @EnableScheduling
+@EnableScheduling
 @EnableTransactionManagement
 @SpringBootApplication
 @MapperScan(value = "team.combinatorics.shuwashuwa.dao")

@@ -13,12 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// 为了节省微信接口的调用次数，这个测试应该被忽略掉
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = MainApplication.class)
+@Ignore
 public class WechatUtilTest {
 
     @Test
-    @Ignore
     public void testSendActivityNotice() throws Exception {
         String rescode = "";
 
@@ -46,7 +47,6 @@ public class WechatUtilTest {
     }
 
     @Test
-    @Ignore
     public void testSendAuditionNotice() throws Exception {
         String rescode = "";
 
@@ -71,7 +71,6 @@ public class WechatUtilTest {
     }
 
     @Test
-    @Ignore
     public  void testGetTemplateId() throws Exception {
         List<String> IDs = WechatUtil.getTemplateID();
         for(String ID:IDs) {
@@ -80,13 +79,11 @@ public class WechatUtilTest {
     }
 
     @Test
-    @Ignore
     public void testGetTemplate() throws Exception {
         WechatUtil.getTemplateList();
     }
 
     @Test
-    @Ignore
     public void testGetQRCode() throws Exception {
         WechatUtil.generateAppCode(2);
     }
