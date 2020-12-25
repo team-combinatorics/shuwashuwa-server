@@ -144,7 +144,7 @@ public class EventServiceImpl implements EventService {
                 .touser(userDao.getUserByUserid(userid).getOpenid())
                 .data(data)
                 .build();
-        // WechatUtil.sendAuditResult(wechatNoticeDTO);
+        WechatUtil.sendAuditResult(wechatNoticeDTO);
     }
 
     @Transactional
