@@ -1,6 +1,5 @@
 package team.combinatorics.shuwashuwa.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.DependsOn;
@@ -33,7 +32,7 @@ final public class WechatUtil {
      * 处理对微信的GET请求的通用方法
      * @param url 欲发送GET请求的URL
      * @return 返回响应的JsonNode
-     * @throws Exception 如果不是因为Access Token失效导致的，抛出CODE2SESSION_FAILURE
+     * @throws Exception WECHAT_SERVER_CONNECTION_FAILURE
      */
     public static JsonNode handleGetRequest(String url) throws Exception {
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
@@ -44,6 +43,12 @@ final public class WechatUtil {
         return mapper.readTree(response.getBody());
     }
 
+    /**
+     * 处理对微信的POST请求的通用方法
+     * @param url 欲发送GET请求的URL
+     * @return 返回响应的JsonNode
+     * @throws Exception WECHAT_SERVER_CONNECTION_FAILURE
+     */
     public static JsonNode handlePostRequest(String url, Object obj) throws Exception {
         ResponseEntity<String> response = restTemplate.postForEntity(url, obj, String.class);
         if (!response.getStatusCode().equals(HttpStatus.OK))
@@ -53,15 +58,11 @@ final public class WechatUtil {
         return mapper.readTree(response.getBody());
     }
 
-
-
-
-
     /**
      * 获取用户的openid
      * @param code 前端传来的res.code
      * @return 用户的openid
-     * @throws Exception handleGetRequest可能抛出的异常
+     * @throws Exception WECHAT_SERVER_CONNECTION_FAILURE、CODE2SESSION_FAILURE
      */
     public static String getOpenID(String code) throws Exception {
         //拼接url
@@ -78,6 +79,11 @@ final public class WechatUtil {
         return root.path("openid").asText();
     }
 
+    /**
+     * 获取微信的access token
+     * @return 当前获取的access token的有效时间
+     * @throws Exception WECHAT_ACCESS_TOKEN_ERROR、WECHAT_SERVER_CONNECTION_FAILURE
+     */
     public static int getWechatAccessToken() throws Exception {
         // 拼接url
         String url = "https://api.weixin.qq.com/cgi-bin/token?"
@@ -96,7 +102,7 @@ final public class WechatUtil {
     /**
      * 获取通知模板列表
      * @return 包含所有通知模板的Iterator
-     * @throws Exception handleGetRequest可能抛出的异常
+     * @throws Exception WECHAT_SERVER_CONNECTION_FAILURE、WECHAT_TEMPLATE_ERROR
      */
     public static Iterator<JsonNode> getTemplateList() throws Exception {
         // 提交请求
@@ -118,14 +124,16 @@ final public class WechatUtil {
         return data.elements();
     }
 
-
-
-
+    /*
+     *
+     * 后续考虑把这个方法封装为一个统一的方法
+     *
+     */
 
     /**
      * 发送审核结果通知
      * @param wechatNoticeDTO 通知模板结构
-     * @throws Exception handleGetRequest可能抛出的异常
+     * @throws Exception WECHAT_SERVER_CONNECTION_FAILURE、WECHAT_NOTICE_FAILURE
      */
     public static void sendAuditResult(WechatNoticeDTO wechatNoticeDTO) throws Exception {
         // 获取模板列表
@@ -187,19 +195,8 @@ final public class WechatUtil {
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * >>>自动<<<获取Access Token，用于调用微信后端接口
+     * >>>被动<<<获取Access Token，用于调用微信后端接口
      * 由于微信对Access Token的获取有每日次数限制，因此设置为定时触发
      * @throws Exception handleGetRequest可能抛出的异常
      */
@@ -233,11 +230,9 @@ final public class WechatUtil {
         while (templates.hasNext()) {
             JsonNode t = templates.next();
             String TmplId = t.path("priTmplId").asText();
-            // System.out.println(TmplId);
+            System.out.println(TmplId);
             result.add(TmplId);
         }
-        //result.add("Ua2MAP-UdHLHx9i_cnWf33nXwON2RgRt0XEOhzK3DNI");
-        //result.add("DzU2gPVQgkKsknQ1dAXRjGoByDjphw252gBvltWir1Q");
         return result;
     }
 
