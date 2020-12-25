@@ -129,6 +129,7 @@ final public class WechatUtil {
     /*
      *
      * 后续考虑把这个方法封装为一个统一的方法
+     * 审核结果通知：0
      *
      */
 
@@ -137,14 +138,14 @@ final public class WechatUtil {
      * @param wechatNoticeDTO 通知模板结构
      * @throws Exception WECHAT_SERVER_CONNECTION_FAILURE、WECHAT_NOTICE_FAILURE
      */
-    public static void sendAuditResult(WechatNoticeDTO wechatNoticeDTO) throws Exception {
+    public static void sendNotice(WechatNoticeDTO wechatNoticeDTO, int type) throws Exception {
         // 获取模板列表
         Iterator<JsonNode> templates = getTemplateList();
         while (templates.hasNext()) {
             JsonNode t = templates.next();
             String title = t.path("title").asText();
             System.out.println(title);
-            if(title.equals("审核结果提醒")) {
+            if(title.equals("审核结果提醒") && type==0) {
                 System.out.println(t.path("priTmplId").asText());
                 wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
                 break;
