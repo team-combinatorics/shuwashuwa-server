@@ -13,11 +13,9 @@ import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.WechatAppCodeDTO;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
+import javax.swing.text.html.HTMLDocument;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 @Component
@@ -100,11 +98,35 @@ final public class WechatUtil {
     }
 
     /**
-     * 获取通知模板列表
-     * @return 包含所有通知模板的Iterator
+     * >>>自动<<<获取Access Token，用于调用微信后端接口
+     * 由于微信对Access Token的获取有每日次数限制，因此设置为定时触发
+     * @throws Exception handleGetRequest可能抛出的异常
+     */
+    @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
+    public void getWechatAccessTokenAutomatically() throws Exception {
+        int expireTime = getWechatAccessToken();
+        System.out.println("[自动]更新Access Token，更新时间为：" + new Date());
+        System.out.println("当前Access Token有效期限为：" + expireTime + "秒");
+    }
+
+    /**
+     * >>>主动<<<获取Access Token，用于调用微信后端接口
+     * 在因为外部原因导致Access Token失效时调用
+     * 由需要Access Token的方法在请求后进行判断来决定是否调用
+     * @throws Exception handleGetRequest可能抛出的异常
+     */
+    public static void getWechatAccessTokenActively() throws Exception {
+        int expireTime = getWechatAccessToken();
+        System.out.println("[主动]更新Access Token，更新时间为：" + new Date());
+        System.out.println("当前Access Token有效期限为：" + expireTime + "秒");
+    }
+
+    /**
+     * >>自动<<获取通知模板列表，每天更新一次
      * @throws Exception WECHAT_SERVER_CONNECTION_FAILURE、WECHAT_TEMPLATE_ERROR
      */
-    public static Iterator<JsonNode> getTemplateList() throws Exception {
+    @Scheduled(initialDelay = 5000, fixedDelay = 86400*1000)
+    public static void getTemplateListAutomatically() throws Exception {
         // 提交请求
         String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                 + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
@@ -122,14 +144,50 @@ final public class WechatUtil {
             }
         }
 
+        PropertiesConstants.WX_TEMPLATE_IDs = new HashMap<>();
         JsonNode data = root.path("data");
-        return data.elements();
+        Iterator<JsonNode> templates = data.elements();
+        while(templates.hasNext()) {
+            JsonNode template = templates.next();
+            PropertiesConstants.WX_TEMPLATE_IDs.put(template.path("title").asText(),
+                    template.path("priTmplId").asText());
+        }
+        System.out.println("[每日]刷新模板信息，今日刷新时间为：" + new Date());
+        System.out.println("模板信息为：");
+        for(Map.Entry<String, String> entry:PropertiesConstants.WX_TEMPLATE_IDs.entrySet()) {
+            System.out.println("模板名称：" + entry.getKey() +
+                    ", 模板ID：" + entry.getValue());
+        }
+        System.out.println();
+    }
+
+    /**
+     * 获取通知模板id
+     * @return 包含所有通知模板ID的List
+     */
+    public static List<String> getTemplateID () {
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<String, String> entry : PropertiesConstants.WX_TEMPLATE_IDs.entrySet()) {
+            result.add(entry.getValue());
+        }
+        /*
+        Iterator<JsonNode> templates = getTemplateList();
+        while (templates.hasNext()) {
+            JsonNode t = templates.next();
+            String TmplId = t.path("priTmplId").asText();
+            System.out.println(TmplId);
+            result.add(TmplId);
+        }
+        */
+        return result;
     }
 
     /*
-     *
      * 后续考虑把这个方法封装为一个统一的方法
      * 审核结果通知：0
+     * 接单成功通知：1
+     * 志愿者审核通知：2
+     * 活动发起通知：3
      *
      */
 
@@ -140,6 +198,7 @@ final public class WechatUtil {
      */
     public static void sendNotice(WechatNoticeDTO wechatNoticeDTO, int type) throws Exception {
         // 获取模板列表
+        /*
         Iterator<JsonNode> templates = getTemplateList();
         while (templates.hasNext()) {
             JsonNode t = templates.next();
@@ -148,6 +207,14 @@ final public class WechatUtil {
             if(title.equals("审核结果提醒") && type==0) {
                 System.out.println(t.path("priTmplId").asText());
                 wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
+                break;
+            }
+        }
+         */
+        for(Map.Entry<String, String> entry:PropertiesConstants.WX_TEMPLATE_IDs.entrySet()) {
+            if(type==0 && entry.getKey().equals("审核结果提醒")) {
+                System.out.println(entry.getValue());
+                wechatNoticeDTO.setTemplate_id(entry.getValue());
                 break;
             }
         }
@@ -201,47 +268,6 @@ final public class WechatUtil {
 
     }
 
-    /**
-     * >>>被动<<<获取Access Token，用于调用微信后端接口
-     * 由于微信对Access Token的获取有每日次数限制，因此设置为定时触发
-     * @throws Exception handleGetRequest可能抛出的异常
-     */
-    @Scheduled(initialDelay = 1000, fixedDelay = 7000*1000)
-    public void getWechatAccessTokenAutomatically() throws Exception {
-        int expireTime = getWechatAccessToken();
-        System.out.println("[自动]更新Access Token，更新时间为：" + new Date());
-        System.out.println("当前Access Token有效期限为：" + expireTime + "秒");
-    }
-
-    /**
-     * >>>主动<<<获取Access Token，用于调用微信后端接口
-     * 在因为外部原因导致Access Token失效时调用
-     * 由需要Access Token的方法在请求后进行判断来决定是否调用
-     * @throws Exception handleGetRequest可能抛出的异常
-     */
-    public static void getWechatAccessTokenActively() throws Exception {
-        int expireTime = getWechatAccessToken();
-        System.out.println("[主动]更新Access Token，更新时间为：" + new Date());
-        System.out.println("当前Access Token有效期限为：" + expireTime + "秒");
-    }
-
-    /**
-     * 获取通知模板id
-     * @return 包含所有通知模板的List
-     */
-    public static List<String> getTemplateID () throws Exception {
-
-        List<String> result = new ArrayList<>();
-        Iterator<JsonNode> templates = getTemplateList();
-        while (templates.hasNext()) {
-            JsonNode t = templates.next();
-            String TmplId = t.path("priTmplId").asText();
-            System.out.println(TmplId);
-            result.add(TmplId);
-        }
-        return result;
-    }
-
 
 
 
@@ -261,14 +287,11 @@ final public class WechatUtil {
      * @throws Exception handleGetRequest可能抛出的异常
      */
     public static void sendActivityNotice(WechatNoticeDTO wechatNoticeDTO) throws Exception {
-        Iterator<JsonNode> templates = getTemplateList();
-        while (templates.hasNext()) {
-            JsonNode t = templates.next();
-            String title = t.path("title").asText();
-            System.out.println(title);
-            if(title.equals("新活动发布提醒")) {
-                System.out.println(t.path("priTmplId").asText());
-                wechatNoticeDTO.setTemplate_id(t.path("priTmplId").asText());
+        for(Map.Entry<String, String> entry:PropertiesConstants.WX_TEMPLATE_IDs.entrySet()) {
+            if(entry.getKey().equals("新活动发布提醒")) {
+                System.out.println(entry.getValue());
+                wechatNoticeDTO.setTemplate_id(entry.getValue());
+                break;
             }
         }
 
