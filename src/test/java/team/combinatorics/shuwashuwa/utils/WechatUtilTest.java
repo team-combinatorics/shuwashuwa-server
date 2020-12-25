@@ -18,58 +18,56 @@ import java.util.Map;
 public class WechatUtilTest {
 
     @Test
+    @Ignore
     public void testSendActivityNotice() throws Exception {
         String rescode = "";
 
-        if(!rescode.equals("")) {
-            String openID = WechatUtil.getOpenID(rescode);
+        String openID = WechatUtil.getOpenID(rescode);
 
-            Map<String, NoticeMessage> data = new HashMap<>();
-            data.put("thing4", NoticeMessage.builder()
-                    .value("45甲331")
-                    .build());
-            data.put("date2", NoticeMessage.builder()
-                    .value("114年514日8:10")
-                    .build());
-            data.put("date8", NoticeMessage.builder()
-                    .value("114年514日19:19")
-                    .build());
-            data.put("thing11", NoticeMessage.builder()
-                    .value("Tsugu")
-                    .build());
-            WechatNoticeDTO wechatNoticeDTO = WechatNoticeDTO.builder()
-                    .touser(openID)
-                    .data(data)
-                    .build();
+        Map<String, NoticeMessage> data = new HashMap<>();
+        data.put("thing4", NoticeMessage.builder()
+                .value("45甲331")
+                .build());
+        data.put("date2", NoticeMessage.builder()
+                .value("114年514日8:10")
+                .build());
+        data.put("date8", NoticeMessage.builder()
+                .value("114年514日19:19")
+                .build());
+        data.put("thing11", NoticeMessage.builder()
+                .value("Tsugu")
+                .build());
+        WechatNoticeDTO wechatNoticeDTO = WechatNoticeDTO.builder()
+                .touser(openID)
+                .data(data)
+                .build();
 
-            WechatUtil.sendActivityNotice(wechatNoticeDTO);
-        }
+        WechatUtil.sendActivityNotice(wechatNoticeDTO);
     }
 
     @Test
+    @Ignore
     public void testSendAuditionNotice() throws Exception {
         String rescode = "";
 
-        if(!rescode.equals("")) {
-            String openID = WechatUtil.getOpenID(rescode);
+        String openID = WechatUtil.getOpenID(rescode);
 
-            Map<String, NoticeMessage> data = new HashMap<>();
-            data.put("phrase5", NoticeMessage.builder()
-                    .value("猜猜看啊")
-                    .build());
-            data.put("thing8", NoticeMessage.builder()
-                    .value("我也不知道你通没通过")
-                    .build());
-            data.put("thing13", NoticeMessage.builder()
-                    .value("电脑坏了")
-                    .build());
-            WechatNoticeDTO wechatNoticeDTO = WechatNoticeDTO.builder()
-                    .touser(openID)
-                    .data(data)
-                    .build();
+        Map<String, NoticeMessage> data = new HashMap<>();
+        data.put("phrase5", NoticeMessage.builder()
+                .value("猜猜看啊")
+                .build());
+        data.put("thing8", NoticeMessage.builder()
+                .value("我也不知道你通没通过")
+                .build());
+        data.put("thing13", NoticeMessage.builder()
+                .value("电脑坏了")
+                .build());
+        WechatNoticeDTO wechatNoticeDTO = WechatNoticeDTO.builder()
+                .touser(openID)
+                .data(data)
+                .build();
 
-            WechatUtil.sendAuditResult(wechatNoticeDTO);
-        }
+        WechatUtil.sendAuditResult(wechatNoticeDTO);
     }
 
     @Test
