@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel("用于向微信发送活动通知请求所传输的VO对象")
+@ApiModel("用于向微信发送活动通知请求所传输的DTO对象")
 public class WechatNoticeDTO {
 
     @ApiModelProperty("用户的openid")
@@ -35,5 +35,3 @@ public class WechatNoticeDTO {
     @ApiModelProperty("进入小程序查看的语言类型")
     private String lang;
 }
-
-//todo: @leesou 检查这个是否应该是dto
