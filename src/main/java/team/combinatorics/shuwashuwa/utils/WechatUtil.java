@@ -44,6 +44,14 @@ final public class WechatUtil {
         return mapper.readTree(response.getBody());
     }
 
+    public static JsonNode handlePostRequest(String url, Object obj) throws Exception {
+        ResponseEntity<String> response = restTemplate.postForEntity(url, obj, String.class);
+        if (!response.getStatusCode().equals(HttpStatus.OK))
+            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readTree(response.getBody());
+    }
 
 
 
@@ -93,11 +101,12 @@ final public class WechatUtil {
      * @throws Exception handleGetRequest可能抛出的异常
      */
     public static Iterator<JsonNode> getTemplateList() throws Exception {
+        // 提交请求
         String url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
                 + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
         JsonNode root = handleGetRequest(url);
 
-        // give second chance, so that we can solve the problem of access token out-of-date
+        // 第二次机会，用于处理access token过期的问题
         if(root.has("errcode") && root.path("errcode").asInt() != 0) {
             getWechatAccessTokenActively();
             url = "https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?"
@@ -111,18 +120,13 @@ final public class WechatUtil {
         return data.elements();
     }
 
-
-
-
-
-
-
     /**
      * 发送审核结果通知
      * @param wechatNoticeDTO 通知模板结构
      * @throws Exception handleGetRequest可能抛出的异常
      */
     public static void sendAuditResult(WechatNoticeDTO wechatNoticeDTO) throws Exception {
+        // 获取模板id
         Iterator<JsonNode> templates = getTemplateList();
         while (templates.hasNext()) {
             JsonNode t = templates.next();
@@ -134,18 +138,20 @@ final public class WechatUtil {
             }
         }
 
-        String accessToken = PropertiesConstants.WX_ACCESS_TOKEN;
+        // 提交发送通知的请求
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
-                + "access_token=" + accessToken;
-        ResponseEntity<String> response = restTemplate.postForEntity(url, wechatNoticeDTO, String.class);
-        if (!response.getStatusCode().equals(HttpStatus.OK))
-            throw new KnownException(ErrorInfoEnum.WECHAT_SERVER_CONNECTION_FAILURE);
+                + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
+        JsonNode root = handlePostRequest(url, wechatNoticeDTO);
 
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode root = mapper.readTree(response.getBody());
-
-        /* TODO: 完善access token过期的处理 */
-        System.out.println(response.getBody());
+        // 第二次机会，用于处理access token过期的问题
+        if(root.has("errcode") && root.path("errcode").asInt() != 0) {
+            getWechatAccessTokenActively();
+            url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?"
+                    + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
+            root = handlePostRequest(url, wechatNoticeDTO);
+            if(root.has("errcode") && root.path("errcode").asInt() != 0)
+                throw new KnownException(ErrorInfoEnum.WECHAT_NOTICE_FAILURE);
+        }
     }
 
     public static void generateAppCode(int activityId) throws Exception {
@@ -218,7 +224,7 @@ final public class WechatUtil {
      * 获取通知模板id
      * @return 包含所有通知模板的List
      */
-    public static List<String> getTemplateID () {
+    public static List<String> getTemplateID () throws Exception {
 
         List<String> result = new ArrayList<>();
         /*Iterator<JsonNode> templates = getTemplateList();
