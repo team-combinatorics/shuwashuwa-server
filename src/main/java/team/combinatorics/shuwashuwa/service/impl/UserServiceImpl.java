@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception {
+    public synchronized LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception {
         String openid = WechatUtil.getOpenID(logInInfoDto.getCode());
         System.out.println("openid: " + openid);
         LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
