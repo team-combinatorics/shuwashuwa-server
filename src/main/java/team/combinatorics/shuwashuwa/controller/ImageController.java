@@ -17,9 +17,10 @@ public class ImageController {
 
     private final ImageStorageService storageService;
 
-    @ApiOperation(value = "上传图片", notes = "上传图片到服务器并存储，暂时不与维修单关联，在data中返回图片地址\n" +
-            "每个用户限制缓存6张图片，每张图片大小不超过1MB\n" +
-            "同时会生产一张缩略图，若返回的文件名为xxx.png，那么生成的缩略图为100_xxx.png")
+    @ApiOperation(value = "上传图片", notes = "上传图片到服务器并存储，暂时不与维修单关联，在data中返回图片地址。" +
+            "每个用户限制缓存6张图片，每张图片大小不超过1MB。" +
+            "同时会生产一张缩略图，若返回的文件名为xxx.png，那么生成的缩略图为100_xxx.png。" +
+            "访问图片的url为/img/xxx.png或/img/100_xxx.png")
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiResponses({
             @ApiResponse(code = 200, message = "上传成功"),
@@ -32,6 +33,7 @@ public class ImageController {
     ) {
         int userid = TokenUtil.extractUserid(token);
         String location = storageService.store(userid,file);
+        System.out.println("用户"+userid+"上传图片，保存为"+location);
         return new CommonResult<>(200,"上传成功", location);
     }
 
@@ -51,6 +53,7 @@ public class ImageController {
                     String token
     ) {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("用户"+userid+"取消了图片"+path+"的使用");
         storageService.setUseless(userid, path);
 
         return new CommonResult<>(200,"删除成功","deleted");

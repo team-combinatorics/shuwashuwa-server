@@ -8,10 +8,10 @@ import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
 import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
 import team.combinatorics.shuwashuwa.model.dto.CommonResult;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.service.VolunteerService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
@@ -78,12 +78,13 @@ public class VolunteerController {
             @ApiParam(value = "目标申请表中的管理员id")
                     Integer adminID,
             @RequestParam(value = "status", required = false)
-            @ApiParam(value = "目标申请表的状态，0为待审核，1为通过，2为不通过",allowableValues = "0,1,2")
+            @ApiParam(value = "目标申请表的状态，0为待审核，1为通过，2为不通过", allowableValues = "0,1,2")
                     Integer status
     ) {
+        System.out.println("查询志愿者申请列表");
         // 对普通用户的查询做强制限制
         int currentUserId = TokenUtil.extractUserid(token);
-        if(userService.isPlainUser(currentUserId))
+        if (userService.isPlainUser(currentUserId))
             targetUserID = currentUserId;
 
         // 构造查询条件
@@ -97,23 +98,23 @@ public class VolunteerController {
                 volunteerService.listVolunteerApplicationByCondition(selectApplicationCO);
         //日期转化
         List<VolunteerApplicationDetailDTO> dtoList = boList.stream()
-                        .map(x -> (VolunteerApplicationDetailDTO)
-                                DTOUtil.convert(x,VolunteerApplicationDetailDTO.class))
-                        .collect(Collectors.toList());
+                .map(x -> (VolunteerApplicationDetailDTO)
+                        DTOUtil.convert(x, VolunteerApplicationDetailDTO.class))
+                .collect(Collectors.toList());
         return new CommonResult<>(200, "请求成功", dtoList);
     }
 
 
-//    @ApiOperation(value = "获取志愿者申请的详细信息")
+    //    @ApiOperation(value = "获取志愿者申请的详细信息")
 //    @RequestMapping(value = "/application/detail", method = RequestMethod.GET)
 //    @AllAccess
     public CommonResult<VolunteerApplicationDetailDTO> getVolunteerApplicationDetail(
-            @RequestParam("id") @ApiParam(value = "要查看的申请表id",required = true) Integer formId
+            @RequestParam("id") @ApiParam(value = "要查看的申请表id", required = true) Integer formId
     ) {
         VolunteerApplicationDetailBO bo = volunteerService.getApplicationDetailByFormId(formId);
         VolunteerApplicationDetailDTO dto =
-                (VolunteerApplicationDetailDTO) DTOUtil.convert(bo,VolunteerApplicationDetailDTO.class);
-        return new CommonResult<>(200,"请求成功",dto);
+                (VolunteerApplicationDetailDTO) DTOUtil.convert(bo, VolunteerApplicationDetailDTO.class);
+        return new CommonResult<>(200, "请求成功", dto);
     }
 
 
@@ -132,19 +133,21 @@ public class VolunteerController {
     ) {
         // 得到当前管理员的用户id
         int adminUserid = TokenUtil.extractUserid(token);
-        System.out.println(adminUserid + "审核了编号为" + auditDTO.getFormId() + "的申请");
+        System.out.println("管理员(UID" + adminUserid + ")审核了编号为" + auditDTO.getFormId() + "的申请");
         int volunteerId = volunteerService.completeApplicationByAdmin(adminUserid, auditDTO);
 
         return new CommonResult<>(200, "请求成功", volunteerId);
     }
 
     @ApiOperation("[志愿者]查询自己的志愿者ID")
-    @RequestMapping(value = "/id",method = RequestMethod.GET)
+    @RequestMapping(value = "/id", method = RequestMethod.GET)
     @VolunteerAccess
     public CommonResult<Integer> getMyVolunteerId(
             @RequestHeader("token") @ApiParam(hidden = true) String token
     ) {
         int userid = TokenUtil.extractUserid(token);
-        return new CommonResult<>(200,"请求成功",volunteerService.getVolunteerIdByUserid(userid));
+        int volunteerId = volunteerService.getVolunteerIdByUserid(userid);
+        System.out.println("UID" + userid + "的志愿者ID是" + volunteerId);
+        return new CommonResult<>(200, "请求成功", volunteerId);
     }
 }

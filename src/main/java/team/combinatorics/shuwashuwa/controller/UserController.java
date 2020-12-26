@@ -5,11 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
-import team.combinatorics.shuwashuwa.model.dto.LogInInfoDTO;
-import team.combinatorics.shuwashuwa.model.dto.LogInSuccessDTO;
-import team.combinatorics.shuwashuwa.model.dto.UserInfoResponseDTO;
-import team.combinatorics.shuwashuwa.model.dto.UserInfoUpdateDTO;
-import team.combinatorics.shuwashuwa.model.dto.CommonResult;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import team.combinatorics.shuwashuwa.utils.WechatUtil;
@@ -39,7 +35,7 @@ public class UserController {
         System.out.println("用户登录 @Controller");
         System.out.println("Code:" + logInInfoDto.getCode());
         LogInSuccessDTO logInSuccessDto = userService.wechatLogin(logInInfoDto);
-        System.out.println("ID: " + TokenUtil.extractUserid(logInSuccessDto.getToken()));
+        System.out.println("UID: " + TokenUtil.extractUserid(logInSuccessDto.getToken()));
         System.out.println("Token: " + logInSuccessDto.getToken());
         return new CommonResult<>(200, "登录成功", logInSuccessDto);
     }
@@ -82,7 +78,7 @@ public class UserController {
         return new CommonResult<>(200, "请求成功", responseDTO);
     }
 
-    
+
     /**
      * 获取通知模板id列表
      */

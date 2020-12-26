@@ -101,6 +101,7 @@ public class SuperAdministratorController {
     ) {
         if(days==null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        System.out.println("清理"+days+"前上传的无用图片中");
         storageService.clearCacheByTime(days);
         return new CommonResult<>(200,"删除成功","deleted");
     }

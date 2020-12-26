@@ -4,12 +4,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = KnownException.class)
     public CommonResult<String> knownExceptionHandler(KnownException se) {
+        System.out.println("错误" + se.getErrCode() + ": " + se.getMessage());
         return new CommonResult<>(se.getErrCode(), "Error", se.getMessage());
     }
 

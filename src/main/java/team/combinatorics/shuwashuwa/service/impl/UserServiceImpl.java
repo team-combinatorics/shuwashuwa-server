@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int deleteOneUser(int userid) {
-        System.out.println("要删除用户的userid为：" + userid);
         return userDao.deleteUserByUserid(userid);
     }
 
@@ -36,7 +35,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public LogInSuccessDTO wechatLogin(LogInInfoDTO logInInfoDto) throws Exception {
         String openid = WechatUtil.getOpenID(logInInfoDto.getCode());
-        System.out.println("用户登录 @Service");
         System.out.println("openid: " + openid);
         LogInSuccessDTO logInSuccessDto = new LogInSuccessDTO();
         UserPO userPO = userDao.getUserByOpenid(openid);

@@ -1,6 +1,8 @@
 package team.combinatorics.shuwashuwa.controller;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
@@ -10,7 +12,6 @@ import team.combinatorics.shuwashuwa.dao.co.SelectServiceEventCO;
 import team.combinatorics.shuwashuwa.model.bo.ServiceAbstractBO;
 import team.combinatorics.shuwashuwa.model.bo.ServiceEventDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.*;
-import team.combinatorics.shuwashuwa.model.dto.CommonResult;
 import team.combinatorics.shuwashuwa.service.EventService;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
@@ -37,7 +38,9 @@ public class EventController {
             @RequestHeader("token") @ApiParam(hidden = true) String token
     ) {
         int userid = TokenUtil.extractUserid(token);
-        return new CommonResult<>(200, "请求成功", eventService.createNewEvent(userid));
+        ServiceEventDetailBO createdEvent = eventService.createNewEvent(userid);
+        System.out.println("用户" + userid + "创建了维修事件，编号" + createdEvent.getId());
+        return new CommonResult<>(200, "请求成功", createdEvent);
     }
 
     @ApiOperation(value = "提交维修单", notes = "需要预先创建维修事件")
@@ -49,6 +52,7 @@ public class EventController {
                     ServiceFormSubmitDTO serviceFormSubmitDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("用户" + userid + "在维修事件" + serviceFormSubmitDTO.getServiceEventId() + "提交了维修单");
         eventService.submitForm(userid, serviceFormSubmitDTO, false);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -62,6 +66,7 @@ public class EventController {
                     ServiceFormSubmitDTO serviceFormSubmitDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("用户" + userid + "在维修事件" + serviceFormSubmitDTO.getServiceEventId() + "保存了草稿");
         eventService.submitForm(userid, serviceFormSubmitDTO, true);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -74,6 +79,7 @@ public class EventController {
             @RequestBody @ApiParam(value = "审核结果结构", required = true) ServiceEventAuditDTO auditDTO
     ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("管理员(UID" + userid + ")审核了维修事件" + auditDTO.getServiceEventId() + "，结果为" + auditDTO.getResult());
         eventService.auditForm(userid, auditDTO);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -86,6 +92,7 @@ public class EventController {
             @RequestParam("eventID") @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("志愿者(UID" + userid + ")接单了维修事件" + serviceEventId);
         eventService.takeOrder(userid, serviceEventId);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -98,6 +105,7 @@ public class EventController {
             @RequestParam("eventID") @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("志愿者(UID" + userid + ")退单了维修事件" + serviceEventId);
         eventService.giveUpOrder(userid, serviceEventId);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -110,6 +118,7 @@ public class EventController {
             @RequestBody @ApiParam(value = "更新维修结果的结构", required = true) ServiceSimpleUpdateDTO resultDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("志愿者(UID" + userid + ")完成了维修事件" + resultDTO.getServiceEventId());
         eventService.completeOrder(userid, resultDTO);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -122,6 +131,7 @@ public class EventController {
             @RequestBody @ApiParam(value = "更新反馈内容的结构", required = true) ServiceSimpleUpdateDTO feedbackDTO
     ) {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("用户" + userid + "更新了维修" + feedbackDTO.getServiceEventId() + "的反馈");
         eventService.updateFeedback(userid, feedbackDTO);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -134,6 +144,7 @@ public class EventController {
             @RequestParam("eventID") @ApiParam(value = "维修事件Id", required = true) Integer serviceEventId
     ) {
         int userid = TokenUtil.extractUserid(token);
+        System.out.println("用户" + userid + "关闭了维修" + serviceEventId);
         eventService.shutdownService(userid, serviceEventId);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -177,9 +188,10 @@ public class EventController {
             @ApiParam(value = "创建时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
                     String createTimeUpperBound
     ) {
+        System.out.println("请求维修事件列表");
         //对普通用户的查询做强制限制
         int currentUserId = TokenUtil.extractUserid(token);
-        if(userService.isPlainUser(currentUserId))
+        if (userService.isPlainUser(currentUserId))
             clientId = currentUserId;
 
         SelectServiceEventCO serviceEventCO = SelectServiceEventCO
@@ -200,7 +212,7 @@ public class EventController {
         return new CommonResult<>(200, "请求成功", dtoList);
     }
 
-    @ApiOperation(value = "统计满足条件的维修事件数量",notes = "不需要筛选的条件无需赋值(暂时没有限制调用权限)")
+    @ApiOperation(value = "统计满足条件的维修事件数量", notes = "不需要筛选的条件无需赋值(暂时没有限制调用权限)")
     @RequestMapping(value = "/count", method = RequestMethod.GET)
     @AllAccess
     public CommonResult<Integer> getServiceEventNumber(
@@ -236,6 +248,7 @@ public class EventController {
             @ApiParam(value = "创建时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
                     String createTimeUpperBound
     ) {
+        System.out.println("请求维修事件数量");
         SelectServiceEventCO serviceEventCO = SelectServiceEventCO
                 .builder()
                 .userId(clientId)
@@ -257,6 +270,7 @@ public class EventController {
             @RequestParam("id") @ApiParam(value = "要查询的维修事件", required = true) Integer eventId
     ) {
         ServiceEventDetailBO bo = eventService.getServiceDetail(eventId);
+        System.out.println("请求了维修事件" + eventId + "的详情");
         ServiceEventDetailDTO dto = (ServiceEventDetailDTO) DTOUtil.convert(bo, ServiceEventDetailDTO.class);
         return new CommonResult<>(200, "请求成功", dto);
     }
