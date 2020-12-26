@@ -66,13 +66,7 @@ public class ActivityServiceImpl implements ActivityService {
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
         //更新活动整体信息
-        ActivityInfoPO activityInfoPO = new ActivityInfoPO();
-        activityInfoPO.setActivityName(activityUpdateDTO.getActivityName());
-        activityInfoPO.setLocation(activityUpdateDTO.getLocation());
-        if(activityUpdateDTO.getStartTime()!=null)
-            activityInfoPO.setStartTime(Timestamp.valueOf(activityUpdateDTO.getStartTime()));
-        if(activityUpdateDTO.getEndTime()!=null)
-            activityInfoPO.setEndTime(Timestamp.valueOf(activityUpdateDTO.getEndTime()));
+        ActivityInfoPO activityInfoPO = (ActivityInfoPO) DTOUtil.convert(activityUpdateDTO,ActivityInfoPO.class);
         if(!DTOUtil.fieldAllNull(activityInfoPO))
         {
             activityInfoPO.setId(activityUpdateDTO.getActivityId());
