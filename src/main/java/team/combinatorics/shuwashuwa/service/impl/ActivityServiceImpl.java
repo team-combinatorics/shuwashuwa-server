@@ -42,6 +42,7 @@ public class ActivityServiceImpl implements ActivityService {
                 .activityName(activityLaunchDTO.getActivityName())
                 .location(activityLaunchDTO.getLocation())
                 .build();
+        if(activityLaunchDTO.getActivityName()==null)
         activityInfoDao.insert(activityInfoPO);
 
         if(activityInfoPO.getActivityName()==null) {
@@ -67,7 +68,7 @@ public class ActivityServiceImpl implements ActivityService {
         //更新活动整体信息
         ActivityInfoPO activityInfoPO = new ActivityInfoPO();
         activityInfoPO.setActivityName(activityUpdateDTO.getActivityName());
-        activityInfoPO.setLocation(activityInfoPO.getLocation());
+        activityInfoPO.setLocation(activityUpdateDTO.getLocation());
         if(activityUpdateDTO.getStartTime()!=null)
             activityInfoPO.setStartTime(Timestamp.valueOf(activityUpdateDTO.getStartTime()));
         if(activityUpdateDTO.getEndTime()!=null)
