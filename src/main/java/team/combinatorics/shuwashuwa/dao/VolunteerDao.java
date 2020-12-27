@@ -17,7 +17,7 @@ public interface VolunteerDao {
      * @param volunteerPO 志愿者信息
      * @return 成功的数量，应当为1
      */
-    int insert(@Param("volunteer") VolunteerPO volunteerPO);
+    Integer insert(@Param("volunteer") VolunteerPO volunteerPO);
 
     /**
      * 修改志愿者信息，不允许修改userid，不能全为空
@@ -26,7 +26,7 @@ public interface VolunteerDao {
      * @param volunteerPO 志愿者信息
      * @return 修改成功的记录数量
      */
-    int update(@Param("volunteer") VolunteerPO volunteerPO);
+    Integer update(@Param("volunteer") VolunteerPO volunteerPO);
 
     /**
      * 更新order count
@@ -43,7 +43,7 @@ public interface VolunteerDao {
      *
      * @return 所有志愿者的列表
      */
-    List<AdminPO> listVolunteers();
+    List<VolunteerPO> listVolunteers();
 
     /**
      * 根据id获取志愿者信息
@@ -74,5 +74,5 @@ public interface VolunteerDao {
      * @param id 志愿者id
      * @return 删除的数量，应该为1
      */
-    int deleteByID(@Param("id") int id);
+    Integer deleteByID(@Param("id") int id);
 }
