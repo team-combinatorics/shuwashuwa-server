@@ -42,7 +42,7 @@ public class ActivityServiceImpl implements ActivityService {
                 .activityName(activityLaunchDTO.getActivityName())
                 .location(activityLaunchDTO.getLocation())
                 .build();
-        if(activityLaunchDTO.getActivityName()==null)
+
         activityInfoDao.insert(activityInfoPO);
 
         if(activityInfoPO.getActivityName()==null) {
