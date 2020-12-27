@@ -53,13 +53,6 @@ public interface VolunteerService {
      */
     Integer getVolunteerIdByUserid(Integer userid);
 
-
-
-
-
-
-
-
     /**
      * （超级）管理员添加新的志愿者
      * @param volunteerDTO 志愿者信息

@@ -150,12 +150,6 @@ public class VolunteerController {
         return new CommonResult<>(200, "请求成功", volunteerId);
     }
 
-
-
-
-
-
-
     /**
      * 添加志愿者
      */

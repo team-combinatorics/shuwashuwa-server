@@ -144,13 +144,6 @@ public class VolunteerServiceImpl implements VolunteerService {
         return volunteerDao.getVolunteerIDByUserID(userid);
     }
 
-
-
-
-
-
-
-
     @Override
     public int addVolunteer(VolunteerDTO volunteerDTO) {
         // 转换为PO
