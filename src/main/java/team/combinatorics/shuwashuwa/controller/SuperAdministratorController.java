@@ -265,40 +265,6 @@ public class SuperAdministratorController {
         return new CommonResult<>(200, "获取成功", pic);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 添加志愿者
      */

@@ -107,17 +107,6 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         return cnt;
     }
 
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public int addVolunteer(VolunteerDTO volunteerDTO) {
         // 转换为PO
