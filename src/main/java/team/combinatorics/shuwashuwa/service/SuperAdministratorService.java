@@ -1,6 +1,7 @@
 package team.combinatorics.shuwashuwa.service;
 
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerDTO;
 
 import java.util.List;
 
@@ -56,4 +57,11 @@ public interface SuperAdministratorService {
      * @return 如果更新成功应该返回修改成功的记录数量（大于0，因为不允许传入的数据全为空）
      */
     int updateAdministratorInfo(AdminDTO adminDTO);
+
+    /**
+     * 超级管理员获取签到用二维码
+     * @param activityID 活动id
+     * @return 微信返回的raw data（字节数组形式储存）
+     */
+    byte[] getWechatQRCode(int activityID) throws Exception;
 }

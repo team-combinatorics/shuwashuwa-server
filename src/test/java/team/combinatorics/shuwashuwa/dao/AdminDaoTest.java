@@ -41,7 +41,7 @@ public class AdminDaoTest {
         int n = list.size();
 
         // 测试新建管理员与获取管理员信息，Dao层不进行新建管理员时信息是否完整的判断
-        Assert.assertEquals(1, adminDao.insert(adminPO));
+        Assert.assertEquals(1, adminDao.insert(adminPO).intValue());
 
         // 测试把UserID转换为管理员id
         Integer adminID = adminDao.getAdminIDByUserID(3);
@@ -75,14 +75,14 @@ public class AdminDaoTest {
                 .userName("kinami")
                 .email("kinami@misaki.cc")
                 .build();
-        Assert.assertEquals(1, adminDao.update(update));
+        Assert.assertEquals(1, adminDao.update(update).intValue());
         AdminPO fetchUpdate = adminDao.getByID(adminID);
         Assert.assertEquals(update.getId(), fetchUpdate.getId());
         Assert.assertEquals(update.getUserName(), fetchUpdate.getUserName());
         Assert.assertEquals(update.getEmail(), fetchUpdate.getEmail());
 
         // 测试删除管理员
-        Assert.assertEquals(1, adminDao.deleteByID(adminID));
+        Assert.assertEquals(1, adminDao.deleteByID(adminID).intValue());
         list = adminDao.listAdmins();
         Assert.assertEquals(n, list.size());
 

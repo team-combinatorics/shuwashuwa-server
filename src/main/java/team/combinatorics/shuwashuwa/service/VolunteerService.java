@@ -5,6 +5,7 @@ import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationAbstractBO;
 import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
 import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
+import team.combinatorics.shuwashuwa.model.dto.VolunteerDTO;
 
 import java.util.List;
 
@@ -51,5 +52,39 @@ public interface VolunteerService {
      * @return 志愿者id
      */
     Integer getVolunteerIdByUserid(Integer userid);
+
+    /**
+     * （超级）管理员添加新的志愿者
+     * @param volunteerDTO 志愿者信息
+     * @return 成功添加应该返回1
+     */
+    int addVolunteer(VolunteerDTO volunteerDTO);
+
+    /**
+     * （超级）管理员获取志愿者列表
+     * @return 志愿者列表
+     */
+    List<VolunteerDTO> getVolunteerList();
+
+    /**
+     * （超级）管理员删除志愿者
+     * @param userID 待删志愿者的用户id
+     * @return 正常删除应该返回1，出现异常应该返回其他值
+     */
+    int deleteVolunteer(int userID);
+
+    /**
+     * （超级）管理员获取单个志愿者的信息
+     * @param userID 志愿者的用户id
+     * @return 志愿者的具体信息
+     */
+    VolunteerDTO getVolunteerInfo(int userID);
+
+    /**
+     * （超级）管理员更新志愿者信息
+     * @param volunteerDTO 志愿者的待更新信息
+     * @return 如果更新成功应该返回修改成功的记录数量（大于0，因为不允许传入的数据全为空）
+     */
+    int updateVolunteerInfo(VolunteerDTO volunteerDTO);
 
 }

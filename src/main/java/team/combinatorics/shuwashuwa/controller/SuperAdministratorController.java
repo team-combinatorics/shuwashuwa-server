@@ -4,14 +4,12 @@ import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
-import team.combinatorics.shuwashuwa.model.dto.ActivityLaunchDTO;
-import team.combinatorics.shuwashuwa.model.dto.ActivityUpdateDTO;
-import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
-import team.combinatorics.shuwashuwa.model.dto.CommonResult;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
@@ -71,7 +69,6 @@ public class SuperAdministratorController {
         boolean success = superAdministratorService.changePassword(oldPassword, newPassword);
         if (success)
             return new CommonResult<>(200, "修改成功", "Change password successfully!");
-        /*TODO: 添加对数据库返回值异常的error code*/
         return new CommonResult<>(40011, "原始密码错误", "Wrong old password!");
     }
 
@@ -127,8 +124,7 @@ public class SuperAdministratorController {
         if (cnt == 1) {
             return new CommonResult<>(200, "添加成功", "success");
         }
-        /*TODO: 或需要为数据库返回异常值添加一个error code?*/
-        return new CommonResult<>(40000, "数据库操作失败", "database failure");
+        return new CommonResult<>(40000, "数据库出现异常，请检查数据库", "database failure");
     }
 
     /**
@@ -160,8 +156,7 @@ public class SuperAdministratorController {
         int cnt = superAdministratorService.deleteAdministrator(userID);
         if (cnt == 1)
             return new CommonResult<>(200, "删除成功", "success");
-        /*TODO: 为数据库异常定义error code*/
-        return new CommonResult<>(40000, "数据库异常，删除失败", "You need to check database");
+        return new CommonResult<>(40000, "数据库异常，请检查数据库", "You need to check database");
     }
 
     /**
@@ -203,8 +198,7 @@ public class SuperAdministratorController {
         int cnt = superAdministratorService.updateAdministratorInfo(adminDTO);
         if (cnt > 0)
             return new CommonResult<>(200, "更新成功", "success");
-        /*TODO: 需要为数据库异常定义一个error code*/
-        return new CommonResult<>(40000, "更新失败，数据库异常", "You should check your database!");
+        return new CommonResult<>(40000, "数据库异常，请检查数据库", "You should check your database!");
     }
 
     /**
@@ -267,7 +261,7 @@ public class SuperAdministratorController {
             @ApiParam(value = "当前正在进行的（要签到的）活动编号", required = true)
                     Integer activityId
     ) throws Exception {
-        byte[] pic = WechatUtil.generateAppCode(activityId);
+        byte[] pic = superAdministratorService.getWechatQRCode(activityId);
         return new CommonResult<>(200, "获取成功", pic);
     }
 

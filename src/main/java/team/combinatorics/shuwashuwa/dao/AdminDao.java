@@ -14,7 +14,7 @@ public interface AdminDao {
      * @param adminPO 管理员信息
      * @return 成功的数量，应当为1
      */
-    int insert(@Param("admin") AdminPO adminPO);
+    Integer insert(@Param("admin") AdminPO adminPO);
 
     /**
      * 修改管理员信息，不允许修改userid，不能全为空
@@ -23,7 +23,7 @@ public interface AdminDao {
      * @param adminPO 管理员信息
      * @return 修改成功的记录数量
      */
-    int update(@Param("admin") AdminPO adminPO);
+    Integer update(@Param("admin") AdminPO adminPO);
 
     /**
      * 获取管理员列表，返回所有
@@ -53,7 +53,7 @@ public interface AdminDao {
      * @param id 管理员id
      * @return 删除的数量，应该为1
      */
-    int deleteByID(@Param("id") int id);
+    Integer deleteByID(@Param("id") int id);
 
 
 }
