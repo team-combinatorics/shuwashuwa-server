@@ -5,18 +5,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.AllAccess;
+import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.annotation.VolunteerAccess;
 import team.combinatorics.shuwashuwa.dao.co.SelectApplicationCO;
+import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
+import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.bo.VolunteerApplicationDetailBO;
-import team.combinatorics.shuwashuwa.model.dto.CommonResult;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAdditionDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationAuditDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerApplicationDetailDTO;
+import team.combinatorics.shuwashuwa.model.dto.*;
 import team.combinatorics.shuwashuwa.service.UserService;
 import team.combinatorics.shuwashuwa.service.VolunteerService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -147,5 +148,113 @@ public class VolunteerController {
         int volunteerId = volunteerService.getVolunteerIdByUserid(userid);
         System.out.println("UID" + userid + "的志愿者ID是" + volunteerId);
         return new CommonResult<>(200, "请求成功", volunteerId);
+    }
+
+
+
+
+
+
+
+    /**
+     * 添加志愿者
+     */
+    @ApiOperation(value = "根据输入的信息添加新的志愿者")
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "添加成功"),
+            @ApiResponse(code = 40010, message = "添加失败，信息不完整")
+    })
+    @SUAccess
+    @AdminAccess
+    public CommonResult<String> addNewVolunteer(
+            @RequestBody @NotNull(message = "管理员信息不能为空") @ApiParam("管理员信息") VolunteerDTO volunteerDTO
+    ) {
+        if (DTOUtil.fieldExistNull(volunteerDTO)) {
+            return new CommonResult<>(40010, "添加失败，信息不完整", "You need to fill all information");
+        }
+        System.out.println(volunteerDTO.getUserid() + "将被添加为志愿者");
+        int cnt = volunteerService.addVolunteer(volunteerDTO);
+        if (cnt == 1) {
+            return new CommonResult<>(200, "添加成功", "success");
+        }
+        return new CommonResult<>(40000, "数据库出现异常，请检查数据库", "database failure");
+    }
+
+    /**
+     * 获取志愿者列表
+     */
+    @ApiOperation(value = "（超级）管理员获取所有志愿者的列表")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+    })
+    @SUAccess
+    @AdminAccess
+    public CommonResult<List<VolunteerDTO>> getVolunteerList() {
+
+        return new CommonResult<>(200, "获取成功", volunteerService.getVolunteerList());
+    }
+
+    /**
+     * 删除志愿者
+     */
+    @ApiOperation(value = "根据输入的信息删除对应的志愿者", notes = "超管&管理员专属")
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "删除成功"),
+    })
+    @SUAccess
+    @AdminAccess
+    public CommonResult<String> deleteVolunteer(
+            @RequestParam @NotNull(message = "用户id不能为空") @ApiParam("要删除管理员权限的用户id") int userID
+    ) {
+        int cnt = volunteerService.deleteVolunteer(userID);
+        if (cnt == 1)
+            return new CommonResult<>(200, "删除成功", "success");
+        return new CommonResult<>(40000, "数据库异常，请检查数据库", "You need to check database");
+    }
+
+    /**
+     * 获取单个志愿者的信息
+     */
+    @ApiOperation(value = "（超级）管理员获取单个志愿者的详细信息")
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+    })
+    @SUAccess
+    public CommonResult<VolunteerDTO> getVolunteerInfo(
+            @NotNull(message = "用户id不能为空") @ApiParam("要获取管理员信息的用户id") int userID
+    ) {
+        return new CommonResult<>(200, "获取成功", volunteerService.getVolunteerInfo(userID));
+    }
+
+    /**
+     * 修改志愿者信息
+     */
+    @ApiOperation(value = "根据输入修改志愿者信息")
+    @RequestMapping(value = "", method = RequestMethod.PATCH)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "更新成功"),
+            @ApiResponse(code = 40010, message = "更新失败，信息不能全为空")
+    })
+    @SUAccess
+    @AdminAccess
+    public CommonResult<String> updateVolunteerInfo(
+            @RequestBody @NotNull(message = "志愿者信息不能为空") @ApiParam("志愿者信息") VolunteerDTO volunteerDTO
+    ) {
+        if (volunteerDTO.getUserid()==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        int backup = volunteerDTO.getUserid();
+        volunteerDTO.setUserid(null);
+        if (DTOUtil.fieldAllNull(volunteerDTO))
+            return new CommonResult<>(40010, "更新失败，信息不能全为空", "You should fill volunteer info!");
+        volunteerDTO.setUserid(backup);
+        System.out.println("即将更新用户id为" + volunteerDTO.getUserid() + "的志愿者的信息");
+        int cnt = volunteerService.updateVolunteerInfo(volunteerDTO);
+        if (cnt > 0)
+            return new CommonResult<>(200, "更新成功", "success");
+        return new CommonResult<>(40000, "数据库异常，请检查数据库", "You should check your database!");
     }
 }
