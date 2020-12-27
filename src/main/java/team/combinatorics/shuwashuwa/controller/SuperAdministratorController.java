@@ -46,7 +46,7 @@ public class SuperAdministratorController {
                                              @NotNull(message = "密码不能为空") @ApiParam("超管密码") String password) {
 
         String token = superAdministratorService.checkInfo(userName, password);
-        if(token != null) {
+        if (token != null) {
 
             System.out.println("超级管理员请求登录");
             return new CommonResult<>(200, "登录成功", token);
@@ -69,7 +69,7 @@ public class SuperAdministratorController {
             @RequestHeader @NotNull(message = "新密码不能为空") @ApiParam("新密码") String newPassword
     ) {
         boolean success = superAdministratorService.changePassword(oldPassword, newPassword);
-        if(success)
+        if (success)
             return new CommonResult<>(200, "修改成功", "Change password successfully!");
         /*TODO: 添加对数据库返回值异常的error code*/
         return new CommonResult<>(40011, "原始密码错误", "Wrong old password!");
@@ -82,7 +82,7 @@ public class SuperAdministratorController {
     @RequestMapping(value = "/cache", method = RequestMethod.GET)
     @SUAccess
     public CommonResult<Integer> getImageCacheNumber() {
-        return new CommonResult<>(200,"请求成功",storageService.countCacheImages());
+        return new CommonResult<>(200, "请求成功", storageService.countCacheImages());
     }
 
     /**
@@ -96,14 +96,14 @@ public class SuperAdministratorController {
     @SUAccess
     public CommonResult<String> handleImageCacheClear(
             @RequestParam("days")
-            @ApiParam(value = "指定的天数",example = "15",required = true)
+            @ApiParam(value = "指定的天数", example = "15", required = true)
                     Integer days
     ) {
-        if(days==null)
+        if (days == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
-        System.out.println("清理"+days+"前上传的无用图片中");
+        System.out.println("清理" + days + "前上传的无用图片中");
         storageService.clearCacheByTime(days);
-        return new CommonResult<>(200,"删除成功","deleted");
+        return new CommonResult<>(200, "删除成功", "deleted");
     }
 
     /**
@@ -119,14 +119,12 @@ public class SuperAdministratorController {
     public CommonResult<String> addNewAdministrator(
             @RequestBody @NotNull(message = "管理员信息不能为空") @ApiParam("管理员信息") AdminDTO adminDTO
     ) {
-
-        System.out.println(adminDTO.getUserid());
-        if(DTOUtil.fieldExistNull(adminDTO)) {
+        if (DTOUtil.fieldExistNull(adminDTO)) {
             return new CommonResult<>(40010, "添加失败，信息不完整", "You need to fill all information");
         }
-        System.out.println(adminDTO.getUserid()+"将被添加为管理员");
+        System.out.println(adminDTO.getUserid() + "将被添加为管理员");
         int cnt = superAdministratorService.addAdministrator(adminDTO);
-        if(cnt == 1) {
+        if (cnt == 1) {
             return new CommonResult<>(200, "添加成功", "success");
         }
         /*TODO: 或需要为数据库返回异常值添加一个error code?*/
@@ -158,9 +156,9 @@ public class SuperAdministratorController {
     @SUAccess
     public CommonResult<String> deleteAdministrator(
             @RequestParam @NotNull(message = "用户id不能为空") @ApiParam("要删除管理员权限的用户id") int userID
-    ){
+    ) {
         int cnt = superAdministratorService.deleteAdministrator(userID);
-        if(cnt == 1)
+        if (cnt == 1)
             return new CommonResult<>(200, "删除成功", "success");
         /*TODO: 为数据库异常定义error code*/
         return new CommonResult<>(40000, "数据库异常，删除失败", "You need to check database");
@@ -194,11 +192,16 @@ public class SuperAdministratorController {
     public CommonResult<String> updateAdministratorInfo(
             @RequestBody @NotNull(message = "管理员信息不能为空") @ApiParam("管理员信息") AdminDTO adminDTO
     ) {
-        if(team.combinatorics.shuwashuwa.utils.DTOUtil.fieldAllNull(adminDTO))
+        if (adminDTO.getUserid()==null)
+            throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
+        int backup = adminDTO.getUserid();
+        adminDTO.setUserid(null);
+        if (DTOUtil.fieldAllNull(adminDTO))
             return new CommonResult<>(40010, "更新失败，信息不能全为空", "You should fill administrator info!");
-        System.out.println("即将更新用户id为"+adminDTO.getUserid()+"的管理员的信息");
+        adminDTO.setUserid(backup);
+        System.out.println("即将更新用户id为" + adminDTO.getUserid() + "的管理员的信息");
         int cnt = superAdministratorService.updateAdministratorInfo(adminDTO);
-        if(cnt>0)
+        if (cnt > 0)
             return new CommonResult<>(200, "更新成功", "success");
         /*TODO: 需要为数据库异常定义一个error code*/
         return new CommonResult<>(40000, "更新失败，数据库异常", "You should check your database!");
@@ -211,7 +214,7 @@ public class SuperAdministratorController {
     @RequestMapping(value = "/activity", method = RequestMethod.POST)
     @SUAccess
     public CommonResult<String> handleActivityLaunch(
-            @RequestBody @ApiParam(value = "活动发起传输对象",required = true) ActivityLaunchDTO activityLaunchDTO
+            @RequestBody @ApiParam(value = "活动发起传输对象", required = true) ActivityLaunchDTO activityLaunchDTO
     ) {
         System.out.println("发起活动");
         activityService.insertActivity(activityLaunchDTO);
@@ -221,15 +224,15 @@ public class SuperAdministratorController {
     /**
      * 超管更新活动信息
      */
-    @ApiOperation(value = "更新活动信息",notes = "至少更新一项")
+    @ApiOperation(value = "更新活动信息", notes = "至少更新一项")
     @RequestMapping(value = "/activity", method = RequestMethod.PATCH)
     @SUAccess
     public CommonResult<String> handleActivityUpdate(
             @RequestBody
-            @ApiParam(value = "活动更新传输对象",required = true)
+            @ApiParam(value = "活动更新传输对象", required = true)
                     ActivityUpdateDTO activityUpdateDTO
     ) {
-        System.out.println("更新活动"+ activityUpdateDTO.getActivityId());
+        System.out.println("更新活动" + activityUpdateDTO.getActivityId());
         activityService.updateActivity(activityUpdateDTO);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -241,16 +244,17 @@ public class SuperAdministratorController {
     @RequestMapping(value = "/activity", method = RequestMethod.DELETE)
     @SUAccess
     public CommonResult<String> handleActivityDelete(
-            @RequestBody @ApiParam(value = "要删除的活动编号",required = true)
+            @RequestBody @ApiParam(value = "要删除的活动编号", required = true)
                     Integer activityId
     ) {
-        System.out.println("移除活动"+activityId);
+        System.out.println("移除活动" + activityId);
         activityService.removeActivity(activityId);
         return new CommonResult<>(200, "请求成功", "success");
     }
 
     /**
      * 超管获取签到用二维码
+     *
      * @param activityId 活动id
      * @return 包含图片字节数组的通用返回结构
      * @throws Exception WECHAT_QRCODE_FAILURE
@@ -261,7 +265,7 @@ public class SuperAdministratorController {
     public CommonResult<byte[]> getQRCode(
             @NotNull @RequestParam
             @ApiParam(value = "当前正在进行的（要签到的）活动编号", required = true)
-            Integer activityId
+                    Integer activityId
     ) throws Exception {
         byte[] pic = WechatUtil.generateAppCode(activityId);
         return new CommonResult<>(200, "获取成功", pic);
