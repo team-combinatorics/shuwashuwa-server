@@ -207,7 +207,7 @@ public class EventController {
         if (createTimeUpperBound != null) serviceEventCO.setEndTime(Timestamp.valueOf(createTimeUpperBound));
         final List<ServiceAbstractBO> boList = eventService.listServiceEvents(serviceEventCO);
         final List<ServiceAbstractDTO> dtoList = boList.stream()
-                .map(x -> (ServiceAbstractDTO) DTOUtil.convert(x, ServiceAbstractDTO.class))
+                .map(x -> DTOUtil.convert(x, ServiceAbstractDTO.class))
                 .collect(Collectors.toList());
         return new CommonResult<>(200, "请求成功", dtoList);
     }
@@ -271,7 +271,7 @@ public class EventController {
     ) {
         ServiceEventDetailBO bo = eventService.getServiceDetail(eventId);
         System.out.println("请求了维修事件" + eventId + "的详情");
-        ServiceEventDetailDTO dto = (ServiceEventDetailDTO) DTOUtil.convert(bo, ServiceEventDetailDTO.class);
+        ServiceEventDetailDTO dto = DTOUtil.convert(bo, ServiceEventDetailDTO.class);
         return new CommonResult<>(200, "请求成功", dto);
     }
 

@@ -72,7 +72,7 @@ public class EventServiceImpl implements EventService {
         if (serviceFormSubmitDTO.getServiceEventId() == null)
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
         //提取维修单信息
-        ServiceFormPO newFormPO = (ServiceFormPO) DTOUtil.convert(serviceFormSubmitDTO, ServiceFormPO.class);
+        ServiceFormPO newFormPO = DTOUtil.convert(serviceFormSubmitDTO, ServiceFormPO.class);
         int eventId = newFormPO.getServiceEventId();
         //获取维修事件，这里开始了一个事务，会加悲观锁，其他人无法再进行任何操作，包括读
         ServiceEventPO eventPO = serviceEventDao.getServiceEventForUpdate(serviceFormSubmitDTO.getServiceEventId());

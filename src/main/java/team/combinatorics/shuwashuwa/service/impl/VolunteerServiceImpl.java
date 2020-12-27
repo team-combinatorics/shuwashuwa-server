@@ -53,7 +53,7 @@ public class VolunteerServiceImpl implements VolunteerService {
 
         //插入新的申请
         VolunteerApplicationPO volunteerApplicationPO =
-                (VolunteerApplicationPO) DTOUtil.convert(volunteerApplicationAdditionDTO, VolunteerApplicationPO.class);
+                DTOUtil.convert(volunteerApplicationAdditionDTO, VolunteerApplicationPO.class);
 
         volunteerApplicationPO.setUserId(userid);
 
@@ -123,7 +123,7 @@ public class VolunteerServiceImpl implements VolunteerService {
                 imageStorageService.delete(volunteerApplicationPO.getCardPicLocation());
                 if (auditDTO.getStatus() == 1) {
                     // 将用户插入志愿者表中
-                    VolunteerPO volunteerPO = (VolunteerPO) DTOUtil.convert(auditDTO, VolunteerPO.class);
+                    VolunteerPO volunteerPO = DTOUtil.convert(auditDTO, VolunteerPO.class);
                     volunteerPO.setUserid(volunteerApplicationPO.getUserId());
                     volunteerDao.insert(volunteerPO);
                     // 更新用户的志愿者权限

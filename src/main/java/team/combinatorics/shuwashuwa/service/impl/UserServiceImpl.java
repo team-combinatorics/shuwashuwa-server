@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoResponseDTO getUserInfo(int userid) {
         UserPO userPO = userDao.getUserByUserid(userid);
-        return (UserInfoResponseDTO) DTOUtil.convert(userPO, UserInfoResponseDTO.class);
+        return DTOUtil.convert(userPO, UserInfoResponseDTO.class);
     }
 
     @Override

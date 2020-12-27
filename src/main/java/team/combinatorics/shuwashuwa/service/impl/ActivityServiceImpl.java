@@ -66,7 +66,7 @@ public class ActivityServiceImpl implements ActivityService {
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
 
         //更新活动整体信息
-        ActivityInfoPO activityInfoPO = (ActivityInfoPO) DTOUtil.convert(activityUpdateDTO,ActivityInfoPO.class);
+        ActivityInfoPO activityInfoPO = DTOUtil.convert(activityUpdateDTO,ActivityInfoPO.class);
         if(!DTOUtil.fieldAllNull(activityInfoPO))
         {
             activityInfoPO.setId(activityUpdateDTO.getActivityId());

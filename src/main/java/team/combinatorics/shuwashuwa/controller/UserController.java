@@ -88,7 +88,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "请求成功")
     })
     @AllAccess
-    public CommonResult<List<String>> getNoticeFormID() throws Exception {
+    public CommonResult<List<String>> getNoticeFormID() {
         return new CommonResult<>(200, "获取成功", WechatUtil.getTemplateID());
     }
 }

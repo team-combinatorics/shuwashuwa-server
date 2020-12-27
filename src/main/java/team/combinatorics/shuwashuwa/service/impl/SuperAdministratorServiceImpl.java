@@ -49,7 +49,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
 
     @Override
     public int addAdministrator(AdminDTO adminDTO) {
-        AdminPO adminPO = (AdminPO) DTOUtil.convert(adminDTO,AdminPO.class);
+        AdminPO adminPO = DTOUtil.convert(adminDTO,AdminPO.class);
         System.out.println(adminPO.getUserid());
         int cnt = adminDao.insert(adminPO);
         if(cnt == 1) {
@@ -63,7 +63,7 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         List<AdminPO> list = adminDao.listAdmins();
         List<AdminDTO> returnList = new Vector<>();
         for(AdminPO adminPO:list) {
-            AdminDTO adminDTO = (AdminDTO) DTOUtil.convert(adminPO,AdminDTO.class);
+            AdminDTO adminDTO = DTOUtil.convert(adminPO,AdminDTO.class);
             returnList.add(adminDTO);
         }
         return returnList;
@@ -82,13 +82,13 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         AdminPO adminPO = adminDao.getByID(adminID);
         if(adminPO == null)
             return null;
-        return (AdminDTO) DTOUtil.convert(adminPO,AdminDTO.class);
+        return DTOUtil.convert(adminPO,AdminDTO.class);
     }
 
     @Override
     public int updateAdministratorInfo(AdminDTO adminDTO) {
         int adminID = adminDao.getAdminIDByUserID(adminDTO.getUserid());
-        AdminPO adminPO = (AdminPO) DTOUtil.convert(adminDTO,AdminPO.class);
+        AdminPO adminPO = DTOUtil.convert(adminDTO,AdminPO.class);
         adminPO.setId(adminID);
         return adminDao.update(adminPO);
     }

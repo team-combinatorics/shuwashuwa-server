@@ -65,9 +65,9 @@ public class DTOUtil {
     }
 
 
-    public static Object convert(Object source, Class<?> targetClass) {
+    public static <T> T convert(Object source, Class<T> targetClass) {
         try {
-            Object target = targetClass.getDeclaredConstructor().newInstance();
+            T target = targetClass.getDeclaredConstructor().newInstance();
             Object[] sourceFields = Arrays.stream(source.getClass().getDeclaredFields())
                     .map(Field::getName).toArray();
             Set<Object> targetFields = Arrays.stream(targetClass.getDeclaredFields())

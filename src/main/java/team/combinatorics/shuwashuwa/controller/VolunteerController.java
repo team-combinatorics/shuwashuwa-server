@@ -98,8 +98,7 @@ public class VolunteerController {
                 volunteerService.listVolunteerApplicationByCondition(selectApplicationCO);
         //日期转化
         List<VolunteerApplicationDetailDTO> dtoList = boList.stream()
-                .map(x -> (VolunteerApplicationDetailDTO)
-                        DTOUtil.convert(x, VolunteerApplicationDetailDTO.class))
+                .map(x -> DTOUtil.convert(x, VolunteerApplicationDetailDTO.class))
                 .collect(Collectors.toList());
         return new CommonResult<>(200, "请求成功", dtoList);
     }
@@ -112,8 +111,7 @@ public class VolunteerController {
             @RequestParam("id") @ApiParam(value = "要查看的申请表id", required = true) Integer formId
     ) {
         VolunteerApplicationDetailBO bo = volunteerService.getApplicationDetailByFormId(formId);
-        VolunteerApplicationDetailDTO dto =
-                (VolunteerApplicationDetailDTO) DTOUtil.convert(bo, VolunteerApplicationDetailDTO.class);
+        VolunteerApplicationDetailDTO dto = DTOUtil.convert(bo, VolunteerApplicationDetailDTO.class);
         return new CommonResult<>(200, "请求成功", dto);
     }
 

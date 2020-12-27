@@ -25,13 +25,13 @@ public class DTOUtilTest {
         List<TmpPO> list = new Vector<>();
         for (int i = 0; i < 10; i++) {
             TmpDTO dto = new TmpDTO("2020-12-08 07:30:0"+i,Integer.valueOf(10-i).toString());
-            TmpPO po = (TmpPO) DTOUtil.convert(dto,TmpPO.class);
+            TmpPO po = DTOUtil.convert(dto,TmpPO.class);
             po.id=i;
             Assert.assertEquals(po.data,Integer.valueOf(10-i).toString());
             Assert.assertEquals(po.timestamp,Timestamp.valueOf(dto.timestamp));
             list.add(po);
         }
-        List<TmpDTO> dtoList = list.stream().map(x -> (TmpDTO)DTOUtil.convert(x,TmpDTO.class)).collect(Collectors.toList());
+        List<TmpDTO> dtoList = list.stream().map(x -> DTOUtil.convert(x,TmpDTO.class)).collect(Collectors.toList());
         for (int i = 0; i < 10; i++) {
             Assert.assertEquals(dtoList.get(i).data,Integer.valueOf(10-i).toString());
             Assert.assertEquals(dtoList.get(i).timestamp,"2020-12-08 07:30:0"+i);

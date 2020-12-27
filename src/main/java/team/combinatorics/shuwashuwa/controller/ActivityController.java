@@ -52,7 +52,7 @@ public class ActivityController {
         if (endTimeUpperBound != null) co.setEndTimeUpperBound(Timestamp.valueOf(endTimeUpperBound));
         final List<ActivityInfoPO> poList = activityService.listActivityByConditions(co);
         List<ActivityResponseDTO> dtoList = poList.stream()
-                .map(x -> (ActivityResponseDTO) DTOUtil.convert(x, ActivityResponseDTO.class))
+                .map(x -> DTOUtil.convert(x, ActivityResponseDTO.class))
                 .collect(Collectors.toList());
         return new CommonResult<>(200, "请求成功", dtoList);
     }
@@ -78,7 +78,7 @@ public class ActivityController {
         System.out.println("请求活动" + activityId + "时间段");
         final List<ActivityTimeSlotBO> boList = activityService.listTimeSlots(activityId);
         List<ActivityTimeSlotDTO> dtoList = boList.stream()
-                .map(x -> (ActivityTimeSlotDTO) DTOUtil.convert(x, ActivityTimeSlotDTO.class))
+                .map(x -> DTOUtil.convert(x, ActivityTimeSlotDTO.class))
                 .collect(Collectors.toList());
         return new CommonResult<>(200, "请求成功", dtoList);
     }
