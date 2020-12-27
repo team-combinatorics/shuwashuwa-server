@@ -25,7 +25,8 @@ public enum ErrorInfoEnum {
     WECHAT_ACCESS_TOKEN_ERROR(40017, "获取微信access token时出错"),
     WECHAT_TEMPLATE_ERROR(40018, "获取通知模板列表时出错"),
     WECHAT_NOTICE_FAILURE(40019, "发送微信通知时出错"),
-    WECHAT_QRCODE_FAILURE(40020, "获取微信二维码时出错");
+    WECHAT_QRCODE_FAILURE(40020, "获取微信二维码时出错"),
+    WRONG_ADD_OR_DELETE(40021, "插入重复信息或删除不存在的信息");
 
     private final Integer errCode;
     private final String errMsg;
