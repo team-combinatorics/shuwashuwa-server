@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.AdminDao;
 import team.combinatorics.shuwashuwa.dao.UserDao;
+import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
+import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
@@ -51,7 +53,9 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     public int addAdministrator(AdminDTO adminDTO) {
         AdminPO adminPO = DTOUtil.convert(adminDTO,AdminPO.class);
         System.out.println(adminPO.getUserid());
-        int cnt = adminDao.insert(adminPO);
+        Integer cnt = adminDao.insert(adminPO);
+        if(cnt==null)
+            throw new KnownException(ErrorInfoEnum.WRONG_ADD_OR_DELETE);
         if(cnt == 1) {
             userDao.updateUserAdminAuthority(adminDTO.getUserid(), true);
         }
@@ -73,7 +77,10 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     public int deleteAdministrator(int userID) {
         int adminID = adminDao.getAdminIDByUserID(userID);
         userDao.updateUserAdminAuthority(userID, false);
-        return adminDao.deleteByID(adminID);
+        Integer cnt =  adminDao.deleteByID(adminID);
+        if(cnt == null)
+            throw new KnownException(ErrorInfoEnum.WRONG_ADD_OR_DELETE);
+        return cnt;
     }
 
     @Override
@@ -90,6 +97,9 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         int adminID = adminDao.getAdminIDByUserID(adminDTO.getUserid());
         AdminPO adminPO = DTOUtil.convert(adminDTO,AdminPO.class);
         adminPO.setId(adminID);
-        return adminDao.update(adminPO);
+        Integer cnt =  adminDao.update(adminPO);
+        if(cnt==null)
+            throw new KnownException(ErrorInfoEnum.WRONG_ADD_OR_DELETE);
+        return cnt;
     }
 }
