@@ -10,22 +10,11 @@
         <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
     </resultMap>
 
-    <resultMap type="team.combinatorics.shuwashuwa.model.bo.ServicePic" id="simplePicResultMap">
-        <result column="id" jdbcType="INTEGER" property="id"/>
-        <result column="pic_location" jdbcType="VARCHAR" property="picLocation"/>
-    </resultMap>
-
     <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
             parameterType="team.combinatorics.shuwashuwa.model.po.ServicePicPO">
         insert into service_pic(pic_location, service_form_id)
         values (#{pic.picLocation}, #{pic.serviceFormId})
     </insert>
-
-    <select id="getServicePicById" resultMap="simplePicResultMap">
-        select id, pic_location
-        from service_pic
-        where id = #{id}
-    </select>
 
     <select id="listServicePicsByFormId" resultType="String">
         select pic_location

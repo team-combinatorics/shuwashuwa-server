@@ -21,7 +21,7 @@
         <result column="time_slot" jdbcType="INTEGER" property="timeSlot"/>
         <collection property="imageList"
                     select="team.combinatorics.shuwashuwa.dao.ServicePicDao.listServicePicsByFormId"
-                    ofType="team.combinatorics.shuwashuwa.model.bo.ServicePic"
+                    ofType="java.lang.String"
                     javaType="java.util.ArrayList"
                     column="id">
         </collection>

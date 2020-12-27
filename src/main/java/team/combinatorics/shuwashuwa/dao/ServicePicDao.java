@@ -3,7 +3,6 @@ package team.combinatorics.shuwashuwa.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import team.combinatorics.shuwashuwa.model.po.ServicePicPO;
-import team.combinatorics.shuwashuwa.model.bo.ServicePic;
 
 import java.util.List;
 
@@ -17,14 +16,6 @@ public interface ServicePicDao {
      * @return 插入成功的数量，如果为0表示不成功
      */
     int insert(@Param("pic") ServicePicPO servicePicPO);
-
-    /**
-     * 通过图片id获取一张图片的位置
-     *
-     * @param id 图片id
-     * @return 一个ServicePic结构，该结构中不包括图片关联的service form id
-     */
-    ServicePic getServicePicById(@Param("id") int id);
 
     /**
      * @param serviceFormId 维修单的id
