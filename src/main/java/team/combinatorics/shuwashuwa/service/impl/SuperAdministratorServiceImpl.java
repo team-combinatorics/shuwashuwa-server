@@ -15,6 +15,7 @@ import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.MD5Util;
 import team.combinatorics.shuwashuwa.utils.TokenUtil;
+import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 import java.util.List;
 import java.util.Vector;
@@ -107,4 +108,8 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
         return cnt;
     }
 
+    @Override
+    public byte[] getWechatQRCode(int activityID) throws Exception {
+        return WechatUtil.generateAppCode(activityID);
+    }
 }

@@ -261,7 +261,7 @@ public class SuperAdministratorController {
             @ApiParam(value = "当前正在进行的（要签到的）活动编号", required = true)
                     Integer activityId
     ) throws Exception {
-        byte[] pic = WechatUtil.generateAppCode(activityId);
+        byte[] pic = superAdministratorService.getWechatQRCode(activityId);
         return new CommonResult<>(200, "获取成功", pic);
     }
 
