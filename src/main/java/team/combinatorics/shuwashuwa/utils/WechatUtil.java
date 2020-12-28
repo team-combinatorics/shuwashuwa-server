@@ -13,6 +13,7 @@ import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.WechatAppCodeDTO;
 import team.combinatorics.shuwashuwa.model.dto.WechatNoticeDTO;
 
+import java.io.*;
 import java.util.*;
 
 
@@ -180,7 +181,6 @@ final public class WechatUtil {
      * 接单成功通知：1
      * 志愿者审核通知：2
      * 活动发起通知：3
-     *
      */
 
     /**
@@ -255,7 +255,7 @@ final public class WechatUtil {
         String url = "https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode?"
                 + "access_token=" + PropertiesConstants.WX_ACCESS_TOKEN;
         WechatAppCodeDTO wechatAppCodeDTO = WechatAppCodeDTO.builder()
-                .path("/page/index/index?activity="+activityId)
+                .path("/pages/index/index?activity="+activityId)
                 .build();
 
         // 发送请求，并给予第二次机会
@@ -268,26 +268,6 @@ final public class WechatUtil {
             if(QRCode == null)
                 throw new KnownException(ErrorInfoEnum.WECHAT_QRCODE_FAILURE);
         }
-
-        // 处理文件，当前是本地生成，后面要改成返回字节数组
-        /*
-        InputStream inputStream = new ByteArrayInputStream(QRCode);
-        boolean tf;
-        File file = new File("src/test/resources/QRcode.png");
-        if(!file.exists()){
-            tf = file.createNewFile();
-            if(!tf)
-                throw new Exception();
-        }
-
-        OutputStream outputStream = new FileOutputStream(file);
-        int content;
-        byte[] buffer = new byte[1024*8];
-        while((content = inputStream.read(buffer, 0, 1024)) != -1)
-            outputStream.write(buffer, 0, content);
-        outputStream.flush();
-
-         */
 
         return QRCode;
     }
