@@ -20,11 +20,12 @@ public interface ImageStorageService {
     void bindWithService(String path, int formId);
 
     /**
-     * 将一张图片从缓存队列中移出，避免被清理
-     * 务必保证图片可记录于其他表中再调用
+     * 将一张图片从缓存队列中移出，以免被清理
+     * 当缓存队列中查无此图会报错
+     * @param userid 请求删除的用户id，用于防止恶意删除
      * @param path 图片路径
      */
-    void setUseful(String path);
+    void setDisposableUse(int userid, String path);
 
     /**
      * 不再需要一张图片，若图片在缓存队列中，则删除

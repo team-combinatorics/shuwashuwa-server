@@ -60,8 +60,19 @@ public class ImageStorageServiceTest {
         assert exist("100_"+ls.get(7));
         assert exist(ls.get(8));
 
-        imageStorageService.setUseful(ls.get(5));
-        imageStorageService.setUseful(ls.get(5));
+        try {
+            imageStorageService.setDisposableUse(2,ls.get(5));
+            assert false;
+        } catch (KnownException ke) {
+            assert ke.getErrCode()==40009;
+        }
+        imageStorageService.setDisposableUse(1,ls.get(5));
+        try {
+            imageStorageService.setDisposableUse(1,ls.get(5));
+            assert false;
+        } catch (KnownException ke) {
+            assert ke.getErrCode()==40022;
+        }
         assert exist(ls.get(5));
         ls.add(imageStorageService.store(1,multipartFile));
         assert exist(ls.get(4));
