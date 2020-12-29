@@ -85,6 +85,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
         CachePicPO cachePicPO = cachePicDao.getCachePicByLocation(path);
         if(cachePicPO != null)
             cachePicDao.deleteByID(cachePicPO.getId());
+        else if(servicePicDao.)
     }
 
     @Override
