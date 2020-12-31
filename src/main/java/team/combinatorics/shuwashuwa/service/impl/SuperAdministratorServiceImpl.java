@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.combinatorics.shuwashuwa.dao.AdminDao;
 import team.combinatorics.shuwashuwa.dao.UserDao;
-import team.combinatorics.shuwashuwa.dao.VolunteerDao;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
-import team.combinatorics.shuwashuwa.model.dto.VolunteerDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
-import team.combinatorics.shuwashuwa.model.po.VolunteerPO;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.MD5Util;
@@ -26,7 +23,6 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
 
     private final UserDao userDao;
     private final AdminDao adminDao;
-    private final VolunteerDao volunteerDao;
 
     @Override
     public String checkInfo(String userName, String password) {
