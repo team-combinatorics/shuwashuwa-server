@@ -44,12 +44,12 @@ public class ActivityController {
             @ApiParam(value = "结束时间上界，以yyyy-MM-dd HH:mm:ss表示")
                     String endTimeUpperBound
     ) {
-        System.out.println("请求活动列表");
         SelectActivityCO co = new SelectActivityCO();
         if (startTimeLowerBound != null) co.setStartTimeLowerBound(Timestamp.valueOf(startTimeLowerBound));
         if (startTimeUpperBound != null) co.setStartTimeUpperBound(Timestamp.valueOf(startTimeUpperBound));
         if (endTimeLowerBound != null) co.setEndTimeLowerBound(Timestamp.valueOf(endTimeLowerBound));
         if (endTimeUpperBound != null) co.setEndTimeUpperBound(Timestamp.valueOf(endTimeUpperBound));
+        System.out.println(co);
         final List<ActivityInfoPO> poList = activityService.listActivityByConditions(co);
         List<ActivityResponseDTO> dtoList = poList.stream()
                 .map(x -> DTOUtil.convert(x, ActivityResponseDTO.class))
@@ -65,7 +65,7 @@ public class ActivityController {
             @RequestParam(value = "activity") @ApiParam(value = "活动Id，从二维码参数获取", required = true) Integer activityId
     ) {
         int userid = TokenUtil.extractUserid(token);
-        System.out.println("用户" + userid + "在活动" + activityId + "签到");
+        System.out.println("在活动" + activityId + "签到");
         activityService.setActive(userid, activityId);
         return new CommonResult<>(200, "请求成功", "success");
     }
@@ -91,7 +91,7 @@ public class ActivityController {
             @RequestParam("activity") @ApiParam(value = "活动id", required = true) Integer activityId
     ) {
         int userid = TokenUtil.extractUserid(token);
-        System.out.println("用户" + userid + "查询了活动" + activityId + "的签到结果");
+        System.out.println("查询了活动" + activityId + "的签到结果");
         boolean result = activityService.haveAttended(userid, activityId);
         return new CommonResult<>(200, "请求成功", result);
     }

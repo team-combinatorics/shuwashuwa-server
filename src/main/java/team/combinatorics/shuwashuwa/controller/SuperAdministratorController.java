@@ -4,7 +4,6 @@ import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import team.combinatorics.shuwashuwa.annotation.AdminAccess;
 import team.combinatorics.shuwashuwa.annotation.NoToken;
 import team.combinatorics.shuwashuwa.annotation.SUAccess;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
@@ -14,7 +13,6 @@ import team.combinatorics.shuwashuwa.service.ActivityService;
 import team.combinatorics.shuwashuwa.service.ImageStorageService;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
-import team.combinatorics.shuwashuwa.utils.WechatUtil;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -153,6 +151,7 @@ public class SuperAdministratorController {
     public CommonResult<String> deleteAdministrator(
             @RequestParam @NotNull(message = "用户id不能为空") @ApiParam("要删除管理员权限的用户id") int userID
     ) {
+        System.out.println("即将移除UID=" + userID + "的管理员身份");
         int cnt = superAdministratorService.deleteAdministrator(userID);
         if (cnt == 1)
             return new CommonResult<>(200, "删除成功", "success");
@@ -210,7 +209,6 @@ public class SuperAdministratorController {
     public CommonResult<String> handleActivityLaunch(
             @RequestBody @ApiParam(value = "活动发起传输对象", required = true) ActivityLaunchDTO activityLaunchDTO
     ) {
-        System.out.println("发起活动");
         activityService.insertActivity(activityLaunchDTO);
         return new CommonResult<>(200, "请求成功", "success");
     }

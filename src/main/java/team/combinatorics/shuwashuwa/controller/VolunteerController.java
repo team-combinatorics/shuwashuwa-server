@@ -50,7 +50,6 @@ public class VolunteerController {
     ) {
         // 提取当前用户的id
         int userid = TokenUtil.extractUserid(token);
-        System.out.println(userid + "提交了志愿者申请");
         volunteerService.addVolunteerApplication(userid, application);
         return new CommonResult<>(200, "申请完成", "posted");
     }
@@ -82,7 +81,6 @@ public class VolunteerController {
             @ApiParam(value = "目标申请表的状态，0为待审核，1为通过，2为不通过", allowableValues = "0,1,2")
                     Integer status
     ) {
-        System.out.println("查询志愿者申请列表");
         // 对普通用户的查询做强制限制
         int currentUserId = TokenUtil.extractUserid(token);
         if (userService.isPlainUser(currentUserId))
@@ -132,7 +130,7 @@ public class VolunteerController {
     ) {
         // 得到当前管理员的用户id
         int adminUserid = TokenUtil.extractUserid(token);
-        System.out.println("管理员(UID" + adminUserid + ")审核了编号为" + auditDTO.getFormId() + "的申请");
+        System.out.println("审核编号为" + auditDTO.getFormId() + "的申请");
         int volunteerId = volunteerService.completeApplicationByAdmin(adminUserid, auditDTO);
 
         return new CommonResult<>(200, "请求成功", volunteerId);
@@ -146,7 +144,7 @@ public class VolunteerController {
     ) {
         int userid = TokenUtil.extractUserid(token);
         int volunteerId = volunteerService.getVolunteerIdByUserid(userid);
-        System.out.println("UID" + userid + "的志愿者ID是" + volunteerId);
+        System.out.println("志愿者ID是" + volunteerId);
         return new CommonResult<>(200, "请求成功", volunteerId);
     }
 
@@ -172,6 +170,7 @@ public class VolunteerController {
         if (cnt == 1) {
             return new CommonResult<>(200, "添加成功", "success");
         }
+        //todo 这为啥是数据库异常
         return new CommonResult<>(40000, "数据库出现异常，请检查数据库", "database failure");
     }
 
@@ -201,8 +200,9 @@ public class VolunteerController {
     @SUAccess
     @AdminAccess
     public CommonResult<String> deleteVolunteer(
-            @RequestParam @NotNull(message = "用户id不能为空") @ApiParam("要删除管理员权限的用户id") int userID
+            @RequestParam @NotNull(message = "用户id不能为空") @ApiParam("要删除志愿者权限的用户id") int userID
     ) {
+        System.out.println("删除志愿者(UID=" + userID + ")");
         int cnt = volunteerService.deleteVolunteer(userID);
         if (cnt == 1)
             return new CommonResult<>(200, "删除成功", "success");
@@ -219,8 +219,9 @@ public class VolunteerController {
     })
     @SUAccess
     public CommonResult<VolunteerDTO> getVolunteerInfo(
-            @NotNull(message = "用户id不能为空") @ApiParam("要获取管理员信息的用户id") int userID
+            @NotNull(message = "用户id不能为空") @ApiParam("要获取志愿者信息的用户id") int userID
     ) {
+        System.out.println("获取志愿者信息(UID=" + userID + ")");
         return new CommonResult<>(200, "获取成功", volunteerService.getVolunteerInfo(userID));
     }
 
