@@ -2,6 +2,15 @@
 
 # [12f23eddde]
 
+# https://unix.stackexchange.com/questions/507450/echo-with-obfuscation
+mask() {
+        local n=3
+        [[ ${#1} -le 5 ]] && n=$(( ${#1} - 3 ))
+        local a="${1:0:${#1}-n}"
+        local b="${1:${#1}-n}"
+        printf "%s%s\n" "${a//?/*}" "$b"
+}
+
 usage(){
     cat << USAGE >&2
 Usage:
@@ -67,7 +76,7 @@ if [[ -z $WX_APPID || -z $WX_SECRET ]]; then
     if [[ $# = 2 ]]; then
         export WX_APPID=$1
         export WX_SECRET=$2
-        echo "wx.appid=$WX_APPID wx.appsecret=$WX_SECRET"
+        echo wx.appid=`mask $WX_APPID` wx.appsecret=`mask $WX_SECRET`
     else
         echo -n "wx.appid="
         read appid
@@ -78,5 +87,8 @@ if [[ -z $WX_APPID || -z $WX_SECRET ]]; then
     fi
 fi
 
+# generate token secert & store in memory
+export TOKEN_SECRET=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c10`
+echo token_secret=`mask $TOKEN_SECRET`
 # run docker
 docker-compose up --build -d
