@@ -32,7 +32,6 @@ public class UserController {
     public CommonResult<LogInSuccessDTO> loginHandler(
             @ApiParam(value = "微信登录信息", required = true) LogInInfoDTO logInInfoDto
     ) throws Exception {
-        System.out.println("用户登录 @Controller");
         System.out.println("Code:" + logInInfoDto.getCode());
         LogInSuccessDTO logInSuccessDto = userService.wechatLogin(logInInfoDto);
         System.out.println("UID: " + TokenUtil.extractUserid(logInSuccessDto.getToken()));
@@ -53,7 +52,6 @@ public class UserController {
                                                @RequestBody @ApiParam(value = "用户信息", required = true) UserInfoUpdateDTO userInfoUpdateDto
     ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
-        System.out.println("更新" + userid + "的用户信息");
         System.out.println(userInfoUpdateDto.toString());
         userService.updateUserInfo(userid, userInfoUpdateDto);
         return new CommonResult<>(200, "更新成功", "User's information has been updated!");
@@ -74,7 +72,6 @@ public class UserController {
     ) throws Exception {
         int userid = TokenUtil.extractUserid(token);
         UserInfoResponseDTO responseDTO = userService.getUserInfo(userid);
-        System.out.println(userid + "请求个人信息");
         return new CommonResult<>(200, "请求成功", responseDTO);
     }
 

@@ -33,7 +33,7 @@ public class ImageController {
     ) {
         int userid = TokenUtil.extractUserid(token);
         String location = storageService.store(userid,file);
-        System.out.println("用户"+userid+"上传图片，保存为"+location);
+        System.out.println("上传图片，保存为"+location);
         return new CommonResult<>(200,"上传成功", location);
     }
 
@@ -53,7 +53,7 @@ public class ImageController {
                     String token
     ) {
         int userid = TokenUtil.extractUserid(token);
-        System.out.println("用户"+userid+"取消了图片"+path+"的使用");
+        System.out.println("取消了图片"+path+"的使用");
         storageService.setUseless(userid, path);
 
         return new CommonResult<>(200,"删除成功","deleted");

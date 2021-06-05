@@ -1,8 +1,12 @@
 {$DOMAIN}
-  tls /ssl/cert.pem /ssl/cert.key 
+tls /ssl/cert.pem /ssl/cert.key 
+log {
+  output stdout
+  format console
+}
 route {
   @backend {
-     path swagger-ui.html* /api/* /image/*
+     path swagger-ui.html* doc.html* /api/* /img/*
   }
   reverse_proxy @backend http://shuwashuwa:8848
   reverse_proxy /hooks/* http://127.0.0.1:9000

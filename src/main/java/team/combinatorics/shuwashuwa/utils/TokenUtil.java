@@ -21,6 +21,7 @@ import java.util.Map;
 public class TokenUtil {
     public static final String SECRET = PropertiesConstants.TOKEN_SECRET;
     public static final int EXPIRE = 60 * 60 * 24 * 15;
+    private static final int SU_EXPIRE = 60 * 60 * 4;
     public static final Map<String, Object> headerMap = new HashMap<>();
     static {
         headerMap.put("alg", "HS256");
@@ -35,7 +36,10 @@ public class TokenUtil {
     public static String createToken(int userid) {
 
         Calendar nowTime = Calendar.getInstance();
-        nowTime.add(Calendar.SECOND, EXPIRE);
+        if(userid == 1)
+            nowTime.add(Calendar.SECOND,SU_EXPIRE);
+        else
+            nowTime.add(Calendar.SECOND, EXPIRE);
         Date expireDate = nowTime.getTime();
 
         return JWT.create()

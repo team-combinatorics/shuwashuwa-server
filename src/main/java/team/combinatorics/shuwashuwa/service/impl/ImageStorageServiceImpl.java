@@ -81,10 +81,13 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     }
 
     @Override
-    public void setUseful(String path) {
+    public void setDisposableUse(int userid, String path) {
         CachePicPO cachePicPO = cachePicDao.getCachePicByLocation(path);
-        if(cachePicPO != null)
-            cachePicDao.deleteByID(cachePicPO.getId());
+        if(cachePicPO == null)
+            throw new KnownException(ErrorInfoEnum.IMAGE_NOT_AVAILABLE);
+        if(cachePicPO.getUserId() != userid)
+            throw new KnownException(ErrorInfoEnum.DATA_NOT_YOURS);
+        cachePicDao.deleteByID(cachePicPO.getId());
     }
 
     @Override
@@ -106,7 +109,9 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     @Override
     public void bindWithService(String path, int formId) {
         //若在缓存表中，移除表项
-        setUseful(path);
+        CachePicPO cachePicPO = cachePicDao.getCachePicByLocation(path);
+        if(cachePicPO != null)
+            cachePicDao.deleteByID(cachePicPO.getId());
 
         //插入记录表
         ServicePicPO servicePicPO = ServicePicPO.builder()

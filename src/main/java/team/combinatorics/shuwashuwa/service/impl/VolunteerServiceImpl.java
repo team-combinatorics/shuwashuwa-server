@@ -38,7 +38,7 @@ public class VolunteerServiceImpl implements VolunteerService {
      * @param volunteerApplicationAdditionDTO 申请时的补充信息，包括申请理由和学生证照片
      */
     @Override
-    public void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO) {
+    public synchronized void addVolunteerApplication(int userid, VolunteerApplicationAdditionDTO volunteerApplicationAdditionDTO) {
         //参数检查
         if (DTOUtil.fieldExistNull(volunteerApplicationAdditionDTO))
             throw new KnownException(ErrorInfoEnum.PARAMETER_LACKING);
@@ -61,8 +61,8 @@ public class VolunteerServiceImpl implements VolunteerService {
 
         volunteerApplicationDao.insert(volunteerApplicationPO);
 
-        //存档图片
-        imageStorageService.setUseful(volunteerApplicationAdditionDTO.getCardPicLocation());
+        //存档图片。所用图片阅后即焚，所以设置为一次性使用
+        imageStorageService.setDisposableUse(userid, volunteerApplicationAdditionDTO.getCardPicLocation());
     }
 
     /**

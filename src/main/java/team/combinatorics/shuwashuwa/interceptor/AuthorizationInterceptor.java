@@ -15,6 +15,7 @@ import team.combinatorics.shuwashuwa.utils.TokenUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 @Component
 @AllArgsConstructor
@@ -61,6 +62,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
                 !(method.isAnnotationPresent(SUAccess.class) && currentUserPO.getSu()) )
         throw new KnownException(ErrorInfoEnum.AUTHORITY_UNMATCHED);
 
+        System.out.println("Time = " + new Date() +
+                ", User = " + userid +
+                ", Invoked = " + method.getName() +
+                ", Volunteer = " + currentUserPO.getVolunteer() +
+                ", Admin = " + currentUserPO.getAdmin() );
         return true;
     }
 }
