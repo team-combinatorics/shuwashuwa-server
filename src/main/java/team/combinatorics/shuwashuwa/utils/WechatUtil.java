@@ -216,7 +216,10 @@ final public class WechatUtil {
             root = handlePostRequest(url, wechatNoticeDTO);
             if(root.has("errcode") && root.path("errcode").asInt() != 0) {
                 System.out.println(root.path("errcode") + " " + root.path("errmsg"));
-                throw new KnownException(ErrorInfoEnum.WECHAT_NOTICE_FAILURE);
+                if(root.path("errcode").asInt()==43101)
+                    System.out.println("[WARNING]当前用户未接收微信通知");
+                else
+                    throw new KnownException(ErrorInfoEnum.WECHAT_NOTICE_FAILURE);
             }
         }
     }
