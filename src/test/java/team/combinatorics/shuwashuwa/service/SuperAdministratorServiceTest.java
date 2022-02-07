@@ -10,6 +10,7 @@ import team.combinatorics.shuwashuwa.MainApplication;
 import team.combinatorics.shuwashuwa.dao.MethodsOfTesting;
 import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
+import team.combinatorics.shuwashuwa.model.dto.UserInfoResponseDTO;
 import team.combinatorics.shuwashuwa.model.po.UserPO;
 
 import java.util.List;
@@ -55,6 +56,10 @@ public class SuperAdministratorServiceTest {
         // 测试超管获取单个管理员信息的服务
         AdminDTO fetchAdminDTO = superAdministratorService.getAdministratorInfo(userID);
         Assert.assertEquals(adminDTO, fetchAdminDTO);
+
+        // 测试超管获取单个用户信息的服务
+        UserInfoResponseDTO fetchUserDTO = superAdministratorService.getUserInfo(userID);
+        Assert.assertTrue(fetchUserDTO.getAdmin());
 
         // 测试超管获取管理员列表的服务
         List<AdminDTO> allAdmins = superAdministratorService.getAdministratorList();

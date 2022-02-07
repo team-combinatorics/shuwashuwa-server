@@ -7,7 +7,9 @@ import team.combinatorics.shuwashuwa.dao.UserDao;
 import team.combinatorics.shuwashuwa.exception.ErrorInfoEnum;
 import team.combinatorics.shuwashuwa.exception.KnownException;
 import team.combinatorics.shuwashuwa.model.dto.AdminDTO;
+import team.combinatorics.shuwashuwa.model.dto.UserInfoResponseDTO;
 import team.combinatorics.shuwashuwa.model.po.AdminPO;
+import team.combinatorics.shuwashuwa.model.po.UserPO;
 import team.combinatorics.shuwashuwa.service.SuperAdministratorService;
 import team.combinatorics.shuwashuwa.utils.DTOUtil;
 import team.combinatorics.shuwashuwa.utils.MD5Util;
@@ -107,5 +109,12 @@ public class SuperAdministratorServiceImpl implements SuperAdministratorService 
     @Override
     public byte[] getWechatQRCode(int activityID) throws Exception {
         return WechatUtil.generateAppCode(activityID);
+    }
+
+    /* from UserServiceImpl.java #L60 */
+    @Override
+    public UserInfoResponseDTO getUserInfo(int userID){
+        UserPO userPO = userDao.getUserByUserid(userID);
+        return DTOUtil.convert(userPO, UserInfoResponseDTO.class);
     }
 }
