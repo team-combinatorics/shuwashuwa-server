@@ -38,6 +38,21 @@ services:
                 max-size: "1m"
                 max-file: "10"
 
+    mysql-cron-backup:
+        image: fradelg/mysql-cron-backup
+        depends_on:
+            - mysql
+        volumes:
+            - ${BACKUPSTORE}:/backup
+        environment:
+            - MYSQL_HOST=mysql
+            - MYSQL_USER
+            - MYSQL_PASS=${MYSQL_PASSWORD}
+            - MYSQL_DATABASE
+            - MAX_BACKUPS
+            - INIT_BACKUP
+        restart: unless-stopped
+
     #####  Uncomment this when debugging db  #####
     # adminer:
     #     image: adminer
