@@ -145,7 +145,13 @@ public class EventServiceImpl implements EventService {
                 .data(data)
                 .page("pages/service-detail/service-detail?id="+auditDTO.getServiceEventId())
                 .build();
-        WechatUtil.sendNotice(wechatNoticeDTO, 0);
+
+        // 捕获异常，防止操作失败
+        try {
+            WechatUtil.sendNotice(wechatNoticeDTO, WechatUtil.WechatNoticeType.TAKE_NOTICE);
+        } catch (Exception e) {
+            System.out.println("userId=" + userid + " eventId=" + eventId + " 发送通知失败" + e.getMessage());
+        }
     }
 
     @Transactional
@@ -166,6 +172,27 @@ public class EventServiceImpl implements EventService {
         serviceEventDao.updateStatus(serviceEventId, 4);
         //更新其他
         serviceEventDao.updateVolunteerInfo(serviceEventId, myVolunteerId);
+
+        // 向用户发送结果通知
+        Map<String, NoticeMessage> data = new HashMap<>();
+        data.put("thing2", NoticeMessage.builder()
+                .value(userDao.getUserByUserid(userid).getUserName())
+                .build());
+        data.put("thing3", NoticeMessage.builder()
+                .value("若一段时间后仍未叫号，请联系在场志愿者")
+                .build());
+        WechatNoticeDTO wechatNoticeDTO = WechatNoticeDTO.builder()
+                .touser(userDao.getUserByUserid(eventPO.getUserId()).getOpenid())
+                .data(data)
+                .page("pages/service-detail/service-detail?id="+serviceEventId)
+                .build();
+
+        // 捕获异常，防止操作失败
+        try {
+            WechatUtil.sendNotice(wechatNoticeDTO, WechatUtil.WechatNoticeType.AUDIT_NOTICE);
+        } catch (Exception e) {
+            System.out.println("userId=" + userid + " eventId=" + serviceEventId + " 发送通知失败" + e.getMessage());
+        }
     }
 
     @Transactional
