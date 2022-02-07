@@ -9,4 +9,4 @@ fi
 # copy artifacts to host
 cp -r /app/target/* /target
 # wait mysql connection for 30s, if it fails then stop
-./wait-for-it.sh -s -t 30 "$MYSQL_ADDRESS" -- java -jar /app/target/${TARGET_JAR}
+./wait-for-it.sh -s -t 30 "$MYSQL_ADDRESS" -- java -jar /app/target.jar
