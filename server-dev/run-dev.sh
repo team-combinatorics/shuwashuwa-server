@@ -10,7 +10,6 @@ Usage:
     If no args specified, it would ask you via interactive commands
     -h | help      Display help message
     -c | convert   Convert all files in current folder from crlf to lf
-    -u | update    Generate new config from *.example
 USAGE
     exit
 }
@@ -28,31 +27,27 @@ convert(){
     exit
 }
 
-update(){
-    # substitute *.example
-    for filename in $PWD/*.example; do
-        envsubst < $filename > $(basename "$filename" .example)
-        echo Updated: $(basename "$filename" .example)
-    done
-    exit
-}
-
 # print help message
 if [[ $1 = "-h" || $1 = "help" ]]; then
     usage
 elif [[ $1 = "-c" || $1 = "convert" ]]; then
     convert
-elif [[ $1 = "-u" || $1 = "update" ]]; then
-    update
 fi
 
-# check your config
-export $(grep -v '^#' .env | xargs -d '\n')
-if [[ $? = 0 ]]; then
-    echo "[Shuwashuwa] Setting up Development Server ..."
-else
-    echo "[Shuwashuwa] Error in .env or file does not exists"
-    exit -1
+# Load config
+set -o allexport
+source .env
+set +o allexport
+
+echo "[Shuwashuwa] Setting up Development Server ..."
+
+# Load secrets
+if [[ -f .secrets.env ]]; then
+  echo "[Shuwashuwa] Loading secrets from .secrets.env"
+  set -o allexport
+  source .secrets.env
+  set +o allexport
+  echo "wx.appid=$WX_APPID wx.appsecret=$WX_SECRET"
 fi
 
 # if appid or secret doesn't exist

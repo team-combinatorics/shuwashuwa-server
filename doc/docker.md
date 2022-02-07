@@ -26,6 +26,12 @@
 
 4. `sudo ./run-production.sh <appid> <appsecret>`
 
+   您也可以创建`.secrets.env`，然后`sudo ./run-production.sh`:
+   ```dotenv
+   WX_APPID=$APPID
+   WX_SECRET=$SECRET
+   ```
+
 5. 打开浏览器，访问http://localhost:8848/swagger-ui.html，显示正常则表明容器已经启动
 
 #### 我想自己编译Jar
