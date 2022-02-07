@@ -19,7 +19,6 @@ Usage:
     If no args specified, it would ask you via interactive commands
     -h | help      Display help message
     -c | convert   Convert all files in current folder from crlf to lf
-    -u | update    Generate new config from *.example
 USAGE
     exit
 }
@@ -37,15 +36,6 @@ convert(){
     exit
 }
 
-update(){
-    # substitute *.example
-    for filename in $PWD/*.example; do
-        envsubst < $filename > $(basename "$filename" .example)
-        echo Updated: $(basename "$filename" .example)
-    done
-    exit
-}
-
 # print help message
 if [[ $1 = "-h" || $1 = "help" ]]; then
     usage
@@ -55,19 +45,26 @@ elif [[ $1 = "-u" || $1 = "update" ]]; then
     update
 fi
 
-# check your config
-export $(grep -v '^#' .env | xargs -d '\n')
-if [[ $? = 0 ]]; then
-    echo "[Shuwashuwa] Setting up Production Server ..."
-else
-    echo "[Shuwashuwa] Error in .env or file does not exists"
-    exit -1
+# Load config
+set -o allexport
+source .env
+set +o allexport
+
+echo "[Shuwashuwa] Setting up Development Server ..."
+
+# Load secrets
+if [[ -f .secrets.env ]]; then
+  echo "[Shuwashuwa] Loading secrets from .secrets.env"
+  set -o allexport
+  source .secrets.env
+  set +o allexport
+  echo wx.appid=$(mask $WX_APPID) wx.appsecret=$(mask $WX_SECRET)
 fi
 
 # check target
 if ! [[ -f $TARGET_PATH ]] ; then
     echo "[FATAL] Target Jar dosen't exist"
-    exit -2
+    exit 2
 fi
 
 # if appid or secret doesn't exist
@@ -76,7 +73,7 @@ if [[ -z $WX_APPID || -z $WX_SECRET ]]; then
     if [[ $# = 2 ]]; then
         export WX_APPID=$1
         export WX_SECRET=$2
-        echo wx.appid=`mask $WX_APPID` wx.appsecret=`mask $WX_SECRET`
+        echo wx.appid=$(mask $WX_APPID) wx.appsecret=$(mask $WX_SECRET)
     else
         echo -n "wx.appid="
         read appid
@@ -87,8 +84,9 @@ if [[ -z $WX_APPID || -z $WX_SECRET ]]; then
     fi
 fi
 
-# generate token secert & store in memory
-export TOKEN_SECRET=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c10`
-echo token_secret=`mask $TOKEN_SECRET`
+# generate token secret at runtime
+export TOKEN_SECRET=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c10)
+echo token_secret=$(mask $TOKEN_SECRET)
+
 # run docker
 docker-compose up --build -d

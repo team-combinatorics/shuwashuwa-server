@@ -173,6 +173,7 @@ public class SuperAdministratorController {
         return new CommonResult<>(200, "获取成功", superAdministratorService.getAdministratorInfo(userID));
     }
 
+
     /**
      * 超管修改管理员信息
      */
@@ -263,4 +264,19 @@ public class SuperAdministratorController {
         return new CommonResult<>(200, "获取成功", pic);
     }
 
+    /**
+     * 超管获取单个用户的信息
+     */
+    @ApiOperation(value = "超级管理员获取单个用户的详细信息")
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "获取成功"),
+    })
+    @SUAccess
+    public CommonResult<UserInfoResponseDTO> getUserInfo(
+            @NotNull(message = "用户id不能为空") @ApiParam("要获取管理员信息的用户id") int userID
+    ) {
+        UserInfoResponseDTO responseDTO = superAdministratorService.getUserInfo(userID);
+        return new CommonResult<>(200, "获取成功", responseDTO);
+    }
 }

@@ -211,5 +211,5 @@ CREATE TABLE `volunteer_application`
   COLLATE = utf8mb4_general_ci;
 
 
-INSERT INTO user(openid, user_name, identity, is_su)
-VALUES ('1da5505af2a5ba46a749eaa6b1a92003', 'shuwashuwa', '超级管理员', 1);
+INSERT INTO user(openid, user_name, identity, is_su, is_admin)
+VALUES ('1da5505af2a5ba46a749eaa6b1a92003', 'shuwashuwa', '超级管理员', 1, 1);
