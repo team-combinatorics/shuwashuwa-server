@@ -21,7 +21,7 @@ import java.util.Map;
 public class TokenUtil {
     public static final String SECRET = PropertiesConstants.TOKEN_SECRET;
     public static final int EXPIRE = 60 * 60 * 24 * 15;
-    private static final int SU_EXPIRE = 60 * 60 * 4;
+    private static final int SU_EXPIRE = 60 * 60 * 6;
     public static final Map<String, Object> headerMap = new HashMap<>();
     static {
         headerMap.put("alg", "HS256");
