@@ -186,7 +186,10 @@ public class EventController {
                     String createTimeLowerBound,
             @RequestParam(value = "createUpper", required = false)
             @ApiParam(value = "创建时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
-                    String createTimeUpperBound
+                    String createTimeUpperBound,
+            @RequestParam(value = "timeSlot", required = false)
+            @ApiParam(value = "活动时间段")
+                    Integer timeSlot
     ) {
         //对普通用户的查询做强制限制
         int currentUserId = TokenUtil.extractUserid(token);
@@ -201,6 +204,7 @@ public class EventController {
                 .closed(closed)
                 .draft(draftSaved)
                 .status(status)
+                .timeSlot(timeSlot)
                 .build();
         System.out.println(serviceEventCO);
         if (createTimeLowerBound != null) serviceEventCO.setBeginTime(Timestamp.valueOf(createTimeLowerBound));
@@ -246,7 +250,10 @@ public class EventController {
                     String createTimeLowerBound,
             @RequestParam(value = "createUpper", required = false)
             @ApiParam(value = "创建时间上界，以yyyy-MM-dd HH:mm:ss表示", example = "1926-08-17 11:45:14")
-                    String createTimeUpperBound
+                    String createTimeUpperBound,
+            @RequestParam(value = "timeSlot", required = false)
+            @ApiParam(value = "活动时间段")
+                    Integer timeSlot
     ) {
         SelectServiceEventCO serviceEventCO = SelectServiceEventCO
                 .builder()
@@ -256,6 +263,7 @@ public class EventController {
                 .closed(closed)
                 .draft(draftSaved)
                 .status(status)
+                .timeSlot(timeSlot)
                 .build();
         System.out.println(serviceEventCO);
         if (createTimeLowerBound != null) serviceEventCO.setBeginTime(Timestamp.valueOf(createTimeLowerBound));
