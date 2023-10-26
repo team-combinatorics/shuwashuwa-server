@@ -1,0 +1,2 @@
+# Make sure everything ends in lf on commit
+* text=auto eol=lf

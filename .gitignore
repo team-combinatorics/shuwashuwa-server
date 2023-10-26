@@ -1,5 +1,6 @@
 ### Secrets ###
 .secrets.env
+.env
 
 HELP.md
 target/

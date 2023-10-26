@@ -1,92 +1,103 @@
-# Consider using this config for procduction
-version: '3'
+version: '3.7'
+
+x-restart-policy: &default-restart-policy
+    restart: unless-stopped
+
+x-logging: &default-logging
+    logging:
+        driver: "json-file"
+        options:
+            max-size: "1m"
+            max-file: "10"
+
+x-env-file: &default-env-file
+    env_file:
+        - .env
+        - .secrets.env
+
+x-environment: &default-environment
+    ADMIN_SECRET: ""
+    DEV_SECRET: ""
+    WX_APPID: ""
+    WX_SECRET: ""
 
 services: 
-    # caddy
-    caddy:
-        image: caddy:latest
-        ports:
-            - "80:80"
-            - "443:443"
+    nginx:
+        image: nginx:1.25-alpine
         volumes:
-            - ${WWWROOT}:/var/www/html
-            - ${CONFIG_PATH}:/etc/caddy/Caddyfile
-            - ${SSL_CERT}:/ssl/cert.pem
-            - ${SSL_KEY}:/ssl/cert.key
+            - ${NGINX_WWW}:/usr/share/nginx/html
+            - ${NGINX_MEDIA}:/usr/share/nginx/media
+            - ${NGINX_CONF}:/etc/nginx/templates/default.conf.template
+        ports:
+            - "${PORT}:80"
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
         environment:
-            - DOMAIN
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "1m"
-                max-file: "10"
+            WX_APPID: ""
+            WX_SECRET: ""
+            MYSQL_PASSWORD: ""
+            MYSQL_USER: ""
+
+    adminer:
+        image: adminer:4.8.1
+        depends_on: 
+            - mysql
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
+        environment:
+            <<: *default-environment
+
+    dufs:
+        image: sigoden/dufs:v0.36.0
+        volumes:
+            - ${NGINX_MEDIA}:/media
+        command: /media -A --path-prefix ${NGINX_ADMIN_PREFIX}media
+        <<: *default-logging
+        <<: *default-restart-policy
 
     mysql:
         image: mysql:8.0.22
         volumes:
             - ${DBINIT}:/docker-entrypoint-initdb.d
             - ${DBSTORE}:/var/lib/mysql
-        environment: 
-            - MYSQL_ROOT_PASSWORD
-            - MYSQL_DATABASE
-            - MYSQL_USER
-            - MYSQL_PASSWORD
-        restart: on-failure
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "1m"
-                max-file: "10"
+        cap_add:
+            - SYS_NICE  # CAP_SYS_NICE
+        env_file:
+            - .secrets.env
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
+        environment:
+            <<: *default-environment
 
     mysql-cron-backup:
-        image: fradelg/mysql-cron-backup
+        image: fradelg/mysql-cron-backup:1.13.1
         depends_on:
             - mysql
         volumes:
             - ${BACKUPSTORE}:/backup
         environment:
-            - MYSQL_HOST=mysql
-            - MYSQL_USER
-            - MYSQL_PASS=${MYSQL_PASSWORD}
-            - MYSQL_DATABASE
-            - MAX_BACKUPS
-            - INIT_BACKUP
-        restart: unless-stopped
-
-    #####  Uncomment this when debugging db  #####
-    # adminer:
-    #     image: adminer
-    #     ports:
-    #         - "8080:8080"
-    #     restart: on-failure
-    #     depends_on: 
-    #         - mysql
+            <<: *default-environment
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
 
     shuwashuwa:
         build: 
             context: ../
-            dockerfile: ./server-production/shuwashuwa-server.dockerfile
-        # Disabled for security 
-        # ports:
-        #     - "8848:8848"
+            dockerfile: ./server-production/prod.dockerfile
         volumes:
-            - ${TARGET_PATH}:/app/target.jar
+            - ${TARGET_PATH}:/target/target.jar
             - ${PIC_PATH}:/pic
         environment: 
-            - MYSQL_DATABASE
-            - MYSQL_USER
-            - MYSQL_PASSWORD
-            - MYSQL_ADDRESS
-            - TOKEN_SECRET
-            - PIC_PATH=/pic
-            - WX_APPID
-            - WX_SECRET
-        restart: on-failure
+            PIC_PATH: /pic
+            ADMIN_SECRET: ""
+            DEV_SECRET: ""
         depends_on: 
             - mysql
-            - caddy
-        logging:
-            driver: "json-file"
-            options:
-                max-size: "10m"
-                max-file: "10"
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
+

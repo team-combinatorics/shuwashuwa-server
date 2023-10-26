@@ -1,4 +1,19 @@
-version: '3'
+version: '3.7'
+
+x-restart-policy: &default-restart-policy
+    restart: unless-stopped
+
+x-logging: &default-logging
+    logging:
+        driver: "json-file"
+        options:
+            max-size: "1m"
+            max-file: "10"
+
+x-env-file: &default-env-file
+    env_file:
+        - .env
+        - .secrets.env
 
 services: 
     mysql:
@@ -6,38 +21,51 @@ services:
         volumes:
             - ${DBINIT}:/docker-entrypoint-initdb.d
             - ${DBSTORE}:/var/lib/mysql
-        environment: 
-            - MYSQL_ROOT_PASSWORD
-            - MYSQL_DATABASE
-            - MYSQL_USER
-            - MYSQL_PASSWORD
-
-    # adminer: THIS CONF IS NOT SUITABLE IN PRODUCTION
-    adminer:
-        image: adminer
         ports:
-            - "8080:8080"
-        depends_on: 
-            - mysql
+            - "${MYSQL_PORT}:3306"
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
 
     shuwashuwa:
         build: 
             context: ../
-            dockerfile: ./server-dev/shuwashuwa-server.dockerfile
+            dockerfile: ./server-dev/dev.dockerfile
         ports: 
-            - "8848:8848"
+            - "${SHUWASHUWA_PORT}:8848"
         volumes: 
             - ${TARGET_DIR}:/target
             - ${PIC_PATH}:/pic
-        environment: 
-            - MYSQL_DATABASE
-            - MYSQL_USER
-            - MYSQL_PASSWORD
-            - MYSQL_ADDRESS
-            - TARGET_JAR
-            - TOKEN_SECRET
-            - PIC_PATH=/pic
-            - WX_APPID
-            - WX_SECRET
         depends_on: 
             - mysql
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
+
+    nginx:
+        image: nginx:1.25-alpine
+        ports:
+            - ${PORT}:80
+        volumes:
+            - ${NGINX_WWW}:/usr/share/nginx/html
+            - ${NGINX_MEDIA}:/usr/share/nginx/media
+            - ${NGINX_CONF}:/etc/nginx/templates/default.conf.template
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
+
+    adminer:
+        image: adminer:4.8.1
+        depends_on: 
+            - mysql
+        <<: *default-logging
+        <<: *default-restart-policy
+        <<: *default-env-file
+
+    dufs:
+        image: sigoden/dufs:v0.36.0
+        volumes:
+            - ${NGINX_MEDIA}:/media
+        command: /media -A --path-prefix ${NGINX_ADMIN_PREFIX}media
+        <<: *default-logging
+        <<: *default-restart-policy
