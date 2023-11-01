@@ -143,7 +143,14 @@ public class VolunteerController {
             @RequestHeader("token") @ApiParam(hidden = true) String token
     ) {
         int userid = TokenUtil.extractUserid(token);
-        int volunteerId = volunteerService.getVolunteerIdByUserid(userid);
+        int volunteerId = -1;
+        try {
+            volunteerId = volunteerService.getVolunteerIdByUserid(userid);
+        } catch (KnownException e) {
+            if (e.getErrCode() != 40003){
+                return new CommonResult<>(e.getErrCode(), e.getMessage(), null);
+            }
+        }
         System.out.println("志愿者ID是" + volunteerId);
         return new CommonResult<>(200, "请求成功", volunteerId);
     }
